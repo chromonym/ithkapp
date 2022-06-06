@@ -1,15 +1,18 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <!--<img alt="Vue logo" src="./assets/logo.png">
+  <MainBody/>-->
+  <NormalDiv title="hi" :options='["test","test2","test3"]'/>
+  <NormalDiv title="hi" :options='["test","test2","test3"]'/>
+  <NormalDiv title="aaa" :options='["test","test2","test3"]'/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import NormalDiv from './components/normaldiv.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    NormalDiv
   }
 }
 </script>
