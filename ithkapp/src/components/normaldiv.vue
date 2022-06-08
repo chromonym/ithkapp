@@ -1,9 +1,10 @@
 <template>
   <div>
     <p>{{title}}</p>
-    <select>
+    <select v-bind:v-model="code">
       <option v-for="opt in options" v-bind:key="opt">{{opt}}</option>
     </select>
+    <p>{{code}}</p>
   </div>
 </template>
 
@@ -12,7 +13,8 @@ export default {
   name: 'NormalDiv',
   props: {
     options: Array,
-    title: String
+    title: String,
+    code: String
   }
 }
 </script>
@@ -20,11 +22,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 div {
-  width: 30vw;
   float: left;
   border-style: solid;
   border-width: 1px;
   border-color: black;
+  flex-grow: 1;
+  flex-basis: 20vw;
 }
 h3 {
   margin: 40px 0 0;
