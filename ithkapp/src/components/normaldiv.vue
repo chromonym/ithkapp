@@ -1,8 +1,9 @@
 <template>
   <div>
     <p>{{title}}</p>
-    <select v-bind:v-model="code">
-      <option v-for="opt in options" v-bind:key="opt">{{opt}}</option>
+    <select v-model="text" @change="this.$emit('send-message',text,code)">
+    <option disabled selected>Select...</option>
+      <option v-for="opt in options" :key="opt" :value="opt">{{opt}}</option>
     </select>
     <p>{{code}}</p>
   </div>
@@ -15,6 +16,11 @@ export default {
     options: Array,
     title: String,
     code: String
+  },
+  data() {
+    return {
+      text: "Select..."
+    }
   }
 }
 </script>

@@ -2,20 +2,19 @@
   <!--<img alt="Vue logo" src="./assets/logo.png">
   <MainBody/>-->
   <div style="display: flex; flex-flow: row wrap; justify-content: center;">
-    <NormalDiv title="hi" :options='["test","test2","test3"]' code="help"/>
-    <NormalDiv title="hi" :options='["test","test2","test3"]' code="2"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="3"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="4"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="5"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="6"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="7"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="8"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="9"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="10"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="11"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="12"/>
+    <NormalDiv title="hi" :options='["test","test2","test3"]' code="help" @send-message="handleSendMessage"/>
+    <NormalDiv title="hi" :options='["test","test2","test3"]' code="2" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="3" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="4" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="5" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="6" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="7" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="8" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="9" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="10" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="11" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="12" @send-message="handleSendMessage"/>
   </div>
-  <h3>{{help.opt}}</h3>
 </template>
 
 <script>
@@ -25,6 +24,11 @@ export default {
   name: 'App',
   components: {
     NormalDiv
+  },
+  methods: {
+    handleSendMessage(value,code) {
+      console.log("From",code+":",value);
+    }
   }
 }
 </script>
