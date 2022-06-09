@@ -1,9 +1,20 @@
 <template>
-  <div>
+  <div id="normaldiv">
     <p>{{title}}</p>
-    <select v-model="text" @change="this.$emit('send-message',text,code)">
-    <option disabled selected>Select...</option>
-      <option v-for="opt in options" :key="opt" :value="opt">{{opt}}</option>
+    <!-- The following depends on which TYPE of grammar option this is: -->
+    <!-- If it's a simple text entry: -->
+    <input v-if="type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." maxlength=4/>
+    <!-- If it's a list of text entries: -->
+    <div v-else-if="type=='affix'">
+      <div v-for="([ax,lvl],index) in affixes" :key="ax">
+        <input v-model.lazy="affixes[index][0]" @input="this.$emit('send-message',affixes,code)"/>
+        <p>{{lvl}}</p>
+      </div>
+    </div>
+    <!-- Otherwise, assume it's a dropdown list: -->
+    <select v-else v-model="option" @change="this.$emit('send-message',option,code)">
+      <option disabled selected>Select...</option>
+      <option v-for="(opt, short) in options" :key="opt" :value="short">{{opt}}</option>
     </select>
     <p>{{code}}</p>
   </div>
@@ -15,11 +26,14 @@ export default {
   props: {
     options: Array,
     title: String,
-    code: String
+    code: String,
+    type: String
   },
   data() {
     return {
-      text: "Select..."
+      text: "",
+      option: "Select...",
+      affixes: [["this",0],["",0],["",0]]
     }
   }
 }
@@ -27,7 +41,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-div {
+#normaldiv {
   float: left;
   border-style: solid;
   border-width: 1px;

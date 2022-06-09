@@ -2,8 +2,8 @@
   <!--<img alt="Vue logo" src="./assets/logo.png">
   <MainBody/>-->
   <div style="display: flex; flex-flow: row wrap; justify-content: center;">
-    <NormalDiv title="hi" :options='["test","test2","test3"]' code="help" @send-message="handleSendMessage"/>
-    <NormalDiv title="hi" :options='["test","test2","test3"]' code="2" @send-message="handleSendMessage"/>
+    <NormalDiv title="Concatenation" :options='["None","Type 1","Type 2"]' code="concat" @send-message="handleSendMessage"/>
+    <NormalDiv title="Version" :options='{"PRC":"Processual","CPT":"Completive"}' code="ver" @send-message="handleSendMessage"/>
     <NormalDiv title="aaa" :options='["test","test2","test3"]' code="3" @send-message="handleSendMessage"/>
     <NormalDiv title="aaa" :options='["test","test2","test3"]' code="4" @send-message="handleSendMessage"/>
     <NormalDiv title="aaa" :options='["test","test2","test3"]' code="5" @send-message="handleSendMessage"/>
@@ -12,8 +12,8 @@
     <NormalDiv title="aaa" :options='["test","test2","test3"]' code="8" @send-message="handleSendMessage"/>
     <NormalDiv title="aaa" :options='["test","test2","test3"]' code="9" @send-message="handleSendMessage"/>
     <NormalDiv title="aaa" :options='["test","test2","test3"]' code="10" @send-message="handleSendMessage"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="11" @send-message="handleSendMessage"/>
-    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="12" @send-message="handleSendMessage"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="11" @send-message="handleSendMessage" type="affix"/>
+    <NormalDiv title="aaa" :options='["test","test2","test3"]' code="12" @send-message="handleSendMessage" type="text"/>
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
     handleSendMessage(value,code) {
       console.log("From",code+":",value);
     }
-  }
+  },
 }
 </script>
 
