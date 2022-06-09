@@ -6,10 +6,14 @@
     <input v-if="type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." maxlength=4/>
     <!-- If it's a list of text entries: -->
     <div v-else-if="type=='affix'">
-      <div v-for="([ax,lvl],index) in affixes" :key="ax">
-        <input v-model.lazy="affixes[index][0]" @input="this.$emit('send-message',affixes,code)"/>
-        <p>{{lvl}}</p>
+      <div v-for="(affix,index) in affixes" :key="affix">
+        <input v-model.lazy="affixes[index][0]" @input="this.$emit('send-message',affixes,code)" placeholder="Enter..." maxlength=3/>
+        <select v-model="affixes[index][1]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block">
+          <option v-for="num in Array(10).keys()" :key="num">{{num}}</option>
+        </select>
       </div>
+      <input type="button" value="Add" @click="affixes.push(['',0])"/>
+      <input type="button" value="Remove" @click="affixes.pop()"/>
     </div>
     <!-- Otherwise, assume it's a dropdown list: -->
     <select v-else v-model="option" @change="this.$emit('send-message',option,code)">
@@ -33,7 +37,7 @@ export default {
     return {
       text: "",
       option: "Select...",
-      affixes: [["this",0],["",0],["",0]]
+      affixes: [["",0]]
     }
   }
 }
