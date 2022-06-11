@@ -3,19 +3,26 @@
   <MainBody/>-->
   <div id="content">
   <h1>Ithkapp</h1>
-  <div style="display: flex; flex-flow: row wrap; justify-content: center;">
+  <div class="section">
+    <OptionBox title="Root (Slot III)" code="root" @send-message="handleSendMessage" type="text"/>
+    <OptionBox title="Slot V Affixes" code="5afx" @send-message="handleSendMessage" type="affix"/>
+    <OptionBox title="Slot VII Affixes" code="7afx" @send-message="handleSendMessage" type="affix"/>
+  </div>
+  <div class="section">
     <OptionBox title="Concatenation" :options='["None","Type 1","Type 2"]' code="concat" @send-message="handleSendMessage"/>
     <OptionBox title="Version" :options='{"PRC":"Processual","CPT":"Completive"}' code="ver" @send-message="handleSendMessage"/>
-    <OptionBox title="aaa" :options='["test","test2","test3"]' code="3" @send-message="handleSendMessage"/>
+  </div>
+  <p>Testing sections below:</p>
+  <input type="checkbox" v-model="test"/>
+  <div style="display: flex; flex-flow: row wrap; justify-content: center;">
+    <OptionBox title="aaa" :options='["test","test2","test3"]' code="3" @send-message="handleSendMessage" disabled/>
     <OptionBox title="aaa" :options='["test","test2","test3"]' code="4" @send-message="handleSendMessage"/>
     <OptionBox title="aaa" :options='["test","test2","test3"]' code="5" @send-message="handleSendMessage"/>
     <OptionBox title="aaa" :options='["test","test2","test3"]' code="6" @send-message="handleSendMessage"/>
     <OptionBox title="aaa" :options='["test","test2","test3"]' code="7" @send-message="handleSendMessage"/>
     <OptionBox title="aaa" :options='["test","test2","test3"]' code="8" @send-message="handleSendMessage"/>
-    <OptionBox title="aaa" :options='["test","test2","test3"]' code="9" @send-message="handleSendMessage"/>
+    <OptionBox title="aaa" :options='["test","test2","test3"]' code="9" @send-message="handleSendMessage" :disabled="test"/>
     <OptionBox title="aaa" :options='["test","test2","test3"]' code="10" @send-message="handleSendMessage"/>
-    <OptionBox title="Slot V Affixes" code="5afx" @send-message="handleSendMessage" type="affix"/>
-    <OptionBox title="Root (Slot III)" code="root" @send-message="handleSendMessage" type="text"/>
   </div>
   <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   </div>
@@ -35,8 +42,16 @@ export default {
   },
   data() {
     return {
+      test: false,
       // the following variables correspond to things visible on-screen
-      ithkword: ["a","b","c","","","","","",""], // ithkuil word, split into slots
+      ithkword: ["a","b","c","","","","","",""], // ithkuil word, split into slots (0-8 = I-IX)
+      grammaroptions: { // grammar options
+        "root":"",
+        "5afx":[],
+        "7afx":[],
+        "concat":"None",
+        
+      },
       gloss: "al.FA.bet", // gloss of word
       ipa: "eɪ bi: si:" // IPA transcription
     }
@@ -44,6 +59,9 @@ export default {
   methods: {
     handleSendMessage(value,code) {
       console.log("From",code+":",value);
+    },
+    calculateSlot1() {
+      console.log("AAAAA");
     }
   },
 }
@@ -77,5 +95,15 @@ export default {
   border-color: black;
   background-color: white;
   overflow: hidden;
+}
+.section {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  padding: 2px;
+  margin: 10px;
 }
 </style>

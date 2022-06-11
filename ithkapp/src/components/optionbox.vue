@@ -1,10 +1,12 @@
 <template>
   <div class="optionbox" :class="OBclass">
-    <p>{{title}}</p>
-    <p class="error"></p>
+    <h3>{{title}}</h3>
+
     <!-- The following depends on which TYPE of grammar option this is: -->
+
     <!-- If it's a simple text entry: -->
     <input v-if="type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." maxlength=4/>
+
     <!-- If it's a list of text entries: -->
     <div v-else-if="type=='affix'">
       <div v-for="(affix,index) in affixes" :key="affix"> <!-- For each affix/degree pair in the array "affixes", add a textbox and dropdown linked to each-->
@@ -16,12 +18,16 @@
       <input type="button" value="Add" @click="affixes.push(['',0]); this.$emit('send-message',affixes,code)"/>
       <input type="button" value="Remove" @click="affixes.pop(); this.$emit('send-message',affixes,code)"/>
     </div>
+
     <!-- Otherwise, assume it's a dropdown list: -->
-    <select v-else v-model="option" @change="this.$emit('send-message',option,code)">
-      <option disabled selected>Select...</option>
+    <select v-else v-model="option" @change="this.$emit('send-message',option,code)" :disabled="disabled" :id="code">
+      <!--<option selected disabled>Select...</option>-->
       <option v-for="(opt, short) in options" :key="opt" :value="short">{{opt}}</option>
     </select>
-    <p>{{code}}</p>
+
+    <p v-if='this.$props.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})'><b>ERROR:</b> Empty affixes</p> <!-- if there's an error, have text that says so -->
+    <p v-else-if='this.$props.type == "text" && this.text == ""'><b>ERROR:</b> Empty root</p>
+    <p v-else></p> <!-- This is here so that the padding works regardless of if there's a <p> element or not -->
   </div>
 </template>
 
@@ -33,21 +39,27 @@ export default {
     title: String,
     code: String,
     type: String,
+    disabled: Boolean
   },
   data() {
     return {
       text: "",
-      option: "Select...",
-      affixes: [["",0]],
-      required: true
+      option: null,
+      affixes: [],
     }
   },
   computed: {
     OBclass() { // set class to error if the input is the default
       console.log(this.affixes.every(function (e) {return e[0] != ""}));
       return {
-        error: this.required & this.option == "Select..." && this.text == "" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})
+        error: (this.$props.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})) || (this.$props.type == "text" && this.text == ""),
+        disabledbox: this.disabled
       }
+    }
+  },
+  mounted() {
+    if (this.$props.type != "affix" && this.$props.type != "text"){
+      document.getElementById(this.$props.code).selectedIndex = 0;
     }
   }
 }
@@ -62,14 +74,20 @@ export default {
   border-color: black;
   flex-grow: 1;
   flex-basis: 20vw;
+  margin: 2px;
 }
 .error {
   border-color: red;
   color: red;
 }
-h3 {
-  margin: 40px 0 0;
+.disabledbox {
+  border-color: black;
+  background-color: silver;
+  color: dimgray;
 }
+/*h3 {
+  margin: 40px 0 0;
+}*/
 ul {
   list-style-type: none;
   padding: 0;
