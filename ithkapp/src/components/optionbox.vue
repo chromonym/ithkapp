@@ -35,7 +35,7 @@
 export default {
   name: 'OptionBox',
   props: {
-    options: Array,
+    options: Object,
     title: String,
     code: String,
     type: String,
@@ -50,7 +50,6 @@ export default {
   },
   computed: {
     OBclass() { // set class to error if the input is the default
-      console.log(this.affixes.every(function (e) {return e[0] != ""}));
       return {
         error: (this.$props.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})) || (this.$props.type == "text" && this.text == ""),
         disabledbox: this.disabled
@@ -73,7 +72,7 @@ export default {
   border-width: 1px;
   border-color: black;
   flex-grow: 1;
-  flex-basis: 20vw;
+  /*flex-basis: 20vw;*/
   margin: 2px;
 }
 .error {
