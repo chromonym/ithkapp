@@ -1,0 +1,306 @@
+{
+    "root": {
+        "type":"text",
+        "title":"Root (Slot III)",
+        "popuptest":"let's get to the root of the problem"
+    },
+
+    "stem": {
+        "type":"",
+        "title":"Stem",
+        "options": {
+            "s1":{
+                "name": "Stem 1",
+                "desc": "N/A"
+            },
+            "s2":{
+                "name": "Stem 2",
+                "desc": "N/A"
+            },
+            "s3":{
+                "name": "Stem 3",
+                "desc": "N/A"
+            },
+            "s0":{
+                "name": "Stem 0",
+                "desc": "N/A"
+            }
+        },
+        "popuptest":"the plant has a...!"
+    },
+
+    "func": {
+        "type":"",
+        "title":"Function",
+        "options": {
+
+        },
+        "popuptest":"functionally useless lol"
+    },
+
+    "spec": {
+        "type":"",
+        "title":"Specification",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "ver": {
+        "type":"",
+        "title":"Version",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "concat": {
+        "type":"",
+        "title":"Concatenation",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+    
+    "shcut": {
+        "type":"",
+        "title":"Shortcutting",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+    
+    "5afx": {
+        "type":"affix",
+        "title":"Slot V Affixes",
+        "popuptest":""
+    },
+
+    "7afx": {
+        "type":"affix",
+        "title":"Slot VII Affixes",
+        "popuptest":""
+    },
+
+    "plex": {
+        "type":"",
+        "title":"Plexity",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "simil": {
+        "type":"",
+        "title":"Similarity",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "cctd": {
+        "type":"",
+        "title":"Connectedness",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "affil": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "ext": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "persp": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "ess": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "vn": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "val": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "pha": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "eff": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "lvl": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "asp": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "mood": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+    
+    "casc": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "ccat": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+    
+    "c0": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "c1": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "c2": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+    
+    "c3": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "c4": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "c5": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "c6": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "c7": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "ill": {
+        "type":"",
+        "options": {
+        },
+        "popuptest":""
+    },
+
+    "exp": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    },
+
+    "vld": {
+        "type":"",
+        "options": {
+
+        },
+        "popuptest":""
+    }
+}

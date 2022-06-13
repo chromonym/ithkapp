@@ -74,12 +74,23 @@
       <!-- Note to self: add a v-if & v-else regarding the following two, based on slot X -->
       <OptionBox title="Mood" :options='{"FAC":"FAC","SUB":"SUB","ASM":"ASM","SPC":"SPC","COU":"COU","HYP":"HYP"}' code="mood" @send-message="handleSendMessage"/>
       <OptionBox title="Case-Scope" :options='{"CCN":"Natural","CCA":"Antecedent","CCS":"Subaltern","CCQ":"Qualifier","CCP":"Precedent","CCV":"Successive"}' code="casc" @send-message="handleSendMessage"/>
+      <OptionBox title="Relation" :options='{"UNF/C":"Unframed + Case","UNF/K":"Unframed + IEV","FRM":"Framed + Case"}' code="rel" @send-message="handleSendMessage"/>
     </div>
-    <div class="section"> <!-- Section 6: Case -->
-      <OptionBox title="Case Category" :options='{"c0":"Transrelative","c1":"Appositive","c2":"Associative","c3":"Adverbial","c4":"Relational","c5":"Affinitive","c6":"Spatio-Temporal I","c7":"Spatio-Temporal II"}' code="ccat" @send-message="handleSendMessage"/>
-      <!-- Note to self: I need to bugfix the fact that switching case category resets the selected case but doesn't update the variables -->
-      <OptionBox v-if="this.ccat == 'c0'" title="Transrelative" :options='{"THM":"Thematic","INS":"Instrumental","ABS":"Absolutive","AFF":"Affective","STM":"Stimulative","EFF":"Effectuative","ERG":"Ergative","DAT":"Dative","IND":"Inducive"}' code="c" @send-message="handleSendMessage" />
-      <OptionBox v-if="this.ccat == 'c1'" title="Appositive" :options='{"POS":"Possesive","PRP":"Proprietive","GEN":"Genitive","ATT":"Attributive","PDC":"Productive","ITP":"Interpretative","OGN":"Originative","IDP":"Interdependent","PAR":"Partitive"}' code="c" @send-message="handleSendMessage" />
+    <div class="section"> <!-- Section 6: Slot 9 -->
+        <OptionBox v-if='this.grammaroptions.rel != "UNF/K"' title="Case Category" :options='{"c0":"Transrelative","c1":"Appositive","c2":"Associative","c3":"Adverbial","c4":"Relational","c5":"Affinitive","c6":"Spatio-Temporal I","c7":"Spatio-Temporal II"}' code="ccat" @send-message="handleSendMessage"/>
+        <!-- Note to self: I need to bugfix the fact that switching case category resets the selected case but doesn't update the variables -->
+        <OptionBox v-if="this.grammaroptions.ccat == 'c0' && this.grammaroptions.rel != 'UNF/K'" title="Transrelative" :options='{"THM":"Thematic","INS":"Instrumental","ABS":"Absolutive","AFF":"Affective","STM":"Stimulative","EFF":"Effectuative","ERG":"Ergative","DAT":"Dative","IND":"Inducive"}' code="c" @send-message="handleSendMessage" />
+        <OptionBox v-if="this.grammaroptions.ccat == 'c1' && this.grammaroptions.rel != 'UNF/K'" title="Appositive" :options='{"POS":"Possesive","PRP":"Proprietive","GEN":"Genitive","ATT":"Attributive","PDC":"Productive","ITP":"Interpretative","OGN":"Originative","IDP":"Interdependent","PAR":"Partitive"}' code="c" @send-message="handleSendMessage" />
+        <OptionBox v-if="this.grammaroptions.ccat == 'c2' && this.grammaroptions.rel != 'UNF/K'" title="Associative" :options='{"APL":"Applicative","PUR":"Purposive","TRA":"Transmissive","DFR":"Deferential","CRS":"Contrastive","TSP":"Transposive","CMM":"Commutative","CMP":"Comparative","CSD":"Considerative"}' code="c" @send-message="handleSendMessage" />
+        <OptionBox v-if="this.grammaroptions.ccat == 'c3' && this.grammaroptions.rel != 'UNF/K'" title="Adverbial" :options='{"FUN":"Functive","TFM":"Transformative","CLA":"Classificative","RSL":"Resultative","CSM":"Consumptive","CON":"Concessive","AVR":"Aversive","CVS":"Conversive","SIT":"Situative"}' code="c" @send-message="handleSendMessage" />
+        <OptionBox v-if="this.grammaroptions.ccat == 'c4' && this.grammaroptions.rel != 'UNF/K'" title="Relational" :options='{"PRN":"Pertinential","DSP":"Descriptive","COR":"Correlative","CPS":"Compositive","COM":"Comitative","UTL":"Utilitative","PRD":"Predicative","RLT":"Relative"}' code="c" @send-message="handleSendMessage" />
+        <OptionBox v-if="this.grammaroptions.ccat == 'c5' && this.grammaroptions.rel != 'UNF/K'" title="Affinitive" :options='{"ACT":"Activative","ASI":"Assimilative","ESS":"Essive","TRM":"Terminative","SEL":"Selective","CFM":"Conformative","DEP":"Dependent","VOC":"Vocative"}' code="c" @send-message="handleSendMessage" />
+        <OptionBox v-if="this.grammaroptions.ccat == 'c6' && this.grammaroptions.rel != 'UNF/K'" title="Spatio-Temporal I" :options='{"LOC":"Locative","ATD":"Attendant","ALL":"Allative","ABL":"Ablative","ORI":"Orientative","IRL":"Interrelative","INV":"Intrative","NAV":"Navigative"}' code="c" @send-message="handleSendMessage" />
+        <OptionBox v-if="this.grammaroptions.ccat == 'c7' && this.grammaroptions.rel != 'UNF/K'" title="Spatio-Temporal II" :options='{"CNR":"Concursive","ASS":"Assessive","PER":"Periodic","PRO":"Prolapse","PCV":"Precursive","PCR":"Postcursive","ELP":"Elapsive","PLM":"Prolimitive"}' code="c" @send-message="handleSendMessage" />
+        <!-- end of cases (if slot X != UNF/K), start of IEV (if slot X == UNF/K) -->
+        <OptionBox v-if="this.grammaroptions.rel == 'UNF/K'" title="Illocution" :options='{"ASR":"Assertive","PFM":"Performative"}' code="ill" @send-message="handleSendMessage"/>
+        <OptionBox v-if="this.grammaroptions.rel == 'UNF/K'" title="Expectation" :options='{"COG":"Cognitive","RSP":"Responsive","EXE":"Executive"}' code="exp" @send-message="handleSendMessage"/>
+        <OptionBox v-if="this.grammaroptions.rel == 'UNF/K'" title="Validation" :options='{"OBS":"Observational","REC":"Recollective","PUP":"Purportive","RPR":"Reportive","IMA":"Imaginary","CVN":"Conventional","ITU":"Intuitive","INF":"Inferential"}' code="vld" @send-message="handleSendMessage" :disabled='this.grammaroptions.ill == "PFM"'/>
     </div>
     <p>Testing sections below:</p>
     <input type="checkbox" v-model="test"/>
@@ -109,6 +120,7 @@
 
 <script>
 import OptionBox from './components/optionbox.vue'
+import grammardata from './grammardata.json'
 
 export default {
   name: 'App',
@@ -118,33 +130,61 @@ export default {
   data() {
     return {
       test: false,
+      gData: {},
       modalContent: "",
-      // the following variables correspond to things visible on-screen
-      ithkword: ["a","b","c","","","","","",""], // ithkuil word, split into slots (0-8 = I-IX)
       grammaroptions: { // grammar options
         "root":"",
+        "stem":0,
+        "func":"STA",
+        "spec":"BSC",
+        "ver":"PRC",
+        "concat":0,
+        "shcut":0,
         "5afx":[],
         "7afx":[],
-        "concat":0,
-        
+        "plex":"U",
+        "simil":"S",
+        "cctd":"S",
+        "affil":"CSL",
+        "ext":"DEL",
+        "persp":"M",
+        "ess":"NRM",
+        "vn":"val",
+        "val":"MNO",
+        "pha":"PCT",
+        "eff":"1:BEN",
+        "lvl":"MIN",
+        "asp":"RTR",
+        "mood":"FAC",
+        "casc":"CCN",
+        "rel": "UNF/C",
+        "ccat":"c0",
+        "c":"THM",
+        "ill":"ASR",
+        "exp":"COG",
+        "vld":"OBS"
       },
+      /*grammarlist: ["root","stem","func","spec","ver",
+                    "concat","shcut","5afx","7afx",
+                    "plex","simil","cctd",
+                    "affil","ext","persp","ess",
+                    "vn","val","pha","eff","lvl","asp","mood","casc",
+                    "ccat","c0","c1","c2","c3","c4","c5","c6","c7"],*/
+      // the following variables correspond to things visible on-screen
+      ithkword: ["a","b","c","","","","","",""], // ithkuil word, split into slots (0-8 = I-IX)
       gloss: "al.FA.bet", // gloss of word
       ipa: "eɪ bi: si:", // IPA transcription
-      ccat: "c0"
     }
   },
   methods: {
     handleSendMessage(value,code) {
       console.log("From",code+":",value);
-      if (code=="ccat") {
-        this.ccat = value;
-      }
+      this.grammaroptions[code] = value;
+      console.log(this.grammaroptions);
     },
     openModal(code) {
       console.log("Modal opening for",code);
-      this.modalContent = code;
-      /*console.log(this.$refs[code]);
-      this.$refs[code].updateValue("DYN");*/
+      this.modalContent = grammardata[code].popuptest;
       document.getElementById("modal").style.display = "block";
     },
     closeModal() {
@@ -154,6 +194,10 @@ export default {
       console.log("AAAAA");
     }
   },
+  beforeCreate() {
+    this.gData = grammardata;
+    console.log(this.gData.stem.options);
+  }
 }
 </script>
 
