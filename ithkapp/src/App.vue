@@ -11,6 +11,7 @@
       <OptionBox title="Version" :options='{"PRC":"Processual","CPT":"Completive"}' code="ver" @send-message="handleSendMessage"/>
     </div>
     <div class="section"> <!-- Section 2: Concatenation & Affixes-->
+      <OptionBox title="Relation" :options='{"UNF/C":"Unframed + Case","UNF/K":"Unframed + IEV","FRM":"Framed + Case"}' code="rel" @send-message="handleSendMessage"/>
       <OptionBox title="Concatenation" :options='["None","Type 1","Type 2"]' code="concat" @send-message="handleSendMessage"/>
       <OptionBox title="Shortcutting" :options="['None','Yes']" code="shcut" @send-message="handleSendMessage"/>
       <OptionBox title="Slot V Affixes" code="5afx" @send-message="handleSendMessage" type="affix"/>
@@ -30,10 +31,10 @@
     </div>
     <div class="section"> <!-- Section 5: Slot VIII -->
       <OptionBox title="Vₙ" :options='{"val":"Valence","pha":"Phase","eff":"Effect","lvl":"Level","asp":"Aspect"}' code="vn" @send-message="handleSendMessage"/>
-      <OptionBox title="Valence" :options='{"MNO":"MNO","PRL":"PRL","CRO":"CRO","RCP":"RCP","CPL":"CPL","DUP":"DUP","DEM":"DEM","CNG":"CNG","PTI":"PTI"}' code="val" @send-message="handleSendMessage"/>
-      <OptionBox title="Phase" :options='{"PCT":"PCT","ITR":"ITR","REP":"REP","ITM":"ITM","RCT":"RCT","FRE":"FRE","FRG":"FRG","VAC":"VAC","FLC":"FLC"}' code="pha" @send-message="handleSendMessage"/>
-      <OptionBox title="Effect" :options='{"1:BEN":"1:BEN","2:BEN":"2:BEN","3:BEN":"3:BEN","SLF:BEN":"SLF:BEN","UNK":"UNK","SLF:DET":"SLF:DET","3:DET":"3:DET","2:DET":"2:DET","1:DET":"1:DET"}' code="eff" @send-message="handleSendMessage"/>
-      <OptionBox title="Level" :options='{"MIN":"MIN","SBE":"SBE","IFR":"IFR","DFT":"DFT","EQU":"EQU","SUR":"SUR","SPL":"SPL","SPQ":"SPQ","MAX":"MAX"}' code="lvl" @send-message="handleSendMessage"/>
+      <OptionBox title="Valence" :options='{"MNO":"Monoactive","PRL":"Parallel","CRO":"Corollary","RCP":"Reciprocal","CPL":"Complementary","DUP":"Duplicative","DEM":"Demonstrative","CNG":"Contingent","PTI":"Participative"}' code="val" @send-message="handleSendMessage"/>
+      <OptionBox title="Phase" :options='{"PCT":"Punctual","ITR":"Iterative","REP":"Repetitive","ITM":"Intermittent","RCT":"Recurrent","FRE":"Frequentative","FRG":"Fragmentative","VAC":"Vacillative","FLC":"Fluctuative"}' code="pha" @send-message="handleSendMessage"/>
+      <OptionBox title="Effect" :options='{"1:BEN":"Beneficial","2:BEN":"Beneficial","3:BEN":"Beneficial","SLF:BEN":"Beneficial to Self","UNK":"Unknown","SLF:DET":"Detrimental to Self","3:DET":"Detrimental","2:DET":"Detrimental","1:DET":"Detrimental"}' code="eff" @send-message="handleSendMessage"/>
+      <OptionBox title="Level" :options='{"MIN":"Minimal","SBE":"Subequative","IFR":"Inferior","DFT":"Deficient","EQU":"Equative","SUR":"Surpassive","SPL":"Superlative","SPQ":"Superequative","MAX":"Maximal"}' code="lvl" @send-message="handleSendMessage"/>
       <OptionBox title="Aspect" code="asp" @send-message="handleSendMessage"
       :options = '{"RTR":"Retrospective",
                   "PRS":"Prospective",
@@ -72,21 +73,20 @@
                   "MTV":"Motive",
                   "SQN":"Sequential"}'/>
       <!-- Note to self: add a v-if & v-else regarding the following two, based on slot X -->
-      <OptionBox title="Mood" :options='{"FAC":"FAC","SUB":"SUB","ASM":"ASM","SPC":"SPC","COU":"COU","HYP":"HYP"}' code="mood" @send-message="handleSendMessage"/>
-      <OptionBox title="Case-Scope" :options='{"CCN":"Natural","CCA":"Antecedent","CCS":"Subaltern","CCQ":"Qualifier","CCP":"Precedent","CCV":"Successive"}' code="casc" @send-message="handleSendMessage"/>
-      <OptionBox title="Relation" :options='{"UNF/C":"Unframed + Case","UNF/K":"Unframed + IEV","FRM":"Framed + Case"}' code="rel" @send-message="handleSendMessage"/>
+      <OptionBox v-if='this.grammaroptions.rel != "FRM"' title="Mood" :options='{"FAC":"Factual","SUB":"Subjunctive","ASM":"Assumptive","SPC":"Speculative","COU":"Counterfactive","HYP":"Hypothetical"}' code="mood" @send-message="handleSendMessage"/>
+      <OptionBox v-else title="Case-Scope" :options='{"CCN":"Natural","CCA":"Antecedent","CCS":"Subaltern","CCQ":"Qualifier","CCP":"Precedent","CCV":"Successive"}' code="casc" @send-message="handleSendMessage"/>
     </div>
     <div class="section"> <!-- Section 6: Slot 9 -->
         <OptionBox v-if='this.grammaroptions.rel != "UNF/K"' title="Case Category" :options='{"c0":"Transrelative","c1":"Appositive","c2":"Associative","c3":"Adverbial","c4":"Relational","c5":"Affinitive","c6":"Spatio-Temporal I","c7":"Spatio-Temporal II"}' code="ccat" @send-message="handleSendMessage"/>
-        <!-- Note to self: I need to bugfix the fact that switching case category resets the selected case but doesn't update the variables -->
-        <OptionBox v-if="this.grammaroptions.ccat == 'c0' && this.grammaroptions.rel != 'UNF/K'" title="Transrelative" :options='{"THM":"Thematic","INS":"Instrumental","ABS":"Absolutive","AFF":"Affective","STM":"Stimulative","EFF":"Effectuative","ERG":"Ergative","DAT":"Dative","IND":"Inducive"}' code="c" @send-message="handleSendMessage" />
-        <OptionBox v-if="this.grammaroptions.ccat == 'c1' && this.grammaroptions.rel != 'UNF/K'" title="Appositive" :options='{"POS":"Possesive","PRP":"Proprietive","GEN":"Genitive","ATT":"Attributive","PDC":"Productive","ITP":"Interpretative","OGN":"Originative","IDP":"Interdependent","PAR":"Partitive"}' code="c" @send-message="handleSendMessage" />
-        <OptionBox v-if="this.grammaroptions.ccat == 'c2' && this.grammaroptions.rel != 'UNF/K'" title="Associative" :options='{"APL":"Applicative","PUR":"Purposive","TRA":"Transmissive","DFR":"Deferential","CRS":"Contrastive","TSP":"Transposive","CMM":"Commutative","CMP":"Comparative","CSD":"Considerative"}' code="c" @send-message="handleSendMessage" />
-        <OptionBox v-if="this.grammaroptions.ccat == 'c3' && this.grammaroptions.rel != 'UNF/K'" title="Adverbial" :options='{"FUN":"Functive","TFM":"Transformative","CLA":"Classificative","RSL":"Resultative","CSM":"Consumptive","CON":"Concessive","AVR":"Aversive","CVS":"Conversive","SIT":"Situative"}' code="c" @send-message="handleSendMessage" />
-        <OptionBox v-if="this.grammaroptions.ccat == 'c4' && this.grammaroptions.rel != 'UNF/K'" title="Relational" :options='{"PRN":"Pertinential","DSP":"Descriptive","COR":"Correlative","CPS":"Compositive","COM":"Comitative","UTL":"Utilitative","PRD":"Predicative","RLT":"Relative"}' code="c" @send-message="handleSendMessage" />
-        <OptionBox v-if="this.grammaroptions.ccat == 'c5' && this.grammaroptions.rel != 'UNF/K'" title="Affinitive" :options='{"ACT":"Activative","ASI":"Assimilative","ESS":"Essive","TRM":"Terminative","SEL":"Selective","CFM":"Conformative","DEP":"Dependent","VOC":"Vocative"}' code="c" @send-message="handleSendMessage" />
-        <OptionBox v-if="this.grammaroptions.ccat == 'c6' && this.grammaroptions.rel != 'UNF/K'" title="Spatio-Temporal I" :options='{"LOC":"Locative","ATD":"Attendant","ALL":"Allative","ABL":"Ablative","ORI":"Orientative","IRL":"Interrelative","INV":"Intrative","NAV":"Navigative"}' code="c" @send-message="handleSendMessage" />
-        <OptionBox v-if="this.grammaroptions.ccat == 'c7' && this.grammaroptions.rel != 'UNF/K'" title="Spatio-Temporal II" :options='{"CNR":"Concursive","ASS":"Assessive","PER":"Periodic","PRO":"Prolapse","PCV":"Precursive","PCR":"Postcursive","ELP":"Elapsive","PLM":"Prolimitive"}' code="c" @send-message="handleSendMessage" />
+        <OptionBox v-if="this.grammaroptions.rel != 'UNF/K'" title="Case" code="c" @send-message="handleSendMessage"
+        :options='this.grammaroptions.ccat == "c0" ? {"THM":"Thematic","INS":"Instrumental","ABS":"Absolutive","AFF":"Affective","STM":"Stimulative","EFF":"Effectuative","ERG":"Ergative","DAT":"Dative","IND":"Inducive"}:
+        this.grammaroptions.ccat == "c1" ? {"POS":"Possesive","PRP":"Proprietive","GEN":"Genitive","ATT":"Attributive","PDC":"Productive","ITP":"Interpretative","OGN":"Originative","IDP":"Interdependent","PAR":"Partitive"} :
+        this.grammaroptions.ccat == "c2" ? {"APL":"Applicative","PUR":"Purposive","TRA":"Transmissive","DFR":"Deferential","CRS":"Contrastive","TSP":"Transposive","CMM":"Commutative","CMP":"Comparative","CSD":"Considerative"} :
+        this.grammaroptions.ccat == "c3" ? {"FUN":"Functive","TFM":"Transformative","CLA":"Classificative","RSL":"Resultative","CSM":"Consumptive","CON":"Concessive","AVR":"Aversive","CVS":"Conversive","SIT":"Situative"} :
+        this.grammaroptions.ccat == "c4" ? {"PRN":"Pertinential","DSP":"Descriptive","COR":"Correlative","CPS":"Compositive","COM":"Comitative","UTL":"Utilitative","PRD":"Predicative","RLT":"Relative"} :
+        this.grammaroptions.ccat == "c5" ? {"ACT":"Activative","ASI":"Assimilative","ESS":"Essive","TRM":"Terminative","SEL":"Selective","CFM":"Conformative","DEP":"Dependent","VOC":"Vocative"} :
+        this.grammaroptions.ccat == "c6" ? {"LOC":"Locative","ATD":"Attendant","ALL":"Allative","ABL":"Ablative","ORI":"Orientative","IRL":"Interrelative","INV":"Intrative","NAV":"Navigative"} :
+        this.grammaroptions.ccat == "c7" ? {"CNR":"Concursive","ASS":"Assessive","PER":"Periodic","PRO":"Prolapse","PCV":"Precursive","PCR":"Postcursive","ELP":"Elapsive","PLM":"Prolimitive"} : ["ERROR"]' />
         <!-- end of cases (if slot X != UNF/K), start of IEV (if slot X == UNF/K) -->
         <OptionBox v-if="this.grammaroptions.rel == 'UNF/K'" title="Illocution" :options='{"ASR":"Assertive","PFM":"Performative"}' code="ill" @send-message="handleSendMessage"/>
         <OptionBox v-if="this.grammaroptions.rel == 'UNF/K'" title="Expectation" :options='{"COG":"Cognitive","RSP":"Responsive","EXE":"Executive"}' code="exp" @send-message="handleSendMessage"/>
