@@ -33,7 +33,14 @@
         "type":"",
         "title":"Function",
         "options": {
-
+            "STA": {
+                "name":"Static",
+                "desc":"N/A"
+            },
+            "DYN": {
+                "name":"Dynamic",
+                "desc":"N/A"
+            }
         },
         "popuptest":"functionally useless lol"
     },
@@ -42,7 +49,22 @@
         "type":"",
         "title":"Specification",
         "options": {
-
+            "BSC": {
+                "name":"Basic",
+                "desc":"N/A"
+            },
+            "CTE": {
+                "name":"Contential",
+                "desc":"N/A"
+            },
+            "CSV": {
+                "name":"Constitutive",
+                "desc":"N/A"
+            },
+            "OBJ": {
+                "name":"Objective",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
@@ -51,7 +73,34 @@
         "type":"",
         "title":"Version",
         "options": {
+            "PRC":{
+                "name":"Processual",
+                "desc":"N/A"
+            },
+            "CPT":{
+                "name":"Completive",
+                "desc":"N/A"
+            }
+        },
+        "popuptest":""
+    },
 
+    "rel": {
+        "type":"",
+        "title":"Relation",
+        "options": {
+            "UNF/C": {
+                "name":"Unframed + Case",
+                "desc":"N/A"
+            },
+            "UNF/K": {
+                "name":"Unframed + IEV",
+                "desc":"N/A"
+            },
+            "FRM": {
+                "name":"Framed + Case",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
@@ -59,28 +108,46 @@
     "concat": {
         "type":"",
         "title":"Concatenation",
-        "options": {
-
-        },
+        "options": [
+            {
+                "name":"None",
+                "desc":"N/A"
+            },
+            {
+                "name":"Type 1",
+                "desc":"N/A"
+            },
+            {
+                "name":"Type 2",
+                "desc":"N/A"
+            }
+        ],
         "popuptest":""
     },
     
     "shcut": {
         "type":"",
         "title":"Shortcutting",
-        "options": {
-
-        },
-        "popuptest":""
+        "options": [
+            {
+                "name":"None",
+                "desc":"N/A"
+            },
+            {
+                "name":"Yes",
+                "desc":"N/A"
+            }
+        ],
+        "popuptest":"will probably eventually switch to being a checkbox"
     },
     
-    "5afx": {
+    "Vafx": {
         "type":"affix",
         "title":"Slot V Affixes",
         "popuptest":""
     },
 
-    "7afx": {
+    "VIIafx": {
         "type":"affix",
         "title":"Slot VII Affixes",
         "popuptest":""
@@ -90,7 +157,18 @@
         "type":"",
         "title":"Plexity",
         "options": {
-
+            "U": {
+                "name":"Uniplex",
+                "desc":"N/A"
+            },
+            "D": {
+                "name":"Duplex",
+                "desc":"N/A"
+            },
+            "M": {
+                "name":"Multiplex",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
@@ -99,7 +177,18 @@
         "type":"",
         "title":"Similarity",
         "options": {
-
+            "S": {
+                "name":"Similar",
+                "desc":"N/A"
+            },
+            "D": {
+                "name":"Dissimilar",
+                "desc":"N/A"
+            },
+            "F": {
+                "name":"Fuzzy",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
@@ -108,198 +197,890 @@
         "type":"",
         "title":"Connectedness",
         "options": {
-
+            "S": {
+                "name":"Separate",
+                "desc":"N/A"
+            },
+            "C": {
+                "name":"Connected",
+                "desc":"N/A"
+            },
+            "F": {
+                "name":"Fused",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "affil": {
         "type":"",
+        "title":"Affiliation",
         "options": {
-
+            "CSL": {
+                "name":"Consolidative",
+                "desc":"N/A"
+            },
+            "ASO": {
+                "name":"Associative",
+                "desc":"N/A"
+            },
+            "COA": {
+                "name":"Coalescent",
+                "desc":"N/A"
+            },
+            "VAR": {
+                "name":"Variative",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "ext": {
         "type":"",
+        "title":"Extension",
         "options": {
-
+            "DEL": {
+                "name":"Delimitive",
+                "desc":"N/A"
+            },
+            "PRX": {
+                "name":"Proximal",
+                "desc":"N/A"
+            },
+            "ICP": {
+                "name":"Inceptive",
+                "desc":"N/A"
+            },
+            "ATV":{
+                "name":"Attentuative",
+                "desc":"N/A"
+            },
+            "GRA":{
+                "name":"Graduative",
+                "desc":"N/A"
+            },
+            "DPL":{
+                "name":"Depletive",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "persp": {
         "type":"",
+        "title":"Perspective",
         "options": {
-
+            "M": {
+                "name":"Monadic",
+                "desc":"N/A"
+            },
+            "G": {
+                "name":"Agglomerative",
+                "desc":"N/A"
+            },
+            "N": {
+                "name":"Nomic",
+                "desc":"N/A"
+            },
+            "A": {
+                "name":"Abstract",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "ess": {
         "type":"",
+        "title":"Essence",
         "options": {
-
+            "NRM": {
+                "name":"Normal",
+                "desc":"N/A"
+            },
+            "RPV": {
+                "name":"Representative",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "vn": {
         "type":"",
+        "title":"Vₙ",
         "options": {
-
+            "val": {
+                "name":"Valence",
+                "desc":"N/A"
+            },
+            "pha": {
+                "name":"Phase",
+                "desc":"N/A"
+            },
+            "eff": {
+                "name":"Effect",
+                "desc":"N/A"
+            },
+            "lvl": {
+                "name":"Level",
+                "desc":"N/A"
+            },
+            "asp": {
+                "name":"Aspect",
+                "desc":"N/A"
+            }
         },
-        "popuptest":""
+        "popuptest":"probably going to delete this"
     },
 
     "val": {
         "type":"",
+        "title":"Valence",
         "options": {
-
+            "MNO":{
+                "name":"Monoactive",
+                "desc":"N/A"
+            },
+            "PRL":{
+                "name":"Parallel",
+                "desc":"N/A"
+            },
+            "CRO":{
+                "name":"Corollary",
+                "desc":"N/A"
+            },
+            "RCP":{
+                "name":"Reciprocal",
+                "desc":"N/A"
+            },
+            "CPL":{
+                "name":"Complementary",
+                "desc":"N/A"
+            },
+            "DUP":{
+                "name":"Duplicative",
+                "desc":"N/A"
+            },
+            "DEM":{
+                "name":"Demonstrative",
+                "desc":"N/A"
+            },
+            "CNG":{
+                "name":"Contingent",
+                "desc":"N/A"
+            },
+            "PTI":{
+                "name":"Partictipative",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "pha": {
         "type":"",
+        "title":"Phase",
         "options": {
-
+            "PCT":{
+                "name":"Punctual",
+                "desc":"N/A"
+            },
+            "ITR":{
+                "name":"Iterative",
+                "desc":"N/A"
+            },
+            "REP":{
+                "name":"Repetitive",
+                "desc":"N/A"
+            },
+            "ITM":{
+                "name":"Intermittent",
+                "desc":"N/A"
+            },
+            "RCT":{
+                "name":"Recurrent",
+                "desc":"N/A"
+            },
+            "FRE":{
+                "name":"Frequentative",
+                "desc":"N/A"
+            },
+            "FRG":{
+                "name":"Fragmentative",
+                "desc":"N/A"
+            },
+            "VAC":{
+                "name":"Vacillative",
+                "desc":"N/A"
+            },
+            "FLC":{
+                "name":"Fluctuative",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "eff": {
         "type":"",
+        "title":"Effect",
         "options": {
-
+            "1:BEN":{
+                "name":"Beneficial to Speaker",
+                "desc":"N/A"
+            },
+            "2:BEN":{
+                "name":"Beneficial to Addressee",
+                "desc":"N/A"
+            },
+            "3:BEN":{
+                "name":"Beneficial to 3rd Party",
+                "desc":"N/A"
+            },
+            "SLF:BEN":{
+                "name":"Beneficial to Formative",
+                "desc":"N/A"
+            },
+            "UNK":{
+                "name":"Unknown",
+                "desc":"N/A"
+            },
+            "SLF:DET":{
+                "name":"Detrimental to Formative",
+                "desc":"N/A"
+            },
+            "3:DET":{
+                "name":"Detrimental to 3rd Party",
+                "desc":"N/A"
+            },
+            "2:DET":{
+                "name":"Detrimental to Addressee",
+                "desc":"N/A"
+            },
+            "1:DET":{
+                "name":"Detrimental to Speaker",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "lvl": {
         "type":"",
+        "title":"Level",
         "options": {
-
+            "MIN":{
+                "name":"Minimal",
+                "desc":"N/A"
+            },
+            "SBE":{
+                "name":"Subequative",
+                "desc":"N/A"
+            },
+            "IFR":{
+                "name":"Inferior",
+                "desc":"N/A"
+            },
+            "DFT":{
+                "name":"Deficient",
+                "desc":"N/A"
+            },
+            "EQU":{
+                "name":"Equative",
+                "desc":"N/A"
+            },
+            "SUR":{
+                "name":"Surpassive",
+                "desc":"N/A"
+            },
+            "SPL":{
+                "name":"Superlative",
+                "desc":"N/A"
+            },
+            "SPQ":{
+                "name":"Superequative",
+                "desc":"N/A"
+            },
+            "MAX":{
+                "name":"Maximal",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "asp": {
         "type":"",
+        "title":"Aspect",
         "options": {
-
+            "RTR":{
+                "name":"Retrospective",
+                "desc":"N/A"
+            },
+            "PRS":{
+                "name":"Prospective",
+                "desc":"N/A"
+            },
+            "HAB":{
+                "name":"Habitual",
+                "desc":"N/A"
+            },
+            "PRG":{
+                "name":"Progressive",
+                "desc":"N/A"
+            },
+            "IMM":{
+                "name":"Imminent",
+                "desc":"N/A"
+            },
+            "PCS":{
+                "name":"Precessive",
+                "desc":"N/A"
+            },
+            "REG":{
+                "name":"Regulative",
+                "desc":"N/A"
+            },
+            "SMM":{
+                "name":"Summative",
+                "desc":"N/A"
+            },
+            "ATP":{
+                "name":"Anticipatory",
+                "desc":"N/A"
+            },
+            "RSM":{
+                "name":"Resumptive",
+                "desc":"N/A"
+            },
+            "CSS":{
+                "name":"Cessative",
+                "desc":"N/A"
+            },
+            "PAU":{
+                "name":"Pausal",
+                "desc":"N/A"
+            },
+            "RGR":{
+                "name":"Regressive",
+                "desc":"N/A"
+            },
+            "PCL":{
+                "name":"Preclusive",
+                "desc":"N/A"
+            },
+            "CNT":{
+                "name":"Continuative",
+                "desc":"N/A"
+            },
+            "ICS":{
+                "name":"Incessative",
+                "desc":"N/A"
+            },
+            "EXP":{
+                "name":"Experiential",
+                "desc":"N/A"
+            },
+            "IRP":{
+                "name":"Interruptive",
+                "desc":"N/A"
+            },
+            "PMP":{
+                "name":"Preemptive",
+                "desc":"N/A"
+            },
+            "CLM":{
+                "name":"Climactic",
+                "desc":"N/A"
+            },
+            "DLT":{
+                "name":"Dilatory",
+                "desc":"N/A"
+            },
+            "TMP":{
+                "name":"Temporary",
+                "desc":"N/A"
+            },
+            "XPD":{
+                "name":"Expenditive",
+                "desc":"N/A"
+            },
+            "LIM":{
+                "name":"Limitative",
+                "desc":"N/A"
+            },
+            "EPD":{
+                "name":"Expeditive",
+                "desc":"N/A"
+            },
+            "PTC":{
+                "name":"Protractive",
+                "desc":"N/A"
+            },
+            "PPR":{
+                "name":"Preparatory",
+                "desc":"N/A"
+            },
+            "DCL":{
+                "name":"Disclusive",
+                "desc":"N/A"
+            },
+            "CCL":{
+                "name":"Conclusive",
+                "desc":"N/A"
+            },
+            "CUL":{
+                "name":"Culminative",
+                "desc":"N/A"
+            },
+            "IMD":{
+                "name":"Intermediative",
+                "desc":"N/A"
+            },
+            "TRD":{
+                "name":"Tardative",
+                "desc":"N/A"
+            },
+            "TNS":{
+                "name":"Transitional",
+                "desc":"N/A"
+            },
+            "ITC":{
+                "name":"Intercommutative",
+                "desc":"N/A"
+            },
+            "MTV":{
+                "name":"Motive",
+                "desc":"N/A"
+            },
+            "SQN":{
+                "name":"Sequential",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "mood": {
         "type":"",
+        "title":"Mood",
         "options": {
-
+            "FAC":{
+                "name":"Factual",
+                "desc":"N/A"
+            },
+            "SUB":{
+                "name":"Subjective",
+                "desc":"N/A"
+            },
+            "ASM":{
+                "name":"Assumptive",
+                "desc":"N/A"
+            },
+            "SPC":{
+                "name":"Speculative",
+                "desc":"N/A"
+            },
+            "COU":{
+                "name":"Counterfactive",
+                "desc":"N/A"
+            },
+            "HYP":{
+                "name":"Hypothetical",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
     
     "casc": {
         "type":"",
+        "title":"Case-Scope",
         "options": {
-
-        },
-        "popuptest":""
-    },
-
-    "ccat": {
-        "type":"",
-        "options": {
-
-        },
-        "popuptest":""
-    },
-    
-    "c0": {
-        "type":"",
-        "options": {
-
-        },
-        "popuptest":""
-    },
-
-    "c1": {
-        "type":"",
-        "options": {
-
-        },
-        "popuptest":""
-    },
-
-    "c2": {
-        "type":"",
-        "options": {
-
+            "CCN":{
+                "name":"Natural",
+                "desc":"N/A"
+            },
+            "CCA":{
+                "name":"Antecedent",
+                "desc":"N/A"
+            },
+            "CCS":{
+                "name":"Subaltern",
+                "desc":"N/A"
+            },
+            "CCQ":{
+                "name":"Qualifier",
+                "desc":"N/A"
+            },
+            "CCP":{
+                "name":"Precedent",
+                "desc":"N/A"
+            },
+            "CCV":{
+                "name":"Successive",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
     
-    "c3": {
+    "c": {
         "type":"",
+        "title":"Case",
         "options": {
-
-        },
-        "popuptest":""
-    },
-
-    "c4": {
-        "type":"",
-        "options": {
-
-        },
-        "popuptest":""
-    },
-
-    "c5": {
-        "type":"",
-        "options": {
-
-        },
-        "popuptest":""
-    },
-
-    "c6": {
-        "type":"",
-        "options": {
-
-        },
-        "popuptest":""
-    },
-
-    "c7": {
-        "type":"",
-        "options": {
-
+            "THM":{
+                "name":"Thematic",
+                "desc":"N/A"
+            },
+            "INS":{
+                "name":"Instrumental",
+                "desc":"N/A"
+            },
+            "ABS":{
+                "name":"Absolutive",
+                "desc":"N/A"
+            },
+            "AFF":{
+                "name":"Affective",
+                "desc":"N/A"
+            },
+            "STM":{
+                "name":"Stimulative",
+                "desc":"N/A"
+            },
+            "EFF":{
+                "name":"Effectuative",
+                "desc":"N/A"
+            },
+            "ERG":{
+                "name":"Ergative",
+                "desc":"N/A"
+            },
+            "DAT":{
+                "name":"Dative",
+                "desc":"N/A"
+            },
+            "IND":{
+                "name":"Inducive",
+                "desc":"N/A"
+            },
+            "POS":{
+                "name":"Possesive",
+                "desc":"N/A"
+            },
+            "PRP":{
+                "name":"Proprietive",
+                "desc":"N/A"
+            },
+            "GEN":{
+                "name":"Genitive",
+                "desc":"N/A"
+            },
+            "ATT":{
+                "name":"Attributive",
+                "desc":"N/A"
+            },
+            "PDC":{
+                "name":"Productive",
+                "desc":"N/A"
+            },
+            "ITP":{
+                "name":"Interpretative",
+                "desc":"N/A"
+            },
+            "OGN":{
+                "name":"Originative",
+                "desc":"N/A"
+            },
+            "IDP":{
+                "name":"Interdependent",
+                "desc":"N/A"
+            },
+            "PAR":{
+                "name":"Partitive",
+                "desc":"N/A"
+            },
+            "APL":{
+                "name":"Applicative",
+                "desc":"N/A"
+            },
+            "PUR":{
+                "name":"Purposive",
+                "desc":"N/A"
+            },
+            "TRA":{
+                "name":"Transmissive",
+                "desc":"N/A"
+            },
+            "DFR":{
+                "name":"Deferential",
+                "desc":"N/A"
+            },
+            "CRS":{
+                "name":"Contrastive",
+                "desc":"N/A"
+            },
+            "TSP":{
+                "name":"Transposive",
+                "desc":"N/A"
+            },
+            "CMM":{
+                "name":"Commutative",
+                "desc":"N/A"
+            },
+            "CMP":{
+                "name":"Comparative",
+                "desc":"N/A"
+            },
+            "CSD":{
+                "name":"Considerative",
+                "desc":"N/A"
+            },
+            "FUN":{
+                "name":"Functive",
+                "desc":"N/A"
+            },
+            "TFM":{
+                "name":"Transformative",
+                "desc":"N/A"
+            },
+            "CLA":{
+                "name":"Classificative",
+                "desc":"N/A"
+            },
+            "RSL":{
+                "name":"Resultative",
+                "desc":"N/A"
+            },
+            "CSM":{
+                "name":"Consumptive",
+                "desc":"N/A"
+            },
+            "CON":{
+                "name":"Concessive",
+                "desc":"N/A"
+            },
+            "AVR":{
+                "name":"Aversive",
+                "desc":"N/A"
+            },
+            "CVS":{
+                "name":"Conversive",
+                "desc":"N/A"
+            },
+            "SIT":{
+                "name":"Situative",
+                "desc":"N/A"
+            },
+            "PRN":{
+                "name":"Pertinential",
+                "desc":"N/A"
+            },
+            "DSP":{
+                "name":"Descriptive",
+                "desc":"N/A"
+            },
+            "COR":{
+                "name":"Correlative",
+                "desc":"N/A"
+            },
+            "CPS":{
+                "name":"Compositive",
+                "desc":"N/A"
+            },
+            "COM":{
+                "name":"Comitative",
+                "desc":"N/A"
+            },
+            "UTL":{
+                "name":"Utilitative",
+                "desc":"N/A"
+            },
+            "PRD":{
+                "name":"Predicative",
+                "desc":"N/A"
+            },
+            "RLT":{
+                "name":"Relative",
+                "desc":"N/A"
+            },
+            "ACT":{
+                "name":"Activative",
+                "desc":"N/A"
+            },
+            "ASI":{
+                "name":"Assimilative",
+                "desc":"N/A"
+            },
+            "ESS":{
+                "name":"Essive",
+                "desc":"N/A"
+            },
+            "TRM":{
+                "name":"Terminative",
+                "desc":"N/A"
+            },
+            "SEL":{
+                "name":"Selective",
+                "desc":"N/A"
+            },
+            "CFM":{
+                "name":"Conformative",
+                "desc":"N/A"
+            },
+            "DEP":{
+                "name":"Dependent",
+                "desc":"N/A"
+            },
+            "VOC":{
+                "name":"Vocative",
+                "desc":"N/A"
+            },
+            "LOC":{
+                "name":"Locative",
+                "desc":"N/A"
+            },
+            "ATD":{
+                "name":"Attendant",
+                "desc":"N/A"
+            },
+            "ALL":{
+                "name":"Allative",
+                "desc":"N/A"
+            },
+            "ABL":{
+                "name":"Ablative",
+                "desc":"N/A"
+            },
+            "ORI":{
+                "name":"Orientative",
+                "desc":"N/A"
+            },
+            "IRL":{
+                "name":"Interrelative",
+                "desc":"N/A"
+            },
+            "INV":{
+                "name":"Intrative",
+                "desc":"N/A"
+            },
+            "NAV":{
+                "name":"Navigative",
+                "desc":"N/A"
+            },
+            "CNR":{
+                "name":"Concursive",
+                "desc":"N/A"
+            },
+            "ASS":{
+                "name":"Assessive",
+                "desc":"N/A"
+            },
+            "PER":{
+                "name":"Periodic",
+                "desc":"N/A"
+            },
+            "PRO":{
+                "name":"Prolapse",
+                "desc":"N/A"
+            },
+            "PCV":{
+                "name":"Precursive",
+                "desc":"N/A"
+            },
+            "PCR":{
+                "name":"Postcursive",
+                "desc":"N/A"
+            },
+            "ELP":{
+                "name":"Elapsive",
+                "desc":"N/A"
+            },
+            "PLM":{
+                "name":"Prolimitive",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "ill": {
         "type":"",
+        "title":"Illocution",
         "options": {
+            "ASR":{
+                "name":"Assertive",
+                "desc":"N/A"
+            },
+            "PFM":{
+                "name":"Performative",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "exp": {
         "type":"",
+        "title":"Expectation",
         "options": {
-
+            "COG":{
+                "name":"Cognitive",
+                "desc":"N/A"
+            },
+            "RSP":{
+                "name":"Responsive",
+                "desc":"N/A"
+            },
+            "EXE":{
+                "name":"Executive",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     },
 
     "vld": {
         "type":"",
+        "title":"Validation",
         "options": {
-
+            "OBS":{
+                "name":"Observational",
+                "desc":"N/A"
+            },
+            "REC":{
+                "name":"Recollective",
+                "desc":"N/A"
+            },
+            "PUP":{
+                "name":"Purportive",
+                "desc":"N/A"
+            },
+            "RPR":{
+                "name":"Reportive",
+                "desc":"N/A"
+            },
+            "IMA":{
+                "name":"Imaginary",
+                "desc":"N/A"
+            },
+            "CVN":{
+                "name":"Conventional",
+                "desc":"N/A"
+            },
+            "ITU":{
+                "name":"Intuitive",
+                "desc":"N/A"
+            },
+            "INF":{
+                "name":"Inferential",
+                "desc":"N/A"
+            }
         },
         "popuptest":""
     }
