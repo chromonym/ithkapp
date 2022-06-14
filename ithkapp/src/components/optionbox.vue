@@ -1,15 +1,15 @@
 <template>
   <div class="optionbox" :class="OBclass">
     <button style="float:right; margin-top: 5px; margin-right: 5px; display:inline" @click="this.$emit('modal',code)">?</button>
-    <h3>{{title}}</h3>
+    <h3>{{json.title}}</h3>
 
     <!-- The following depends on which TYPE of grammar option this is: -->
 
     <!-- If it's a simple text entry: -->
-    <input v-if="type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." maxlength=4/>
+    <input v-if="json.type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." maxlength=4/>
 
     <!-- If it's a list of text entries: -->
-    <div v-else-if="type=='affix'">
+    <div v-else-if="json.type=='affix'">
       <div v-for="(affix,index) in affixes" :key="affix"> <!-- For each affix/degree pair in the array "affixes", add a textbox and two dropdowns linked to each-->
         <input v-model="affixes[index][0]" @input="this.$emit('send-message',affixes,code)" placeholder="Enter..." maxlength=3/> <!-- Textbox -->
         <select v-model="affixes[index][1]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block"> <!-- Dropdown 1 (Degree) -->
@@ -27,12 +27,13 @@
 
     <!-- Otherwise, assume it's a dropdown list: -->
     <select v-else v-model="option" @change="this.$emit('send-message',option,code)" :disabled="disabled" :id="code">
-      <option v-for="(opt, short) in options" :key="opt" :value="short">{{opt}} {{short === short.toString().toUpperCase() ? "("+short+")" : ""}}</option>
+      <!--<option v-for="(opt, short) in options" :key="opt" :value="short">{{opt}} {{short === short.toString().toUpperCase() ? "("+short+")" : ""}}</option>-->
+      <option v-for="(opt, short) in json.options" :key="opt.name" :value="short">{{opt.name}} {{short === short.toString().toUpperCase() ? "("+short+")" : ""}}</option>
       <!-- above: show the long form of the option (opt), and IF the short form (short) is uppercase then show that in brackets as well -->
     </select>
 
-    <p v-if='this.$props.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})'><b>ERROR:</b> Empty affixes</p> <!-- if there's an error, have text that says so -->
-    <p v-else-if='this.$props.type == "text" && this.text == ""'><b>ERROR:</b> Empty root</p>
+    <p v-if='json.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})'><b>ERROR:</b> Empty affixes</p> <!-- if there's an error, have text that says so -->
+    <p v-else-if='json.type == "text" && this.text == ""'><b>ERROR:</b> Empty root</p>
     <p v-else></p> <!-- This is here so that the padding works regardless of if there's a <p> element or not -->
   </div>
 </template>
@@ -42,10 +43,8 @@
 export default {
   name: 'OptionBox',
   props: {
-    options: Object,
-    title: String,
     code: String,
-    type: String,
+    json: Object, // pass in grammardata[code] to here
     disabled: Boolean
   },
   data() {
@@ -58,7 +57,7 @@ export default {
   computed: {
     OBclass() { // set class to error if the input is the default
       return {
-        error: (this.$props.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})) || (this.$props.type == "text" && this.text == ""),
+        error: (this.json.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})) || (this.json.type == "text" && this.text == ""),
         disabledbox: this.disabled
       }
     }
