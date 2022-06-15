@@ -117,7 +117,7 @@ export default {
         ["u","ui","ua","oa"],
         ["ae","ea","äi"] // yes, this one is shorter
       ],
-      slots: ["/","/","/","/","/","/","/","/","/"], // ithkuil word, split into slots (0-8 = I-IX)
+      slots: ["","","","","","","","","","/"], // ithkuil word, split into slots (0-6 = I-VII, 7-8 = VIII, 9 = IX)
       gloss: "al.FA.bet", // gloss of word
       ipa: "eɪ bi: si:", // IPA transcription
     }
@@ -125,15 +125,18 @@ export default {
   methods: {
     async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
       await (()=>{this.gOptions[code] = value})();
-      if (["concat","shcut"].includes(code)) {this.calculateSlot1();}
-      if (["stem","ver","shcut"].includes(code)) {this.calculateSlot2();} // also VIIafx for optional affix shortcuts
-      if (code == "root") {this.slots[2] = value}
-      if (["Vafx","func","spec","ctxt","shcut"].includes(code)) {this.calculateSlot4();}
-      if (["Vafx"].includes(code)) {await this.calculateSlot5();}
-      if (["affil","plex","simil","cctd","ext","persp","ess"].includes(code)) {this.calculateSlot6();}
-      if (["VIIafx"].includes(code)) {await this.calculateSlot7();}
-      //if (["rel","val","pha","eff","lvl","asp","mood","casc"].includes(code)) {this.calculateSlot8();}
-      //if (["rel","c","ill","exp","vld"].includes(code)) {this.calculateSlot9();}
+      await (()=> {
+        if (["concat","shcut"].includes(code)) {this.calculateSlot1();}
+        if (["stem","ver","shcut"].includes(code)) {this.calculateSlot2();} // also VIIafx for optional affix shortcuts
+        if (code == "root") {this.slots[2] = value}
+        if (["Vafx","func","spec","ctxt","shcut"].includes(code)) {this.calculateSlot4();}
+        if (["Vafx"].includes(code)) {this.calculateSlot5();}
+        if (["Vafx","affil","plex","simil","cctd","ext","persp","ess"].includes(code)) {this.calculateSlot6();}
+        if (["VIIafx"].includes(code)) {this.calculateSlot7();}
+        if (["vn","val","pha","eff","lvl","asp"].includes(code)) {this.calculateSlot8a();}
+        if (["vn","rel","mood","casc"].includes(code)) {this.calculateSlot8b();}
+        //if (["rel","c","ill","exp","vld"].includes(code)) {this.calculateSlot9();}
+      })();
     },
     openModal(code) {
       console.log("Modal opening for",code);
@@ -170,7 +173,6 @@ export default {
       this.slots[4] = out;
     },
     calculateSlot6() {
-      //"affil","plex","simil","cctd","ext","persp","ess", "Vafx"
       // step 1: get normal states for each option
       var AFFIL = {"CSL":"","ASO":"l","COA":"r","VAR":"ř"}[this.gOptions.affil];
       var CONF = (this.gOptions.plex === "U") ? "" : (this.gOptions.plex === "D2") ? "s" : // the most hideous (but comparatively tame compared to ithkuil iii) table as an object
@@ -223,7 +225,7 @@ export default {
           rulesApplied[2] = true;
           out = out.charAt(0) + out;
         }
-        if (out.includes('s') || out.includes('š') || out.includes('z') || out.includes('ž') || out.includes('ç') || out.includes('c') || out.includes('č')) {
+        if (!rulesApplied[0] && (out.includes('s') || out.includes('š') || out.includes('z') || out.includes('ž') || out.includes('ç') || out.includes('c') || out.includes('č'))) {
           // 4. for forms containing a sibilant fricative or affricative in any position, geminate it.
           rulesApplied[3] = true;
           out = out.replace("s","ss").replace("š","šš").replace("z","zz").replace("ž","žž").replace("ç","çç").replace('c',"cc").replace("č","čč");
@@ -262,14 +264,58 @@ export default {
       var out="";
       for (var j in this.gOptions.VIIafx) {
         var i = Object.assign({},this.gOptions.VIIafx[j]);
-        out += i[0];
         out += this.sVowels[(i[1]+9)%10][i[2]-1];
+        out += i[0];
       }
       this.slots[6] = out;
+    },
+    calculateSlot8a() {
+      if (this.gOptions.vn === "asp") {
+        // aspect
+        var pph = [["RTR","PRS","HAB","PRG","IMM","PCS","REG","SMM","ATP"],
+                  ["RSM","CSS","PAU","RGR","PCL","CNT","ICS","EXP","IRP"],
+                  ["PMP","CLM","DLT","TMP","XPD","LIM","EPD","PTC","PPR"],
+                  ["DCL","CCL","CUL","IMD","TRD","TNS","ITC","MTV","SQN"]];
+        for (var i in pph) {
+          if (pph[i].includes(this.gOptions.asp)) {
+            this.slots[7] = this.sVowels[pph[i].findIndex(x => x === this.gOptions.asp)][i];
+          }
+        }
+      } else {
+        // not aspect
+        var ph = ["val","pha","eff","lvl"];
+        var phh = {"val":["MNO","PRL","CRO","RCP","CPL","DUP","DEM","CNG","PTI"],
+                   "pha":["PCT","ITR","REP","ITM","RCT","FRE","FRG","VAC","FLC"],
+                   "eff":["1:BEN","2:BEN","3:BEN","SLF:BEN","UNK","SLF:DET","3:DET","2:DET","1:DET"],
+                   "lvl":["MIN","SBE","IFR","DFT","EQU","SUR","SPL","SPQ","MAX"]};
+        this.slots[7] = this.sVowels[phh[this.gOptions.vn].findIndex(x => x === this.gOptions[this.gOptions.vn])][ph.findIndex(x => x == this.gOptions.vn)];
+      }
+    },
+    calculateSlot8b() {
+      //"vn","rel","mood","casc"
+      var ph = [];
+      var phh = [];
+      if (this.gOptions.vn === "asp") { ph = ["w","hw","hlw","hly","hnw","hny"]; }
+      else { ph = ["h","hl","hr","hm","hn","hň"]; }
+      if (this.gOptions.rel === "FRM") {
+        phh = ["CCN","CCA","CCS","CCQ","CCP","CCV"];
+        this.slots[8] = ph[phh.findIndex(x => x === this.gOptions.casc)]
+      }
+      else {
+        phh = ["FAC","SUB","ASM","SPC","COU","HYP"];
+        this.slots[8] = ph[phh.findIndex(x => x === this.gOptions.mood)];
+      }
     }
   },
-  mounted() {
+  beforeMount() {
+    this.calculateSlot1();
+    this.calculateSlot2();
+    this.calculateSlot4();
     this.calculateSlot5();
+    this.calculateSlot6();
+    this.calculateSlot7();
+    this.calculateSlot8a();
+    this.calculateSlot8b();
   }
 }
 </script>
