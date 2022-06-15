@@ -85,6 +85,29 @@
         "popuptest":""
     },
 
+    "ctxt": {
+        "type":"",
+        "title":"Context",
+        "options":{
+            "EXS":{
+                "name":"Existential",
+                "desc":"N/A"
+            },
+            "FNC":{
+                "name":"Functional",
+                "desc":"N/A"
+            },
+            "RPS":{
+                "name":"Representational",
+                "desc":"N/A"
+            },
+            "AMG":{
+                "name":"Amalgamate",
+                "desc":"N/A"
+            }
+        }
+    },
+
     "rel": {
         "type":"",
         "title":"Relation",
