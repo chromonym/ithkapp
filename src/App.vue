@@ -117,6 +117,7 @@ export default {
         ["u","ui","ua","oa"],
         ["ae","ea","äi"] // yes, this one is shorter
       ],
+      sDip: ["ai","äi","ei","ëi","oi","öi","ui","au","eu","ëu","ou","iu"], // permissible diphthongs
       slots: ["","","","","","","","","","/"], // ithkuil word, split into slots (0-6 = I-VII, 7-8 = VIII, 9 = IX)
       gloss: "al.FA.bet", // gloss of word
       ipa: "eɪ bi: si:", // IPA transcription
@@ -124,6 +125,14 @@ export default {
   },
   methods: {
     async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
+      await (()=>{
+        if (code === "rel" && (code == "UNF/K" || this.gOptions.rel == "UNF/K")) {
+          this.gOptions.c = "THM"; // fix to match the fact that the OptionBoxes for these reset but the values don't
+          this.gOptions.ill = "ASR";
+          this.gOptions.exp = "COG";
+          this.gOptions.vld = "OBS";
+        }
+      })();
       await (()=>{this.gOptions[code] = value})();
       await (()=> {
         if (["concat","shcut"].includes(code)) {this.calculateSlot1();}
@@ -135,7 +144,7 @@ export default {
         if (["VIIafx"].includes(code)) {this.calculateSlot7();}
         if (["vn","val","pha","eff","lvl","asp"].includes(code)) {this.calculateSlot8a();}
         if (["vn","rel","mood","casc"].includes(code)) {this.calculateSlot8b();}
-        //if (["rel","c","ill","exp","vld"].includes(code)) {this.calculateSlot9();}
+        if (["rel","c","ill","exp","vld"].includes(code)) {this.calculateSlot9();}
       })();
     },
     openModal(code) {
@@ -162,7 +171,7 @@ export default {
       var phh = ["EXS","FNC","RPS","AMG"];
       this.slots[3] = this.sVowels[ph[this.gOptions.func][this.gOptions.spec]][phh.findIndex(x => x == this.gOptions.ctxt)];
     },
-    calculateSlot5() {
+    calculateSlot5() { // TODO: If formative Slot V contains two or more affixes, Slot II VV must take a glottal-stop (applied as per the rules of Sec. 1.7)
       // I have no idea if it was the Object.assign() or the async/await in handleSendMessage(), but it works and I'm not questioning it.
       var out="";
       for (var j in this.gOptions.Vafx) {
@@ -292,7 +301,6 @@ export default {
       }
     },
     calculateSlot8b() {
-      //"vn","rel","mood","casc"
       var ph = [];
       var phh = [];
       if (this.gOptions.vn === "asp") { ph = ["w","hw","hlw","hly","hnw","hny"]; }
@@ -305,6 +313,43 @@ export default {
         phh = ["FAC","SUB","ASM","SPC","COU","HYP"];
         this.slots[8] = ph[phh.findIndex(x => x === this.gOptions.mood)];
       }
+    },
+    calculateSlot9() {
+      //"rel","c","ill","exp","vld"
+      var ph = [["THM","INS","ABS","AFF","STM","EFF","ERG","DAT","IND"],
+                ["POS","PRP","GEN","ATT","PDC","ITP","OGN","IDP","PAR"],
+                ["APL","PUR","TRA","DFR","CRS","TSP","CMM","CMP","CSD"],
+                ["FUN","TFM","CLA","RSL","CSM","CON","AVR","CVS","SIT"]];
+      var phh = [["PRN","DSP","COR","CPS","COM","UTL","PRD","n/a","RLT"],
+                 ["ACT","ASI","ESS","TRM","SEL","CFM","DEP","n/a","VOC"],
+                 ["LOC","ATD","ALL","ABL","ORI","IRL","INV","n/a","NAV"],
+                 ["CNR","ASS","PER","PRO","PCV","PCR","ELP","n/a","PLM"]];
+      var pph = ["OBS","REC","PUP","RPR","n/a","IMA","CVN","ITU","INF"];
+      var pphh = ["COG","RSP","EXE"];
+      var pphnum = 0;
+      var cfound = false;
+      if (this.gOptions.rel !== "UNF/K") {
+        for (var i in ph) {
+          if (ph[i].includes(this.gOptions.c)) {
+            this.slots[9] = this.sVowels[ph[i].findIndex(x => x === this.gOptions.c)][i];
+            cfound = true;
+          }
+        }
+        if (!cfound) {
+          for (var j in phh) {
+            if (phh[j].includes(this.gOptions.c)) {
+              this.slots[9] = this.sVowels[phh[j].findIndex(x => x === this.gOptions.c)][j] + "+'";
+            }
+          }
+        }
+      } else {
+        if (this.gOptions.ill == "PFM") {
+          pphnum = 4;
+        } else {
+          pphnum = pph.findIndex(x => x === this.gOptions.vld);
+        }
+        this.slots[9] = this.sVowels[pphnum][pphh.findIndex(x => x === this.gOptions.exp)];
+      }
     }
   },
   beforeMount() {
@@ -316,6 +361,7 @@ export default {
     this.calculateSlot7();
     this.calculateSlot8a();
     this.calculateSlot8b();
+    this.calculateSlot9();
   }
 }
 </script>
