@@ -1,6 +1,5 @@
 <template>
-  <!--<img alt="Vue logo" src="./assets/logo.png">
-  <MainBody/>-->
+  <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
   <div id="content">
     <h1>Ithkapp</h1>
     <div class="section"> <!-- Section 1: Root, etc. -->
@@ -49,7 +48,7 @@
     <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   </div>
   <div id="footer">
-    <p>{{slots.join("")}} /{{ipa}}/</p>
+    <p>{{ithkword}} /{{ipa}}/</p>
     <p>{{gloss}}</p>
   </div>
   <div id="modal" class="modal" @click.self="closeModal()">
@@ -117,35 +116,29 @@ export default {
         ["u","ui","ua","oa"],
         ["ae","ea","äi"] // yes, this one is shorter
       ],
+      shortcutting: false,
+      shcuttypeA: 0,
+      shcuttypeB: 0,
       sDip: ["ai","äi","ei","ëi","oi","öi","ui","au","eu","ëu","ou","iu"], // permissible diphthongs
-      slots: ["","","","","","","","","","/"], // ithkuil word, split into slots (0-6 = I-VII, 7-8 = VIII, 9 = IX)
+      slots: ["","","","","","","","","","",""], // ithkuil word, split into slots (0-6 = I-VII, 7-8 = VIII, 9 = IX, 10 = ungeminated VI)
+      ithkword: "", // the calculated ithkuil word
       gloss: "al.FA.bet", // gloss of word
       ipa: "eɪ bi: si:", // IPA transcription
     }
   },
   methods: {
     async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
-      await (()=>{
+      await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
         if (code === "rel" && (code == "UNF/K" || this.gOptions.rel == "UNF/K")) {
-          this.gOptions.c = "THM"; // fix to match the fact that the OptionBoxes for these reset but the values don't
+          this.gOptions.c = "THM"; // quick fix to match the fact that the OptionBoxes for these reset but the values don't
           this.gOptions.ill = "ASR";
           this.gOptions.exp = "COG";
           this.gOptions.vld = "OBS";
         }
       })();
-      await (()=>{this.gOptions[code] = value})();
-      await (()=> {
-        if (["concat","shcut"].includes(code)) {this.calculateSlot1();}
-        if (["stem","ver","shcut"].includes(code)) {this.calculateSlot2();} // also VIIafx for optional affix shortcuts
-        if (code == "root") {this.slots[2] = value}
-        if (["Vafx","func","spec","ctxt","shcut"].includes(code)) {this.calculateSlot4();}
-        if (["Vafx"].includes(code)) {this.calculateSlot5();}
-        if (["Vafx","affil","plex","simil","cctd","ext","persp","ess"].includes(code)) {this.calculateSlot6();}
-        if (["VIIafx"].includes(code)) {this.calculateSlot7();}
-        if (["vn","val","pha","eff","lvl","asp"].includes(code)) {this.calculateSlot8a();}
-        if (["vn","rel","mood","casc"].includes(code)) {this.calculateSlot8b();}
-        if (["rel","c","ill","exp","vld"].includes(code)) {this.calculateSlot9();}
-      })();
+      (()=>{this.gOptions[code] = value})();
+      if (code == "root") {this.slots[2] = value}
+      this.calculateWord();
     },
     openModal(code) {
       console.log("Modal opening for",code);
@@ -155,15 +148,41 @@ export default {
     closeModal() {
       document.getElementById("modal").style.display = "none";
     },
-    calculateSlot1() { // will be more complicated when i add shortcuts
-      this.slots[0] = ["","h","hw"][this.gOptions.concat];
+    calculateWord() {
+      // this order is specifically because slots 4 and 6 can influence slots 1 through 5 due to shortcutting.
+      // technically, slot 7 can also influence slot 2 (and so should be before it), but i haven't coded that in yet.
+      this.calculateSlot4();
+      this.calculateSlot6();
+      this.shortcutCalcs();
+      this.calculateSlot1();
+      this.calculateSlot2();
+      this.calculateSlot5();
+      this.calculateSlot7();
+      this.calculateSlot8a();
+      this.calculateSlot8b();
+      this.calculateSlot9();
+      (() => {this.ithkword = this.slots.slice(0,-1).join("")})();
     },
-    calculateSlot2() {
+    calculateSlot1() { // sctype = "", "w", "y" here
+      if (this.shortcutting) {
+      this.slots[0] = [["", "w", "y"],
+                      ["h","hl","hm"],
+                      ["hw","hr","hn"]][this.gOptions.concat][this.shcuttypeA];
+      } else {
+        this.slots[0] = ["","h","hw"][this.gOptions.concat];
+      }
+    },
+    calculateSlot2() { // sctype = 0 through 4 here
       var ph = {"s1":{"PRC":0,"CPT":1},
                 "s2":{"PRC":2,"CPT":3},
                 "s3":{"PRC":5,"CPT":6}, // standard vowel form 5 (4 here) is skipped
                 "s0":{"PRC":7,"CPT":8}};
-      this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][0];
+      if (!this.shortcutting){
+        this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][0];
+      } else {
+        console.log(this.shortcutting);
+        this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][this.shcuttypeB];
+      }
     },
     calculateSlot4() {
       var ph = {"STA":{"BSC":0,"CTE":1,"CSV":2,"OBJ":3},
@@ -176,8 +195,13 @@ export default {
       var out="";
       for (var j in this.gOptions.Vafx) {
         var i = Object.assign({},this.gOptions.Vafx[j]);
-        out += i[0];
-        out += this.sVowels[(i[1]+9)%10][i[2]-1];
+        if (this.shortcutting) {
+          out += this.sVowels[(i[1]+9)%10][i[2]-1];
+          out += i[0];
+        } else {
+          out += i[0];
+          out += this.sVowels[(i[1]+9)%10][i[2]-1];
+        }
       }
       this.slots[4] = out;
     },
@@ -216,6 +240,7 @@ export default {
       out = out.charAt(0) + out.slice(1).replace("çx","xw");
       // unsure how to do [C]bm --> [C]f / [C]v and [C]bn --> [C]ţ / [C]ḑ, because it's based on voicedness I think
       out = out.replace("ff","vw").replace("ţţ","ḑy");
+      this.slots[10] = out;
       // step 4: apply gemination (apply nine rules) IF slot V contains affixes
       if (Object.keys(this.gOptions.Vafx).length != 0) {
         var rulesApplied = [false,false,false,false,false,false,false,false,false];
@@ -350,18 +375,35 @@ export default {
         }
         this.slots[9] = this.sVowels[pphnum][pphh.findIndex(x => x === this.gOptions.exp)];
       }
+    },
+    shortcutCalcs() {
+      // Do calculations related to the slots
+      // SHORTCUTTING!
+      (() => {
+      if (this.gOptions.shcut === 1 && this.slots[3] == "a" && [["l","d","r","tļ","v","j","ř","dl"].includes(this.slots[10])]) {
+        //l = ., d = PRX, r = G, tļ = RPV, v = N, j = A, ř = G.RPV, dl = PRX.RPV
+        var ph = {"l":[1,0], "d":[2,0],
+                  "r":[1,1],"tļ":[2,1],
+                  "v":[1,2], "j":[2,2],
+                  "ř":[1,3],"dl":[2,3]};
+        try {
+          this.shortcutting = true;
+          this.shcuttypeA = ph[this.slots[10]][0];
+          this.shcuttypeB = ph[this.slots[10]][1];
+          this.slots[3] = "";
+          this.slots[5] = "";
+        } catch {
+          this.shortcutting = false;
+          this.calculateSlot4();
+          this.calculateSlot6();
+        }
+      } else {
+        this.shortcutting = false;
+      }})();
     }
   },
   beforeMount() {
-    this.calculateSlot1();
-    this.calculateSlot2();
-    this.calculateSlot4();
-    this.calculateSlot5();
-    this.calculateSlot6();
-    this.calculateSlot7();
-    this.calculateSlot8a();
-    this.calculateSlot8b();
-    this.calculateSlot9();
+    this.calculateWord();
   }
 }
 </script>
