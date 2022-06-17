@@ -62,6 +62,7 @@
 <script>
 import OptionBox from './components/optionbox.vue'
 import grammardata from './grammardata.json'
+import consdata from './consdata.json'
 
 export default {
   name: 'App',
@@ -72,6 +73,7 @@ export default {
     return {
       modalContent: "",
       gData: grammardata,
+      cData: consdata,
       gOptions: { // grammar options
         "root":"",
         "stem":"s1",
@@ -163,7 +165,7 @@ export default {
       this.calculateSlot8a();
       this.calculateSlot8b();
       this.calculateSlot9();
-      (() => {this.ithkword = this.slots.slice(0,-1).join("")})();
+      this.finalCalcs();
     },
     calculateSlot1() { // sctype = "", "w", "y" here
       if (this.shortcutting) {
@@ -365,7 +367,7 @@ export default {
         if (!cfound) {
           for (var j in phh) {
             if (phh[j].includes(this.gOptions.c)) {
-              this.slots[9] = this.sVowels[phh[j].findIndex(x => x === this.gOptions.c)][j] + "+'";
+              this.slots[9] = this.sVowels[phh[j].findIndex(x => x === this.gOptions.c)][j] + "'";
             }
           }
         }
@@ -402,6 +404,50 @@ export default {
       } else {
         this.shortcutting = false;
       }})();
+    },
+    insertGStop(vowels,endOfWord=false) { // inserting a glottal stop given a set of vowels
+      if (vowels.length === 1 || this.sDip.includes(vowels)) {
+        if (!endOfWord) {
+          return vowels+"'";
+        } else if (vowels.length === 1) {
+          return vowels+"'"+vowels;
+        } else {
+          return vowels.charAt(0)+"'"+vowels.charAt(1);
+        }
+      } else {
+        return vowels.charAt(0)+"'"+vowels.charAt(1);
+      }
+    },
+    getConsData(manner="",voic="") { // place="", voic="", manner="", sibil=""
+      for (var i in this.cData) {
+        if (manner == "" || this.cData[i][0] == manner) {
+          if (voic == "" || this.cData[i][1] == voic) {
+            console.log(i);
+          }
+        }
+      }
+    },
+    finalCalcs() {
+      // Step 1: Glottal Stop Insertion(tm)
+      if (this.slots[9].charAt(this.slots[9].length-1) === "'") {
+        this.slots[9] = this.slots[9].slice(0,-1);
+        this.slots[9] = this.insertGStop(this.slots[9],true);
+      }
+      // Step 2: Remove unnecessary vowels at the start
+      if (this.slots[0] === "" && this.slots[1] === "a") {
+        if (this.slots[2].length === 1) {
+          //monocons. root
+          if (this.slots[2] !== "ļ"){ // not ļ
+            this.slots[1] = "";
+          }
+        } else if (this.slots[2].length === 2) {
+          //bicons. root
+          console.log("not done yet");
+          this.getConsData("stop");
+        }
+      }
+      // Step 3: Join everything together
+      (() => {this.ithkword = this.slots.slice(0,-1).join("")})();
     }
   },
   beforeMount() {
