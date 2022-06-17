@@ -381,7 +381,6 @@ export default {
       }
     },
     shortcutCalcs() {
-      // Do calculations related to the slots
       // SHORTCUTTING!
       (() => {
       if (this.gOptions.shcut === 1 && this.slots[3] == "a" && [["l","d","r","tļ","v","j","ř","dl"].includes(this.slots[10])]) {
@@ -418,34 +417,156 @@ export default {
         return vowels.charAt(0)+"'"+vowels.charAt(1);
       }
     },
-    getConsData(manner="",voic="") { // place="", voic="", manner="", sibil=""
-      for (var i in this.cData) {
-        if (manner == "" || this.cData[i][0] == manner) {
-          if (voic == "" || this.cData[i][1] == voic) {
-            console.log(i);
-          }
+    getCons(...tags) { // takes an unlimited number of lists of properties that a consonant can have, and returns all consonants for which all of at least one bracket is true
+    var outp = [];
+    for (var i in this.cData) {
+      for (var j in tags) {
+        if (tags[j].every(element => {return this.cData[i].includes(element)}) && !outp.includes(i)) {
+          outp.push(i);
         }
       }
+    }
+    return outp;
     },
+    removeDuplicate(strin){ // Code by shivanisinghss2110 @ https://www.geeksforgeeks.org/javascript-program-to-remove-duplicates-from-a-given-string/
+      // Used as index in the modified string
+      var index = 0;
+      var n = strin.length;
+      var str = strin.split("");
+      // Traverse through all characters
+      for (var i = 0; i < n; i++) {
+        // Check if str[i] is present before it
+        var j;
+        for (j = 0; j < i; j++) {
+          if (str[i] == str[j]) {
+            break;
+          }
+        }
+        // If not present, then add it to result.
+        if (j == i) {
+          str[index++] = str[i];
+        }
+      }
+      return str.join("").slice(str, index);
+    },
+    
     finalCalcs() {
       // Step 1: Glottal Stop Insertion(tm)
       if (this.slots[9].charAt(this.slots[9].length-1) === "'") {
         this.slots[9] = this.slots[9].slice(0,-1);
         this.slots[9] = this.insertGStop(this.slots[9],true);
       }
+
       // Step 2: Remove unnecessary vowels at the start
       if (this.slots[0] === "" && this.slots[1] === "a") {
+        var nogem = this.removeDuplicate(this.slots[2]);
+        console.log(nogem);
         if (this.slots[2].length === 1) {
           //monocons. root
           if (this.slots[2] !== "ļ"){ // not ļ
             this.slots[1] = "";
           }
-        } else if (this.slots[2].length === 2) {
-          //bicons. root
-          console.log("not done yet");
-          this.getConsData("stop");
+        } else if (nogem.length === 2) {
+          //bicons. root - this is VERY difficult to test and MAY have some errors, but I'm pretty confident that it shouldn't.
+          var ra = nogem.charAt(0);
+          var rb = nogem.charAt(1);
+          if ((this.getCons(["stop"]).includes(ra) && ["r","l","ř","w","y"].includes(rb)) || // 3.2.0 - first char is... stops
+              (["p","k"].includes(ra) && ["s","š"].includes(rb)) ||
+              (["b","g"].includes(ra) && ["z","ž"].includes(rb)) ||
+              (ra === "p" && ["f","ţ","ç","x","h","ļ"].includes(rb)) ||
+              (ra === "b" && ["v","ḑ"].includes(rb)) ||
+              (ra === "t" && ["f","v","ţ","ḑ","ç","x","h","ļ"].includes(rb)) ||
+              (ra === "d" && rb == "v") ||
+              (ra === "k" && ["f","ţ","ç","x","h"].includes(rb)) ||
+              (ra === "g" && ["v","ḑ"].includes(rb)) ||
+              (["s","š"].includes(ra) && this.getCons(["stop","unvoiced"],["fric","nonsibil","unvoiced"],["affric","unvoiced"]).includes(rb)) || // 3.2.1 - sibilant fricatives
+              (["z","ž"].includes(ra) && this.getCons(["stop","voiced"],["fric","nonsibil","voiced"],["affric","voiced"]).includes(rb)) ||
+              (["s","z","š","ž"].includes(ra) && ["m","n","ň","r","l","w","y","ř","v"].includes(rb)) ||
+              (["c","č"].includes(ra) && this.getCons(["fric","nonsibil","unvoiced"],["stop","unvoiced"]).includes(rb)) || // 3.2.2 - sibilant affricatives
+              (["c","č"].includes(ra) && rb === "h") ||
+              (["ẓ","j"].includes(ra) && this.getCons(["fric","nonsibil","voiced"],["stop","voiced"]).includes(rb)) ||
+              (["c","ẓ","č","j"].includes(ra) && ["r","l","m","n","ň","w","v"]) ||
+              (ra === "x" && ["p","t","c","č","m","n","l","r","w"].includes(rb)) || // 3.2.3 - x
+              (ra === "ç" && ["p","t","c","č","k","m","n","ň","l","r","ř"].includes(rb)) || // 3.2.4 - ç
+              (["f","ţ"].includes(ra) && this.getCons(["stop","unvoiced"],["affric","unvoiced"]).includes(rb)) || // 3.2.5 - f, v, ţ, ḑ
+              (["v","ḑ"].includes(ra) && this.getCons(["stop","voiced"],["affric","voiced"]).includes(rb)) ||
+              (["f","v","ţ","ḑ"] && ["r","l","w","y","ř","m","n","ň"].includes(rb)) ||
+              (ra === "ļ" && this.getCons(["stop","unvoiced"],["affric","unvoiced"],["nasal"]).includes(rb)) || // 3.2.6 - ļ
+              (ra === "ļ" && ["w","y"].includes(rb)) ||
+              (ra === "h" && ["l","r","m","n","w"].includes(rb)) || // 3.2.7 - h
+              (["m","n"].includes(ra) && ["l","r","w","y","ř"].includes(rb)) || // 3.2.8 - nasals
+              (ra === "ň" && ["l","r","w"].includes(rb)) ||
+              (["l","r"].includes(ra) && ["w","y"].includes(rb)) // 3.2.9 - liquids
+          ){
+            this.slots[1] = ""; // if ANY of the huge above if statement is true, you can drop the second slot
+          }
+        } else if (nogem.length === 3) {
+          //tricons. root - NEED TO REMOVE GEMINATES!
+          var da = nogem.charAt(0);
+          var db = nogem.charAt(1);
+          var dc = nogem.charAt(2);
+          var dab = da + db;
+          if (
+            // 3.3.0 - stop, sibil, anything permissible as of 3.2.2
+            (["ps","pš","ks","kš"].includes(dab) && this.getCons(["stop","unvoiced"],["fric","nonsibil","unvoiced"],["affric","unvoiced"]).includes(dc)) ||
+            (["bz","bž","gz","gž"].includes(dab) && this.getCons(["stop","voiced"],["fric","nonsibil","voiced"],["affric","voiced"]).includes(dc)) ||
+            (["ps","pš","ks","kš","bz","bž","gz","gž"].includes(dab) && ["m","n","ň","r","l","w","y","ř","v"].includes(dc)) ||
+            // 3.3.1 - stop, l/r, w/y
+            (["p","b","t","d","k","g"].includes(da) && ["l","r"].includes(db) && ["w","y"].includes(dc)) ||
+            // 3.3.2 - voiceless stop, ç, m/n/ň
+            (["p","t","k"].includes(da) && db === "ç" && ["m","n","ň"].includes(dc)) ||
+            // 3.3.3 - p/k, f/ţ, y/w  OR  p/t, ļ, w/y
+            (["p","k"].includes(da) && ["f","t"].includes(db) && ["y","w"].includes(dc)) ||
+            (["p","t"].includes(db) && db === "ļ" && ["w","y"].includes(dc)) ||
+            // 3.3.4 - sibil fric, stop, approx/liq.  OR  sibil, nasal, w/y based on 3.2.8
+            (["s","š","ç"].includes(da) && ["p","t","k"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
+            (["z","ž"].includes(da) && ["b","d","g"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
+            (["s","z","š","ž","ç"].includes(da) && ["m","n"].includes(db) && ["w","y"].includes(dc)) ||
+            (["s","z","š","ž","ç"].includes(da) && db === "ň" && dc === "w") ||
+            // 3.3.5 - hlw, hrw, hmw, hnw, hmy, hny
+            (["hlw","hrw","hmw","hnw","hmy","hny"].includes(nogem)) ||
+            // 3.3.6 - sibil affric, stop, liquid/approx  OR  sibil affric, nasal, w/y based on 3.2.8
+            (["c","č"].includes(da) && ["p","t","k"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
+            (["ẓ","j"].includes(da) && ["b","d","g"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
+            (["c","ẓ","č","j"].includes(da) && ["m","n"].includes(db) && ["w","y"].includes(dc)) ||
+            (["c","ẓ","č","j"].includes(da) && db === "ň" && dc === "w") ||
+            // 3.3.7 - flw, ţlw, fly, ţly
+            (["flw","ţly","fly","ţly"].includes(nogem)) ||
+            // 3.3.8 - xp/xt, l/r/w/y  OR  xm/xn, w/y  OR  xc/xč, w
+            (["xp","xt"].includes(dab) && ["l","r","w","y"].includes(dc)) ||
+            (["xm","xn"].includes(dab) && ["w","y"].includes(dc)) ||
+            (["xc","xč"].includes(dab) && dc === "w")
+          ) {
+            this.slots[1] = "";
+          }
+        } else if (nogem.length === 4) {
+          // tetracons. roots
+          var qa = nogem.charAt(0);
+          var qb = nogem.charAt(1);
+          var qc = nogem.charAt(2);
+          var qd = nogem.charAt(3);
+          if (
+            // 3.4.1 - tri-cons ending in a stop, liq/approx WHICH MEANS p/b/k/g, s/z/š/ž, stop, affric/stop
+            (["p","k"].includes(qa) && ["s","š"].includes(qb) && ["p","t","k"].includes(qc) && ["r","l","w","y","ř"].includes(qd)) ||
+            (["b","g"].includes(qa) && ["z","ž"].includes(qb) && ["b","d","g"].includes(qc) && ["r","l","w","y","ř"].includes(qd)) ||
+            // 3.4.2 - sibil, stop, ly
+            (["s","š","ç","c","č"].includes(qa) && ["p","t","k"].includes(qb) && qc === "l" && qd === "y") ||
+            (["z","ž","ẓ","j"].includes(qa) && ["b","d","g"].includes(qb) && qc === "l" && qd === "y")
+          ) {
+            this.slots[1] = "";
+          }
         }
       }
+
+      // Step 3: Remove unnecessary vowels at the end
+      if (this.slots[9] === "a" && this.slots[8] === "h") {
+        this.slots[9] = "";
+        this.slots[8] = "";
+        if (this.slots[7] === "a") {
+          console.log("Removing Slot 8 vowels is not currently supported, sorry.");
+        }
+      }
+
       // Step 3: Join everything together
       (() => {this.ithkword = this.slots.slice(0,-1).join("")})();
     }
