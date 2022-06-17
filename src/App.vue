@@ -5,10 +5,9 @@
     <div class="section"> <!-- Section 1: Root, etc. -->
       <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" type="text" @modal="openModal" ref="root"/>
       <OptionBox :json="gData.stem" code="stem" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" @modal="openModal" ref="func"/>
       <OptionBox :json="gData.spec" code="spec" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage"/>
+      <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" @modal="openModal" ref="func"/>
+      <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage"/>
     </div>
     <div class="section"> <!-- Section 2: Concatenation & Affixes-->
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage"/>
@@ -22,24 +21,25 @@
       <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage"/>
     </div>
-    <div class="section"> <!-- Section 4: Slot VI -->
+    <div class="section"> <!-- Section 4: Slot 6 -->
       <OptionBox :json="gData.affil" code="affil" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.ext" code="ext" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.persp" code="persp" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.ess" code="ess" @send-message="handleSendMessage"/>
     </div>
-    <div class="section"> <!-- Section 5: Slot VIII -->
+    <div class="section"> <!-- Section 5: Slot 8a -->
       <OptionBox :json="gData.vn" code="vn" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.eff" code="eff" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage"/>
-      <OptionBox v-if='this.gOptions.rel != "FRM"' :json="gData.mood" code="mood" @send-message="handleSendMessage"/>
-      <OptionBox v-else :json="gData.casc" code="casc" @send-message="handleSendMessage"/>
     </div>
-    <div class="section"> <!-- Section 6: Slot 9 & 10 -->
+    <div class="section"> <!-- Section 6: Slot 8b to 10 -->
+      <OptionBox :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage"/>
+      <OptionBox v-if='this.gOptions.rel == "UNF/K"' :json="gData.mood" code="mood" @send-message="handleSendMessage"/>
+      <OptionBox v-else :json="gData.casc" code="casc" @send-message="handleSendMessage"/>
       <OptionBox v-if="this.gOptions.rel != 'UNF/K'" :json="gData.c" code="c" @send-message="handleSendMessage" />
       <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.ill" code="ill" @send-message="handleSendMessage"/>
       <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.exp" code="exp" @send-message="handleSendMessage"/>
@@ -129,11 +129,13 @@ export default {
   methods: {
     async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
       await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
-        if (code === "rel" && (code == "UNF/K" || this.gOptions.rel == "UNF/K")) {
+        if (code === "rel" && (value == "UNF/K" || this.gOptions.rel == "UNF/K")) {
           this.gOptions.c = "THM"; // quick fix to match the fact that the OptionBoxes for these reset but the values don't
           this.gOptions.ill = "ASR";
           this.gOptions.exp = "COG";
           this.gOptions.vld = "OBS";
+          this.gOptions.casc = "CCN";
+          this.gOptions.mood = "FAC";
         }
       })();
       (()=>{this.gOptions[code] = value})();
@@ -330,7 +332,7 @@ export default {
       var phh = [];
       if (this.gOptions.vn === "asp") { ph = ["w","hw","hlw","hly","hnw","hny"]; }
       else { ph = ["h","hl","hr","hm","hn","hň"]; }
-      if (this.gOptions.rel === "FRM") {
+      if (this.gOptions.rel != "UNF/K") {
         phh = ["CCN","CCA","CCS","CCQ","CCP","CCV"];
         this.slots[8] = ph[phh.findIndex(x => x === this.gOptions.casc)]
       }

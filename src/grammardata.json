@@ -113,15 +113,15 @@
         "title":"Relation",
         "options": {
             "UNF/C": {
-                "name":"Unframed + Case",
+                "name":"Nominal",
                 "desc":"N/A"
             },
             "UNF/K": {
-                "name":"Unframed + IEV",
+                "name":"Unframed Verbal",
                 "desc":"N/A"
             },
             "FRM": {
-                "name":"Framed + Case",
+                "name":"Framed Verbal",
                 "desc":"N/A"
             }
         },
