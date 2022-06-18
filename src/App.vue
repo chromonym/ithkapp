@@ -595,8 +595,115 @@ export default {
             lastCons = this.slots[6][this.slots[6].length][0]; // the last consonant is slot 7's last affix.
           }
           if (shortenSlot8) {
+            var nogem2 = this.removeDuplicate(lastCons);
+            if (lastCons.length == 1) {
+              //monocons.
+              if (lastCons !== "w" && lastCons !== "y" && lastCons !== "'") { // 4.1 any consonant except -w or -y
+                this.slots[7] = "";
+                this.cut[1] = true; // slot 8a removed
+              }
+            } else if (lastCons.length == 2) {
+              //bicons.
+              var eba = lastCons.charAt(0);
+              var ebb = lastCons.charAt(1);
+              if (
+                (["p","t","k"].includes(eba) && ["f","ţ","s","š","ç","x","h","ļ"].includes(ebb)) || // 4.2.1 - stop, fricative
+                (["b","d","g"].includes(eba) && ["v","ḑ","z","ž"].includes(ebb)) ||
+                (["k","p"].includes(eba) && ebb === "t") || // 4.2.2 - non-dental stop, dental stop
+                (["g","b"].includes(eba) && ebb === "d") ||
+                (["s","š"].includes(eba) && ["p","t","k"].includes(ebb)) || // 4.2.3 - sibilant fric, stop
+                (["z","ž"].includes(eba) && ["b","d","g"].includes(ebb)) ||
+                (["c","č"].includes(eba) && ["t","k"].includes(ebb)) || // 4.2.4 - sibilant affric, nonlabial stop
+                (["ẓ","j"].includes(eba) && ["d","g"].includes(ebb)) ||
+                (eba === "f" && ["t","k","s","š","ç"].includes(ebb)) || // 4.2.5 - f/v, nonlabial stop/sibilant fric
+                (eba === "v" && ["d","g","z","ž"].includes(ebb)) ||
+                (eba === "ţ" && ["t","k"].includes(ebb)) || // 4.2.6 - ţ/ḑ, nonlabial stop
+                (eba === "ḑ" && ["d","g"].includes(ebb)) ||
+                (["ļ","x"].includes(eba) && ["p","t","k"].includes(ebb)) || // 4.2.7 - ļ/x, voiceless stop
+                (["m","n"].includes(eba) && ["p","b","t","d","k","g","f","v","ţ","ḑ","s","z","š","ž","ç","x","h","ļ"].includes(ebb)) || // 4.2.8 - m/n, stop/fric
+                (eba === "ň" && ["t","d","f","v","ţ","ḑ","s","z","š","ž","ç","h"]) || // 4.2.9 - ň, dental stop/fric (NOT ļ/x)
+                (eba === "r" && ebb !== "w" && ebb !== "y" && ebb !== "'") || // 4.2.10 - r, anything except w/y/'
+                (eba === "l" && !(["'","w","y","r","ň"].includes(ebb))) || // 4.2.11 - l, anything except w/y/r/ň/'
+                (eba === ebb && !(["p","t","k","b","d","g","'"].includes(eba))) // 4.2.12 - any geminated consonant except stops
+              ){
+                this.slots[7] = "";
+                this.cut[1] = true; // slot 8a removed
+              }
+            } else if (lastCons.length == 3) {
+              // tricons.
+              var eca = lastCons.charAt(0);
+              var ecb = lastCons.charAt(1);
+              var ecc = lastCons.charAt(2);
+              if (
+                (ecb === "p" && ((["r","ř","l"].includes(eca) && ["t","k","f","ţ","x","s","š","h","ļ","ç"].includes(ecc))
+                             || (["m","ň"].includes(eca) && ["h","ļ","ç"].includes(ecc))
+                             || (["s","š","ç"].includes(eca) && ["f","ţ","s","š","ļ","ç"].includes(ecc)))) ||
+                (ecb === "t" && ((["l","r","ř"].includes(eca) && ["k","f","x","h","ļ","ç"].includes(ecc))
+                             || (eca === "n" && ["k","f","x","h"].includes(ecc))
+                             || (["m","ň","s","š","ç"].includes(eca) && ["h","ļ","ç"].includes(ecc)))) ||
+                (ecb === "k" && ((["l","r","ř"].includes(eca) && ["t","f","ţ","s","š","h","ç"].includes(ecc))
+                             || (["n","f","ţ","l"].includes(eca) && ["h","ç"].includes(ecc))
+                             || (eca === "m" && ["f","ţ","h","ç"].includes(ecc))
+                             || (["s","š","ç"].includes(eca) && ["f","ţ","s","š","h","ç"].includes(ecc)))) ||
+                (ecb === "b" && ((["r","ř"].includes(eca) && ["d","g","v","ḑ","z","ž"].includes(ecc))
+                             || (eca === "l" && ["v","ḑ","z","ž"].includes(ecc)))) ||
+                (ecb === "d" && (["r","ř"].includes(eca) && ["b","g","v"].includes(ecc))) ||
+                (ecb === "g" && ((["r","ř"].includes(eca) && ["b","d","v","ḑ","z","ž"].includes(ecc))
+                             || (eca === "l" && ["v","ḑ","z","ž"].includes(ecc)))) ||
+                (ecb === "f" && ((["l","r","ř","m","ň"].includes(eca) && ["t","k","f","s","š"].includes(ecc))
+                             || (["p","t","k"].includes(eca) && ["k","f"].includes(ecc))
+                             || (eca === "f" && ["t","k","s","š"].includes(ecc)))) ||
+                (ecb === "ţ" && ((["p","k","r","l","ř","m","n","ň"].includes(eca) && ["t","k","ţ"].includes(ecc))
+                             || (eca === "ţ" && ["t","k"].includes(ecc)))) ||
+                (ecb === "x" && ((["r","l","ř"].includes(eca) && ["t","x"].includes(ecc))
+                             || (["p","t","f","s","š","n","m"].includes(eca) && ecc === "x")
+                             || (eca === "x" && ecc === "t"))) ||
+                (ecb === "ļ" && ((["p","t","r","ř","m","n","ň"].includes(eca) && ["t","k","ļ"].includes(ecc))
+                             || (["ļ","l"].includes(eca) && ["t","k"].includes(ecc)))) ||
+                (ecb === "s" && ((["r","l","ř","m","n","ň","p","k","f"].includes(eca) && ["p","t","k","f","ţ","x","s"].includes(ecc))
+                             || (eca === "ţ" && ["p","t","k","s"].includes(ecc))
+                             || (eca === "s" && ["p","t","k","f","ţ","x"].includes(ecc)))) ||
+                (ecb === "š" && ((["r","l","ř","m","n","ň","p","k","f"].includes(eca) && ["p","t","k","f","ţ","x","š"].includes(ecc))
+                             || (eca === "ţ" && ["p","t","k","š"].includes(ecc))
+                             || (eca === "š" && ["p","t","k","f","ţ","x"].includes(ecc)))) ||
+                (ecb === "v" && ((["r","ř","l"].includes(eca) && ["v","z","ž"].includes(ecc))
+                             || (["b","g","m","ň"].includes(eca) && ecc === "v")
+                             || (eca === "v" && ["z","ž"].includes(ecc)))) ||
+                (ecb === "ḑ" && (["b","g","r","ř","l","n","m","ň"].includes(eca) && ecc === "ḑ")) ||
+                (ecb === "z" && ((["r","ř","l","n","m","ň"].includes(eca) && ["b","d","g","z"].includes(ecc))
+                             || (["b","g","v"].includes(eca) && ecc === "z")
+                             || (eca === "z" && ["b","d","g"].includes(ecc)))) ||
+                (ecb === "ž" && ((["r","ř","l","n","m","ň"].includes(eca) && ["b","d","g","ž"].includes(ecc))
+                             || (["b","g","v"].includes(eca) && ecc === "ž")
+                             || (eca === "ž" && ["b","d","g"].includes(ecc)))) ||
+                (ecb === "c" && (["r","ř","l"].includes(eca) && ["t","k","c","h"].includes(ecc))) ||
+                (ecb === "č" && (["r","ř","l"].includes(eca) && ["t","k","č","h"].includes(ecc))) ||
+                (ecb === "ẓ" && (["r","ř","l"].includes(eca) && ["d","g","ẓ"].includes(ecc))) ||
+                (ecb === "j" && (["r","ř","l"].includes(eca) && ["d","g","j"].includes(ecc))) ||
+                (ecb === "m" && ((["r","l","ř"].includes(eca) && ["p","t","k","b","d","f","ţ","x","s","š","v","ḑ","z","ž","m","ļ","ç"].includes(ecc))
+                             || (eca === "m" && ["p","t","k","b","d","f","ţ","x","s","š","v","ḑ","z","ž","ļ","ç"].includes(ecc)))) ||
+                (ecb === "n" && ((["r","ř"].includes(eca) && ["t","k","d","g","f","ţ","x","s","š","v","ḑ","z","ž","n","ļ","ç"].includes(ecc))
+                             || (eca === "l" && ["t","k","d","g","ţ","s","š","z","ž","ļ","ç"].includes(ecc))
+                             || (eca === "n" && ["t","k","d","g","f","ţ","x","s","š","v","ḑ","z","ž","ļ","ç"].includes(ecc)))) ||
+                (ecb === "l" && (eca === "l" && ["p","t","k","b","d","g","f","ţ","x","s","š","v","ḑ","z","ž","c","č","ẓ","j","m","n","ň","ç"].includes(ecc))) ||
+                (["r","ř"].includes(ecb) && (["r","ř"].includes(eca) && ["p","t","k","b","d","g","f","ţ","x","s","š","v","ḑ","z","ž","c","č","ẓ","j","m","n","ň","l","ļ","ç"].includes(ecc))) ||
+                (ecb === "ç" && ((["p","t","k","m","n","ň","r","l","ř"].includes(eca) && ["t","k","ç"].includes(ecc))
+                             || (eca === "ç" && ["t","k"].includes(ecc))))
+              ) {
+                this.slots[7] = "";
+                this.cut[1] = true;
+              }
+            /*} else if (nogem2.length == 4) {
+              // tetracons. & pentacons.
+              var eda = nogem2.charAt(0);
+              var edb = nogem2.charAt(1);
+              var edc = nogem2.charAt(2);
+              var edbc = edb + edc;
+              var edd = nogem2.charAt(3);
+              if ((["l","r","ř"].includes(eda) && (edbc)))
+            }
             console.log(lastCons); // this is where the code that checks if lastCons is permissable at the end of a word goes
-          }
+          }*/
           //this.slots[7] = "";
           //this.cut[1] = true; // slot 8a removed
         }
@@ -620,7 +727,7 @@ export default {
         stressType = ["UNF/K","UNF/C","FRM"].findIndex(x => x == this.gOptions.rel); // stress is reliant on relation, otherwise
       }
       // 5b: making sure the word can actually take the required stress
-      do { // i.e. stress 0 needs 1 vowel, stress 1 needs 2 vowels, stress 2 needs 3 vowels
+      while (wordVowels.length <= stressType) { // i.e. stress 0 needs 1 vowel, stress 1 needs 2 vowels, stress 2 needs 3 vowels
         var cutVal = this.cut.findIndex(x => x == true); 
         var ph = [1,7,9];
         if (ph[cutVal] === 9) {this.slots[8] = "h"}
@@ -628,7 +735,7 @@ export default {
         this.cut[cutVal] = false;
         (() => {this.ithkword = this.slots.slice(0,-1).join("")})(); // recalculate ithkword because slots have updated
         wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi); // recalculate wordVowels because ithkword has updated
-      } while (wordVowels.length <= stressType);
+      }
       // 5c: marking the stress
       if (stressType === 0 && wordVowels.length > 1) { // if ultimate stress (and not single-syllable word, because that's already assumed to be ultimate)
         console.log("apply ultimate stress");
