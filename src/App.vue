@@ -122,7 +122,9 @@ export default {
       shcuttypeA: 0,
       shcuttypeB: 0,
       sDip: ["ai","äi","ei","ëi","oi","öi","ui","au","eu","ëu","ou","iu"], // permissible diphthongs
+      sAccent: {"a":"á","e":"é","i":"í","ì":"í","o":"ó","u":"ú","ä":"â","ë":"ê","ö":"ô","ü":"û"}, // how to accent vowels
       slots: ["","","","","","","","","","",""], // ithkuil word, split into slots (0-6 = I-VII, 7-8 = VIII, 9 = IX, 10 = ungeminated VI)
+      cut: [false,false,false], // cut vowels - slots 2, 8a, and 9
       ithkword: "", // the calculated ithkuil word
       gloss: "al.FA.bet", // gloss of word
       ipa: "eɪ bi: si:", // IPA transcription
@@ -130,6 +132,7 @@ export default {
   },
   methods: {
     async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
+      console.log("Recieved "+value+" from "+code);
       await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
         if (code === "rel" && (value == "UNF/K" || this.gOptions.rel == "UNF/K")) {
           this.gOptions.c = "THM"; // quick fix to match the fact that the OptionBoxes for these reset but the values don't
@@ -139,9 +142,10 @@ export default {
           this.gOptions.casc = "CCN";
           this.gOptions.mood = "FAC";
         }
+        this.cut = [false,false,false]; // reset this.cut
       })();
       (()=>{this.gOptions[code] = value})();
-      if (code == "root") {this.slots[2] = value}
+      if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
       this.calculateWord();
     },
     openModal(code) {
@@ -157,7 +161,7 @@ export default {
       // technically, slot 7 can also influence slot 2 (and so should be before it), but i haven't coded that in yet.
       this.calculateSlot4();
       this.calculateSlot6();
-      this.shortcutCalcs();
+      this.shortcutCalcs(); // this is because slots 1, 2 and 5 are dependant in a very specific way on what 4 and 6 are, IF shortcuts are enabled.
       this.calculateSlot1();
       this.calculateSlot2();
       this.calculateSlot5();
@@ -184,7 +188,6 @@ export default {
       if (!this.shortcutting){
         this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][0];
       } else {
-        console.log(this.shortcutting);
         this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][this.shcuttypeB];
       }
       if (this.gOptions.Vafx.length >= 2) {
@@ -197,13 +200,12 @@ export default {
       var phh = ["EXS","FNC","RPS","AMG"];
       this.slots[3] = this.sVowels[ph[this.gOptions.func][this.gOptions.spec]][phh.findIndex(x => x == this.gOptions.ctxt)];
     },
-    calculateSlot5() { // TODO: If formative Slot V contains two or more affixes, Slot II VV must take a glottal-stop (applied as per the rules of Sec. 1.7)
+    calculateSlot5() {
       // I have no idea if it was the Object.assign() or the async/await in handleSendMessage(), but it works and I'm not questioning it.
       var out="";
       for (var j in this.gOptions.Vafx) {
         var i = Object.assign({},this.gOptions.Vafx[j]);
         if (this.shortcutting) {
-          console.log(j + " " + this.gOptions.Vafx.length);
           if (j == (this.gOptions.Vafx.length-1)) {
             out += this.insertGStop(this.sVowels[(i[1]+9)%10][i[2]-1]); // if it's the last slot 5 and slot 6 has been dropped, insert a glottal stop into the vowel
           } else {
@@ -459,20 +461,26 @@ export default {
     },
     
     finalCalcs() {
-      // Step 1: Glottal Stop Insertion in Slot 9 (the reason it's done here is because there's some extra logic that I haven't written yet)
+      var slot9saved = "";
+      // Step 1: Glottal Stop Insertion in Slot 9
       if (this.slots[9].charAt(this.slots[9].length-1) === "'") {
-        this.slots[9] = this.slots[9].slice(0,-1);
-        this.slots[9] = this.insertGStop(this.slots[9],true);
+        if (this.concat === 0) {
+          this.slots[9] = this.slots[9].slice(0,-1);
+          this.slots[9] = this.insertGStop(this.slots[9],true);
+        } else {
+          slot9saved = this.slots[9];
+          this.slots[9] = this.slots[9].slice(0,-1);
+        }
       }
 
-      // Step 2: Remove unnecessary vowels at the start
+      // Step 2: Remove unnecessary vowels at the start - the logic is dependant on the length of the root, so that's what I've done.
       if (this.slots[0] === "" && this.slots[1] === "a") {
         var nogem = this.removeDuplicate(this.slots[2]);
-        console.log(nogem);
         if (this.slots[2].length === 1) {
           //monocons. root
           if (this.slots[2] !== "ļ"){ // not ļ
             this.slots[1] = "";
+            this.cut[0] = true; // slot 2 removed
           }
         } else if (nogem.length === 2) {
           //bicons. root - this is VERY difficult to test and MAY have some errors, but I'm pretty confident that it shouldn't.
@@ -507,6 +515,7 @@ export default {
               (["l","r"].includes(ra) && ["w","y"].includes(rb)) // 3.2.9 - liquids
           ){
             this.slots[1] = ""; // if ANY of the huge above if statement is true, you can drop the second slot
+            this.cut[0] = true; // slot 2 removed
           }
         } else if (nogem.length === 3) {
           //tricons. root
@@ -546,6 +555,7 @@ export default {
             (["xc","xč"].includes(dab) && dc === "w")
           ) {
             this.slots[1] = "";
+            this.cut[0] = true; // slot 2 removed
           }
         } else if (nogem.length === 4) {
           // tetracons. roots
@@ -562,6 +572,7 @@ export default {
             (["z","ž","ẓ","j"].includes(qa) && ["b","d","g"].includes(qb) && qc === "l" && qd === "y")
           ) {
             this.slots[1] = "";
+            this.cut[0] = true; // slot 2 removed
           }
         }
       }
@@ -570,16 +581,90 @@ export default {
       if (this.slots[9] === "a" && this.slots[8] === "h") {
         this.slots[9] = "";
         this.slots[8] = "";
-        if (this.slots[7] === "a") {
-          console.log("Removing Slot 8 vowels is not currently supported, sorry.");
+        this.cut[2] = true; // slot 9 removed
+        if (this.slots[7] === "a") { // here i have to check that the consonant before this is allowed at the end of a word
+          var lastCons;
+          var shortenSlot8 = true;
+          if (this.slots[6].length == 0 && this.slots[4].length == 0 && this.shortcutting) { // if slots 5 & 7 are empty and there's shortcutting,
+            lastCons = this.slots[2]; // then the last consonant is the root.
+          } else if (this.slots[6].length == 0 && this.shortcutting) { // if that but slot 5 is filled,
+            shortenSlot8 = false; // don't remove slot 8, because 5 must have a glottal stop at the end which is not permitted.
+          } else if (this.slots[6].length == 0) { // if that but no shortcutting,
+            lastCons = this.slots[5]; // then the last consonant is slot 6.
+          } else { // otherwise,
+            lastCons = this.slots[6][this.slots[6].length][0]; // the last consonant is slot 7's last affix.
+          }
+          if (shortenSlot8) {
+            console.log(lastCons); // this is where the code that checks if lastCons is permissable at the end of a word goes
+          }
+          //this.slots[7] = "";
+          //this.cut[1] = true; // slot 8a removed
         }
       }
 
-      // Step 3: Join everything together
+      // Step 4: Join everything together
       (() => {this.ithkword = this.slots.slice(0,-1).join("")})();
+
+      // Step 5: Apply Slot 10 (stress)
+      // Penultimate stress is unmarked, others are marked with a diacritic; a -> á, ä -> â.
+      var wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
+      var stressType = 0;
+      // 5a: converting meaning to where the stress should be [0 = ult, 1 = penult, 2 = antepenult]
+      if (this.gOptions.concat !== 0) { // if it's a concatenated word
+        if (slot9saved.charAt(slot9saved.length-1) === "'") { //if you'd normally add a glottal stop into slot 9
+          stressType = 0; // ultimate stress
+        } else {
+          stressType = 1; // penultimate stress
+        }
+      } else {
+        stressType = ["UNF/K","UNF/C","FRM"].findIndex(x => x == this.gOptions.rel); // stress is reliant on relation, otherwise
+      }
+      // 5b: making sure the word can actually take the required stress
+      do { // i.e. stress 0 needs 1 vowel, stress 1 needs 2 vowels, stress 2 needs 3 vowels
+        var cutVal = this.cut.findIndex(x => x == true); 
+        var ph = [1,7,9];
+        if (ph[cutVal] === 9) {this.slots[8] = "h"}
+        this.slots[ph[cutVal]] = "a";
+        this.cut[cutVal] = false;
+        (() => {this.ithkword = this.slots.slice(0,-1).join("")})(); // recalculate ithkword because slots have updated
+        wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi); // recalculate wordVowels because ithkword has updated
+      } while (wordVowels.length <= stressType);
+      // 5c: marking the stress
+      if (stressType === 0 && wordVowels.length > 1) { // if ultimate stress (and not single-syllable word, because that's already assumed to be ultimate)
+        console.log("apply ultimate stress");
+        for (let i = this.ithkword.length-1; i >= 0; i--) {
+          if (["a","e","i","o","u","ä","ë","ö","ü"].includes(this.ithkword.charAt(i))) {
+            console.log(this.sAccent[this.ithkword.charAt(i-1)]);
+            if (this.sDip.includes(this.ithkword.charAt(i-1) + this.ithkword.charAt(i))) {
+              this.ithkword = this.ithkword.substring(0, i-1) + this.sAccent[this.ithkword.charAt(i-1)] + this.ithkword.substring(i);
+            } else {
+              this.ithkword = this.ithkword.substring(0, i) + this.sAccent[this.ithkword.charAt(i)] + this.ithkword.substring(i+1);
+            }
+            break;
+          }
+        }
+      } else if (stressType === 2) { // if antepenultimate stress
+        console.log("apply antepenultimate stress");
+        var counter = 0;
+        for (let i = this.ithkword.length-1; i >= 0; i--) {
+          if (["a","e","i","o","u","ä","ë","ö","ü"].includes(this.ithkword.charAt(i))) {
+            if (counter == 2) {
+              if (this.sDip.includes(this.ithkword.charAt(i-1) + this.ithkword.charAt(i))) {
+                this.ithkword = this.ithkword.substring(0, i-1) + this.sAccent[this.ithkword.charAt(i-1)] + this.ithkword.substring(i);
+              } else {
+                this.ithkword = this.ithkword.substring(0, i) + this.sAccent[this.ithkword.charAt(i)] + this.ithkword.substring(i+1);
+              }
+              break;
+            } else {
+              counter++
+            }
+          }
+        }
+      } // penultimate stress is unmarked, so I don't have to do anything
     }
   },
   beforeMount() {
+    this.slots[2] = "";
     this.calculateWord();
   }
 }

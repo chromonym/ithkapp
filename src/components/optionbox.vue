@@ -34,7 +34,7 @@
 
     <p v-if='json.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})'><b>ERROR:</b> Empty affixes</p> <!-- if there's an error, have text that says so -->
     <p v-else-if='json.type == "text" && this.text == ""'><b>ERROR:</b> Empty root</p>
-    <p v-else-if='(json.type == "text" && !this.text.split("").every((x) => Object.keys(this.cData).includes(x)))
+    <p v-else-if='(json.type == "text" && !this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())))
                 ||(json.type == "affix" && this.affixes.length != 0 && !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))'><b>ERROR:</b> Non-allowed characters</p>
     <p v-else></p> <!-- This is here so that the padding works regardless of if there's a <p> element or not -->
   </div>
@@ -61,7 +61,7 @@ export default {
   computed: {
     OBclass() { // set class to error if the input is the default
       return {
-        error: (this.json.type == "affix" && this.affixes.length != 0 && (!this.affixes.every(function (e) {return e[0] != ""}) || !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))) || (this.json.type == "text" && (this.text == "" || !this.text.split("").every((x) => Object.keys(this.cData).includes(x)))),
+        error: (this.json.type == "affix" && this.affixes.length != 0 && (!this.affixes.every(function (e) {return e[0] != ""}) || !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))) || (this.json.type == "text" && (this.text == "" || !this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())))),
         disabledbox: this.disabled
       }
     }
