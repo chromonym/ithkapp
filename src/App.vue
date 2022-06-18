@@ -693,17 +693,22 @@ export default {
                 this.slots[7] = "";
                 this.cut[1] = true;
               }
-            /*} else if (nogem2.length == 4) {
+            } else if (nogem2.length == 4) {
               // tetracons. & pentacons.
               var eda = nogem2.charAt(0);
               var edb = nogem2.charAt(1);
               var edc = nogem2.charAt(2);
               var edbc = edb + edc;
               var edd = nogem2.charAt(3);
-              if ((["l","r","ř"].includes(eda) && (edbc)))
+              if (((["l","r","ř"].includes(eda) && (["tç","pf","fs","fš"].includes(edbc) || (["k","p"].includes(edb) && ["s","š","ţ","ç"].includes(edc)))) ||
+              (eda === "r" && ((["n","ň","m"].includes(edb) && ["s","š","ţ","ç"].includes(edc)) || (["ň","m"].includes(edb) && edc === "f"))))
+              && ["t","k"].includes(edd)) {
+                this.slots[7] = "";
+                this.cut[1] = true;
+              }
             }
             console.log(lastCons); // this is where the code that checks if lastCons is permissable at the end of a word goes
-          }*/
+          }
           //this.slots[7] = "";
           //this.cut[1] = true; // slot 8a removed
         }
