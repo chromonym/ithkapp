@@ -187,6 +187,9 @@ export default {
         console.log(this.shortcutting);
         this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][this.shcuttypeB];
       }
+      if (this.gOptions.Vafx.length >= 2) {
+        this.slots[1] = this.insertGStop(this.slots[1]);
+      }
     },
     calculateSlot4() {
       var ph = {"STA":{"BSC":0,"CTE":1,"CSV":2,"OBJ":3},
@@ -200,7 +203,12 @@ export default {
       for (var j in this.gOptions.Vafx) {
         var i = Object.assign({},this.gOptions.Vafx[j]);
         if (this.shortcutting) {
-          out += this.sVowels[(i[1]+9)%10][i[2]-1];
+          console.log(j + " " + this.gOptions.Vafx.length);
+          if (j == (this.gOptions.Vafx.length-1)) {
+            out += this.insertGStop(this.sVowels[(i[1]+9)%10][i[2]-1]); // if it's the last slot 5 and slot 6 has been dropped, insert a glottal stop into the vowel
+          } else {
+            out += this.sVowels[(i[1]+9)%10][i[2]-1];
+          }
           out += i[0];
         } else {
           out += i[0];
@@ -451,7 +459,7 @@ export default {
     },
     
     finalCalcs() {
-      // Step 1: Glottal Stop Insertion(tm)
+      // Step 1: Glottal Stop Insertion in Slot 9 (the reason it's done here is because there's some extra logic that I haven't written yet)
       if (this.slots[9].charAt(this.slots[9].length-1) === "'") {
         this.slots[9] = this.slots[9].slice(0,-1);
         this.slots[9] = this.insertGStop(this.slots[9],true);
@@ -501,7 +509,7 @@ export default {
             this.slots[1] = ""; // if ANY of the huge above if statement is true, you can drop the second slot
           }
         } else if (nogem.length === 3) {
-          //tricons. root - NEED TO REMOVE GEMINATES!
+          //tricons. root
           var da = nogem.charAt(0);
           var db = nogem.charAt(1);
           var dc = nogem.charAt(2);
