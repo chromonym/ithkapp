@@ -121,6 +121,7 @@ export default {
       shortcutting: false,
       shcuttypeA: 0,
       shcuttypeB: 0,
+      slotVIIshortcut: false,
       sDip: ["ai","äi","ei","ëi","oi","öi","ui","au","eu","ëu","ou","iu"], // permissible diphthongs
       sAccent: {"a":"á","e":"é","i":"í","ì":"í","o":"ó","u":"ú","ä":"â","ë":"ê","ö":"ô","ü":"û"}, // how to accent vowels
       slots: ["","","","","","","","","","",""], // ithkuil word, split into slots (0-6 = I-VII, 7-8 = VIII, 9 = IX, 10 = ungeminated VI)
@@ -158,7 +159,7 @@ export default {
     },
     calculateWord() {
       // this order is specifically because slots 4 and 6 can influence slots 1 through 5 due to shortcutting.
-      // technically, slot 7 can also influence slot 2 (and so should be before it), but i haven't coded that in yet.
+      // additionally, what slot 2 shows can influence what slot 7 shows
       this.calculateSlot4();
       this.calculateSlot6();
       this.shortcutCalcs(); // this is because slots 1, 2 and 5 are dependant in a very specific way on what 4 and 6 are, IF shortcuts are enabled.
@@ -186,8 +187,30 @@ export default {
                 "s3":{"PRC":5,"CPT":6}, // standard vowel form 5 (4 here) is skipped
                 "s0":{"PRC":7,"CPT":8}};
       if (!this.shortcutting){
-        this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][0];
+        var lastVII;
+        var vowelColumn = 0;
+        if (this.gOptions.shcut === 0) {
+          if (this.gOptions.VIIafx.length > 0) {
+            lastVII = [...this.gOptions.VIIafx[this.gOptions.VIIafx.length-1]];
+          } else {
+            lastVII = ["no",0,0];
+          }
+          if (lastVII[0] === "r" && lastVII[1] === 4 && lastVII[2] === 1){
+            vowelColumn = 1;
+            this.slotVIIshortcut = true;
+          } else if (lastVII[0] === "t" && lastVII[1] === 4 && lastVII[2] === 1) {
+            vowelColumn = 2;
+            this.slotVIIshortcut = true;
+          } else if (lastVII[0] === "t" && lastVII[1] === 5 && lastVII[2] === 1) {
+            vowelColumn = 3;
+            this.slotVIIshortcut = true;
+          } else {
+            this.slotVIIshortcut = false;
+          }
+        }
+        this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][vowelColumn];
       } else {
+        this.slotVIIshortcut = false;
         this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][this.shcuttypeB];
       }
       if (this.gOptions.Vafx.length >= 2) {
@@ -310,10 +333,18 @@ export default {
     calculateSlot7() {
       // I have no idea if it was the Object.assign() or the async/await in handleSendMessage(), but it works and I'm not questioning it.
       var out="";
-      for (var j in this.gOptions.VIIafx) {
-        var i = Object.assign({},this.gOptions.VIIafx[j]);
-        out += this.sVowels[(i[1]+9)%10][i[2]-1];
-        out += i[0];
+      if (this.slotVIIshortcut) {
+        for (var j in this.gOptions.VIIafx.slice(0,-1)) {
+          var i = Object.assign({},this.gOptions.VIIafx[j]);
+          out += this.sVowels[(i[1]+9)%10][i[2]-1];
+          out += i[0];
+        }
+      } else {
+        for (var k in this.gOptions.VIIafx) {
+          var l = Object.assign({},this.gOptions.VIIafx[k]);
+          out += this.sVowels[(l[1]+9)%10][l[2]-1];
+          out += l[0];
+        }
       }
       this.slots[6] = out;
     },
@@ -586,14 +617,14 @@ export default {
           if (this.slots[7] === "a") { // here i have to check that the consonant before this is allowed at the end of a word
             var lastCons;
             var shortenSlot8 = true;
-            if (this.slots[6].length == 0 && this.slots[4].length == 0 && this.shortcutting) { // if slots 5 & 7 are empty and there's shortcutting,
+            if (this.gOptions.VIIafx.length == 0 && this.gOptions.Vafx.length == 0 && this.shortcutting) { // if slots 5 & 7 are empty and there's shortcutting,
               lastCons = this.slots[2]; // then the last consonant is the root.
-            } else if (this.slots[6].length == 0 && this.shortcutting) { // if that but slot 5 is filled,
+            } else if (this.gOptions.VIIafx.length == 0 && this.shortcutting) { // if that but slot 5 is filled,
               shortenSlot8 = false; // don't remove slot 8, because 5 must have a glottal stop at the end which is not permitted.
-            } else if (this.slots[6].length == 0) { // if that but no shortcutting,
+            } else if (this.gOptions.VIIafx.length == 0) { // if that but no shortcutting,
               lastCons = this.slots[5]; // then the last consonant is slot 6.
             } else { // otherwise,
-              lastCons = this.slots[6][this.slots[6].length][0]; // the last consonant is slot 7's last affix.
+              lastCons = this.gOptions.VIIafx[this.gOptions.VIIafx.length-1][0]; // the last consonant is slot 7's last affix.
             }
             if (shortenSlot8) {
               var nogem2 = this.removeDuplicate(lastCons);
