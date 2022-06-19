@@ -232,8 +232,8 @@ export default {
     calculateSlot2() { // sctype = 0 through 4 here
       var ph = {"s1":{"PRC":0,"CPT":1},
                 "s2":{"PRC":2,"CPT":3},
-                "s3":{"PRC":5,"CPT":6}, // standard vowel form 5 (4 here) is skipped
-                "s0":{"PRC":7,"CPT":8}};
+                "s0":{"CPT":5,"PRC":6}, // standard vowel form 5 (4 here) is skipped, and everything after that is reversed
+                "s3":{"CPT":7,"PRC":8}};
       if (!this.shortcutting){
         var lastVII;
         var vowelColumn = 0;
@@ -989,7 +989,7 @@ export default {
           } else if ("řř" === char+nextchar) {
             this.ipa += "ʁ:" // again, this is the user's choice between [ʁ:] and [ʀ], which is why it also has its own else if
             skipnext = true;
-          } else if (["hl","hr","hm","hn"].includes(char+nextchar)) {
+          } else if (["hl","hr","hm","hn"].includes(char+nextchar) && i == 0) {
             this.ipa += {"hl":"ɬ","hr":"ɾ̥","hm":"m̥","hn":"n̥"}[char+nextchar]; // this should be the user's choice between that and hl/hɾ/hm/hn
             skipnext = true;
           } else if (["ph","th","kh","ch","čh"].includes(char+nextchar) && (this.ithkword.charAt(parseInt(i)+2) === "" || Object.keys(this.sAccent).includes(this.ithkword.charAt(parseInt(i)+2)) || Object.values(this.sAccent).includes(this.ithkword.charAt(parseInt(i)+2)))) {
