@@ -118,6 +118,49 @@ export default {
         ["u","ui","ua","oa"],
         ["ae","ea","äi"] // yes, this one is shorter
       ],
+      ipaLookup: { // n, x, r, rr, řř, hl, hr, hm, hn (ph, th, kh, ch, čh)
+        "p":"p",
+        "b":"b",
+        "m":"m",
+        "f":"f",
+        "v":"v",
+        "w":"w",
+        "t":"t",
+        "d":"d",
+        "ţ":"θ",
+        "ḑ":"ð",
+        "s":"s",
+        "z":"z",
+        "c":"ts",
+        "ẓ":"dz",
+        "š":"ʃ",
+        "ž":"ʒ",
+        "č":"tʃ",
+        "j":"dʒ",
+        "ç":"ç",
+        "y":"j",
+        "k":"k",
+        "g":"g",
+        "ň":"ŋ",
+        "ř":"ʁ",
+        "'":"ʔ",
+        "h":"h",
+        "ļ":"ɮ",
+        "l":"l",
+        // everything else has a reliance on the surrounding letters
+      },
+      ipaPreference: { // because with most vowels the user will eventually be able to choose which pronunciation they want
+        "a": "a", // [a] or [ɑ]
+        "ä": "æ", // only [æ]
+        "e": "ɛ", // [ɛ] or [e]
+        "ë": "ɤ", // [ɤ] or [ʌ] or [ə]
+        "i": "i", // [i] or [ɪ]
+        "ì":"iː", // only [iː]
+        "o": "ɔ", // [ɔ] or [o]
+        "ö": "œ", // [œ] or [ø]
+        "u": "ʊ", // [ʊ] or [u]
+        "ü": "ʉ"  // [ʉ] or [y]
+      },
       shortcutting: false,
       shcuttypeA: 0,
       shcuttypeB: 0,
@@ -128,7 +171,7 @@ export default {
       cut: [false,false,false], // cut vowels - slots 2, 8a, and 9
       ithkword: "", // the calculated ithkuil word
       gloss: "al.FA.bet", // gloss of word
-      ipa: "eɪ bi: si:", // IPA transcription
+      ipa: "", // IPA transcription
     }
   },
   methods: {
@@ -148,6 +191,7 @@ export default {
       (()=>{this.gOptions[code] = value})();
       if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
       this.calculateWord();
+      this.IPAcalcs();
     },
     openModal(code) {
       console.log("Modal opening for",code);
@@ -739,10 +783,7 @@ export default {
                   this.cut[1] = true;
                 }
               }
-              console.log(lastCons); // this is where the code that checks if lastCons is permissable at the end of a word goes
             }
-            //this.slots[7] = "";
-            //this.cut[1] = true; // slot 8a removed
           }
         }
       }
@@ -779,7 +820,6 @@ export default {
         console.log("apply ultimate stress");
         for (let i = this.ithkword.length-1; i >= 0; i--) {
           if (["a","e","i","o","u","ä","ë","ö","ü"].includes(this.ithkword.charAt(i))) {
-            console.log(this.sAccent[this.ithkword.charAt(i-1)]);
             if (this.sDip.includes(this.ithkword.charAt(i-1) + this.ithkword.charAt(i))) {
               this.ithkword = this.ithkword.substring(0, i-1) + this.sAccent[this.ithkword.charAt(i-1)] + this.ithkword.substring(i);
             } else {
@@ -806,11 +846,96 @@ export default {
           }
         }
       } // penultimate stress is unmarked, so I don't have to do anything
+    },
+    IPAcalcs() {
+      this.ipa = "";
+      var skipnext = false;
+      if (Object.keys(this.sAccent).includes(this.ithkword.charAt(0)) || Object.values(this.sAccent).includes(this.ithkword.charAt(0))) {
+        this.ipa += "ʔ";
+      }
+      for (var i in this.ithkword.split("")) {
+        if (!skipnext) {
+          let prevchar = this.ithkword.charAt(parseInt(i)-1);
+          let char = this.ithkword.charAt(parseInt(i));
+          let nextchar = this.ithkword.charAt(parseInt(i)+1);
+          if (Object.values(this.sAccent).includes(char)) {
+            this.ipa += "ˈ";
+          }
+          if (char === "n") {
+            if (["k","g","x"].includes(nextchar)) {this.ipa += "ŋ";}
+            else {this.ipa += "n"}
+          } else if (char === "r" && nextchar !== "r") {
+            if (!(Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar))) {this.ipa += "ɹ"}
+            else {this.ipa += "ɾ"}
+          } else if (char === "x") {
+            this.ipa += "x"; // this should be the user's choice between [x] and [χ], which is why it has its own else if
+          } else if ("rr" === char+nextchar) {
+            this.ipa += "r"
+            skipnext = true;
+          } else if ("řř" === char+nextchar) {
+            this.ipa += "ʁ:" // again, this is the user's choice between [ʁ:] and [ʀ], which is why it also has its own else if
+            skipnext = true;
+          } else if (["hl","hr","hm","hn"].includes(char+nextchar)) {
+            this.ipa += {"hl":"ɬ","hr":"ɾ̥","hm":"m̥","hn":"n̥"}[char+nextchar]; // this should be the user's choice between that and hl/hɾ/hm/hn
+            skipnext = true;
+          } else if (["ph","th","kh","ch","čh"].includes(char+nextchar) && (this.ithkword.charAt(parseInt(i)+2) === "" || Object.keys(this.sAccent).includes(this.ithkword.charAt(parseInt(i)+2)) || Object.values(this.sAccent).includes(this.ithkword.charAt(parseInt(i)+2)))) {
+            // syllable-initial or word-final
+            this.ipa += this.ipaLookup[char];
+            this.ipa += "ʰ";
+            skipnext = true;
+          } else if (char === nextchar && Object.keys(this.ipaLookup).includes(char)) { // if geminated
+            this.ipa += this.ipaLookup[char];
+            this.ipa += "ː";
+            skipnext = true;
+          } else if (Object.keys(this.sAccent).includes(char) || Object.values(this.sAccent).includes(char)) { // if vowel
+            var vwl;
+            if (Object.values(this.sAccent).includes(char)) {vwl = Object.keys(this.sAccent).find(e => this.sAccent[e] == char)}
+            else {vwl = char}
+            if (vwl === nextchar || vwl === Object.keys(this.sAccent).find(e => this.sAccent[e] == nextchar)) { // if geminated vowel
+              this.ipa += this.ipaPreference[vwl];
+              this.ipa += "ː";
+              skipnext = true;
+            } else if (["ä","ë"].includes(vwl)) {
+                this.ipa += this.ipaPreference[vwl];
+            } else if (vwl === "a") {
+                if (Object.keys(this.sAccent).includes(prevchar) || Object.values(this.sAccent).includes(prevchar)) {this.ipa += "ɑ"}
+                else {this.ipa += this.ipaPreference[vwl]}
+            } else if (vwl === "e") {
+                if (Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar)) {this.ipa += "e"}
+                else {this.ipa += this.ipaPreference[vwl]}
+            } else if (vwl === "i") {
+                if (Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar)) {this.ipa += "i"}
+                else if (nextchar == "y" || prevchar == "y") {this.ipa += "ɪ"}
+                else {this.ipa += this.ipaPreference[vwl]}
+            } else if (vwl === "o") {
+                if (Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar)) {this.ipa += "o"}
+                else {this.ipa += this.ipaPreference[vwl]}
+            } else if (vwl === "ö") {
+                if (Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar)) {this.ipa += "ø"}
+                else {this.ipa += this.ipaPreference[vwl]}
+            } else if (vwl === "u") {
+                if (Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar)) {this.ipa += "u"}
+                else if (nextchar == "w" || prevchar == "w") {this.ipa += "ʊ"}
+                else {this.ipa += this.ipaPreference[vwl]}
+            } else if (vwl === "ü") {
+                if (nextchar == "w" || prevchar == "w" || nextchar == "y" || prevchar == "y") {this.ipa += "ʉ"}
+                else {this.ipa += this.ipaPreference[vwl]}
+            }
+          } else if (Object.keys(this.ipaLookup).includes(char)) {
+            this.ipa += this.ipaLookup[char];
+          } else {
+            this.ipa += "-";
+          }
+        } else {
+          skipnext = false;
+        }
+      }
     }
   },
   beforeMount() {
     this.slots[2] = "";
     this.calculateWord();
+    this.IPAcalcs();
   }
 }
 </script>
