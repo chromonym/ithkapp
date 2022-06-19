@@ -2,14 +2,16 @@
   <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
   <div id="content">
     <h1>Ithkapp</h1>
+    <p class="smalltext">That's a placeholder name.<br/>Compatible with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4</p>
     <div class="section"> <!-- Section 1: Root, etc. -->
-      <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" type="text" @modal="openModal" ref="root"/>
+      <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" type="text" ref="root"/> <!-- @modal="openModal", ref="code" for each of these -->
       <OptionBox :json="gData.stem" code="stem" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.spec" code="spec" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" @modal="openModal" ref="func"/>
+      <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" ref="func"/>
       <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage"/>
     </div>
     <div class="section"> <!-- Section 2: Concatenation & Affixes-->
+      <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage"/>
       <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix"/>
@@ -18,8 +20,8 @@
     <div class="section"> <!-- Section 3: Configuration -->
       <h2 style="width:100%;">Configuration</h2>
       <OptionBox :json="gData.plex" code="plex" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage"/>
+      <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)'/>
+      <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)'/>
     </div>
     <div class="section"> <!-- Section 4: Slot 6 -->
       <OptionBox :json="gData.affil" code="affil" @send-message="handleSendMessage"/>
@@ -37,7 +39,6 @@
     </div>
     <div class="section"> <!-- Section 6: Slot 8b to 10 -->
       <OptionBox :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage"/>
       <OptionBox v-if='this.gOptions.rel == "UNF/K"' :json="gData.mood" code="mood" @send-message="handleSendMessage"/>
       <OptionBox v-else :json="gData.casc" code="casc" @send-message="handleSendMessage"/>
       <OptionBox v-if="this.gOptions.rel != 'UNF/K'" :json="gData.c" code="c" @send-message="handleSendMessage" />
@@ -48,8 +49,9 @@
     <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   </div>
   <div id="footer">
-    <p>{{ithkword}} /{{ipa}}/</p>
-    <p>{{gloss}}</p>
+    <p><span class="word"><b>{{ithkword}}</b></span><br/>
+    <span class="smalltext">[{{ipa}}]<br/>
+    <span :title="fullGloss">{{gloss}}</span></span></p>
   </div>
   <div id="modal" class="modal" @click.self="closeModal()">
     <div class="modal-content">
@@ -85,7 +87,7 @@ export default {
         "shcut":0,
         "Vafx":[],
         "VIIafx":[],
-        "plex":"U",
+        "plex":"UPX",
         "simil":"S",
         "cctd":"S",
         "affil":"CSL",
@@ -168,9 +170,10 @@ export default {
       sDip: ["ai","äi","ei","ëi","oi","öi","ui","au","eu","ëu","ou","iu"], // permissible diphthongs
       sAccent: {"a":"á","e":"é","i":"í","ì":"í","o":"ó","u":"ú","ä":"â","ë":"ê","ö":"ô","ü":"û"}, // how to accent vowels
       slots: ["","","","","","","","","","",""], // ithkuil word, split into slots (0-6 = I-VII, 7-8 = VIII, 9 = IX, 10 = ungeminated VI)
-      cut: [false,false,false], // cut vowels - slots 2, 8a, and 9
+      cut: [false,false,false], // cut vowels - slots 2, 9, and 8a
       ithkword: "", // the calculated ithkuil word
-      gloss: "al.FA.bet", // gloss of word
+      gloss: "", // gloss of word
+      fullGloss: "", // full version of above
       ipa: "", // IPA transcription
     }
   },
@@ -192,6 +195,7 @@ export default {
       if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
       this.calculateWord();
       this.IPAcalcs();
+      this.glossCalcs();
     },
     openModal(code) {
       console.log("Modal opening for",code);
@@ -289,7 +293,7 @@ export default {
     calculateSlot6() {
       // step 1: get normal states for each option
       var AFFIL = {"CSL":"","ASO":"l","COA":"r","VAR":"ř"}[this.gOptions.affil];
-      var CONF = (this.gOptions.plex === "U") ? "" : (this.gOptions.plex === "D2") ? "s" : // the most hideous (but comparatively tame compared to ithkuil iii) table as an object
+      var CONF = (this.gOptions.plex === "UPX") ? "" : (this.gOptions.plex === "DPX") ? "s" : // the most hideous (but comparatively tame compared to ithkuil iii) table as an object
                  ({"M":{"S":{"S":"t","C":"k","F":"p"}, "D":{"S":"ţ","C":"f","F":"ç"}, "F":{"S":"z","C":"ž","F":"ẓ"}},
                    "D":{"S":{"S":"c","C":"ks","F":"ps"}, "D":{"S":"ţs","C":"fs","F":"š"}, "F":{"S":"č","C":"kš","F":"pš"}}})[this.gOptions.plex][this.gOptions.simil][this.gOptions.cctd];
       var EXT = ((CONF === "") ? {"DEL":"","PRX":"d","ICP":"g","ATV":"b","GRA":"gz","DPL":"bz"}
@@ -539,7 +543,7 @@ export default {
       var slot9saved = "";
       // Step 1: Glottal Stop Insertion in Slot 9
       if (this.slots[9].charAt(this.slots[9].length-1) === "'") {
-        if (this.concat === 0) {
+        if (this.gOptions.concat === 0) {
           this.slots[9] = this.slots[9].slice(0,-1);
           this.slots[9] = this.insertGStop(this.slots[9],true);
         } else {
@@ -654,11 +658,11 @@ export default {
         }
 
         // Step 3: Remove unnecessary vowels at the end
-        if (this.slots[9] === "a" && this.slots[8] === "h") {
-          this.slots[9] = "";
+        if (this.slots[7] === "a" && this.slots[8] === "h") {
+          this.slots[7] = "";
           this.slots[8] = "";
-          this.cut[2] = true; // slot 9 removed
-          if (this.slots[7] === "a") { // here i have to check that the consonant before this is allowed at the end of a word
+          this.cut[2] = true; // slot 8a removed
+          if (this.slots[9] === "a") { // here i have to check that the consonant before this is allowed at the end of a word
             var lastCons;
             var shortenSlot8 = true;
             if (this.gOptions.VIIafx.length == 0 && this.gOptions.Vafx.length == 0 && this.shortcutting) { // if slots 5 & 7 are empty and there's shortcutting,
@@ -675,8 +679,8 @@ export default {
               if (lastCons.length == 1) {
                 //monocons.
                 if (lastCons !== "w" && lastCons !== "y" && lastCons !== "'") { // 4.1 any consonant except -w or -y
-                  this.slots[7] = "";
-                  this.cut[1] = true; // slot 8a removed
+                  this.slots[9] = "";
+                  this.cut[1] = true; // slot 9 removed
                 }
               } else if (lastCons.length == 2) {
                 //bicons.
@@ -702,8 +706,8 @@ export default {
                   (eba === "l" && !(["'","w","y","r","ň"].includes(ebb))) || // 4.2.11 - l, anything except w/y/r/ň/'
                   (eba === ebb && !(["p","t","k","b","d","g","'"].includes(eba))) // 4.2.12 - any geminated consonant except stops
                 ){
-                  this.slots[7] = "";
-                  this.cut[1] = true; // slot 8a removed
+                  this.slots[9] = "";
+                  this.cut[1] = true; // slot 9 removed
                 }
               } else if (lastCons.length == 3) {
                 // tricons.
@@ -766,8 +770,8 @@ export default {
                   (ecb === "ç" && ((["p","t","k","m","n","ň","r","l","ř"].includes(eca) && ["t","k","ç"].includes(ecc))
                               || (eca === "ç" && ["t","k"].includes(ecc))))
                 ) {
-                  this.slots[7] = "";
-                  this.cut[1] = true;
+                  this.slots[9] = "";
+                  this.cut[1] = true; // slot 9 removed
                 }
               } else if (nogem2.length == 4) {
                 // tetracons. & pentacons.
@@ -779,8 +783,8 @@ export default {
                 if (((["l","r","ř"].includes(eda) && (["tç","pf","fs","fš"].includes(edbc) || (["k","p"].includes(edb) && ["s","š","ţ","ç"].includes(edc)))) ||
                 (eda === "r" && ((["n","ň","m"].includes(edb) && ["s","š","ţ","ç"].includes(edc)) || (["ň","m"].includes(edb) && edc === "f"))))
                 && ["t","k"].includes(edd)) {
-                  this.slots[7] = "";
-                  this.cut[1] = true;
+                  this.slots[9] = "";
+                  this.cut[1] = true; // slot 9 removed
                 }
               }
             }
@@ -808,8 +812,8 @@ export default {
       // 5b: making sure the word can actually take the required stress
       while (wordVowels.length <= stressType) { // i.e. stress 0 needs 1 vowel, stress 1 needs 2 vowels, stress 2 needs 3 vowels
         var cutVal = this.cut.findIndex(x => x == true); 
-        var ph = [1,7,9];
-        if (ph[cutVal] === 9) {this.slots[8] = "h"}
+        var ph = [1,9,7];
+        if (ph[cutVal] === 7) {this.slots[8] = "h"}
         this.slots[ph[cutVal]] = "a";
         this.cut[cutVal] = false;
         (() => {this.ithkword = this.slots.slice(0,-1).join("")})(); // recalculate ithkword because slots have updated
@@ -817,7 +821,6 @@ export default {
       }
       // 5c: marking the stress
       if (stressType === 0 && wordVowels.length > 1) { // if ultimate stress (and not single-syllable word, because that's already assumed to be ultimate)
-        console.log("apply ultimate stress");
         for (let i = this.ithkword.length-1; i >= 0; i--) {
           if (["a","e","i","o","u","ä","ë","ö","ü"].includes(this.ithkword.charAt(i))) {
             if (this.sDip.includes(this.ithkword.charAt(i-1) + this.ithkword.charAt(i))) {
@@ -829,7 +832,6 @@ export default {
           }
         }
       } else if (stressType === 2) { // if antepenultimate stress
-        console.log("apply antepenultimate stress");
         var counter = 0;
         for (let i = this.ithkword.length-1; i >= 0; i--) {
           if (["a","e","i","o","u","ä","ë","ö","ü"].includes(this.ithkword.charAt(i))) {
@@ -847,7 +849,119 @@ export default {
         }
       } // penultimate stress is unmarked, so I don't have to do anything
     },
+    glossCalcs() {
+      this.gloss = "";
+      this.fullGloss = "";
+      // glosses are of the form (T#-)S#(.CPT)(.S7cut)-"root"(-SLOT 4)(-SLOT 5.1)(-SLOT 5.2)(-SLOT 6)(-SLOT 7.1)(-SLOT 7.2)(-SLOT 8)(-SLOT 9)\SLOT 10,
+      // unless there's a shortcut in which case slot 6 will be moved to slot 2
+      // Slot 1
+      if (this.gOptions.concat !== 0) {
+        this.gloss += "T" + this.gOptions.concat + "-";
+        this.fullGloss += "T" + this.gOptions.concat + "-";
+      }
+      // Slot 2
+      this.gloss += "S" + this.gOptions.stem.charAt(1);
+      if (this.gOptions.ver === "CPT") {
+        this.gloss += ".CPT"
+      }
+      this.fullGloss += "S" + this.gOptions.stem.charAt(1) + "." + this.gOptions.ver;
+      if (this.shortcutting) {
+        var configgCode = (this.gOptions.plex+this.gOptions.simil+this.gOptions.cctd).slice(0,3);
+        this.fullGloss += "."+this.gOptions.affil+"."+configgCode+"."+this.gOptions.ext+"."+this.gOptions.persp+"."+this.gOptions.ess;
+        var s2c = [];
+        if (this.gOptions.affil != "CSL") {s2c.push(this.gOptions.affil)}
+        if (configgCode != "UPX") {s2c.push(configgCode)}
+        if (this.gOptions.ext != "DEL") {s2c.push(this.gOptions.ext)}
+        if (this.gOptions.persp != "M") {s2c.push(this.gOptions.persp)}
+        if (this.gOptions.ess != "NRM") {s2c.push(this.gOptions.ess)}
+        if (s2c.length > 0) {this.gloss += "." + s2c.join(".")}
+      } else if (this.slotVIIshortcut) {
+        this.gloss += ".[fix this]"
+        this.fullGloss += ".[fix this]"
+      }
+      // Slot 3
+      this.gloss += '-"' + this.gOptions.root + '"'; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
+      this.fullGloss += '-"' + this.gOptions.root + '"';
+      // Slot 4
+      this.fullGloss += "-"+this.gOptions.func+"."+this.gOptions.spec+"."+this.gOptions.ctxt;
+      var s4c = [];
+      if (this.gOptions.func != "STA") {s4c.push(this.gOptions.func)}
+      if (this.gOptions.spec != "BSC") {s4c.push(this.gOptions.spec)}
+      if (this.gOptions.ctxt != "EXS") {s4c.push(this.gOptions.ctxt)}
+      if (s4c.length > 0) {this.gloss += "-" + s4c.join(".")}
+      // Slot 5
+      for (var i in this.gOptions.Vafx) {
+        let affx = this.gOptions.Vafx[i];
+        this.gloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]]; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
+        this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]];
+      }
+      // Slot 6
+      if (!this.shortcutting) {
+        var configCode = (this.gOptions.plex+this.gOptions.simil+this.gOptions.cctd).slice(0,3);
+        this.fullGloss += "-"+this.gOptions.affil+"."+configCode+"."+this.gOptions.ext+"."+this.gOptions.persp+"."+this.gOptions.ess;
+        var s6c = [];
+        if (this.gOptions.affil != "CSL") {s6c.push(this.gOptions.affil)}
+        if (configCode != "UPX") {s6c.push(configCode)}
+        if (this.gOptions.ext != "DEL") {s6c.push(this.gOptions.ext)}
+        if (this.gOptions.persp != "M") {s6c.push(this.gOptions.persp)}
+        if (this.gOptions.ess != "NRM") {s6c.push(this.gOptions.ess)}
+        if (s6c.length > 0) {this.gloss += "-" + s6c.join(".")}
+        else if (this.gOptions.Vafx.length > 0) {
+          this.gloss += "-{Ca}";
+        }
+      } else if (this.gOptions.Vafx.length > 0) {
+        this.gloss += "-{Ca}";
+        this.fullGloss += "-{Ca}";
+      }
+      // Slot 7
+      if (this.slotVIIshortcut) {
+        for (var j in this.gOptions.VIIafx.slice(0,-1)) {
+          let affx = this.gOptions.VIIafx[j];
+          this.gloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]]; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
+          this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]];
+        }
+      } else {
+        for (var k in this.gOptions.VIIafx) {
+          let affx = this.gOptions.VIIafx[k];
+          this.gloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]]; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
+          this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]];
+        }
+      }
+      // Slot 8
+      var s8c = [];
+      if (this.gOptions[this.gOptions.vn] !== "MNO") {s8c.push(this.gOptions[this.gOptions.vn])}
+      if (this.gOptions.mood !== "FAC" && this.gOptions.rel === "UNF/K") {s8c.push(this.gOptions.mood)}
+      if (this.gOptions.casc !== "CCN" && this.gOptions.rel !== "UNF/K") {s8c.push(this.gOptions.casc)}
+      if (s8c.length > 0) {this.gloss += "-" + s8c.join(".")}
+      this.fullGloss += "-" + this.gOptions[this.gOptions.vn] + "." + (this.gOptions.rel === "UNF/K" ? this.gOptions.mood : this.gOptions.casc)
+      // Slot 9
+      if (this.gOptions.rel === "UNF/K") {
+        //IEV
+        var s9c = [];
+        this.fullGloss += "-"+this.gOptions.ill+"."+this.gOptions.exp;
+        if (this.gOptions.ill === "ASR") {this.fullGloss+="."+this.gOptions.vld}
+        if (this.gOptions.ill !== "ASR") {s9c.push(this.gOptions.ill)}
+        if (this.gOptions.exp !== "COG") {s9c.push(this.gOptions.exp)}
+        if (this.gOptions.vld !== "OBS" && this.gOptions.ill === "ASR") {s9c.push(this.gOptions.vld)}
+        if (s9c.length > 0) {this.gloss += "-" + s9c.join(".")}
+      } else {
+        //case
+        if (this.gOptions.c !== "THM") {this.gloss += "-"+this.gOptions.c}
+        this.fullGloss += "-"+this.gOptions.c;
+      }
+      // Slot 10
+      if (this.gOptions.concat === 0) {
+        this.fullGloss += "\\" + this.gOptions.rel.split("/")[0];
+        if (this.gOptions.rel.split("/")[0] !== "UNF") {this.gloss += "\\" + this.gOptions.rel.split("/")[0]}
+      }
+      if (this.gOptions.shcut === 2) {
+        let ph = this.gloss;
+        this.gloss = this.fullGloss;
+        this.fullGloss = ph;
+      }
+    },
     IPAcalcs() {
+      // Calculate the IPA pronunciation of the Ithkuil word
       this.ipa = "";
       var skipnext = false;
       if (Object.keys(this.sAccent).includes(this.ithkword.charAt(0)) || Object.values(this.sAccent).includes(this.ithkword.charAt(0))) {
@@ -936,6 +1050,7 @@ export default {
     this.slots[2] = "";
     this.calculateWord();
     this.IPAcalcs();
+    this.glossCalcs();
   }
 }
 </script>
@@ -949,11 +1064,18 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.word {
+  font-size: 20px;
+}
+.smalltext {
+  font-size: 13px;
+  color: gray;
+}
 #content {
   position: absolute;
   top: 0px;
   left: 0px;
-  bottom: 100px;
+  bottom: 90px;
   right: 0px;
   overflow: auto;
 }
@@ -961,7 +1083,7 @@ export default {
   position: fixed;
   left: 0;
   bottom: 0;
-  height: 100px;
+  height: 90px;
   width: 100%;
   border-style: solid;
   border-width: 1px;
@@ -979,7 +1101,11 @@ export default {
   padding: 2px;
   margin: 10px;
 }
-
+@media (max-width: 800px) {
+  .section {
+    flex-direction: column;
+  }
+}
 .modal {
   display: none;
   position: fixed;

@@ -157,7 +157,7 @@
                 "desc":"N/A"
             },
             {
-                "name":"Yes",
+                "name":"Yes, if possible",
                 "desc":"N/A"
             },
             {
@@ -184,8 +184,12 @@
         "type":"",
         "title":"Plexity",
         "options": {
-            "U": {
+            "UPX": {
                 "name":"Uniplex",
+                "desc":"N/A"
+            },
+            "DPX": {
+                "name":"Vague Duplex",
                 "desc":"N/A"
             },
             "D": {
