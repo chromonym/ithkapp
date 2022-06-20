@@ -35,7 +35,7 @@
         "options": {
             "STA": {
                 "name":"Static",
-                "desc":"N/A"
+                "desc":"The <b>Static</b> function is typically used in the following ways:<br/><ul><li>Nouns (Nominal relation) denoting physically-tangible objects/entities being referred to only to identify them.<br/>e.g. <i>a ball, a tree, a rock, a person, a cloud,</i> etc.</li></ul>"
             },
             "DYN": {
                 "name":"Dynamic",

@@ -73,8 +73,9 @@ export default {
   },
   methods: {
     updateValue(toUpdate) {
-      if (this.$props.type != "affix" && this.$props.type != "text" && toUpdate in this.$props.options) {
+      if (this.$props.type != "affix" && this.$props.type != "text" && Object.keys(this.$props.json.options).includes(toUpdate)) {
         this.option = toUpdate;
+        document.getElementById(this.$props.code).selectedIndex = Object.keys(this.$props.json.options).findIndex(x => x === toUpdate);
         this.$emit('send-message',this.option,this.$props.code)
       }
     }

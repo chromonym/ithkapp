@@ -4,47 +4,47 @@
     <h1>Ithkapp</h1>
     <p class="smalltext">That's a placeholder name.<br/>Compatible with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4</p>
     <div class="section"> <!-- Section 1: Root, etc. -->
-      <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" type="text" ref="root"/> <!-- @modal="openModal", ref="code" for each of these -->
-      <OptionBox :json="gData.stem" code="stem" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.spec" code="spec" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" ref="func"/>
-      <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage"/>
+      <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" type="text" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
+      <OptionBox :json="gData.stem" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
+      <OptionBox :json="gData.spec" code="spec" @send-message="handleSendMessage" ref="spec" @modal="openModal"/>
+      <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
+      <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
     </div>
     <div class="section"> <!-- Section 2: Concatenation & Affixes-->
-      <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix"/>
-      <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix"/>
+      <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal"/>
+      <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
+      <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
+      <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal"/>
+      <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal"/>
     </div>
     <div class="section"> <!-- Section 3: Configuration -->
       <h2 style="width:100%;">Configuration</h2>
-      <OptionBox :json="gData.plex" code="plex" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)'/>
-      <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)'/>
+      <OptionBox :json="gData.plex" code="plex" @send-message="handleSendMessage" ref="plex" @modal="openModal"/>
+      <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="simil" @modal="openModal"/>
+      <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="cctd" @modal="openModal"/>
     </div>
     <div class="section"> <!-- Section 4: Slot 6 -->
-      <OptionBox :json="gData.affil" code="affil" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.ext" code="ext" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.persp" code="persp" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.ess" code="ess" @send-message="handleSendMessage"/>
+      <OptionBox :json="gData.affil" code="affil" @send-message="handleSendMessage" ref="affil" @modal="openModal"/>
+      <OptionBox :json="gData.ext" code="ext" @send-message="handleSendMessage" ref="ext" @modal="openModal"/>
+      <OptionBox :json="gData.persp" code="persp" @send-message="handleSendMessage" ref="persp" @modal="openModal"/>
+      <OptionBox :json="gData.ess" code="ess" @send-message="handleSendMessage" ref="ess" @modal="openModal"/>
     </div>
     <div class="section"> <!-- Section 5: Slot 8a -->
-      <OptionBox :json="gData.vn" code="vn" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.eff" code="eff" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage"/>
-      <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage"/>
+      <OptionBox :json="gData.vn" code="vn" @send-message="handleSendMessage" ref="vn" @modal="openModal"/>
+      <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage" ref="val" @modal="openModal"/>
+      <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage" ref="pha" @modal="openModal"/>
+      <OptionBox :json="gData.eff" code="eff" @send-message="handleSendMessage" ref="eff" @modal="openModal"/>
+      <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal"/>
+      <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal"/>
     </div>
     <div class="section"> <!-- Section 6: Slot 8b to 10 -->
-      <OptionBox :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage"/>
-      <OptionBox v-if='this.gOptions.rel == "UNF/K"' :json="gData.mood" code="mood" @send-message="handleSendMessage"/>
-      <OptionBox v-else :json="gData.casc" code="casc" @send-message="handleSendMessage"/>
-      <OptionBox v-if="this.gOptions.rel != 'UNF/K'" :json="gData.c" code="c" @send-message="handleSendMessage" />
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.ill" code="ill" @send-message="handleSendMessage"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.exp" code="exp" @send-message="handleSendMessage"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"'/>
+      <OptionBox :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
+      <OptionBox v-if='this.gOptions.rel == "UNF/K"' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
+      <OptionBox v-else :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel != 'UNF/K'" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
     </div>
     <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   </div>
@@ -54,9 +54,16 @@
     <span :title="fullGloss">{{gloss}}</span></span></p>
   </div>
   <div id="modal" class="modal" @click.self="closeModal()">
-    <div class="modal-content">
+    <div id="modal-content">
       <span class="close" @click="closeModal()">&times;</span>
-      <p>Hi from {{modalContent}}</p>
+      <div v-if="modalContent.type == ''">
+        <div v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
+          <div @click="updateFromModal(modalID,option)">
+            <h3>{{modalContent.options[option].name}} ({{option}})</h3>
+            <p v-html="modalContent.options[option].desc"></p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -74,6 +81,7 @@ export default {
   data() {
     return {
       modalContent: "",
+      modalID: "",
       gData: grammardata,
       cData: consdata,
       gOptions: { // grammar options
@@ -199,11 +207,15 @@ export default {
     },
     openModal(code) {
       console.log("Modal opening for",code);
-      this.modalContent = this.gData[code].popuptest;
+      this.modalContent = this.gData[code];
+      this.modalID = code;
       document.getElementById("modal").style.display = "block";
     },
     closeModal() {
       document.getElementById("modal").style.display = "none";
+    },
+    updateFromModal(reference,value) {
+      this.$refs[reference].updateValue(value);
     },
     calculateWord() {
       // this order is specifically because slots 4 and 6 can influence slots 1 through 5 due to shortcutting.
@@ -1118,16 +1130,35 @@ export default {
   background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.4);
 }
-.modal-content {
+#modal-content {
   background-color: #fefefe;
   margin: 15% auto;
-  padding: 20px;
+  /*padding: 20px;*/
   border: 1px solid #888;
   width: 80%;
+  text-align: left;
+}
+.modalOption {
+  border: 1px solid black;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.modalSelected {
+  background-color: rgb(179, 255, 230)
+}
+.modalOption:hover,
+.modalOption:focus {
+  text-decoration: none;
+  cursor: pointer;
+}
+.modalSelected:hover {
+  cursor: auto;
 }
 .close {
   color: #aaa;
   float: right;
+  padding-right: 10px;
+  padding-top: 5px;
   font-size: 28px;
   font-weight: bold;
 }
