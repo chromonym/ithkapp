@@ -267,7 +267,7 @@ export default {
     },
     calculateSlot4() {
       var ph = {"STA":{"BSC":0,"CTE":1,"CSV":2,"OBJ":3},
-                "DYN":{"BSC":5,"CTE":6,"CSV":7,"OBJ":8}}; // again, svf 5 is skipped
+                "DYN":{"OBJ":5,"CSV":6,"CTE":7,"BSC":8}}; // again, svf 5 is skipped
       var phh = ["EXS","FNC","RPS","AMG"];
       this.slots[3] = this.sVowels[ph[this.gOptions.func][this.gOptions.spec]][phh.findIndex(x => x == this.gOptions.ctxt)];
     },
