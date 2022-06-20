@@ -766,119 +766,119 @@
         "options": {
             "THM":{
                 "name":"Thematic",
-                "desc":"N/A"
+                "desc":"The (usually inanimate) party which is a participant to the verbal predicate which does not undergo any tangible change of state.<br/><b>Semantic role:</b> CONTENT"
             },
             "INS":{
                 "name":"Instrumental",
-                "desc":"N/A"
+                "desc":"The entity acting as means utilized by an explicit or implicit agent to implement/carry out the effect/impact of an act/event.<br/><b>Semantic role:</b> INSTRUMENT"
             },
             "ABS":{
                 "name":"Absolutive",
-                "desc":"N/A"
+                "desc":"The party that is the target of, and/or undergoes, the effect/impact or change of state as a result of a tangible act/event.<br/><b>Semantic role:</b> PATIENT"
             },
             "AFF":{
                 "name":"Affective",
-                "desc":"N/A"
+                "desc":"The party who undergoes an unwilled, affective experience,<br/>e.g. coughing, sneezing, feeling hot/cold, trembling, experiencing sensory input (tactile, olfactory, visual, aural, gustatory), proprioceptive states, psychological/emotional states, reflex reactions such as cringing, yawning, ducking, screaming in fright, etc.<br/><b>Semantic role:</b> EXPERIENCER"
             },
             "STM":{
                 "name":"Stimulative",
-                "desc":"N/A"
+                "desc":"The party/entity/idea/thought/situation or mental state which triggers an unwilled, affective response or is the trigger for an existential state such as possession.<br/><b>Semantic role:</b> STIMULUS"
             },
             "EFF":{
                 "name":"Effectuative",
-                "desc":"N/A"
+                "desc":"The party/force that initiates a chain of causal events or who induces another party to act as an agent (specifiable via the ENB affix).<br/><b>Semantic role:</b> ENABLER"
             },
             "ERG":{
                 "name":"Ergative",
-                "desc":"N/A"
+                "desc":"The animate party or inanimate force which initiates/causes an act/event which creates a tangible effect or change of state in a patient.<br/><b>Semantic role:</b> AGENT or FORCE"
             },
             "DAT":{
                 "name":"Dative",
-                "desc":"N/A"
+                "desc":"The party which is the (intended) recipient of a verb of transference, transmission, or communication; the party at/to which a physically transferred entity, transmitted information, or a communicable entity is directed.<br/><b>Semantic role:</b> RECIPIENT"
             },
             "IND":{
                 "name":"Inducive",
-                "desc":"N/A"
+                "desc":"The patient who undergoes the tangible effect, impact, or change of state of an act/event initiated/caused by that self-same party.<br/><b>Semantic role:</b> AGENT+PATIENT"
             },
             "POS":{
                 "name":"Possesive",
-                "desc":"N/A"
+                "desc":"The party which has alienable (i.e., removable or severable) possession of another noun in the sense of having physical control or oversight of that noun, whether by chance circumstance or deliberate manipulation."
             },
             "PRP":{
                 "name":"Proprietive",
-                "desc":"N/A"
+                "desc":"The party having alienable possession of another noun in the sense of quasi-permanent contextual control, ownership or oversight, whether by societal recognition, socialconvention, law, purchase or decree, which mere physical separation does not sever."
             },
             "GEN":{
                 "name":"Genitive",
-                "desc":"N/A"
+                "desc":"The party which has inalienable (i.e., irremovable, non-severable) possession of or association with another noun in the sense of having that noun as an inherent or intrinsic attribute, characteristic, physical part, or genetic (i.e., familial) bond."
             },
             "ATT":{
                 "name":"Attributive",
-                "desc":"N/A"
+                "desc":"The party which inalienably experiences the effects of, or otherwise has an affective (see the affective case above) relationship with another noun, either as a temporary or permanent attribute, characteristic, or experience, whether physical or psychological, objective or subjective in nature."
             },
             "PDC":{
                 "name":"Productive",
-                "desc":"N/A"
+                "desc":"The party which is the creator, author or originator of another noun."
             },
             "ITP":{
                 "name":"Interpretative",
-                "desc":"N/A"
+                "desc":"The party acting as the subjective interpretational context of another noun, that is the noun by or through which another noun is subjectively considered, interpreted or described,<br/>e.g. <i><b>Monet's</b> Paris, <b>my</b> baseball team (as spoken by a fan)</i>."
             },
             "OGN":{
                 "name":"Originative",
-                "desc":"N/A"
+                "desc":"The party which is the literal or figurative source of another, or which is the native location, origin, or usual locative context for another."
             },
             "IDP":{
                 "name":"Interdependent",
-                "desc":"N/A"
+                "desc":"The party which has a coordinated, tandem, complementary or mutually dependent relationship with another. The relationship between the two nouns can be thought of as reciprocal in nature, i.e., each noun implies the other or needs the other to exist within its natural context."
             },
             "PAR":{
                 "name":"Partitive",
-                "desc":"N/A"
+                "desc":"Indicates a quantitative or content-to-container relationship between the two nouns,<br/>e.g. <i>a cup <b>of coffee</b>, a box(ful) <b>of books</b>, a train(load) <b>of refugees</b>, twelve <b>chairs</b></i>."
             },
             "APL":{
                 "name":"Applicative",
-                "desc":"N/A"
+                "desc":"The entity/act/event which constitutes the circumstantial, potentially one-time, temporary purpose of another entity/act/event.<br/>'for the (circumstantial/temporary/one-time) purpose of X', 'being used (temporarily/circumstantially) as X'."
             },
             "PUR":{
                 "name":"Purposive",
-                "desc":"N/A"
+                "desc":"The entity/act/event which constitutes the inherent/innate/intrinsic purpose of another entity/act/event.<br/>'for the (dedicated) purpose/function of X'"
             },
             "TRA":{
                 "name":"Transmissive",
-                "desc":"N/A"
+                "desc":"Renamed from the <span style='font-variant:small-caps'>Benefactive</span> in Ithkuil 2011, this case indicates the party for which/whom an entity/act/event occurs or is transmitted, with the intention that the entity/act/event be beneficial/detrimental to the named party.<br/>'for (the benefit/detriment of) X'"
             },
             "DFR":{
                 "name":"Deferential",
-                "desc":"N/A"
+                "desc":"The entity for whose sake, or out of deference/respect to whom, an act/event occurs.<br/>'for X's sake', 'out of deference for X', 'out of respect for X'"
             },
             "CRS":{
                 "name":"Contrastive",
-                "desc":"N/A"
+                "desc":"The party for which something is substituted, or of which another party/entity takes its place;<br/>'instead of X', 'as a substitute for X', 'in place of X'"
             },
             "TSP":{
                 "name":"Transposive",
-                "desc":"N/A"
+                "desc":"The party on whose behalf something is/occurs."
             },
             "CMM":{
                 "name":"Commutative",
-                "desc":"N/A"
+                "desc":"The party in exchange for which, a reciprocal or complementary act/event occurs;<br/>e.g. <i>He paid 100 dollars <b>in exchange for the tickets</b>.</i>"
             },
             "CMP":{
                 "name":"Comparative",
-                "desc":"N/A"
+                "desc":"The party being compared to another, translatable as 'as compared to', 'as opposed to,' 'versus'; with verbs it translates as 'whereas' or 'while' (in its synonymous usage to 'whereas').<br/>Examples: <i>She chose the red one <b>as opposed to the others</b>, Sam drives a van <b>versus Joe</b>, who prefers a truck, At the party, she danced <b>while/whereas I ate.</b></i>"
             },
             "CSD":{
                 "name":"Considerative",
-                "desc":"N/A"
+                "desc":"The entity according to which, another entity is, or an act/event occurs."
             },
             "FUN":{
                 "name":"Functive",
-                "desc":"N/A"
+                "desc":"Identifies a noun used to describe/characterize the manner in which an act/event/state occurs or exists,<br/>e.g. <i>She dances <b>gracefully</b>; The boys ate <b>with gusto</b>; That clown is speaking <b>nonsense</b>; Father speaks <b>with such fortitude</b>.</i>"
             },
             "TFM":{
                 "name":"Transformative",
-                "desc":"N/A"
+                "desc":"Identifies the outcome or final state of a process, often translatable by 'to,' 'until,' or 'into' in the sense of reaching a final state after undergoing some transformation.<br/>Examples: <i>The house burned <b>to ashes</b>, Mother reached a state <b>of tranquility</b>, The clowns will turn our children <b>into slaves</b>, Her father drank himself <b>to death</b.</i>"
             },
             "CLA":{
                 "name":"Classificative",
