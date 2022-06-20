@@ -882,159 +882,159 @@
             },
             "CLA":{
                 "name":"Classificative",
-                "desc":"N/A"
+                "desc":"Identifies a noun as a basis for arranging, sorting, classifying, or counting,<br/>e.g. <i>Place them <b>in groups of three</b>, The workers arranged the tables <b>in rows</b>, He lay down <b>lengthwise</b>, Can you count <b>by fives</b>?, I will sort them <b>by color</b></i>.<br/>Also identifies the basis for recurring increments,<br/>e.g. <i>month by month; day in, day out; box upon box, clown after clown.</i>"
             },
             "RSL":{
                 "name":"Resultative",
-                "desc":"N/A"
+                "desc":"Identifies a result/consequence, translatable as 'resulting in X', 'with X as a consequence', etc."
             },
             "CSM":{
                 "name":"Consumptive",
-                "desc":"N/A"
+                "desc":"Identifies the entity consumed or used as a resource as a result of, or as a concurrent part of a process,<br/>e.g. <i>She cooks <b>with tomatoes</b>, The clown fed her <b>an apple</b>, He reads <b>by candle(light)</b>.</i>"
             },
             "CON":{
                 "name":"Concessive",
-                "desc":"N/A"
+                "desc":"Identifies a noun or phrase which gives rise to an implicitly expected result which does not occur. This translates in many ways such as 'despite,' 'in spite of,' 'notwithstanding,' 'although,' 'regardless of,' 'no matter what,' etc.<br/>Examples: <i><b>In spite of his stupidity</b>, he passed the test; <b>The law notwithstanding</b>, I will stand my ground; <b>No matter how ignorant</b> (they may be), they are welcome; <b>Although a foreigner</b>, we will let him in.</i>"
             },
             "AVR":{
                 "name":"Aversive",
-                "desc":"N/A"
+                "desc":"Identifies a source or object of fear and/or avoidance. With nouns, it translates expressions such as 'for fear of,' 'in order to avoid,' or 'in avoidance of.' With verbs, it would translate English ‘lest.’<br/>Examples: <i>She finished her plate <b>for fear of my wrath</b>, I traveled by night <b>to avoid the sun</b>. Hide the children, <b>lest the clowns find them</b>.</i>"
             },
             "CVS":{
                 "name":"Conversive",
-                "desc":"N/A"
+                "desc":"Identifies an exception. When the exception is to a hypothetical situation, it translates as 'unless' in verbal phrases, and 'without' for nouns,<br/>e.g. <i><b>Without peace</b>, this society is doomed; We'll be safe <b>unless the clowns find us</b>.</i><br/>If applied to a real or actual situation, it translates as 'except (for)', 'but for,' 'but (not), 'excluding', 'if not for,' 'if it wasn't for,' 'if it wasn't on account of.'<br/><i><b>If not for the rain</b>, we would have had a good time; She loves everybody <b>except clowns</b>; All pets are vermin, <b>excluding dogs</b>; He eats almost anything <b>but (not) spinach</b>.</i>"
             },
             "SIT":{
                 "name":"Situative",
-                "desc":"N/A"
+                "desc":"Identifies a noun as the background context for a clause without implying any direct causative relationship between the background context and the associated or consequent act/state/event. It translates in many ways,<br/>e.g. <i><b>Because of war</b>, our planet will never be able to join the Federation; <b>Given the presence of clowns</b>, we must accept the corruption of our children; <b>With my plan</b>, we will defeat the enemy.</i><br/>Other translations include: 'inasmuch as / insofar as / to the extent that / taking X into account / in view of the fact that / given that / considering'."
             },
             "PRN":{
                 "name":"Pertinential",
-                "desc":"N/A"
+                "desc":"Identifies the general referent of another formative, translating such English terms as 'about,' 'regarding,' 'concerning,' 'in regard to,' 'in reference to,' 'pertaining to,' or 'as for.'"
             },
             "DSP":{
                 "name":"Descriptive",
-                "desc":"N/A"
+                "desc":"Identifies a formative as describing another formative in an adjectival manner, translatable as 'characterized/describable as being like X; characterized/describable as having the quality/qualities of X'"
             },
             "COR":{
                 "name":"Correlative",
-                "desc":"N/A"
+                "desc":"Indicates an abstract general relationship, association, or conjunction between one formative and another, including subjective, contextual, metaphorical, or symbolic associations. It translates general phrases such as 'relative to,' 'in relation to,' 'in correlation with,' 'in association with,'<br/>e.g. <i><b>career</b> goals, the soup <b>of the day</b>, the direction <b>of that road</b>, The elapsed time <b>relative to the distance</b> determines the winner, Our next topic is sex <b>and/in art</b> (i.e., the relationship between art and sex).</i>"
             },
             "CPS":{
                 "name":"Compositive",
-                "desc":"N/A"
+                "desc":"Identifies a noun as being the literal or figurative substance or component(s) of which another is made, composed, formed, built or comprised.<br/>Example of usage would be <i>That statue was carved <b>out of marble</b>, She owns three <b>gold(en)</b> coins, We were caught in a web <b>of lies</b>, I use a <b>wooden</b> ladder, It was a house <b>of cards</b>, <b>Three suits</b> comprise his wardrobe, Joe detests <b>styrofoam</b> cups.</i>"
             },
             "COM":{
                 "name":"Comitative",
-                "desc":"N/A"
+                "desc":"Identifies a formative that accompanies another, translatable as '(along) with'. When used with <span style='font-variant:small-caps'>Parallel</span> or <span style='font-variant:small-caps'>Complementary</span> valence, signifies that the formative is being used in the same (or a complementary) way or is undergoing the same (or a complementary) activity as the other formative it is associated with<br/>(i.e., the meaning of the <span style='font-variant:small-caps'>Conjunctive</span> case in Ithkuil 2011)."
             },
             "UTL":{
                 "name":"Utilitative",
-                "desc":"N/A"
+                "desc":"Identifies a formative in the process of being used while some other activity or state is in progress. It does not imply the INSTRUMENT of an act as does the instrumental case.<br/>Examples: <i>the <b>gun-wielding</b> man, the <b>umbrella-toting</b> pedestrian, a girl <b>with backpack (on)</b>.</i>"
             },
             "PRD":{
                 "name":"Predicative",
-                "desc":"N/A"
+                "desc":"Identifies the non-causal basis, foundation, sustenance (literally or figuratively), or required existential condition for another noun or clause, translatable by the phrases 'based (up)on,' 'dependent (up)on' or 'relying on.'<br/>Examples of use are <i>a book <b>dependent on a publisher</b>, a man <b>relying on charity</b>, laws <b>based in reason</b>, success <b>supported by corruption</b>.</i>"
             },
             "RLT":{
                 "name":"Relative",
-                "desc":"N/A"
+                "desc":"Identifies a formative (or case-frame) as constituting a relative clause associated with the preceding formative (or whatever formative is indicated by the DCD affix as being the head of the relative clause).<br/><b>NOTE:</b> a lone formative in <span style='font-variant:small-caps'>Relative</span> case not functioning as an external head of a relative clause need not be in <span style='font-variant:small-caps'>Framed</span> Relation."
             },
             "ACT":{
                 "name":"Activative",
-                "desc":"N/A"
+                "desc":"Identifies the <span style='font-variant:small-caps'>Experiencer</span> of a modal state, such as obligation, necessity, desire, hope, expectation, wishing, being able to, etc. functioning as the \"subject\" of a modal(ized) verb governing a hypothetical state (i.e., what is wanted, needed, expected, able to be done, etc.)"
             },
             "ASI":{
                 "name":"Assimilative",
-                "desc":"N/A"
+                "desc":"Identifies a formative used as a context for analogy or metaphorical comparison to another formative; translatable as 'as/like' meaning 'as if (it were) X' in the sense of comparison or analogy between one thing and another that it is not,<br/>e.g. <i>She sings <b>like a bird</b>; Treat her <b>as/like a princess</b></i> (= as if she were a princess); <i>He talks <b>like a child</b></i> (even though he's an adult)."
             },
             "ESS":{
                 "name":"Essive",
-                "desc":"N/A"
+                "desc":"Identifies the role or name by which an entity is known or contextually identified. It translates English 'as/like' in the sense of naming or reference to the an entity's functional identity,<br/>e.g. <i>They called him <b>a clown</b>, The woman entered the club <b>as an equal</b> of any man, We consider you <b>our only hope</b>, Treat her <b>as/like a princess</b></i> (because she is one), <i>He talks <b>like a child</b></i> (because he is a child)."
             },
             "TRM":{
                 "name":"Terminative",
-                "desc":"N/A"
+                "desc":"Identifies a noun as being the goal of an act/event,<br/>e.g. <i>We seek <b>a new planet</b>; a desire <b>to see his homeland</b>; an academy <b>for (making) champions</b></i>."
             },
             "SEL":{
                 "name":"Selective",
-                "desc":"N/A"
+                "desc":"Identifies a contextually recurring time-period, as well as a string of recurring entities,<br/>e.g. <i>I visit him <b>every three days</b>; <b>Each year</b>, I travel to the Clown Planet; He works <b>nights</b>; <b>By day</b>, she is an artisan; The clowns visit us <b>on Sundays</b>; ...<b>every third book</b>; ...<b>every green one</b>.</i>"
             },
             "CFM":{
                 "name":"Conformative",
-                "desc":"N/A"
+                "desc":"The entity pursuant to which, as per which, or in conformance with which, another entity is, or an act/event occurs."
             },
             "DEP":{
                 "name":"Dependent",
-                "desc":"N/A"
+                "desc":"Identifies as formative as being the basis of a dependency phrase on which another formative or phrase acts as the contingency, translatable as <b>'...if the circumstances regarding X are such to allow/warrant it'</b> where the final “it” refers to the original contingency noun/phrase whose existence/occurrence is (at least in part) determined by or contingent upon the dependency phrase. The exact nature of the dependency can be specified using the DPC affix."
             },
             "VOC":{
                 "name":"Vocative",
-                "desc":"N/A"
+                "desc":"Signifies a noun being used in direct address."
             },
             "LOC":{
                 "name":"Locative",
-                "desc":"N/A"
+                "desc":"entity identified as the location where something is situated or occurs; 'at / in / on / by X' "
             },
             "ATD":{
                 "name":"Attendant",
-                "desc":"N/A"
+                "desc":"entity in whose presence something is/occurs and which/who is thereby involved in some peripheral manner (e.g., as a witness, as a party affected or stimulated to action, etc.)"
             },
             "ALL":{
                 "name":"Allative",
-                "desc":"N/A"
+                "desc":"entity toward which another entity is moving/approaching"
             },
             "ABL":{
                 "name":"Ablative",
-                "desc":"N/A"
+                "desc":"entity away from which another entity is moving/receding"
             },
             "ORI":{
                 "name":"Orientative",
-                "desc":"N/A"
+                "desc":"entity (often a body part or sub-component) which serves as the “face” or surface or “front” or “head” of an entity in terms of external communication or interaction, or which serves as the forward “end” of a spatially orientated axis aligned to a vector of motion in terms of directional movement."
             },
             "IRL":{
                 "name":"Interrelative",
-                "desc":"N/A"
+                "desc":"signifies the directional/temporal orientation or position of an entity relative to another, i.e., a noun relative to whose position in space or time another noun is being described for purposes of spatial/temporal orientation,<br/>e.g. <i>He turned his back <b>on me</b>, It lies just west <b>of the house</b>, Tell me when the parade starts <b>relative to my arrival</b></i>."
             },
             "INV":{
                 "name":"Intrative",
-                "desc":"N/A"
+                "desc":"Identifies a noun as being the spatio-temporal boundary point of a span or volume of space or a period of time, i.e, either the starting point or the ending point of a span of time or space.<br/>English translations include: 'as of X' / 'since X' / 'until X'; for spatial contexts, translates as “between there and here” / “between here and there”)"
             },
             "NAV":{
                 "name":"Navigative",
-                "desc":"N/A"
+                "desc":"entity whose literal or metaphorically inferred long axis serves as the direction of another entity's path, course, arc, or trajectory of translative motion"
             },
             "CNR":{
                 "name":"Concursive",
-                "desc":"N/A"
+                "desc":"Indicates a “temporal locative” meaning 'at or during the time of X', i.e., the point or stretch in time at or during which an entity or an act/event exists or occurs."
             },
             "ASS":{
                 "name":"Assessive",
-                "desc":"N/A"
+                "desc":"Specifies the increment of space or time or unit by which a contextual ratio of measurement is created,<br/>e.g. <i>He charges <b>by the minute</b>. It travels at 90 kilometers <b>per hour</b>. He earns $25 <b>per book</b>.</i>"
             },
             "PER":{
                 "name":"Periodic",
-                "desc":"N/A"
+                "desc":"Identifies the span of time / time frame at some point(s) during which, separate events, repetitions, or durationally segmented acts or states take place.<br/>Examples would be <i>He wrote the novel <b>in/over six months</b>, These clowns can corrupt your child <b>within a few days</b>, The woman has been ill a lot <b>this year</b>, <b>For the last several concerts</b>, my voice has been deteriorating.</i>"
             },
             "PRO":{
                 "name":"Prolapse",
-                "desc":"N/A"
+                "desc":"Signifies the duration of an act, condition, or event, i.e., how long it takes or lasts,<br/>e.g. <i>He prayed <b>through lunch</b>, It rained <b>all night</b>, It took <b>three days</b> for the fever to break, She sang <b>for an hour</b>.</i>"
             },
             "PCV":{
                 "name":"Precursive",
-                "desc":"N/A"
+                "desc":"Identifies an entity acting as a point in time prior to which an act, condition, or event occurs,<br/>e.g. <i>'this city <b>before the war</b>', 'a presentation <b>preceding the banquet</b>'.</i>"
             },
             "PCR":{
                 "name":"Postcursive",
-                "desc":"N/A"
+                "desc":"Identifies an entity acting as a point in time after which, following which, subsequent to which, an act, state, or event occurs,<br/>e.g. <i>'this city <b>after the war</b>', 'a presentation <b>following the banquet</b>', 'It's been a long time <b>since I danced</b>'.</i>"
             },
             "ELP":{
                 "name":"Elapsive",
-                "desc":"N/A"
+                "desc":"Identifies the amount of time that has passed or is expected to pass between the contextual present and the time of the act, condition, or event being spoken of. It corresponds to English '...ago' or '...from now'.<br/>Examples would be <i><b>Four years ago</b> I was a student; <b>Going back three generations</b>, women could not even vote; <b>Four years from now</b>, I will be a student; <b>Looking ahead three generations</b>, clowns will rule the world; I will be home <b>in three days</b>; Little did he know that <b>two months later</b> he'd be a rich man.</i><br/>The past vs. future distinction is determined from context, any aspectual morphology, or may be specified with the new TPL affix. "
             },
             "PLM":{
                 "name":"Prolimitive",
-                "desc":"N/A"
+                "desc":"Signifies the spatio-temporal boundary point of a span of time or space during which or within which something is expected to or must occur or be situated.<br/>Equivalent to English phrases: by the end of X / within the period ending in X / within the period ending with X / before X is over / before X is up / inside of (the period signified by) X"
             }
         },
         "popuptest":""

@@ -56,9 +56,12 @@
   <div id="modal" class="modal" @click.self="closeModal()">
     <div id="modal-content">
       <span class="close" @click="closeModal()">&times;</span>
+      <h2 style="text-align:center;">{{modalContent.title}}</h2>
+      <p style="text-align:center;">{{modalContent.popuptest}}</p>
       <div v-if="modalContent.type == ''">
-        <div v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
-          <div @click="updateFromModal(modalID,option)">
+        <div v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
+          <h2 style="text-align:center;" v-if='modalID === "c" && ["THM","POS","APL","FUN","PRN","ACT","LOC"].includes(option)'>{{{"THM":"Transrelative","POS":"Appositive","APL":"Associative","FUN":"Adverbial","PRN":"Relational","ACT":"Affinitive","LOC":"Spatio-Temporal"}[option]}} Cases</h2>
+          <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
             <h3>{{modalContent.options[option].name}} ({{option}})</h3>
             <p v-html="modalContent.options[option].desc"></p>
           </div>
