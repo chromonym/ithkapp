@@ -2,7 +2,7 @@
     "root": {
         "type":"text",
         "title":"Root (Slot III)",
-        "popuptest":"let's get to the root of the problem"
+        "popupdesc":"let's get to the root of the problem"
     },
 
     "stem": {
@@ -26,7 +26,7 @@
                 "desc": "N/A"
             }
         },
-        "popuptest":"the plant has a...!"
+        "popupdesc":"the plant has a...!"
     },
 
     "func": {
@@ -42,7 +42,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":"functionally useless lol"
+        "popupdesc":"functionally useless lol"
     },
 
     "spec": {
@@ -66,7 +66,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "ver": {
@@ -82,7 +82,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "ctxt": {
@@ -125,7 +125,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "concat": {
@@ -145,7 +145,7 @@
                 "desc":"N/A"
             }
         ],
-        "popuptest":""
+        "popupdesc":""
     },
     
     "shcut": {
@@ -165,19 +165,19 @@
                 "desc":"N/A"
             }
         ],
-        "popuptest":"will probably eventually switch to being a checkbox"
+        "popupdesc":"will probably eventually switch to being a checkbox"
     },
     
     "Vafx": {
         "type":"affix",
         "title":"Slot V Affixes",
-        "popuptest":""
+        "popupdesc":""
     },
 
     "VIIafx": {
         "type":"affix",
         "title":"Slot VII Affixes",
-        "popuptest":""
+        "popupdesc":""
     },
 
     "plex": {
@@ -201,7 +201,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "simil": {
@@ -221,7 +221,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "cctd": {
@@ -241,7 +241,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "affil": {
@@ -265,7 +265,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "ext": {
@@ -297,7 +297,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "persp": {
@@ -321,7 +321,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "ess": {
@@ -337,7 +337,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "vn": {
@@ -365,7 +365,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":"probably going to delete this"
+        "popupdesc":"probably going to delete this"
     },
 
     "val": {
@@ -409,7 +409,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "pha": {
@@ -453,7 +453,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "eff": {
@@ -497,7 +497,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "lvl": {
@@ -541,7 +541,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "asp": {
@@ -693,7 +693,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "mood": {
@@ -725,7 +725,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
     
     "casc": {
@@ -757,7 +757,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
     
     "c": {
@@ -1037,7 +1037,7 @@
                 "desc":"Signifies the spatio-temporal boundary point of a span of time or space during which or within which something is expected to or must occur or be situated.<br/>Equivalent to English phrases: by the end of X / within the period ending in X / within the period ending with X / before X is over / before X is up / inside of (the period signified by) X"
             }
         },
-        "popuptest":""
+        "popupdesc":"Cases are the role of the word in a sentence, and TNIL has 68.<br/>They are split into seven categories;<br/><a href='#THM'>Transrelative</a>, which are similar to cases in natural languages,<br/><a href='#POS'>Appositive</a>, which is to do with posession-esque relations,<br/><a href='#APL'>Associative</a>, which is similar but more related to reasons and motives,<br/><a href='#FUN'>Adverbial</a>, which (fairly obviously) is for adverb-like words,<br/><a href='#PRN'>Relational</a>,<br/><a href='#ACT'>Affinitive</a>, and<br/><a href='#LOC'>Spatio-Temporal</a>, which are for words describing the space or time of the sentence."
     },
 
     "ill": {
@@ -1053,7 +1053,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "exp": {
@@ -1073,7 +1073,7 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     },
 
     "vld": {
@@ -1113,6 +1113,6 @@
                 "desc":"N/A"
             }
         },
-        "popuptest":""
+        "popupdesc":""
     }
 }

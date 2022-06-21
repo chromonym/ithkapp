@@ -56,11 +56,11 @@
   <div id="modal" class="modal" @click.self="closeModal()">
     <div id="modal-content">
       <span class="close" @click="closeModal()">&times;</span>
-      <h2 style="text-align:center;">{{modalContent.title}}</h2>
-      <p style="text-align:center;">{{modalContent.popuptest}}</p>
+      <h2 style="text-align:center;" id="top">{{modalContent.title}}</h2>
+      <p style="text-align:center;" v-html="modalContent.popupdesc"></p>
       <div v-if="modalContent.type == ''">
         <div v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
-          <h2 style="text-align:center;" v-if='modalID === "c" && ["THM","POS","APL","FUN","PRN","ACT","LOC"].includes(option)'>{{{"THM":"Transrelative","POS":"Appositive","APL":"Associative","FUN":"Adverbial","PRN":"Relational","ACT":"Affinitive","LOC":"Spatio-Temporal"}[option]}} Cases</h2>
+          <h2 style="text-align:center;" :id="option" v-if='modalID === "c" && ["THM","POS","APL","FUN","PRN","ACT","LOC"].includes(option)'>{{{"THM":"Transrelative","POS":"Appositive","APL":"Associative","FUN":"Adverbial","PRN":"Relational","ACT":"Affinitive","LOC":"Spatio-Temporal"}[option]}} Cases</h2>
           <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
             <h3>{{modalContent.options[option].name}} ({{option}})</h3>
             <p v-html="modalContent.options[option].desc"></p>
@@ -68,6 +68,7 @@
         </div>
       </div>
     </div>
+    <a id="modalToTop" href="#top">↑</a>
   </div>
 </template>
 
@@ -1140,6 +1141,24 @@ export default {
   border: 1px solid #888;
   width: 80%;
   text-align: left;
+}
+#modal-content p a {
+  color: black;
+  font-weight: bold;
+}
+#modalToTop {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgb(36, 156, 116);
+  color: white;
+  border-color: white;
+  width: 50px;
+  height: 50px;
+  text-decoration: none;
+  border-radius: 25px;
+  text-align: center;
+  font-size: 35px;
 }
 .modalOption {
   border: 1px solid black;
