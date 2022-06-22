@@ -11,9 +11,9 @@
       <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
     </div>
     <div class="section"> <!-- Section 2: Concatenation & Affixes-->
-      <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal"/>
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
+      <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != 0"/>
       <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal"/>
       <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal"/>
     </div>
@@ -39,12 +39,12 @@
     </div>
     <div class="section"> <!-- Section 6: Slot 8b to 10 -->
       <OptionBox :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
-      <OptionBox v-if='this.gOptions.rel == "UNF/K"' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
+      <OptionBox v-if='this.gOptions.rel == "UNF/K" && this.gOptions.concat == 0' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
       <OptionBox v-else :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel != 'UNF/K'" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K'" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel != 'UNF/K' || this.gOptions.concat != 0" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == 0" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == 0" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == 0" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
     </div>
     <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   </div>
@@ -62,7 +62,7 @@
         <div v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
           <h2 style="text-align:center;" :id="option" v-if='modalID === "c" && ["THM","POS","APL","FUN","PRN","ACT","LOC"].includes(option)'>{{{"THM":"Transrelative","POS":"Appositive","APL":"Associative","FUN":"Adverbial","PRN":"Relational","ACT":"Affinitive","LOC":"Spatio-Temporal"}[option]}} Cases</h2>
           <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
-            <h3>{{modalContent.options[option].name}} ({{option}})</h3>
+            <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
             <p v-html="modalContent.options[option].desc"></p>
           </div>
         </div>
@@ -193,7 +193,7 @@ export default {
     async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
       console.log("Recieved "+value+" from "+code);
       await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
-        if (code === "rel" && (value == "UNF/K" || this.gOptions.rel == "UNF/K")) {
+        if (code === "rel" && (value == "UNF/K" || this.gOptions.rel == "UNF/K") && this.gOptions.concat == 0) {
           this.gOptions.c = "THM"; // quick fix to match the fact that the OptionBoxes for these reset but the values don't
           this.gOptions.ill = "ASR";
           this.gOptions.exp = "COG";
@@ -462,7 +462,7 @@ export default {
       var pphh = ["COG","RSP","EXE"];
       var pphnum = 0;
       var cfound = false;
-      if (this.gOptions.rel !== "UNF/K") {
+      if (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != 0) {
         for (var i in ph) {
           if (ph[i].includes(this.gOptions.c)) {
             this.slots[9] = this.sVowels[ph[i].findIndex(x => x === this.gOptions.c)][i];
@@ -871,7 +871,7 @@ export default {
       // glosses are of the form (T#-)S#(.CPT)(.S7cut)-"root"(-SLOT 4)(-SLOT 5.1)(-SLOT 5.2)(-SLOT 6)(-SLOT 7.1)(-SLOT 7.2)(-SLOT 8)(-SLOT 9)\SLOT 10,
       // unless there's a shortcut in which case slot 6 will be moved to slot 2
       // Slot 1
-      if (this.gOptions.concat !== 0) {
+      if (this.gOptions.concat != 0) {
         this.gloss += "T" + this.gOptions.concat + "-";
         this.fullGloss += "T" + this.gOptions.concat + "-";
       }
