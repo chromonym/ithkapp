@@ -2,7 +2,7 @@
     "root": {
         "type":"text",
         "title":"Root (Slot III)",
-        "popupdesc":"let's get to the root of the problem"
+        "popupdesc":"The root is the general definition of the word, and can be directly modified by the Stem and Specification. Check the <a href=\"http://www.ithkuil.net/list_of_roots_v_0_5_1.pdf\">roots document</a> for what your word's Root, Stem, and Specification should be."
     },
 
     "stem": {
@@ -11,22 +11,22 @@
         "options": {
             "s1":{
                 "name": "Stem 1",
-                "desc": "N/A"
+                "desc": ""
             },
             "s2":{
                 "name": "Stem 2",
-                "desc": "N/A"
+                "desc": ""
             },
             "s3":{
                 "name": "Stem 3",
-                "desc": "N/A"
+                "desc": ""
             },
             "s0":{
                 "name": "Stem 0",
-                "desc": "N/A"
+                "desc": "Stem 0 is special in that it describes the overall \"stemless\" definition of a root; i.e. the title of its box in the roots document (if it has one) or a general agglomeration of the three roots' definitions."
             }
         },
-        "popupdesc":"the plant has a...!"
+        "popupdesc":"The stem of a word describes which of three possible definitons that a root could take is used in the word. Specific stem definitions are in the <a href=\"http://www.ithkuil.net/list_of_roots_v_0_5_1.pdf\">roots document</a>."
     },
 
     "func": {
@@ -35,14 +35,14 @@
         "options": {
             "STA": {
                 "name":"Static",
-                "desc":"The <b>Static</b> function is typically used in the following ways:<br/><ul><li>Nouns (Nominal relation) denoting physically-tangible objects/entities being referred to only to identify them.<br/>e.g. <i>a ball, a tree, a rock, a person, a cloud,</i> etc.</li></ul>"
+                "desc":"The <b>Static</b> function is typically used in the following ways:<br/><ul><li>Nouns (Nominal relation) identifying an object, group, entity, or action in which any change or motion is irrelevant to the speaker, or</li><li>Verbs (Verbal relation) referring to a non-changing, undynamic state.</li></ul>"
             },
             "DYN": {
                 "name":"Dynamic",
-                "desc":"N/A"
+                "desc":"The <b>Dynamic</b> function is typically used in the following ways:<br/><ul><li>Nouns (Nominal relation) referring to states involving change or motion where said change or motion is relevant to the speaker, or</li><li>Verbs (Verbal relation) involving change/motion/movement/action in which the change/motion/movement/action is relevant to the speaker's intended meaning, especially those involving an agent/enabler and a patient.</li></ul>"
             }
         },
-        "popupdesc":"functionally useless lol"
+        "popupdesc":"Function is used to show how relevant any change or motion related to a word is to the speaker, and can be both subjective (a meal as an event [STA] or as a process [DYN]?) or objective (<i>the sunset is orange</i> [STA] vs <i>the sky became orange</i> [DYN]) depending on the situation."
     },
 
     "spec": {
@@ -51,22 +51,22 @@
         "options": {
             "BSC": {
                 "name":"Basic",
-                "desc":"N/A"
+                "desc":"A holistic instantiation of a root, prior to the application of one of the other three Specifications, essentially encompassing the meanings of the CTE, and CSV specifications below."
             },
             "CTE": {
                 "name":"Contential",
-                "desc":"N/A"
+                "desc":"The physical or non-physical “content” or essence or purposeful function or idealized/abstract/platonic form thereof, as opposed to its mere physical form/shape"
             },
             "CSV": {
                 "name":"Constitutive",
-                "desc":"N/A"
+                "desc":"The form (physical or non-physical) in which an entity/state/act actually expresses itself, is shaped, or is realized, as opposed to its functional/purposeful content, i.e., \"what constitutes X\""
             },
             "OBJ": {
                 "name":"Objective",
-                "desc":"N/A"
+                "desc":"Whichever of the following is most salient to the semantics of the particular stem:<br/>(1) tangible tool/instrument/means by which a state act/state/event occurs, or if inapplicable, then<br/>(2) the third-party object/entity associated with the interaction between two parties (e.g., the object being given in a dative interaction), or if inapplicable then<br/>(3) the resulting tangible object/product/situation, or if inapplicable, then<br/>(4) the semantic patient or experiencer of the state/act/event."
             }
         },
-        "popupdesc":""
+        "popupdesc":"Specification makes the definition of the root more specific.<br/>Listed below are the <i>generic</i> definitions of the terms, but <b>the <a href=\"http://www.ithkuil.net/list_of_roots_v_0_5_1.pdf\">roots document</a> should have all necessary information</b> (i.e. what your root means when paired with a certain specification)."
     },
 
     "ver": {
@@ -75,14 +75,14 @@
         "options": {
             "PRC":{
                 "name":"Processual",
-                "desc":"N/A"
+                "desc":"The <b>Processual</b> is the default version and describes all acts, conditions, or events which are ends in themselves and not goal-oriented, i.e., are not focused on an anticipated outcome or final purpose toward which a progressive effort is being made."
             },
             "CPT":{
                 "name":"Completive",
-                "desc":"N/A"
+                "desc":"The <b>Completive</b> describes acts, conditions, or events which achieve, or are intended to achieve, an anticipated outcome, i.e., which are oriented toward the achievement of some purpose, outcome, or final state. Such a distinction is usually handled by word choice in Western languages.<br/><i>hunt → to hunt down<br/>to be losing → to lose<br/>to study → to learn<br/>to be winning → to win<br/>to strive for → to accomplish, achieve</i>"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Version describes if a given word is goal-oriented or not in its outcome. Ithkuil III had six, but TNIL has only two."
     },
 
     "ctxt": {
@@ -1037,7 +1037,7 @@
                 "desc":"Signifies the spatio-temporal boundary point of a span of time or space during which or within which something is expected to or must occur or be situated.<br/>Equivalent to English phrases: by the end of X / within the period ending in X / within the period ending with X / before X is over / before X is up / inside of (the period signified by) X"
             }
         },
-        "popupdesc":"Cases are the role of the word in a sentence, and TNIL has 68.<br/>They are split into seven categories;<br/><a href='#THM'>Transrelative</a>, which are similar to cases in natural languages,<br/><a href='#POS'>Appositive</a>, which is to do with posession-esque relations,<br/><a href='#APL'>Associative</a>, which is similar but more related to reasons and motives,<br/><a href='#FUN'>Adverbial</a>, which (fairly obviously) is for adverb-like words,<br/><a href='#PRN'>Relational</a>,<br/><a href='#ACT'>Affinitive</a>, and<br/><a href='#LOC'>Spatio-Temporal</a>, which are for words describing the space or time of the sentence."
+        "popupdesc":"Cases are the role of the word in a sentence, and TNIL has 68.<br/>They are split into seven categories;<br/><a href='#THM'>Transrelative</a>, which are similar to cases in natural languages,<br/><a href='#POS'>Appositive</a>, which is to do with possession-esque relations,<br/><a href='#APL'>Associative</a>, which is similar but more related to reasons and motives,<br/><a href='#FUN'>Adverbial</a>, which (fairly obviously) is for adverb-like words,<br/><a href='#PRN'>Relational</a>,<br/><a href='#ACT'>Affinitive</a>, and<br/><a href='#LOC'>Spatio-Temporal</a>, which are for words describing the space or time of the sentence."
     },
 
     "ill": {
