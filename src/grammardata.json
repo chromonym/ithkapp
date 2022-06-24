@@ -2,7 +2,7 @@
     "root": {
         "type":"text",
         "title":"Root (Slot III)",
-        "popupdesc":"The root is the general definition of the word, and can be directly modified by the Stem and Specification. Check the <a href=\"http://www.ithkuil.net/list_of_roots_v_0_5_1.pdf\">roots document</a> for what your word's Root, Stem, and Specification should be."
+        "popupdesc":"The root is the general definition of the word, and can be directly modified by the Stem and Specification. Check the <a target=\"_blank\" href=\"http://www.ithkuil.net/list_of_roots_v_0_5_1.pdf\">roots document</a> for what your word's Root, Stem, and Specification should be."
     },
 
     "stem": {
@@ -26,7 +26,7 @@
                 "desc": "Stem 0 is special in that it describes the overall \"stemless\" definition of a root; i.e. the title of its box in the roots document (if it has one) or a general agglomeration of the three roots' definitions."
             }
         },
-        "popupdesc":"The stem of a word describes which of three possible definitons that a root could take is used in the word. Specific stem definitions are in the <a href=\"http://www.ithkuil.net/list_of_roots_v_0_5_1.pdf\">roots document</a>."
+        "popupdesc":"The stem of a word describes which of three possible definitons that a root could take is used in the word. Specific stem definitions are in the <a target=\"_blank\" href=\"http://www.ithkuil.net/list_of_roots_v_0_5_1.pdf\">roots document</a>."
     },
 
     "func": {
@@ -66,7 +66,7 @@
                 "desc":"Whichever of the following is most salient to the semantics of the particular stem:<br/>(1) tangible tool/instrument/means by which a state act/state/event occurs, or if inapplicable, then<br/>(2) the third-party object/entity associated with the interaction between two parties (e.g., the object being given in a dative interaction), or if inapplicable then<br/>(3) the resulting tangible object/product/situation, or if inapplicable, then<br/>(4) the semantic patient or experiencer of the state/act/event."
             }
         },
-        "popupdesc":"Specification makes the definition of the root more specific.<br/>Listed below are the <i>generic</i> definitions of the terms, but <b>the <a href=\"http://www.ithkuil.net/list_of_roots_v_0_5_1.pdf\">roots document</a> should have all necessary information</b> (i.e. what your root means when paired with a certain specification)."
+        "popupdesc":"Specification makes the definition of the root more specific.<br/>Listed below are the <i>generic</i> definitions of the terms, but <b>the <a target=\"_blank\" href=\"http://www.ithkuil.net/list_of_roots_v_0_5_1.pdf\">roots document</a> should have all necessary information</b> (i.e. what your root means when paired with a certain specification)."
     },
 
     "ver": {
@@ -91,11 +91,11 @@
         "options":{
             "EXS":{
                 "name":"Existential",
-                "desc":"N/A"
+                "desc":"<b>Neutral description</b><br/>The EXISTENTIAL context focuses on those features of a noun or verb which are ontologically objective, i.e., those that exist irrespective of any observers, opinions, interpretations, beliefs or attitudes. Similarly excluded from consideration in the EXISTENTIAL is any notion of a noun's use, function, role or benefit. The EXISTENTIAL serves only to point out the mere existence of a noun as a tangible, objective entity under discussion. It is thus used to offer mere identification of a noun or verb."
             },
             "FNC":{
                 "name":"Functional",
-                "desc":"N/A"
+                "desc":"<b>Focus on the personal meaning/importance</b><br/>"
             },
             "RPS":{
                 "name":"Representational",
@@ -171,13 +171,13 @@
     "Vafx": {
         "type":"affix",
         "title":"Slot V Affixes",
-        "popupdesc":""
+        "popupdesc":"<a href=\"http://www.ithkuil.net/affixes%20v_0_7_5.pdf\" target=\"_blank\">Slot V Affixes</a> are simple definitional modifications to your word applied <b>before</b> any concatenated words, Configuration, Affiliation, Extension, Perspective, and Essence.<br/><b>Degree 0</b> refers to the affix's general semantic concept as a whole, similar to Stem 0.<br/><br/><u>Types:</u><br/><b>Type 1:</b> circumstantial relation to the word<br/><b>Type 2:</b> derivational relation to the word (i.e. it's a new word/phrase, as in 'polar bear')<br/><b>Type 3:</b> Apply to the previous affix"
     },
 
     "VIIafx": {
         "type":"affix",
         "title":"Slot VII Affixes",
-        "popupdesc":""
+        "popupdesc":"<a href=\"http://www.ithkuil.net/affixes%20v_0_7_5.pdf\" target=\"_blank\">Slot VII Affixes</a> are simple definitional modifications to your word applied <b>after</b> any concatenated words, Configuration, Affiliation, Extension, Perspective, and Essence.<br/><b>Degree 0</b> refers to the affix's general semantic concept as a whole, similar to Stem 0.<br/><br/><u>Types:</u><br/><b>Type 1:</b> circumstantial relation to the word<br/><b>Type 2:</b> derivational relation to the word (i.e. it's a new word/phrase, as in 'polar bear')<br/><b>Type 3:</b> Apply to the previous affix"
     },
 
     "plex": {

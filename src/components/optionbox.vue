@@ -1,7 +1,7 @@
 <template>
-  <div class="optionbox" :class="OBclass">
-    <button style="float:right; margin-top: 5px; margin-right: 5px; display:inline" @click="this.$emit('modal',code)">?</button>
-    <h3>{{json.title}}</h3>
+  <div class="optionbox" :class="OBclass" @click.self="this.$emit('modal',code)">
+    <!--<button style="float:right; margin-top: 5px; margin-right: 5px; display:inline" @click="this.$emit('modal',code)">?</button>-->
+    <h3 @click.self="this.$emit('modal',code)">{{json.title}}</h3>
 
     <!-- The following depends on which TYPE of grammar option this is: -->
 
@@ -32,11 +32,12 @@
       <!-- above: show the long form of the option (opt), and IF the short form (short) is uppercase then show that in brackets as well -->
     </select>
 
-    <p v-if='json.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})'><b>ERROR:</b> Empty affixes</p> <!-- if there's an error, have text that says so -->
-    <p v-else-if='json.type == "text" && this.text == ""'><b>ERROR:</b> Empty root</p>
+    <p v-if='json.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})' @click.self="this.$emit('modal',code)"><b>ERROR:</b> Empty affixes</p> <!-- if there's an error, have text that says so -->
+    <p v-else-if='json.type == "text" && this.text == ""' @click.self="this.$emit('modal',code)"><b>ERROR:</b> Empty root</p>
     <p v-else-if='(json.type == "text" && !this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())))
-                ||(json.type == "affix" && this.affixes.length != 0 && !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))'><b>ERROR:</b> Non-allowed characters</p>
-    <p v-else></p> <!-- This is here so that the padding works regardless of if there's a <p> element or not -->
+                ||(json.type == "affix" && this.affixes.length != 0 && !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))'
+                @click.self="this.$emit('modal',code)"><b>ERROR:</b> Non-allowed characters</p>
+    <p v-else @click.self="this.$emit('modal',code)"></p> <!-- This is here so that the padding works regardless of if there's a <p> element or not -->
   </div>
 </template>
 
@@ -93,6 +94,10 @@ export default {
   flex-grow: 1;
   /*flex-basis: 20vw;*/
   margin: 2px;
+}
+.optionbox:hover {
+  text-decoration: none;
+  cursor: pointer;
 }
 .error {
   border-color: red;

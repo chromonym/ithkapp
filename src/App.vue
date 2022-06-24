@@ -2,7 +2,9 @@
   <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
   <div id="content">
     <h1>Ithkapp</h1>
-    <p class="smalltext">That's a placeholder name.<br/>Compatible with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4</p>
+    <p class="smalltext">That's a placeholder name.
+    <br/>Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
+    <br/>Click on each of the boxes to learn more about what it means.</p>
     <div class="section"> <!-- Section 1: Root, etc. -->
       <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" type="text" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
       <OptionBox :json="gData.stem" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
@@ -896,8 +898,8 @@ export default {
         this.fullGloss += ".[fix this]"
       }
       // Slot 3
-      this.gloss += '-"' + this.gOptions.root + '"'; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
-      this.fullGloss += '-"' + this.gOptions.root + '"';
+      this.gloss += '-"' + this.gOptions.root.toLowerCase() + '"'; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
+      this.fullGloss += '-"' + this.gOptions.root.toLowerCase() + '"';
       // Slot 4
       this.fullGloss += "-"+this.gOptions.func+"."+this.gOptions.spec+"."+this.gOptions.ctxt;
       var s4c = [];
