@@ -4,7 +4,7 @@
     <h1>Ithkapp</h1>
     <p class="smalltext">That's a placeholder name.
     <br/>Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
-    <br/>Click on each of the boxes to learn more about what it means.</p>
+    <br/>Click on a box's title to learn more about what it means.</p>
     <div class="section"> <!-- Section 1: Root, etc. -->
       <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" type="text" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
       <OptionBox :json="gData.stem" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
@@ -41,12 +41,12 @@
     </div>
     <div class="section"> <!-- Section 6: Slot 8b to 10 -->
       <OptionBox :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
-      <OptionBox v-if='this.gOptions.rel == "UNF/K" && this.gOptions.concat == 0' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
+      <OptionBox v-if='this.gOptions.rel == "UNF/K" && this.gOptions.concat == "0"' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
       <OptionBox v-else :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel != 'UNF/K' || this.gOptions.concat != 0" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == 0" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == 0" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == 0" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel != 'UNF/K' || this.gOptions.concat != '0'" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0'" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0'" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
+      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0'" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
     </div>
     <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   </div>
@@ -97,7 +97,7 @@ export default {
         "spec":"BSC",
         "ctxt":"EXS",
         "ver":"PRC",
-        "concat":0,
+        "concat":"0",
         "shcut":0,
         "Vafx":[],
         "VIIafx":[],
@@ -195,7 +195,7 @@ export default {
     async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
       console.log("Recieved "+value+" from "+code);
       await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
-        if (code === "rel" && (value == "UNF/K" || this.gOptions.rel == "UNF/K") && this.gOptions.concat == 0) {
+        if (code === "rel" && (value == "UNF/K" || this.gOptions.rel == "UNF/K") && this.gOptions.concat == "0") {
           this.gOptions.c = "THM"; // quick fix to match the fact that the OptionBoxes for these reset but the values don't
           this.gOptions.ill = "ASR";
           this.gOptions.exp = "COG";
@@ -218,6 +218,7 @@ export default {
       document.getElementById("modal").style.display = "block";
     },
     closeModal() {
+      console.log("Modal closing for",this.modalID);
       document.getElementById("modal").style.display = "none";
     },
     updateFromModal(reference,value) {
@@ -464,7 +465,7 @@ export default {
       var pphh = ["COG","RSP","EXE"];
       var pphnum = 0;
       var cfound = false;
-      if (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != 0) {
+      if (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != '0') {
         for (var i in ph) {
           if (ph[i].includes(this.gOptions.c)) {
             this.slots[9] = this.sVowels[ph[i].findIndex(x => x === this.gOptions.c)][i];
@@ -561,7 +562,7 @@ export default {
       var slot9saved = "";
       // Step 1: Glottal Stop Insertion in Slot 9
       if (this.slots[9].charAt(this.slots[9].length-1) === "'") {
-        if (this.gOptions.concat === 0) {
+        if (this.gOptions.concat == '0') {
           this.slots[9] = this.slots[9].slice(0,-1);
           this.slots[9] = this.insertGStop(this.slots[9],true);
         } else {
@@ -818,7 +819,7 @@ export default {
       var wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
       var stressType = 0;
       // 5a: converting meaning to where the stress should be [0 = ult, 1 = penult, 2 = antepenult]
-      if (this.gOptions.concat !== 0) { // if it's a concatenated word
+      if (this.gOptions.concat != '0') { // if it's a concatenated word
         if (slot9saved.charAt(slot9saved.length-1) === "'") { //if you'd normally add a glottal stop into slot 9
           stressType = 0; // ultimate stress
         } else {
@@ -873,7 +874,7 @@ export default {
       // glosses are of the form (T#-)S#(.CPT)(.S7cut)-"root"(-SLOT 4)(-SLOT 5.1)(-SLOT 5.2)(-SLOT 6)(-SLOT 7.1)(-SLOT 7.2)(-SLOT 8)(-SLOT 9)\SLOT 10,
       // unless there's a shortcut in which case slot 6 will be moved to slot 2
       // Slot 1
-      if (this.gOptions.concat != 0) {
+      if (this.gOptions.concat != '0') {
         this.gloss += "T" + this.gOptions.concat + "-";
         this.fullGloss += "T" + this.gOptions.concat + "-";
       }
@@ -968,7 +969,7 @@ export default {
         this.fullGloss += "-"+this.gOptions.c;
       }
       // Slot 10
-      if (this.gOptions.concat === 0) {
+      if (this.gOptions.concat == '0') {
         this.fullGloss += "\\" + this.gOptions.rel.split("/")[0];
         if (this.gOptions.rel.split("/")[0] !== "UNF") {this.gloss += "\\" + this.gOptions.rel.split("/")[0]}
       }
@@ -1147,6 +1148,10 @@ export default {
 #modal-content p a {
   color: black;
   font-weight: bold;
+}
+#modal-content > p {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 #modalToTop {
   position: fixed;

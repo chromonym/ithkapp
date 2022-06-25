@@ -95,15 +95,15 @@
             },
             "FNC":{
                 "name":"Functional",
-                "desc":"<b>Focus on the personal meaning/importance</b><br/>"
+                "desc":"<b>Focus on the personal meaning/importance</b><br/>The FUNCTIONAL context focuses on those features of a formative that are defined socially by ideas, attitudes, beliefs, opinions, convention, cultural status, use, function, benefit, etc. It serves to identify not what a noun existentially is, but to show that the noun has specific (and subjective) contextual meaning, relevance or purpose."
             },
             "RPS":{
                 "name":"Representational",
-                "desc":"N/A"
+                "desc":"<b>Connotes that the word is a metaphor</b><br/>The REPRESENTATIONAL context focuses on a formative as a symbol, metaphor, or metonym, in that it indicates that the formative is serving as a representation or substitute for some other concept or entity which is abstractly associated with it. For example, the metaphorical connotations of the English sentence <i>That pinstripe-suited dog is checking out a kitty</i>, can be equally conveyed in Ithkuil by inflecting the words for 'dog' and 'kitty' into the REPRESENTATIONAL context. The REPRESENTATIONAL is one of several ways that Ithkuil overtly renders all metaphorical, symbolic, or metonymic usages (from a grammatical standpoint)."
             },
             "AMG":{
                 "name":"Amalgamate",
-                "desc":"N/A"
+                "desc":"<b>Connotes a focus on the emotional impact plus cultural significance</b><br/>The AMALGAMATIVE context is the most abstract and difficult to understand from a Western linguistic perspective. It focuses on the systemic, holistic, gestalt-like, componential nature of a formative, implying that its objective and subjective totality is derived synergistically from (or as an emergent property of) the interrelationships between all of its parts, not just in terms of a static momentary appraisal, but in consideration of the entire developmental history of the noun and any interactions and relationships it has (whether past, present or potential) within the larger context of the world. Its use indicates the speaker is inviting the hearer to subjectively consider all the subjective wonder, emotional nuances, psychological ramifications and/or philosophical implications associated with the noun's existence, purpose, or function, as being a world unto itself, intrinsically interconnected with the wider world beyond it on many levels."
             }
         }
     },
@@ -114,15 +114,15 @@
         "options": {
             "UNF/C": {
                 "name":"Nominal",
-                "desc":"N/A"
+                "desc":"The word is <i>not</i> a verb (which usually means a noun)"
             },
             "UNF/K": {
                 "name":"Unframed Verbal",
-                "desc":"N/A"
+                "desc":"The word is a verb"
             },
             "FRM": {
                 "name":"Framed Verbal",
-                "desc":"N/A"
+                "desc":"The word is the main verb <b>in a verb phrase</b> (or \"frame\") - the verb phrase continues until the end of the sentance, and this word MUST go at the start of it."
             }
         },
         "popupdesc":""
