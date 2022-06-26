@@ -41,12 +41,12 @@
     </div>
     <div class="section"> <!-- Section 6: Slot 8b to 10 -->
       <OptionBox :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
-      <OptionBox v-if='this.gOptions.rel == "UNF/K" && this.gOptions.concat == "0"' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
-      <OptionBox v-else :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel != 'UNF/K' || this.gOptions.concat != '0'" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0'" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0'" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
-      <OptionBox v-if="this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0'" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
+      <OptionBox :show='!cascOrMood' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
+      <OptionBox :show='cascOrMood' :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
+      <OptionBox :show="cascOrMood" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
+      <OptionBox :show="!cascOrMood" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
+      <OptionBox :show="!cascOrMood" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
+      <OptionBox :show="!cascOrMood" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
     </div>
     <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   </div>
@@ -61,8 +61,25 @@
       <h2 style="text-align:center;" id="top">{{modalContent.title}}</h2>
       <p style="text-align:center;" v-html="modalContent.popupdesc"></p>
       <div v-if="modalContent.type == ''">
-        <div v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
-          <h2 style="text-align:center;" :id="option" v-if='modalID === "c" && ["THM","POS","APL","FUN","PRN","ACT","LOC"].includes(option)'>{{{"THM":"Transrelative","POS":"Appositive","APL":"Associative","FUN":"Adverbial","PRN":"Relational","ACT":"Affinitive","LOC":"Spatio-Temporal"}[option]}} Cases</h2>
+        <div v-if="modalID == 'c'" class="tab">
+          <button class="tablinks active" @click="changeClassTab('THM','PLM','Allcases')" id="Allcases">All</button>
+          <button class="tablinks" @click="changeClassTab('THM','IND','Transrelative')" id="Transrelative">Transrelative</button>
+          <button class="tablinks" @click="changeClassTab('POS','PAR','Appositive')" id="Appositive">Appositive</button>
+          <button class="tablinks" @click="changeClassTab('APL','CSD','Associative')" id="Associative">Associative</button>
+          <button class="tablinks" @click="changeClassTab('FUN','SIT','Adverbial')" id="Adverbial">Adverbial</button>
+          <button class="tablinks" @click="changeClassTab('PRN','RLT','Relational')" id="Relational">Relational</button>
+          <button class="tablinks" @click="changeClassTab('ACT','VOC','Affinitive')" id="Affinitive">Affinitive</button>
+          <button class="tablinks" @click="changeClassTab('LOC','PLM','Spatio-Temporal')" id="Spatio-Temporal">Spatio-Temporal</button>
+        </div>
+        <div v-if="modalID == 'c'">
+          <div v-for="option in Object.keys(modalContent.options).slice(Object.keys(modalContent.options).indexOf(this.casePopupStart),Object.keys(modalContent.options).indexOf(this.casePopupEnd)+1)" v-bind:key="modalContent.options[option]">
+            <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
+              <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
+              <p v-html="modalContent.options[option].desc"></p>
+            </div>
+          </div>
+        </div>
+        <div v-else v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
           <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
             <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
             <p v-html="modalContent.options[option].desc"></p>
@@ -189,20 +206,16 @@ export default {
       gloss: "", // gloss of word
       fullGloss: "", // full version of above
       ipa: "", // IPA transcription
+      casePopupStart: "THM",
+      casePopupEnd: "PLM",
+      casePopupTitle: "Allcases",
+      cascOrMood: false, // false if case scope, true if mood.
     }
   },
   methods: {
     async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
       console.log("Recieved "+value+" from "+code);
       await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
-        if (code === "rel" && (value == "UNF/K" || this.gOptions.rel == "UNF/K") && this.gOptions.concat == "0") {
-          this.gOptions.c = "THM"; // quick fix to match the fact that the OptionBoxes for these reset but the values don't
-          this.gOptions.ill = "ASR";
-          this.gOptions.exp = "COG";
-          this.gOptions.vld = "OBS";
-          this.gOptions.casc = "CCN";
-          this.gOptions.mood = "FAC";
-        }
         this.cut = [false,false,false]; // reset this.cut
       })();
       (()=>{this.gOptions[code] = value})();
@@ -210,11 +223,14 @@ export default {
       this.calculateWord();
       this.IPAcalcs();
       this.glossCalcs();
+      this.cascOrMood = (this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0');
+      console.log(this.cascOrMood);
     },
     openModal(code) {
       console.log("Modal opening for",code);
       this.modalContent = this.gData[code];
       this.modalID = code;
+      console.log(this.$refs);
       document.getElementById("modal").style.display = "block";
     },
     closeModal() {
@@ -223,6 +239,17 @@ export default {
     },
     updateFromModal(reference,value) {
       this.$refs[reference].updateValue(value);
+    },
+    changeClassTab(cStart,cEnd,cTitle) {
+      this.casePopupStart = cStart;
+      this.casePopupEnd = cEnd;
+      this.casePopupTitle = cTitle;
+      var tablinks = document.getElementsByClassName("tablinks");
+      console.log(tablinks);
+      for (let i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(cTitle).className += " active";
     },
     calculateWord() {
       // this order is specifically because slots 4 and 6 can influence slots 1 through 5 due to shortcutting.
@@ -288,7 +315,7 @@ export default {
       var ph = {"STA":{"BSC":0,"CTE":1,"CSV":2,"OBJ":3},
                 "DYN":{"OBJ":5,"CSV":6,"CTE":7,"BSC":8}}; // again, svf 5 is skipped
       var phh = ["EXS","FNC","RPS","AMG"];
-      this.slots[3] = this.sVowels[ph[this.gOptions.func][this.gOptions.spec]][phh.findIndex(x => x == this.gOptions.ctxt)];
+      this.slots[3] = this.sVowels[ph[this.gOptions.func][this.gOptions.spec]][phh.indexOf(this.gOptions.ctxt)];
     },
     calculateSlot5() {
       // I have no idea if it was the Object.assign() or the async/await in handleSendMessage(), but it works and I'm not questioning it.
@@ -424,7 +451,7 @@ export default {
                   ["DCL","CCL","CUL","IMD","TRD","TNS","ITC","MTV","SQN"]];
         for (var i in pph) {
           if (pph[i].includes(this.gOptions.asp)) {
-            this.slots[7] = this.sVowels[pph[i].findIndex(x => x === this.gOptions.asp)][i];
+            this.slots[7] = this.sVowels[pph[i].indexOf(this.gOptions.asp)][i];
           }
         }
       } else {
@@ -434,7 +461,7 @@ export default {
                    "pha":["PCT","ITR","REP","ITM","RCT","FRE","FRG","VAC","FLC"],
                    "eff":["1:BEN","2:BEN","3:BEN","SLF:BEN","UNK","SLF:DET","3:DET","2:DET","1:DET"],
                    "lvl":["MIN","SBE","IFR","DFT","EQU","SUR","SPL","SPQ","MAX"]};
-        this.slots[7] = this.sVowels[phh[this.gOptions.vn].findIndex(x => x === this.gOptions[this.gOptions.vn])][ph.findIndex(x => x == this.gOptions.vn)];
+        this.slots[7] = this.sVowels[phh[this.gOptions.vn].indexOf(this.gOptions[this.gOptions.vn])][ph.indexOf(this.gOptions.vn)];
       }
     },
     calculateSlot8b() {
@@ -442,13 +469,13 @@ export default {
       var phh = [];
       if (this.gOptions.vn === "asp") { ph = ["w","hw","hlw","hly","hnw","hny"]; }
       else { ph = ["h","hl","hr","hm","hn","hň"]; }
-      if (this.gOptions.rel != "UNF/K") {
+      if (this.gOptions.rel != "UNF/K" || this.gOptions.concat != "0") {
         phh = ["CCN","CCA","CCS","CCQ","CCP","CCV"];
-        this.slots[8] = ph[phh.findIndex(x => x === this.gOptions.casc)]
+        this.slots[8] = ph[phh.indexOf(this.gOptions.casc)]
       }
       else {
         phh = ["FAC","SUB","ASM","SPC","COU","HYP"];
-        this.slots[8] = ph[phh.findIndex(x => x === this.gOptions.mood)];
+        this.slots[8] = ph[phh.indexOf(this.gOptions.mood)];
       }
     },
     calculateSlot9() {
@@ -468,14 +495,14 @@ export default {
       if (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != '0') {
         for (var i in ph) {
           if (ph[i].includes(this.gOptions.c)) {
-            this.slots[9] = this.sVowels[ph[i].findIndex(x => x === this.gOptions.c)][i];
+            this.slots[9] = this.sVowels[ph[i].indexOf(this.gOptions.c)][i];
             cfound = true;
           }
         }
         if (!cfound) {
           for (var j in phh) {
             if (phh[j].includes(this.gOptions.c)) {
-              this.slots[9] = this.sVowels[phh[j].findIndex(x => x === this.gOptions.c)][j] + "'";
+              this.slots[9] = this.sVowels[phh[j].indexOf(this.gOptions.c)][j] + "'";
             }
           }
         }
@@ -483,9 +510,9 @@ export default {
         if (this.gOptions.ill == "PFM") {
           pphnum = 4;
         } else {
-          pphnum = pph.findIndex(x => x === this.gOptions.vld);
+          pphnum = pph.indexOf(this.gOptions.vld);
         }
-        this.slots[9] = this.sVowels[pphnum][pphh.findIndex(x => x === this.gOptions.exp)];
+        this.slots[9] = this.sVowels[pphnum][pphh.indexOf(this.gOptions.exp)];
       }
     },
     shortcutCalcs() {
@@ -826,11 +853,11 @@ export default {
           stressType = 1; // penultimate stress
         }
       } else {
-        stressType = ["UNF/K","UNF/C","FRM"].findIndex(x => x == this.gOptions.rel); // stress is reliant on relation, otherwise
+        stressType = ["UNF/K","UNF/C","FRM"].indexOf(this.gOptions.rel); // stress is reliant on relation, otherwise
       }
       // 5b: making sure the word can actually take the required stress
       while (wordVowels.length <= stressType) { // i.e. stress 0 needs 1 vowel, stress 1 needs 2 vowels, stress 2 needs 3 vowels
-        var cutVal = this.cut.findIndex(x => x == true); 
+        var cutVal = this.cut.indexOf(true);
         var ph = [1,9,7];
         if (ph[cutVal] === 7) {this.slots[8] = "h"}
         this.slots[ph[cutVal]] = "a";
@@ -949,12 +976,12 @@ export default {
       // Slot 8
       var s8c = [];
       if (this.gOptions[this.gOptions.vn] !== "MNO") {s8c.push(this.gOptions[this.gOptions.vn])}
-      if (this.gOptions.mood !== "FAC" && this.gOptions.rel === "UNF/K") {s8c.push(this.gOptions.mood)}
-      if (this.gOptions.casc !== "CCN" && this.gOptions.rel !== "UNF/K") {s8c.push(this.gOptions.casc)}
+      if (this.gOptions.mood !== "FAC" && this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") {s8c.push(this.gOptions.mood)}
+      if (this.gOptions.casc !== "CCN" && this.gOptions.rel !== "UNF/K" || this.gOptions.concat != "0") {s8c.push(this.gOptions.casc)}
       if (s8c.length > 0) {this.gloss += "-" + s8c.join(".")}
       this.fullGloss += "-" + this.gOptions[this.gOptions.vn] + "." + (this.gOptions.rel === "UNF/K" ? this.gOptions.mood : this.gOptions.casc)
       // Slot 9
-      if (this.gOptions.rel === "UNF/K") {
+      if (this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") {
         //IEV
         var s9c = [];
         this.fullGloss += "-"+this.gOptions.ill+"."+this.gOptions.exp;
@@ -1196,5 +1223,24 @@ export default {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+}
+.tab button:hover {
+  background-color: #ddd;
+}
+.tab button.active {
+  background-color: rgb(179, 255, 230);
 }
 </style>

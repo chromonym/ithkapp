@@ -48,7 +48,8 @@ export default {
   props: {
     code: String,
     json: Object, // pass in grammardata[code] to here
-    disabled: Boolean
+    disabled: Boolean,
+    show: Boolean,
   },
   data() {
     return {
@@ -62,9 +63,10 @@ export default {
     OBclass() { // set class to error if the input is the default
       return {
         error: (this.json.type == "affix" && this.affixes.length != 0 && (!this.affixes.every(function (e) {return e[0] != ""}) || !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))) || (this.json.type == "text" && (this.text == "" || !this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())))),
-        disabledbox: this.disabled
+        disabledbox: this.disabled,
+        notShown: this.show
       }
-    }
+    },
   },
   mounted() {
     if (this.$props.type != "affix" && this.$props.type != "text"){
@@ -76,7 +78,8 @@ export default {
       if (this.$props.type != "affix" && this.$props.type != "text" && Object.keys(this.$props.json.options).includes(toUpdate)) {
         this.option = toUpdate;
         document.getElementById(this.$props.code).selectedIndex = Object.keys(this.$props.json.options).findIndex(x => x === toUpdate);
-        this.$emit('send-message',this.option,this.$props.code)
+        this.$emit('send-message',this.option,this.$props.code);
+        console.log(this.show);
       }
     }
   }
@@ -85,6 +88,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.notShown {
+  display: none;
+}
 .optionbox {
   float: left;
   border-style: solid;

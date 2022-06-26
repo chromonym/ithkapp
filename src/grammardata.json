@@ -1037,7 +1037,7 @@
                 "desc":"Signifies the spatio-temporal boundary point of a span of time or space during which or within which something is expected to or must occur or be situated.<br/>Equivalent to English phrases: by the end of X / within the period ending in X / within the period ending with X / before X is over / before X is up / inside of (the period signified by) X"
             }
         },
-        "popupdesc":"Cases are the role of the word in a sentence, and TNIL has 68.<br/>They are split into seven categories;<br/><a href='#THM'>Transrelative</a>, which are similar to cases in natural languages,<br/><a href='#POS'>Appositive</a>, which is to do with possession-esque relations,<br/><a href='#APL'>Associative</a>, which is similar but more related to reasons and motives,<br/><a href='#FUN'>Adverbial</a>, which (fairly obviously) is for adverb-like words,<br/><a href='#PRN'>Relational</a>,<br/><a href='#ACT'>Affinitive</a>, and<br/><a href='#LOC'>Spatio-Temporal</a>, which are for words describing the space or time of the sentence."
+        "popupdesc":"Cases are the role of the word in a sentence, and TNIL has 68.<br/>They are split into seven categories;<br/><b>Transrelative</b>, which are similar to cases in natural languages,<br/><b>Appositive</b>, which is to do with possession-esque relations,<br/><b>Associative</b>, which is similar but more related to reasons and motives,<br/><b>Adverbial</b>, which (fairly obviously) is for adverb-like words,<br/><b>Relational</b>,<br/><b>Affinitive</b>, and<br/><b>Spatio-Temporal</b>, which are for words describing the space or time of the sentence."
     },
 
     "ill": {
