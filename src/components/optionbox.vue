@@ -79,7 +79,6 @@ export default {
         this.option = toUpdate;
         document.getElementById(this.$props.code).selectedIndex = Object.keys(this.$props.json.options).findIndex(x => x === toUpdate);
         this.$emit('send-message',this.option,this.$props.code);
-        console.log(this.show);
       }
     }
   }

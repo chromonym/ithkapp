@@ -33,11 +33,11 @@
     </div>
     <div class="section"> <!-- Section 5: Slot 8a -->
       <OptionBox :json="gData.vn" code="vn" @send-message="handleSendMessage" ref="vn" @modal="openModal"/>
-      <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage" ref="val" @modal="openModal"/>
-      <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage" ref="pha" @modal="openModal"/>
-      <OptionBox :json="gData.eff" code="eff" @send-message="handleSendMessage" ref="eff" @modal="openModal"/>
-      <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal"/>
-      <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal"/>
+      <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage" ref="val" @modal="openModal" :disabled='this.gOptions.vn != "val"'/>
+      <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage" ref="pha" @modal="openModal" :disabled='this.gOptions.vn != "pha"'/>
+      <OptionBox :json="gData.eff" code="eff" @send-message="handleSendMessage" ref="eff" @modal="openModal" :disabled='this.gOptions.vn != "eff"'/>
+      <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"'/>
+      <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal" :disabled='this.gOptions.vn != "asp"'/>
     </div>
     <div class="section"> <!-- Section 6: Slot 8b to 10 -->
       <OptionBox :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
@@ -79,7 +79,7 @@
             </div>
           </div>
         </div>
-        <div v-else v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
+        <div v-else-if="modalID != 'shcut'" v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
           <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
             <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
             <p v-html="modalContent.options[option].desc"></p>
@@ -87,7 +87,7 @@
         </div>
       </div>
     </div>
-    <a id="modalToTop" href="#top">↑</a>
+    <button id="modalToTop" @click="scrollToTop">↑</button>
   </div>
 </template>
 
@@ -210,6 +210,7 @@ export default {
       casePopupEnd: "PLM",
       casePopupTitle: "Allcases",
       cascOrMood: false, // false if case scope, true if mood.
+      tabGroups: [["root","stem","spec"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
     }
   },
   methods: {
@@ -224,13 +225,11 @@ export default {
       this.IPAcalcs();
       this.glossCalcs();
       this.cascOrMood = (this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0');
-      console.log(this.cascOrMood);
     },
     openModal(code) {
       console.log("Modal opening for",code);
       this.modalContent = this.gData[code];
       this.modalID = code;
-      console.log(this.$refs);
       document.getElementById("modal").style.display = "block";
     },
     closeModal() {
@@ -240,12 +239,14 @@ export default {
     updateFromModal(reference,value) {
       this.$refs[reference].updateValue(value);
     },
+    scrollToTop() {
+      document.getElementById('modal').scrollTo(0, 0);
+    },
     changeClassTab(cStart,cEnd,cTitle) {
       this.casePopupStart = cStart;
       this.casePopupEnd = cEnd;
       this.casePopupTitle = cTitle;
       var tablinks = document.getElementsByClassName("tablinks");
-      console.log(tablinks);
       for (let i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
       }

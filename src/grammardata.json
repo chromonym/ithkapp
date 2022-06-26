@@ -165,7 +165,7 @@
                 "desc":"N/A"
             }
         ],
-        "popupdesc":"will probably eventually switch to being a checkbox"
+        "popupdesc":"This does not affect the definition of the word, it's simply a way of potentially making it shorter if the other option choices allow.<br/><br/>The <b>Absolutely None</b> option also disables the dropping of default-value slots and will make sure that the word is at its maximum length."
     },
     
     "Vafx": {
