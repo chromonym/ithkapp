@@ -57,7 +57,10 @@
   </div>
   <div id="modal" class="modal" @click.self="closeModal()">
     <div id="modal-content">
-      <span class="close" @click="closeModal()">&times;</span>
+      <div class="tab">
+        <button v-for="tabcode in modalTabs" :key="tabcode" :class="{active: tabcode === modalID}" @click="closeModal(); openModal(tabcode);">{{gData[tabcode].title}}</button>
+        <span class="close" @click="closeModal()">&times;</span>
+      </div>
       <h2 style="text-align:center;" id="top">{{modalContent.title}}</h2>
       <p style="text-align:center;" v-html="modalContent.popupdesc"></p>
       <div v-if="modalContent.type == ''">
@@ -105,6 +108,7 @@ export default {
     return {
       modalContent: "",
       modalID: "",
+      modalTabs: [],
       gData: grammardata,
       cData: consdata,
       gOptions: { // grammar options
@@ -210,7 +214,7 @@ export default {
       casePopupEnd: "PLM",
       casePopupTitle: "Allcases",
       cascOrMood: false, // false if case scope, true if mood.
-      tabGroups: [["root","stem","spec"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
+      tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
     }
   },
   methods: {
@@ -228,8 +232,18 @@ export default {
     },
     openModal(code) {
       console.log("Modal opening for",code);
+      let tGroupFound = false;
       this.modalContent = this.gData[code];
       this.modalID = code;
+      for (let i of this.tabGroups) {
+        if (i.includes(code)) {
+          this.modalTabs = [...i];
+          tGroupFound = true;
+        }
+      }
+      if(!tGroupFound) {
+        this.modalTabs = [];
+      }
       document.getElementById("modal").style.display = "block";
     },
     closeModal() {
