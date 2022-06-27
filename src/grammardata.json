@@ -134,18 +134,18 @@
         "options": [
             {
                 "name":"None",
-                "desc":"N/A"
+                "desc":"This word is not concatenated to another."
             },
             {
                 "name":"Type 1",
-                "desc":"N/A"
+                "desc":"Type-1 concatenation implies a <b>circumstantial relationship</b> between the concatenated formative and the parent (equivalent to placing the concatenated formative into a case-frame)"
             },
             {
                 "name":"Type 2",
-                "desc":"N/A"
+                "desc":"Type-2 concatenation is derivational (i.e., lexicalizing), creating a new lexico-semantic gestalt and usually requiring a different English translation.<br/>This is analogous to English forms like <i>polar bear</i> naming a new animal rather than stating a location."
             }
         ],
-        "popupdesc":""
+        "popupdesc":"Concatenation is similar to the Incorporated Root of Ithkuil III. Basically, it's how you show two roots on one word in order to make a short phrase or for extra description ('fire chair' rather than 'chair').<br/>A concatenated word <i><b>MUST</b></i> be followed by another word (formative), and the two must be joined with a dash."
     },
     
     "shcut": {
@@ -186,22 +186,22 @@
         "options": {
             "UPX": {
                 "name":"Uniplex",
-                "desc":"N/A"
+                "desc":"The UNIPLEX configuration indicates a single, contextual embodiment of the word, i.e., one whole contextual unit of the basic nominal stem,<br/>e.g. <i>a tree, a person, a screwdriver, a grape, a hammer blow, a hole</i>.<br/>With verbs the UNIPLEX signifies a single, holistic act, state, or event,<br/>e.g. <i>to be a tree, to become a person, to use a screwdriver, to eat a grape, to strike (once) with a hammer, to dig a hole</i>."
             },
             "DPX": {
                 "name":"Vague Duplex",
-                "desc":"N/A"
+                "desc":"The Vague DUPLEX (unofficial name) is the same as the below DUPLEX, except no information regarding Similarity or Connectedness is relayed."
             },
             "D": {
                 "name":"Duplex",
-                "desc":"N/A"
+                "desc":"The DUPLEX indicated any two contextual embodiments of the word (like the UNIPLEX) or two individual, holistic acts, states, or events.<br/>Like the <b>DUAL</b> in some natural languages."
             },
             "M": {
                 "name":"Multiplex",
-                "desc":"N/A"
+                "desc":"Same as the above two in terms of when it is applied, but only for more than two instances.<br/>Like the <b>PLURAL</b> in most natural languages."
             }
         },
-        "popupdesc":""
+        "popupdesc":"Describes how many instances of the word there are, like plurality markings of other languages."
     },
 
     "simil": {
@@ -210,18 +210,18 @@
         "options": {
             "S": {
                 "name":"Similar",
-                "desc":"N/A"
+                "desc":"The 2+ instances are similar or the same"
             },
             "D": {
                 "name":"Dissimilar",
-                "desc":"N/A"
+                "desc":"The 2+ instances are not similar at all"
             },
             "F": {
                 "name":"Fuzzy",
-                "desc":"N/A"
+                "desc":"It is unclear as to how similar the 2+ instances are"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Only applies when the Plexity is DUPLEX or MULTIPLEX.<br/>This indicates how similar the 2+ instances (from the Plexity) <i>are</i>."
     },
 
     "cctd": {
@@ -230,18 +230,18 @@
         "options": {
             "S": {
                 "name":"Separate",
-                "desc":"N/A"
+                "desc":"The 2+ instances are separate"
             },
             "C": {
                 "name":"Connected",
-                "desc":"N/A"
+                "desc":"The 2+ instances are somewhat connected (but discrete)"
             },
             "F": {
                 "name":"Fused",
-                "desc":"N/A"
+                "desc":"The 2+ instances are <i>very</i> connected and are somewhat difficult to make discrete"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Only applies when the Plexity is DUPLEX or MULTIPLEX.<br/>This indicated how connected the 2+ instanced (from the Plexity) <i>are</i>."
     },
 
     "affil": {
@@ -734,30 +734,30 @@
         "options": {
             "CCN":{
                 "name":"Natural",
-                "desc":"N/A"
+                "desc":"X's case is governed by the noun-case of the formative marked <b>Antecedent (CCA)</b>; in the absence of such, X's case is associated with the main verb (or framed verb if within a case-frame), except for if it has the Appositive or Relational Cases."
             },
             "CCA":{
                 "name":"Antecedent",
-                "desc":"N/A"
+                "desc":"X is the “head” whose case governs all <b>Natural (CCN)</b> nouns in the clause"
             },
             "CCS":{
                 "name":"Subaltern",
-                "desc":"N/A"
+                "desc":"X is the formative to which formatives in the clause marked with <b>Qualifier (CCQ)</b> are associated"
             },
             "CCQ":{
                 "name":"Qualifier",
-                "desc":"N/A"
+                "desc":"X is associated by noun-case to the formative marked by <b>Subaltern (CCS)</b>"
             },
             "CCP":{
                 "name":"Precedent",
-                "desc":"N/A"
+                "desc":"X's noun-case associates only with the immediately <b>following</b> formative"
             },
             "CCV":{
                 "name":"Successive",
-                "desc":"N/A"
+                "desc":"X's noun-case associates only with the immediately <b>preceding</b> formative"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Formatives showing Case use the Case-Scope to indicate the scope of a case-marked formative over adjacent formatives. This is useful when there is a string of cases modifying another “head” formative; specifies which has scope over which other formative.<br/>Similar to a Type 1 Concatenation."
     },
     
     "c": {
