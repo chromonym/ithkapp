@@ -105,7 +105,8 @@
                 "name":"Amalgamate",
                 "desc":"<b>Connotes a focus on the emotional impact plus cultural significance</b><br/>The AMALGAMATIVE context is the most abstract and difficult to understand from a Western linguistic perspective. It focuses on the systemic, holistic, gestalt-like, componential nature of a formative, implying that its objective and subjective totality is derived synergistically from (or as an emergent property of) the interrelationships between all of its parts, not just in terms of a static momentary appraisal, but in consideration of the entire developmental history of the noun and any interactions and relationships it has (whether past, present or potential) within the larger context of the world. Its use indicates the speaker is inviting the hearer to subjectively consider all the subjective wonder, emotional nuances, psychological ramifications and/or philosophical implications associated with the noun's existence, purpose, or function, as being a world unto itself, intrinsically interconnected with the wider world beyond it on many levels."
             }
-        }
+        },
+        "popupdesc": "Context is a morphological category with no equivalent in other languages. It indicates what tangible or intangible features or aspects of a formative are being psychologically implied in any given utterance. There is no way to show this in translation other than by paraphrase.<br/>Simply, context implies what <b>emotional meaning</b> you should apply to the given word; reading the individual definitions is recommended."
     },
 
     "rel": {
@@ -114,7 +115,7 @@
         "options": {
             "UNF/C": {
                 "name":"Nominal",
-                "desc":"The word is <i>not</i> a verb (which usually means a noun)"
+                "desc":"The word is <i>not</i> a verb (which usually means a noun).<br/>All Concatenated words are Nominal automatically."
             },
             "UNF/K": {
                 "name":"Unframed Verbal",
@@ -125,7 +126,7 @@
                 "desc":"The word is the main verb <b>in a verb phrase</b> (or \"frame\") - the verb phrase continues until the end of the sentance, and this word MUST go at the start of it."
             }
         },
-        "popupdesc":""
+        "popupdesc":"Put simply, which <b>part of speech</b> a word belongs to. A nominal is usually a noun, but could be anything <i>other than</i> a verb.<br/><br/><b>Nominals</b> (and Framed Verbals) are modified by Case and Case-Scope to give a more specific purpose, and (Unframed) <b>Verbals</b> are modified by Mood, Illocution, Expectation and Validation to give a reasoning and intended reaction."
     },
 
     "concat": {
@@ -145,7 +146,7 @@
                 "desc":"Type-2 concatenation is derivational (i.e., lexicalizing), creating a new lexico-semantic gestalt and usually requiring a different English translation.<br/>This is analogous to English forms like <i>polar bear</i> naming a new animal rather than stating a location."
             }
         ],
-        "popupdesc":"Concatenation is similar to the Incorporated Root of Ithkuil III. Basically, it's how you show two roots on one word in order to make a short phrase or for extra description ('fire chair' rather than 'chair').<br/>A concatenated word <i><b>MUST</b></i> be followed by another word (formative), and the two must be joined with a dash."
+        "popupdesc":"Concatenation is similar to the Incorporated Root of Ithkuil III. Basically, it's how you show two roots on one word in order to make a short phrase or for extra description ('fire chair' rather than 'chair').<br/>A concatenated word <i><b>MUST</b></i> be followed by another word (formative), and the two must be joined with a dash.<br/>A concatenated word is automatically a Nominal (see Relation for more on that)."
     },
     
     "shcut": {
@@ -154,7 +155,7 @@
         "options": [
             {
                 "name":"None",
-                "desc":"N/A"
+                "desc":"NOTE FOR PEOPLE READING THIS .JSON FILE: these descriptions aren't shown because for some reason the shortcutting doesn't work when changed from inside the popup, and so currently I have disabled the options in the popup (which is where these descriptions would show)."
             },
             {
                 "name":"Yes, if possible",
@@ -201,7 +202,7 @@
                 "desc":"Same as the above two in terms of when it is applied, but only for more than two instances.<br/>Like the <b>PLURAL</b> in most natural languages."
             }
         },
-        "popupdesc":"Describes how many instances of the word there are, like plurality markings of other languages."
+        "popupdesc":"Describes how many instances of the word there are, similar <b>but not the same as</b> plurality markings of other languages. However, similarities to plurality are used in the below definitions.<br/>This is how you turn the word \"tree\" into \"forest\", for example, but not \"tree\" into \"trees\"."
     },
 
     "simil": {
@@ -250,22 +251,22 @@
         "options": {
             "CSL": {
                 "name":"Consolidative",
-                "desc":"N/A"
+                "desc":"The CONSOLIDATIVE affiliation indicates that the individual members of a configurational set are a naturally occurring set where <b>the function, state, purpose or benefit of individual members is inapplicable</b>, irrelevant, or if applicable, is shared. It differs from the ASSOCIATIVE affiliation below in that the role of individual set members is not subjectively defined by human design. Examples are <i>tree branches, a grove, a mound of rocks, some people, the clouds</i>.<br/><br/>The CONSOLIDATIVE is also the affiliation normally applied to nouns in the UNIPLEX (plexity) when spoken of in a neutral way, since a noun in the UNIPLEX specifies one single entity without reference to a set, therefore the concept of “shared” function would be inapplicable. Examples: <i>a man</i>, <i>a door</i>, <i>a sensation of heat</i>, <i>a leaf</i>. With verbs, the CONSOLIDATIVE would imply that the act, state, or event is occurring naturally, or is neutral as to purpose or design."
             },
             "ASO": {
                 "name":"Associative",
-                "desc":"N/A"
+                "desc":"The ASSOCIATIVE affiliation indicates that the individual members of a configurational set share <b>the same subjective function, state, purpose or benefit</b>. Its use can be illustrated by taking the Ithkuil word for soldier in the DISCRETE configuration and comparing its English translations when inflected for the CONSOLIDATIVE affiliation (= <i>a group of soldiers</i>) versus the ASSOCIATIVE (= <i>a troop, a platoon</i>). It is this CONSOLIDATIVE versus ASSOCIATIVE distinction, then, that would distinguish otherwise equivalent plural inflections of the Ithkuil word for tree by translating them respectively as <i>a grove</i> versus <i>an orchard</i>.<br/><br/>The ASSOCIATIVE affiliation can also be used with nouns in the UNIPLEX (plexity) to signify a sense of unity amongst one's characteristics, purposes, thoughts, etc. For example, the word <i>person</i> inflected for the UNIPLEX and ASSOCIATIVE would translate as <i>a single-minded person</i>. Even nouns such as <i>rock</i>, <i>tree</i> or <i>work of art</i> could be inflected this way, subjectively translatable as <i>a well-formed rock</i>, <i>a tree with integrity</i>, <i>a “balanced” work of art</i>.<br/><br/>With verbs, the ASSOCIATIVE signifies that the act, state or event is by design or with specific purpose. The CONSOLIDATIVE versus ASSOCIATIVE distinction could be used, for example, with the verb <i>turn</i> in \"I <i>turned</i> toward the window\" to indicate whether it was for no particular reason or due to a desire to look outside."
             },
             "COA": {
                 "name":"Coalescent",
-                "desc":"N/A"
+                "desc":"The COALESCENT affiliation indicates that the members of a configurational set share in a <b>complementary relationship</b> with respect to their individual functions, states, purposes, benefits, etc. This means that, while each member's function is distinct from those of other members, each serves in furtherance of some greater unified role. For example, the Ithkuil word translating English <i>toolset</i> would be the word for tool in some plural configuration (depending on each tool's distinct physical appearance) and the COALESCENT affiliation to indicate that each tool has a distinct but complementary function in furtherance of enabling construction or repair activities. Another example would be using the COALESCENT with the word for <i>(piece of) food</i> to signify a well-balanced meal.<br/><br/>The COALESCENT naturally appears most often in conjunction with the DUPLEX since binary sets tend to be complementary. It is used, for example, to signify symmetrical binary sets such as body parts, generally indicating a lefthand/righthand mirror-image distinction, e.g., <i>one's ears, one's hands, a pair of wings</i>. Pairs that do not normally distinguish such a complementary distinction (e.g. <i>one's eyes</i>) can nevertheless be optionally placed in the COALESCENT affiliation to emphasize bilateral symmetry (e.g., <i>one's left and right eye functioning together</i>).<br/><br/>With verbs, the COALESCENT signifies that related, synergistic nature of the component acts, states, and events which make up a greater holistic act, state, or event. It imposes a situational structure onto an act, state, or event, where individual circumstances work together in complementary fashion to comprise the total situation. It would be used, for example, to distinguish the sentences <i>He traveled in the Yukon</i> from <i>He ventured in the Yukon</i>, or <i>I came up with a plan</i> versus <i>I fashioned a plan</i>."
             },
             "VAR": {
                 "name":"Variative",
-                "desc":"N/A"
+                "desc":"The VARIATIVE affiliation indicates that the individual members of a configurational set <b>differ as to subjective function, state, purpose or benefit</b>. The differences among members can be to varying degrees (i.e., constituting a fuzzy set in regard to function, purpose, etc.) or at complete odds with one another, although it should be noted that the VARIATIVE would not be used to signify opposed but complementary differences among set members (see the COALESCENT affiliation above). It would thus be used to signify <i>a jumble of tools, odds-and-ends, a random gathering, a rag-tag group, a dysfunctional couple, a cacophony of notes, of a mess of books, a collection in disarray</i>.<br/>It operates with nouns in the UNIPLEX to render meanings such as <i>a man at odds with himself, an ill-formed rock, a chaotic piece of art, a “lefthand-righthand” situation</i>.<br/><br/>With verbs, the VARIATIVE indicates an act, state, or event that occurs for more than one reason or purpose, and that those reasons or purposes are more or less unrelated. This sense can probably be captured in English only through paraphrase, as in <i>She bought the house for various reasons</i> or <i>My being at the party served several purposes</i>. With non-UNIPLEX configurations, the use of the VARIATIVE affiliation can describe rather complex phenomena; for example, a sentence such as <i>The light is blinking</i> in conjunction with the VARIATIVE could mean that each blink of the light signals something different than the preceding or following blinks."
             }
         },
-        "popupdesc":""
+        "popupdesc":"Affiliation distinguishes the relationships between individual members of a set in terms of purpose, function, and/or benefit.<br/><br/>Affiliation operates synergistically in conjunction with Configuration to describe the total contextual relationship between the members of a set. Like Configuration, the meanings of nouns or verbs in the various affiliations often involve lexical changes when translated into English."
     },
 
     "ext": {
@@ -306,22 +307,22 @@
         "options": {
             "M": {
                 "name":"Monadic",
-                "desc":"N/A"
+                "desc":"The MONADIC means that there is a certain number of (relevant) instances of the word. When combined with things like the MULTIPLEX, it means that the entire group is being considered as a whole (\"forest(s)\", not \"trees\")."
             },
             "G": {
                 "name":"Agglomerative",
-                "desc":"N/A"
+                "desc":"The AGGLOMERATIVE is similar to the MONADIC, except it doesn't imply any sense of number; as in, \"one or more X\". It is also used for turning nouns (such as \"a strand of hair\" in the MONADIC) into mass nouns (such as \"hair\" in the AGGLOMERATIVE)"
             },
             "N": {
                 "name":"Nomic",
-                "desc":"N/A"
+                "desc":"The NOMIC refers to the general archetype of the word as opposed to any specific instance of it. Examples are: <i><b>The dog</b> is a noble beast, <b>Clowns</b> are what children love most, There is nothing like <b>a tree</b></i>."
             },
             "A": {
                 "name":"Abstract",
-                "desc":"N/A"
+                "desc":"Similar to the formation of English abstract nouns using suffixes such as <i>-hood</i> or <i>-ness</i>, the ABSTRACT transforms a configurative category into an abstract concept considered in a non-spatial, timeless, numberless context.<br/>Examples: <i>grove → the idea of being a grove or “grovehood”</i>; <i>book → everything about books, having to do with books, involvement with books</i>.<br/><br/>With verbs, the ABSTRACT is used in verbal constructions to create a temporal abstraction, where the temporal relationship of the action, event, or state to the present is irrelevant or inapplicable, similar to the way in which the English infinitive or gerund form (used as substitutes for a verb phrase) do not convey a specific tense in the following sentences: <i><b>Singing</b> is not his strong suit; It makes no sense <b>to worry</b> about it; I can't stand her <b>pouting</b></i>."
             }
         },
-        "popupdesc":""
+        "popupdesc":"Perspective is the closest Ithkuil morphological category to the Number and Tense categories of other languages (e.g., singular/plural and past/present/future). However, the correspondence is only approximate because Perspective does not specifically address the quantity to which a formative is instantiated within a given context, nor when it occurs relative to the present, but rather the manner in which it is <i>spatio-temporally instantiated</i>."
     },
 
     "ess": {
@@ -374,42 +375,42 @@
         "options": {
             "MNO":{
                 "name":"Monoactive",
-                "desc":"N/A"
+                "desc":"The MONOACTIVE valence is the default valence and indicates a lack of co-activity, i.e., no participation by a second party is implied.<br/><b>Use this for the default of all other Vₙ options.</b>"
             },
             "PRL":{
                 "name":"Parallel",
-                "desc":"N/A"
+                "desc":"The PARALLEL valence indicates that a second party is engaging in the same activity as the first party at same time.<br/>It would be used in translating sentences such as <i>The children all sang together</i>, <i>We both went jogging on the parkway</i>."
             },
             "CRO":{
                 "name":"Corollary",
-                "desc":"N/A"
+                "desc":"The COROLLARY valence is similar to the PARALLEL, except that the second party engages in related activity at the same time as the first party, rather than the same activity.<br/>It would be used in translating sentences such as <i>The children played in the yard</i> (i.e., each child engaged in a different play activity) or <i>The band played my favorite song</i> (implying that not everyone in the band was playing the same instrument, or perhaps that someone in the band sang as opposed to playing an instrument)."
             },
             "RCP":{
                 "name":"Reciprocal",
-                "desc":"N/A"
+                "desc":"The RECIPROCAL valence indicates identical activity by each party directed at the other, thus translating the English adverbial phrases 'each other' and 'one another,' as in:<br/><i>They looked at each other</i>, <i>The clown and the grocer despise one another</i>."
             },
             "CPL":{
                 "name":"Complementary",
-                "desc":"N/A"
+                "desc":"The COMPLEMENTARY valence indicates that the second party performs a complementary activity to that of the first party. By “complementary” is meant an activity different from that of the first party, but necessary to complete the whole of the joint activity, i.e., the “other half” of the joint activity.<br/>This is exemplified in sentences such as <i>The man and his son played catch</i>, <i>Hortense took me into the woods</i>, <i>The clown read the children a story</i>, <i>My back itches so I scratch it</i>,<br/>where 'played catch' implies the complementary activities of throwing and catching, 'took (into the woods)' implies someone leading while the other follows, 'read' implies a reader and an audience, and 'itches' implies scratching."
             },
             "DUP":{
                 "name":"Duplicative",
-                "desc":"N/A"
+                "desc":"The DUPLICATIVE valence indicates that the second party copies or repeats the activity of the first party, as in the sentences:<br/><i>Let's draw a picture</i> (i.e., I'll draw it first, then you draw the same picture), <i>They both read that book</i> (i.e., first one, then the other), <i>I bought a new car</i> (i.e., and now someone else is buying a new car, too)."
             },
             "DEM":{
                 "name":"Demonstrative",
-                "desc":"N/A"
+                "desc":"The DEMONSTRATIVE valence indicates that the first party demonstrates for the second party how to do something or what to do.<br/>Thus an Ithkuil sentence constructed as <i>We played chess</i> with the verb in the DEMONSTRATIVE valence would mean 'I showed her how to play chess,' while the sentence constructed as <i>They fought us</i> in this valence would mean 'They taught us how to fight.'"
             },
             "CNG":{
                 "name":"Contingent",
-                "desc":"N/A"
+                "desc":"The CONTINGENT valence indicates that the second party engages in the next or dependent phase of a multi-part activity, the specific activity being dependent on context.<br/>Thus the Ithkuil sentence <i>I started the campfire for my friend</i> in the CONTINGENT implies that the friend then performed the next logical step, i.e., he cooked the food."
             },
             "PTI":{
                 "name":"Partictipative",
-                "desc":"N/A"
+                "desc":"The PARTICIPATIVE valence indicates that the parties take part in an activity involving a greater whole, translatable by the English phrase 'take part in…'<br/>Thus, the Ithkuil sentence <i>They raced</i> in the PARTICIPATIVE means 'They each took part in the race.'"
             }
         },
-        "popupdesc":""
+        "popupdesc":"In Ithkuil, the term <b>Valence</b> is used to refer to the manner of participation of two separate entities or parties to any given verb, i.e., participation by one party automatically implies participation by another party to the same act, event, or state in either a parallel, corollary, or complementary fashion. Such dual participation occurs naturally in the verbs of world languages and is the province of what is known as “co-active” verbs."
     },
 
     "pha": {

@@ -2,8 +2,9 @@
   <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
   <div id="content">
     <h1>Ithkapp</h1>
-    <p class="smalltext">That's a placeholder name.
-    <br/>Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
+    <p class="smalltext">Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
+    <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
+    <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
     <div class="section"> <!-- Section 1: Root, etc. -->
       <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" type="text" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
@@ -182,7 +183,7 @@ export default {
         "ř":"ʁ",
         "'":"ʔ",
         "h":"h",
-        "ļ":"ɮ",
+        "ļ":"ɬ",
         "l":"l",
         // everything else has a reliance on the surrounding letters
       },
@@ -245,6 +246,7 @@ export default {
         this.modalTabs = [];
       }
       document.getElementById("modal").style.display = "block";
+      if(code === "c") { this.changeClassTab('THM','PLM','Allcases'); }
     },
     closeModal() {
       console.log("Modal closing for",this.modalID);
