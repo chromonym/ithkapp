@@ -275,30 +275,36 @@
         "options": {
             "DEL": {
                 "name":"Delimitive",
-                "desc":"N/A"
+                "desc":"The DELIMITIVE extension indicates that a noun is being spoken of in its contextual entirety as a discrete entity with clear spatio-temporal boundaries, with no emphasis on any particular portion, edge, boundary, limit, or manifestation beyond the context at hand. It can be considered the neutral or default view, e.g., <i>a tree, a grove, a set of books, an army</i>. With verbs, this extension indicates that the act, state, or event is being considered in its entirety, from beginning to end, e.g., <i>She diets every winter</i> (i.e., she starts and finishes each diet).",
+                "image":"http://ithkuil.net/images/3-4-1c.jpg"
             },
             "PRX": {
                 "name":"Proximal",
-                "desc":"N/A"
+                "desc": "The PROXIMAL extension indicates that a noun is being spoken of not in its entirety, but rather only in terms of the portion, duration, subset, or aspect which is relevant to the context at hand. It would be used to translate the words <i>tree, journey,</i> and <i>ladder</i> in the sentences <i>That <b>tree</b> is hard there</i> (e.g., in the spot where I hit against it), <i>She lost weight during her <b>journey</b></i>, or <i>He climbed on the <b>ladder</b></i> (i.e., it is not relevant to the context to know if he made it all the way to the top).<br/>Note that in these sentences, the PROXIMAL does not refer to a specific or delineated piece, part, or component of the tree or ladder, but rather to the fact that delineated boundaries such as the ends of the ladder or the entirety of the tree are not relevant or applicable to the context at hand.",
+                "image":"http://ithkuil.net/images/3-4-2c.jpg"
             },
             "ICP": {
                 "name":"Inceptive",
-                "desc":"N/A"
+                "desc": "The INCEPTIVE extension focuses on the closest boundary, the beginning, initiation, or the immediately accessible portion of a noun or verb, without focusing on the boundaries of the remainder. It would be used in translating the nouns <i>tunnel, song, desert, daybreak</i> and <i>plan</i> in the following sentences: <i>We looked into (the mouth of) the <b>tunnel</b>, He recognizes that <b>song</b></i> (i.e., from the first few notes), <i>They came upon (an expanse of) <b>desert</b>, Let's wait for <b>daybreak</b>, I'm working out a <b>plan</b></i> (i.e., that I just thought of).<br/>In verbal contexts it would correspond to the English ‘to begin (to)…’ or ‘to start (to)…’ as in <i>He began reading, It’s starting to molt,</i> or <i>She goes on a diet every winter</i>.",
+                "image":"http://ithkuil.net/images/3-4-3c.jpg"
             },
             "ATV":{
-                "name":"Attentuative",
-                "desc":"N/A"
+                "name":"Attenuative",
+                "desc":"The ATTENUATIVE extension focuses on the end, termination, last portion, or trailing boundary of a noun, without focusing on the preceding or previously existing state of the noun. It would be used in translating the words <i>water, story,</i> and <i>arrival</i> in the sentences <i>There’s no <b>water</b></i> (i.e., we ran out), <i>I like the <b>end of that story</b></i>, and <i>We await your <b>arrival</b></i>. With verbs, it is illustrated by the sentences <i>It finished molting</i> or <i>She’s come off her diet</i>.",
+                "image": "http://ithkuil.net/images/3-4-4c.jpg"
             },
             "GRA":{
                 "name":"Graduative",
-                "desc":"N/A"
+                "desc":"The GRADUATIVE extension is the inverse of the DEPLETIVE (below), focusing on a diffuse, extended “fade-in” or gradual onset of a noun. It would be used in translating the words <i>darkness, wonder,</i> and <i>music</i> in the following sentences: <i><b>Darkness</b> came upon us, I felt a growing sense of <b>wonder</b>, The <b>music</b> was very soft at first</i>. With verbs it is illustrated by verbs and phrases such as to fade in, to start gradually, to build up, and similar notions, e.g., <i>She's been eating more and more lately</i>.",
+                "image":"http://ithkuil.net/images/3-4-6c.jpg"
             },
             "DPL":{
                 "name":"Depletive",
-                "desc":"N/A"
+                "desc": "The DEPLETIVE extension focuses on the terminal boundary or “trailing” edge of a noun, where this terminus is ill-defined, “diffuse” or extended to some degree, (i.e. the at-hand context of the noun “peters out” or terminates gradually). Essentially, it applies to any context involving actual or figurative fading. It would be used in translating the words <i>water, strength,</i> and <i>twilight</i> in the sentences <i>He drank the last of the <b>water</b>, I have little <b>strength</b> left, She disappeared into the <b>twilight</b></i>. With verbs, it is exemplified by the phrases to wind down, to fade out, to disappear gradually and similar notions, e.g., <i>She's eating less and less these days</i>.",
+                "image":"http://ithkuil.net/images/3-4-5c.jpg"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Extension refers to the spatial and temporal extent to which you are considering the root word; are you referring to all of it? The start of it? Some part in the middle of it?"
     },
 
     "persp": {
@@ -331,14 +337,14 @@
         "options": {
             "NRM": {
                 "name":"Normal",
-                "desc":"N/A"
+                "desc":"Things that are real or real things that have happened"
             },
             "RPV": {
                 "name":"Representative",
-                "desc":"N/A"
+                "desc":"Things that are potentially real (\"It seems\"/\"I think it's\") or imagined"
             }
         },
-        "popupdesc":""
+        "popupdesc":"The Ithkuil category of Essence explicitly distinguishes real-world actualities from their alternative, imagined or potential counterparts. The two essences are termed NORMAL and REPRESENTATIVE, the former being the default essence denoting real-world nouns and verbs, the latter denoting alternative counterparts."
     },
 
     "vn": {
@@ -347,26 +353,26 @@
         "options": {
             "val": {
                 "name":"Valence",
-                "desc":"N/A"
+                "desc":""
             },
             "pha": {
                 "name":"Phase",
-                "desc":"N/A"
+                "desc":""
             },
             "eff": {
                 "name":"Effect",
-                "desc":"N/A"
+                "desc":""
             },
             "lvl": {
                 "name":"Level",
-                "desc":"N/A"
+                "desc":""
             },
             "asp": {
                 "name":"Aspect",
-                "desc":"N/A"
+                "desc":""
             }
         },
-        "popupdesc":"probably going to delete this"
+        "popupdesc":"Determines which of the linked categories (listed below) will actually be shown on the word. All others are showable via <a href=\"http://www.ithkuil.net/affixes%20v_0_7_5.pdf\" target=\"_blank\">affix</a> if absolutely necessary, but will not be shown otherwise."
     },
 
     "val": {
@@ -419,42 +425,42 @@
         "options": {
             "PCT":{
                 "name":"Punctual",
-                "desc":"N/A"
+                "desc":"The PUNCTUAL describes an act, condition, or event which is point-like, momentary or instantaneous in nature, such as an explosion, a flash of lightning, a blow, a single handclap, a collision between two objects, a stab of pain, a single cough, the clicking of a lock, etc.<br/>It can be visually represented along a timeline by a single point, e.g., <b>•</b>"
             },
             "ITR":{
                 "name":"Iterative",
-                "desc":"N/A"
+                "desc":"The ITERATIVE refers to a momentary or instantaneous event, like the PUNCTUAL above, which repeats itself in a rapid, on/off, staccato manner, like a machine gun burst, strobe light burst, an alarm bell ringing, or the quick unconscious tapping of a finger, the whole comprising a single event.<br/>Visual representation: <b>• • • •</b>"
             },
             "REP":{
                 "name":"Repetitive",
-                "desc":"N/A"
+                "desc":"The REPETITIVE refers to a relatively brief event of indeterminate or vague duration (i.e., as with the default above), but repeated in an on/off staccato manner, like a car horn being honked repeatedly in a fast steady rhythm, or an automatic machine press.<br/>Visual representation: <b>— — ——</b>"
             },
             "ITM":{
                 "name":"Intermittent",
-                "desc":"N/A"
+                "desc":"The INTERMITTENT is similar to the ITERATIVE above, identifying a repetitive occurrence of a PUNCTUAL event, however, unlike the ITERATIVE, the duration of time between repetitions is relatively long and contextually relevant. It would be used in describing the downbeat pattern of a pop song, the ongoing snapping of fingers to music, the steady one-drop-at-a-time dripping of a faucet, etc.<br/>Visual representation: <b>•⠀⠀⠀•⠀⠀⠀•⠀⠀⠀•</b>"
             },
             "RCT":{
                 "name":"Recurrent",
-                "desc":"N/A"
+                "desc":"The RECURRENT is to the REPETITIVE as the INTERMITTENT is to the ITERATIVE. It indicates a slow repetition of a non-PUNCTUAL (default) event, where the duration between occurrences is relatively long and contextually relevant. Exemplified by the sounding of a foghorn, or the ongoing hooting of an owl.<br/>Visual representation: <b>—⠀⠀⠀—⠀⠀⠀—⠀⠀⠀—</b>"
             },
             "FRE":{
                 "name":"Frequentative",
-                "desc":"N/A"
+                "desc":"The FREQUENTATIVE indicates an iterative occurrence (a single set of punctual repetitions) which in turn repeats at intervals, the whole considered as a single event. Examples would be the repetitive sets of hammerings of a woodpecker or the repeated short bursts of a jackhammer.<br/>Visual representation: <b>• • •⠀⠀⠀• • •⠀⠀⠀• • •⠀⠀⠀• • •</b>"
             },
             "FRG":{
                 "name":"Fragmentative",
-                "desc":"N/A"
+                "desc":"The FRAGMENTATIVE indicates a random pattern of punctual occurrences, the whole considered as a single event.<br/>Visual representation: <b>• •⠀⠀⠀• • •⠀⠀⠀⠀⠀• •⠀⠀⠀• • • • •⠀⠀⠀⠀⠀•⠀⠀⠀• •</b>"
             },
             "VAC":{
                 "name":"Vacillative",
-                "desc":"N/A"
+                "desc":"The VACILLATIVE functions as a non-punctual counterpart to the FRAGMENTATIVE.<br/>Visual representation: <b>—— — —⠀⠀⠀— —⠀⠀⠀— —⠀⠀⠀—⠀⠀⠀⠀⠀— — —</b>"
             },
             "FLC":{
                 "name":"Fluctuative",
-                "desc":"N/A"
+                "desc":"The FLUCTUATIVE indicates a random pattern of both punctual and longer occurrences. An example would be the “sputtering” of a lighted fuse, the random patterns of tongues of flames, the chirping of birds in the wild, etc.<br/>Visual representation: <b>— • • —⠀⠀• — • •⠀⠀⠀—⠀⠀⠀⠀⠀• • — • • •⠀⠀⠀• •⠀⠀⠀—— • — • •</b>"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Phase refers to variances in the temporal pattern of how an act, condition or event occurs.<br/>The default (i.e. if the Phase is not specified) is only one occurrence.<br/>Said default can be visually represented along a progressive timeline by a short dash, e.g., <b>—</b>"
     },
 
     "eff": {
@@ -463,42 +469,42 @@
         "options": {
             "1:BEN":{
                 "name":"Beneficial to Speaker",
-                "desc":"N/A"
+                "desc":"Whatever the word is describing is beneficial to the speaker."
             },
             "2:BEN":{
                 "name":"Beneficial to Addressee",
-                "desc":"N/A"
+                "desc":"Whatever the word is describing is beneficial to the addressee."
             },
             "3:BEN":{
                 "name":"Beneficial to 3rd Party",
-                "desc":"N/A"
+                "desc":"Whatever the word is describing is beneficial to some third party (who is probably referred to by another word)."
             },
             "SLF:BEN":{
                 "name":"Beneficial to Formative",
-                "desc":"N/A"
+                "desc":"Whatever the word is describing is beneficial to itself."
             },
             "UNK":{
                 "name":"Unknown",
-                "desc":"N/A"
+                "desc":"The benefit/detriment from this word is unknown.<br/>Note that this is <b>not the same as no benefit/detriment</b>."
             },
             "SLF:DET":{
                 "name":"Detrimental to Formative",
-                "desc":"N/A"
+                "desc":"Whatever the word is describing is detrimental to itself."
             },
             "3:DET":{
                 "name":"Detrimental to 3rd Party",
-                "desc":"N/A"
+                "desc":"Whatever the word is describing is detrimental to some third party (who is probably referred to by another word)."
             },
             "2:DET":{
                 "name":"Detrimental to Addressee",
-                "desc":"N/A"
+                "desc":"Whatever the word is describing is detrimental to the addressee."
             },
             "1:DET":{
                 "name":"Detrimental to Speaker",
-                "desc":"N/A"
+                "desc":"Whatever the word is describing is detrimental to the speaker."
             }
         },
-        "popupdesc":""
+        "popupdesc":"<b>Effect</b> is used to describe who a certain concept (the word) is beneficial or detrimental to."
     },
 
     "lvl": {
@@ -507,42 +513,42 @@
         "options": {
             "MIN":{
                 "name":"Minimal",
-                "desc":"N/A"
+                "desc":"X's M is at its least possible<br/>X is at its least M possible"
             },
             "SBE":{
                 "name":"Subequative",
-                "desc":"N/A"
+                "desc":"X's M is less than or equal to to Y (or less than or equal to before)<br/>X is less M than or equal to Y/before"
             },
             "IFR":{
                 "name":"Inferior",
-                "desc":"N/A"
+                "desc":"X's M is the least within/among Y (or ever)<br/>X is the least M within/among Y"
             },
             "DFT":{
                 "name":"Deficient",
-                "desc":"N/A"
+                "desc":"X's M is less than Y (or less than before)<br/>X is less M than Y (or than before) "
             },
             "EQU":{
                 "name":"Equative",
-                "desc":"N/A"
+                "desc":"X's M is the same as Y (or as before)<br/>X is as M as Y (or as before)"
             },
             "SUR":{
                 "name":"Surpassive",
-                "desc":"N/A"
+                "desc":"X's M is more than Y (or than before)<br/>X is more M than Y (or than before)"
             },
             "SPL":{
                 "name":"Superlative",
-                "desc":"N/A"
+                "desc":"X's M is the most within/among Y (or ever)<br/>X is the most M within/among Y (or ever)"
             },
             "SPQ":{
                 "name":"Superequative",
-                "desc":"N/A"
+                "desc":"X's M is more than or equal to Y (or more than or equal to before)<br/>X is more M than or equal to Y/before"
             },
             "MAX":{
                 "name":"Maximal",
-                "desc":"N/A"
+                "desc":"X's M is at its most possible<br/>X is at its most M possible"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Level is used in comparative statements, such as \"my hat is cooler than your hat\".<br/>X = this word,<br/>M = a <b>verb</b> (what quality of X is being compared),<br/>Y = a word marked with the <b>CMP case</b> (the thing being compared to)"
     },
 
     "asp": {
@@ -551,150 +557,150 @@
         "options": {
             "RTR":{
                 "name":"Retrospective",
-                "desc":"N/A"
+                "desc":"This aspect operates in conjunction with Perspective to create various equivalents to Western tense categories.<br/>With the MONADIC, the RETROSPECTIVE equates with the English simple past tense.<br/>With the NOMIC and ABSTRACT, it adds a sense of ‘and it’s always been that way’."
             },
             "PRS":{
                 "name":"Prospective",
-                "desc":"N/A"
+                "desc":"Like the RETROSPECTIVE above, this aspect operates in conjunction with Perspective to create various equivalents to Western tense categories.<br/>With the MONADIC, the PROSPECTIVE equates with the English future tense.<br/>With the NOMIC and ABSTRACT, it adds a sense of ‘and it’ll always be that way’ or ‘from now on’."
             },
             "HAB":{
                 "name":"Habitual",
-                "desc":"N/A"
+                "desc":"When used with the MONADIC perspective, this aspect conveys the idea of ‘always’ or ‘continues to’."
             },
             "PRG":{
                 "name":"Progressive",
-                "desc":"N/A"
+                "desc":"This aspect conveys the idea of an act in progress, similar to the English construction ‘in the midst of [verb] + ing’ or the use of the present participle in Spanish."
             },
             "IMM":{
                 "name":"Imminent",
-                "desc":"N/A"
+                "desc":"Conveys that an action, state or event is imminent. Translates phrases such as ‘(just) about to’ or ‘on the verge of’ as in <i>I think Carl is about to cry</i>."
             },
             "PCS":{
                 "name":"Precessive",
-                "desc":"N/A"
+                "desc":"Conveys that an action, state or event has immediately preceded. Translates such phrases as ‘just’ or ‘just now,’ as in <i>We just saw a clown in the toy store</i>."
             },
             "REG":{
                 "name":"Regulative",
-                "desc":"N/A"
+                "desc":"Conveys the idea of participation or involvement in an action, state, or event over an amount of time extending from the past into the future relative to the contextual present. Translates English phrases such as ‘engaged in’ or ‘involved in’ as in <i>Her husband is engaged in construction of the new bridge</i>."
             },
             "SMM":{
                 "name":"Summative",
-                "desc":"N/A"
+                "desc":"meaning ‘...(have) already X’d’"
             },
             "ATP":{
                 "name":"Anticipatory",
-                "desc":"N/A"
+                "desc":"meaning ‘have yet to (begin) X-ing’"
             },
             "RSM":{
                 "name":"Resumptive",
-                "desc":"N/A"
+                "desc":"Conveys the idea of an act, state, or event resuming after having previously ceased, as in <i>The girl resumed singing</i>, or <i>He is starting to laugh again</i>."
             },
             "CSS":{
                 "name":"Cessative",
-                "desc":"N/A"
+                "desc":"Conveys the idea of cessation of an event, state or action. Translates English phrases such as ‘stop,’ ‘discontinue,’ or ‘cease,’ as in <i>They stopped dancing at midnight</i>."
             },
             "PAU":{
                 "name":"Pausal",
-                "desc":"N/A"
+                "desc":"Indicates a pause in an action, state or event, with an implied intention to resume. Translates phrases such as ‘take a break from’ or ‘pause in’ as in <i>Mother took a break from cleaning to gossip with her friends</i>."
             },
             "RGR":{
                 "name":"Regressive",
-                "desc":"N/A"
+                "desc":"Conveys the idea of a return to an original or previous action, state or event after a long hiatus involving an intervening change of state or situation, as translated by the phrase ‘return to.’ The REGRESSIVE should be distinguished from the RESUMPTIVE above, which merely implies the restarting after a stop or pause without an intervening change of state or situation. An example would be <i>Mr. Yates returned to golf after recovering from his stroke</i>."
             },
             "PCL":{
                 "name":"Preclusive",
-                "desc":"N/A"
+                "desc":"Conveys the fact that an action, state, or event takes place from inception to conclusion all in one contextual segment, translating such phrases as ‘all at once,’ ‘all in one go,’ ‘without stopping,’ etc. as in <i>Walter drank the entire bottle in one gulp</i>."
             },
             "CNT":{
                 "name":"Continuative",
-                "desc":"N/A"
+                "desc":"Conveys the idea that an action, event, or state continues on. Translates phrases such as ‘keep on,’ ‘still,’ ‘stay,’ ‘yet,’ etc. When used in a negative sentence, conveys the idea of English ‘no longer’ or ‘not anymore’ as in <i>She kept on singing, You're still staring at me, I've yet to meet him, Sam no longer loves you / Sam doesn't love you anymore</i>."
             },
             "ICS":{
                 "name":"Incessative",
-                "desc":"N/A"
+                "desc":"Conveys that an action, state or event continues on without stopping. Translates such English adverbials as ‘…on and on’ or ‘…away’ as in <i>They danced the night away</i> or <i>They've been battling on and on since last year</i>."
             },
             "EXP":{
                 "name":"Experiential",
-                "desc":"N/A"
+                "desc":"Translates English ‘ever’ in the sense of ‘within the realm of one’s experience’ or ‘at some point in one’s experience,’ as in <i>Does he ever shut up?</i><br/>Note the EXPERIENTIAL does not equate to ‘ever’ when it means ‘always,’ as in <i>Ever does he seek his destiny</i> nor as an adverb of mere emphasis as in <i>Was she ever tired</i>."
             },
             "IRP":{
                 "name":"Interruptive",
-                "desc":"N/A"
+                "desc":"meaning ‘to get interrupted while X-ing’ or ‘to X only so far or so much before having to stop’"
             },
             "PMP":{
                 "name":"Preemptive",
-                "desc":"N/A"
+                "desc":"Emphasizes the singularity and initial occurrence of an action, state or event, as translated by such English phrases as ‘for once’ or ‘just once,’ as well as the anticipation preceding a long-expected situation, as translated by phrases such as ‘at last,’ ‘after all this time,’ ‘finally,’ and ‘for the first time.’"
             },
             "CLM":{
                 "name":"Climactic",
-                "desc":"N/A"
+                "desc":"Emphasizes the finality of an action, state or event, as translated by such English phrases as ‘once and for all’ or ‘for the last time.’"
             },
             "DLT":{
                 "name":"Dilatory",
-                "desc":"N/A"
+                "desc":"meaning ‘(be) long-delay(ed) in being/doing X’ "
             },
             "TMP":{
                 "name":"Temporary",
-                "desc":"N/A"
+                "desc":"Conveys that an action, state or event is being considered or is applicable only to the present subjective context or range of the contextual present, as translated by phrases such as ‘for the time being’ or ‘but only for the moment’ or ‘for now’ as in <i>This will be sufficient for now</i> or <i>For the time being you'll have to drink water</i>."
             },
             "XPD":{
                 "name":"Expenditive",
-                "desc":"N/A"
+                "desc":"Conveys an all-consuming action, state, or event which interferes with or prevents other events from occurring. It translates English phrases such as ‘spend one’s time’ or ‘away’ as in <i>Mother spends her life worrying</i> or <i>He's pining away</i>."
             },
             "LIM":{
                 "name":"Limitative",
-                "desc":"N/A"
+                "desc":"meaning ‘to be/do X (just) in time’; indicates an act/event that culminates an anticipatory context"
             },
             "EPD":{
                 "name":"Expeditive",
-                "desc":"N/A"
+                "desc":"Conveys a sense of haste associated with an action or event. Translates English ‘hurry (up)’ as in <i>Hurry up and finish</i> or <i>They ate in a hurry</i>."
             },
             "PTC":{
                 "name":"Protractive",
-                "desc":"N/A"
+                "desc":"‘take one’s time X-ing’"
             },
             "PPR":{
                 "name":"Preparatory",
-                "desc":"N/A"
+                "desc":"meaning ‘to be/do X in advance’, ‘to be/do X in preparation for a future situation’"
             },
             "DCL":{
                 "name":"Disclusive",
-                "desc":"N/A"
+                "desc":"Focuses on the revelatory nature of an action, state or event, translating phrases such as ‘turn out to be,’ ‘turn out that…’ and ‘be revealed that….’"
             },
             "CCL":{
                 "name":"Conclusive",
-                "desc":"N/A"
+                "desc":"Conveys the direct outcome of an action, state or event within the short-term context of the situation at hand. Translates phrases such as ‘end up…, come to, reach the point where,’ as in <i>I ended up crashing the car</i> or <i>He drank to the point where he passed out</i>."
             },
             "CUL":{
                 "name":"Culminative",
-                "desc":"N/A"
+                "desc":"Similar to the CONCLUSIVE above, but with a focus on the eventual, long-term outcome over an extended period of time or through a series of developmental steps. Compare the following examples with the CONCLUSIVE aspect above: <i>In the end, I'll have to leave town; <i>Things got to the point where the mayor got involved; Eventually, they fell in love</i>."
             },
             "IMD":{
                 "name":"Intermediative",
-                "desc":"N/A"
+                "desc":"Conveys the idea that the action, state, or event takes place at some point along the timeline of, or within the duration of, another action, state, event, or background context, as translated by the phrases ‘at some point’ or ‘somewhere along the way….’"
             },
             "TRD":{
                 "name":"Tardative",
-                "desc":"N/A"
+                "desc":"Conveys the idea that an action, state, or event lessens, dwindles, or slackens in energy, intensity, or effect, impliedly by exhaustion of the active source of energy or agency, or by dissipation of the foundational context involved. Translates such phrases as ‘to get tired of,’ ‘peter out,’ ‘trail off,’ etc."
             },
             "TNS":{
                 "name":"Transitional",
-                "desc":"N/A"
+                "desc":"Focuses on the initial stage of preparation, adjustment, or accustomization to an action, state or event, translated by phrases such as ‘take up,’ ‘start to,’ etc. implying a long-term process of initialization, as in <i>I'm planning to take up golf</i>."
             },
             "ITC":{
                 "name":"Intercommutative",
-                "desc":"N/A"
+                "desc":"Conveys the idea of “sequential reciprocity,” meaning that the action or event is a consequent reciprocation triggered by, or in reaction to, an initiating action or event. It translates the English verbal particle ‘back’ as in <i>The boy threw it back</i> or <i>She stared back at the men ogling her</i>."
             },
             "MTV":{
                 "name":"Motive",
-                "desc":"N/A"
+                "desc":"Conveys that an action, state or event involves physical removal or absence of the participant from the present context of discourse. Translates such phrases as ‘be off …-ing’ or ‘go off to …’ as in <i>Dad's off hunting</i> or <i>They went off to cavort with the clowns</i>."
             },
             "SQN":{
                 "name":"Sequential",
-                "desc":"N/A"
+                "desc":"This aspect conveys the idea a “sequential progressive” in which a series of contextually identical instances is seen as comprising a single event, usually with an implied culmination point. It translates the English use of ‘off’ as in <i>He's checking off each item as it is inventoried</i>, or <i>The sheep died off from the disease</i>."
             }
         },
-        "popupdesc":""
+        "popupdesc":"Aspect provides detailed and specific temporal information about the word, <i>not</i> in relation to the speaker's present moment of utterance (as with Perspective), but rather in relation to the contextual “present” of the act, condition, or event being spoken about.<br/>It makes the most sense when applied to verbs (both unframed and framed)."
     },
 
     "mood": {
@@ -703,30 +709,30 @@
         "options": {
             "FAC":{
                 "name":"Factual",
-                "desc":"N/A"
+                "desc":"The FACTUAL mood signifies that the factuality of the speaker’s statement is certain and that there either is no underlying presupposition to the statement, or if there is, its factuality is also certain or has no bearing on the factuality of the statement.<br/><b>TRUE / TRUE or NONE</b>"
             },
             "SUB":{
                 "name":"Subjective",
-                "desc":"N/A"
+                "desc":"The SUBJUNCTIVE mood indicates that the factuality of an explicit or implicit presupposition underlying the statement is certain, but the factuality of the speaker’s statement itself is questionable or uncertain, the specific nuance of factuality intended being subject to the particular Bias and Validation associated with the verb. Corresponds roughly with English ‘may,’ ‘maybe’ or ‘might,’ with the added distinction that an explicit or implicit (i.e., underlying) presupposition is true.<br/><b>UNCERTAIN / TRUE</b>"
             },
             "ASM":{
                 "name":"Assumptive",
-                "desc":"N/A"
+                "desc":"The ASSUMPTIVE mood functions identically to the FACTUAL except that the factuality of an underlying presupposition is unknown. It therefore conveys an act, state, or event whose factuality is dependent on whether something else is factual, thus corresponding to certain usages of English ‘maybe’ and ‘will’ (where ‘will’ primarily conveys possibility, not future tense).<br/><b>TRUE / UNCERTAIN</b>"
             },
             "SPC":{
                 "name":"Speculative",
-                "desc":"N/A"
+                "desc":"The SPECULATIVE mood indicates that the factuality of both the presupposition and the statement itself are unknown. Its translation into English is dependent on the specific context, sometimes corresponding to ‘may,’ ‘maybe’ or ‘might,’ and at other times corresponding to the auxiliary ‘would.’<br/><b>UNCERTAIN / UNCERTAIN</b>"
             },
             "COU":{
                 "name":"Counterfactive",
-                "desc":"N/A"
+                "desc":"The COUNTERFACTIVE mood indicates that the factuality of the underlying presupposition is false or unreal but that the factuality of the statement would otherwise be true. It thus corresponds to the English construction of auxiliary ‘would’ or ‘would have’ in its use to show counterfactuality (i.e., what would have been if a false presupposition had been true).<br/><b>TRUE / FALSE</b>"
             },
             "HYP":{
                 "name":"Hypothetical",
-                "desc":"N/A"
+                "desc":"The HYPOTHETICAL mood indicates that the factuality of the underlying presupposition is false or unreal and that the factuality of the statement itself is uncertain. It thus corresponds to the English construction of auxiliary ‘might have’ in its use to show possible counterfactuality (i.e., what might have been if a false presupposition had been true).<br/><b>UNKNOWABLE / FALSE</b>"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Mood refers to the knowability and truthfulness of a statement, and describes both the truth of the actual statement and any underlying presuppositions.<br/>Alongside Illocution, Expectation and Validation, it refers to the whole statement.<br/><b>FULL STATEMENT / PRESUPPOSITIONS</b>"
     },
     
     "casc": {
@@ -1047,14 +1053,14 @@
         "options": {
             "ASR":{
                 "name":"Assertive",
-                "desc":"N/A"
+                "desc":"Statement is an assertion/proposition about the world which constitutes a truth claim"
             },
             "PFM":{
                 "name":"Performative",
-                "desc":"N/A"
+                "desc":"Statement is other than a truth claim; e.g., a declaration, a command, question, or a “commissive” (i.e., promise, vow, oath, guarantee)"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Illocution simply determines whether something is a truth claim or not.<br/>Alongside Mood, Expectation and Validation, it refers to the whole statement."
     },
 
     "exp": {
@@ -1063,18 +1069,18 @@
         "options": {
             "COG":{
                 "name":"Cognitive",
-                "desc":"N/A"
+                "desc":"Addressee expected to listen and consider the statement"
             },
             "RSP":{
                 "name":"Responsive",
-                "desc":"N/A"
+                "desc":"Addressee expected to verbally respond to the statement, whether as acknowledgment, agreement, or with a counter-statement"
             },
             "EXE":{
                 "name":"Executive",
-                "desc":"N/A"
+                "desc":"Addressee expected to physically (re-)act in response to the statement"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Expectation is the expected response from the addressee in regards to the statement.<br/>Alongside Mood, Illocution and Validation, it refers to the whole statement."
     },
 
     "vld": {
@@ -1083,37 +1089,37 @@
         "options": {
             "OBS":{
                 "name":"Observational",
-                "desc":"N/A"
+                "desc":"The statement is true because of present sensory knowledge or present sensory experience: “I perceive... / I know...” "
             },
             "REC":{
                 "name":"Recollective",
-                "desc":"N/A"
+                "desc":"The statement is true because of past sensory knowledge or past sensory experience: “I remember... / I know (from memory)...”"
             },
             "PUP":{
                 "name":"Purportive",
-                "desc":"N/A"
+                "desc":"The statement is true because of knowledge from a definitive/(quasi-)verifiable 3rd party source: “I've read... / (an expert) has said...”"
             },
             "RPR":{
                 "name":"Reportive",
-                "desc":"N/A"
+                "desc":"The statement is true because of knowledge from a 3rd party: “I heard (from someone)... / someone has said...”"
             },
             "IMA":{
                 "name":"Imaginary",
-                "desc":"N/A"
+                "desc":"The statement is <b>NOT</b> true because it is: an unreal statement, not intended as true, based on whim, imagination, dream, altered mental state, etc."
             },
             "CVN":{
                 "name":"Conventional",
-                "desc":"N/A"
+                "desc":"The statement is true because of cultural/conventional (i.e., collectively agreed-upon) knowledge: “They say... / It is said...”"
             },
             "ITU":{
                 "name":"Intuitive",
-                "desc":"N/A"
+                "desc":"The statement is true because of intuition, a hunch, subjective feeling, past experiences, etc. - “I feel... / I have a hunch... / something tells me...”"
             },
             "INF":{
                 "name":"Inferential",
-                "desc":"N/A"
+                "desc":"The statement is true because of inference from evidence (or absence of alternatives), induction, extrapolation, etc. “I infer... / I reason...”"
             }
         },
-        "popupdesc":""
+        "popupdesc":"Validation <b>only applies when the Illocution is Assertive</b>.<br/>It refers to the evidential basis for a statement (i.e. why it's true).<br/>Alongside Mood, Illocution and Validation, it refers to the whole statement."
     }
 }

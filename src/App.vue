@@ -84,7 +84,8 @@
           </div>
         </div>
         <div v-else-if="modalID != 'shcut'" v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
-          <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
+          <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}" :style="modalContent.options[option].image ? 'min-height:170px;' : ''">
+            <img v-if="modalContent.options[option].image" :src="modalContent.options[option].image" :alt="modalContent.options[option].name" style="float: right; height:150px; padding-top: 10px; padding-left: 10px; padding-bottom: 10px;"/>
             <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
             <p v-html="modalContent.options[option].desc"></p>
           </div>
@@ -994,9 +995,9 @@ export default {
       var s8c = [];
       if (this.gOptions[this.gOptions.vn] !== "MNO") {s8c.push(this.gOptions[this.gOptions.vn])}
       if (this.gOptions.mood !== "FAC" && this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") {s8c.push(this.gOptions.mood)}
-      if (this.gOptions.casc !== "CCN" && this.gOptions.rel !== "UNF/K" || this.gOptions.concat != "0") {s8c.push(this.gOptions.casc)}
+      if (this.gOptions.casc !== "CCN" && (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != "0")) {s8c.push(this.gOptions.casc)}
       if (s8c.length > 0) {this.gloss += "-" + s8c.join(".")}
-      this.fullGloss += "-" + this.gOptions[this.gOptions.vn] + "." + (this.gOptions.rel === "UNF/K" ? this.gOptions.mood : this.gOptions.casc)
+      this.fullGloss += "-" + this.gOptions[this.gOptions.vn] + "." + ((this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") ? this.gOptions.mood : this.gOptions.casc)
       // Slot 9
       if (this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") {
         //IEV
