@@ -1,7 +1,8 @@
 <template>
   <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
   <div id="content">
-    <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
+    <span class="close" @click="openModal('settings')"><i class="fa-solid fa-gear fa-xs"></i></span>
+    <h1> Ithkapp (hwirbuvie-ekţgyil)</h1>
     <p class="smalltext">Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
@@ -62,32 +63,53 @@
         <button v-for="tabcode in modalTabs" :key="tabcode" :class="{active: tabcode === modalID}" @click="closeModal(); openModal(tabcode);">{{gData[tabcode].title}}</button>
         <span class="close" @click="closeModal()">&times;</span>
       </div>
-      <h2 style="text-align:center;" id="top">{{modalContent.title}}</h2>
-      <p style="text-align:center;" v-html="modalContent.popupdesc"></p>
-      <div v-if="modalContent.type == ''">
-        <div v-if="modalID == 'c'" class="tab">
-          <button class="tablinks active" @click="changeClassTab('THM','PLM','Allcases')" id="Allcases">All</button>
-          <button class="tablinks" @click="changeClassTab('THM','IND','Transrelative')" id="Transrelative">Transrelative</button>
-          <button class="tablinks" @click="changeClassTab('POS','PAR','Appositive')" id="Appositive">Appositive</button>
-          <button class="tablinks" @click="changeClassTab('APL','CSD','Associative')" id="Associative">Associative</button>
-          <button class="tablinks" @click="changeClassTab('FUN','SIT','Adverbial')" id="Adverbial">Adverbial</button>
-          <button class="tablinks" @click="changeClassTab('PRN','RLT','Relational')" id="Relational">Relational</button>
-          <button class="tablinks" @click="changeClassTab('ACT','VOC','Affinitive')" id="Affinitive">Affinitive</button>
-          <button class="tablinks" @click="changeClassTab('LOC','PLM','Spatio-Temporal')" id="Spatio-Temporal">Spatio-Temporal</button>
-        </div>
-        <div v-if="modalID == 'c'">
-          <div v-for="option in Object.keys(modalContent.options).slice(Object.keys(modalContent.options).indexOf(this.casePopupStart),Object.keys(modalContent.options).indexOf(this.casePopupEnd)+1)" v-bind:key="modalContent.options[option]">
-            <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
+      <div :class="{hidden: modalID != 'settings'}" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
+        <h2 style="text-align:center;">Settings</h2>
+        <h3>IPA (Pronunciation)</h3>
+        <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
+        <label>Pronunciation of ⟨e⟩: </label><select @change="event => settingsUpdate(event, 'e')"><option>[ɛ]</option><option>[e]</option></select><br/><br/>
+        <label>Pronunciation of ⟨ë⟩: </label><select @change="event => settingsUpdate(event, 'ë')"><option>[ɤ]</option><option>[ʌ]</option><option>[ə]</option></select><br/><br/>
+        <label>Pronunciation of ⟨i⟩: </label><select @change="event => settingsUpdate(event, 'i')"><option>[i]</option><option>[ɪ]</option></select><br/><br/>
+        <label>Pronunciation of ⟨o⟩: </label><select @change="event => settingsUpdate(event, 'o')"><option>[ɔ]</option><option>[o]</option></select><br/><br/>
+        <label>Pronunciation of ⟨ö⟩: </label><select @change="event => settingsUpdate(event, 'ö')"><option>[œ]</option><option>[ø]</option></select><br/><br/>
+        <label>Pronunciation of ⟨u⟩: </label><select @change="event => settingsUpdate(event, 'u')"><option>[ʊ]</option><option>[u]</option></select><br/><br/>
+        <label>Pronunciation of ⟨ü⟩: </label><select @change="event => settingsUpdate(event, 'ü')"><option>[ʉ]</option><option>[y]</option></select><br/><br/>
+        <label>Pronunciation of ⟨x⟩: </label><select @change="event => settingsUpdate(event, 'x')"><option>[x]</option><option>[χ]</option></select><br/><br/>
+        <label>Pronunciation of ⟨řř⟩: </label><select @change="event => settingsUpdate(event, 'řř')"><option>[ʁː]</option><option>[ʀ]</option></select><br/><br/>
+        <label>Pronunciation of ⟨hl⟩, ⟨hr⟩, ⟨hm⟩, ⟨hn⟩ at the start of a word: </label>
+        <select @change="event => settingsUpdate(event, 'hX')">
+          <option value="dev">Devoiced</option>
+          <option value="h+">As written</option>
+        </select>
+      </div>
+      <div v-if="modalID != 'settings'">
+        <h2 style="text-align:center;">{{modalContent.title}}</h2>
+        <p style="text-align:center;" v-html="modalContent.popupdesc"></p>
+        <div v-if="modalContent.type == ''">
+          <div v-if="modalID == 'c'" class="tab">
+            <button class="tablinks active" @click="changeClassTab('THM','PLM','Allcases')" id="Allcases">All</button>
+            <button class="tablinks" @click="changeClassTab('THM','IND','Transrelative')" id="Transrelative">Transrelative</button>
+            <button class="tablinks" @click="changeClassTab('POS','PAR','Appositive')" id="Appositive">Appositive</button>
+            <button class="tablinks" @click="changeClassTab('APL','CSD','Associative')" id="Associative">Associative</button>
+            <button class="tablinks" @click="changeClassTab('FUN','SIT','Adverbial')" id="Adverbial">Adverbial</button>
+            <button class="tablinks" @click="changeClassTab('PRN','RLT','Relational')" id="Relational">Relational</button>
+            <button class="tablinks" @click="changeClassTab('ACT','VOC','Affinitive')" id="Affinitive">Affinitive</button>
+            <button class="tablinks" @click="changeClassTab('LOC','PLM','Spatio-Temporal')" id="Spatio-Temporal">Spatio-Temporal</button>
+          </div>
+          <div v-if="modalID == 'c'">
+            <div v-for="option in Object.keys(modalContent.options).slice(Object.keys(modalContent.options).indexOf(this.casePopupStart),Object.keys(modalContent.options).indexOf(this.casePopupEnd)+1)" v-bind:key="modalContent.options[option]">
+              <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
+                <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
+                <p v-html="modalContent.options[option].desc"></p>
+              </div>
+            </div>
+          </div>
+          <div v-else-if="modalID != 'shcut'" v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
+            <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}" :style="modalContent.options[option].image ? 'min-height:170px;' : ''">
+              <img v-if="modalContent.options[option].image" :src="modalContent.options[option].image" :alt="modalContent.options[option].name" style="float: right; height:150px; padding-top: 10px; padding-left: 10px; padding-bottom: 10px;"/>
               <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
               <p v-html="modalContent.options[option].desc"></p>
             </div>
-          </div>
-        </div>
-        <div v-else-if="modalID != 'shcut'" v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
-          <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}" :style="modalContent.options[option].image ? 'min-height:170px;' : ''">
-            <img v-if="modalContent.options[option].image" :src="modalContent.options[option].image" :alt="modalContent.options[option].name" style="float: right; height:150px; padding-top: 10px; padding-left: 10px; padding-bottom: 10px;"/>
-            <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
-            <p v-html="modalContent.options[option].desc"></p>
           </div>
         </div>
       </div>
@@ -198,7 +220,13 @@ export default {
         "o": "ɔ", // [ɔ] or [o]
         "ö": "œ", // [œ] or [ø]
         "u": "ʊ", // [ʊ] or [u]
-        "ü": "ʉ"  // [ʉ] or [y]
+        "ü": "ʉ", // [ʉ] or [y]
+        "x": "x", // [x] or [χ]
+        "řř": "ʁː", // [ʁː] and [ʀ]
+        "hl": "ɬ", // [ɬ] or [hl]
+        "hr": "ɾ̥", // [ɾ̥] or [hɾ]
+        "hm": "m̥", // [m̥] or [hm]
+        "hn": "n̥"  // [n̥] or [hn]
       },
       shortcutting: false,
       shcuttypeA: 0,
@@ -252,6 +280,25 @@ export default {
     closeModal() {
       console.log("Modal closing for",this.modalID);
       document.getElementById("modal").style.display = "none";
+    },
+    settingsUpdate(event,val="") {
+      if (["a","e","ë","i","o","ö","u","ü","x","řř"].includes(val)) {
+        this.ipaPreference[val] = event.target.value.slice(1, -1);
+        this.IPAcalcs();
+      } else if (val == "hX") {
+        if (event.target.value == "dev") {
+          this.ipaPreference["hl"] = "ɬ";
+          this.ipaPreference["hr"] = "ɾ̥";
+          this.ipaPreference["hm"] = "m̥";
+          this.ipaPreference["hn"] = "n̥";
+        } else {
+          this.ipaPreference["hl"] = "hl";
+          this.ipaPreference["hr"] = "hɾ";
+          this.ipaPreference["hm"] = "hm";
+          this.ipaPreference["hn"] = "hn";
+        }
+        this.IPAcalcs();
+      }
     },
     updateFromModal(reference,value) {
       this.$refs[reference].updateValue(value);
@@ -1046,15 +1093,19 @@ export default {
             if (!(Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar))) {this.ipa += "ɹ"}
             else {this.ipa += "ɾ"}
           } else if (char === "x") {
-            this.ipa += "x"; // this should be the user's choice between [x] and [χ], which is why it has its own else if
+            this.ipa += this.ipaPreference[char]; // this should be the user's choice between [x] and [χ], which is why it has its own else if
+            if (char == nextchar) {
+              this.ipa += "ː"
+              skipnext = true;
+            }
           } else if ("rr" === char+nextchar) {
             this.ipa += "r"
             skipnext = true;
           } else if ("řř" === char+nextchar) {
-            this.ipa += "ʁ:" // again, this is the user's choice between [ʁ:] and [ʀ], which is why it also has its own else if
+            this.ipa += this.ipaPreference[char+nextchar] // again, this is the user's choice between [ʁ:] and [ʀ], which is why it also has its own else if
             skipnext = true;
           } else if (["hl","hr","hm","hn"].includes(char+nextchar) && i == 0) {
-            this.ipa += {"hl":"ɬ","hr":"ɾ̥","hm":"m̥","hn":"n̥"}[char+nextchar]; // this should be the user's choice between that and hl/hɾ/hm/hn
+            this.ipa += this.ipaPreference[char+nextchar] // this should be the user's choice as well
             skipnext = true;
           } else if (["ph","th","kh","ch","čh"].includes(char+nextchar) && (this.ithkword.charAt(parseInt(i)+2) === "" || Object.keys(this.sAccent).includes(this.ithkword.charAt(parseInt(i)+2)) || Object.values(this.sAccent).includes(this.ithkword.charAt(parseInt(i)+2)))) {
             // syllable-initial or word-final
@@ -1260,5 +1311,8 @@ export default {
 }
 .tab button.active {
   background-color: rgb(179, 255, 230);
+}
+.hidden {
+  display: none;
 }
 </style>
