@@ -7,33 +7,35 @@
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
-    <div class="section" :class="{hidden: wordType != 'normal'}"> <!-- Section 1: Root, etc. -->
-      <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" type="text" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
-      <OptionBox :json="gData.stem" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
+    <div class="section" :class="{hidden: wordType == 'suppletive'}"> <!-- Section 1: Root, etc. -->
+      <OptionBox :json="gData.affRoot" :class="{hidden: wordType != 'affRoot'}" code="affRoot" @send-message="handleSendMessage" ref="affRoot" @modal="openModal"/>
+      <OptionBox :json="gData.arDegree" :class="{hidden: wordType != 'affRoot'}" code="arDegree" @send-message="handleSendMessage" ref="arDegree" @modal="openModal"/>
+      <OptionBox :json="gData.root" :class="{hidden: wordType == 'affRoot'}" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
+      <OptionBox :json="gData.stem" :class="{hidden: wordType == 'affRoot'}" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
       <OptionBox :json="gData.spec" code="spec" @send-message="handleSendMessage" ref="spec" @modal="openModal"/>
       <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
       <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: wordType != 'normal'}"> <!-- Section 2: Concatenation & Affixes-->
+    <div class="section" :class="{hidden: wordType == 'suppletive'}"> <!-- Section 2: Concatenation & Affixes-->
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
       <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != 0"/>
       <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal"/>
       <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: wordType != 'normal'}"> <!-- Section 3: Configuration -->
+    <div class="section" :class="{hidden: wordType == 'suppletive'}"> <!-- Section 3: Configuration -->
       <h2 style="width:100%;">Configuration</h2>
       <OptionBox :json="gData.plex" code="plex" @send-message="handleSendMessage" ref="plex" @modal="openModal"/>
       <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="simil" @modal="openModal"/>
       <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="cctd" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: wordType != 'normal'}"> <!-- Section 4: Slot 6 -->
+    <div class="section" :class="{hidden: wordType == 'suppletive'}"> <!-- Section 4: Slot 6 -->
       <OptionBox :json="gData.affil" code="affil" @send-message="handleSendMessage" ref="affil" @modal="openModal"/>
       <OptionBox :json="gData.ext" code="ext" @send-message="handleSendMessage" ref="ext" @modal="openModal"/>
       <OptionBox :json="gData.persp" code="persp" @send-message="handleSendMessage" ref="persp" @modal="openModal"/>
       <OptionBox :json="gData.ess" code="ess" @send-message="handleSendMessage" ref="ess" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: wordType != 'normal'}"> <!-- Section 5: Slot 8a -->
+    <div class="section" :class="{hidden: wordType == 'suppletive'}"> <!-- Section 5: Slot 8a -->
       <OptionBox :json="gData.vn" code="vn" @send-message="handleSendMessage" ref="vn" @modal="openModal"/>
       <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage" ref="val" @modal="openModal" :disabled='this.gOptions.vn != "val"'/>
       <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage" ref="pha" @modal="openModal" :disabled='this.gOptions.vn != "pha"'/>
@@ -44,13 +46,13 @@
     <div class="section"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct -->
       <OptionBox :class="{hidden: wordType != 'suppletive'}" :json="gData.suppType" code="suppType" @send-message="handleSendMessage" ref="suppType" @modal="openModal"/>
 
-      <OptionBox :class="{hidden: wordType != 'normal'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType != 'normal'}" :show='!cascOrMood' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType != 'normal'}" :show='cascOrMood' :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
-      <OptionBox :show="cascOrMood && wordType == 'normal'" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType != 'normal'}" :show="!cascOrMood" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType != 'normal'}" :show="!cascOrMood" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType != 'normal'}" :show="!cascOrMood" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='!cascOrMood' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='cascOrMood' :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
+      <OptionBox :show="cascOrMood" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show="!cascOrMood" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show="!cascOrMood" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show="!cascOrMood" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
     </div>
   <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   </div>
@@ -67,7 +69,11 @@
       </div>
       <div :class="{hidden: modalID != 'settings'}" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
         <h2 style="text-align:center;">Settings</h2>
-        <label>Word type: </label><select @change="wordType = $event.target.value; calculateAdjunct($event.target.value);"><option>normal</option><option>suppletive</option></select>
+        <label>Word type: </label><select @change="wordType = $event.target.value; calculateAdjunct($event.target.value);">
+          <option>normal</option>
+          <option>suppletive</option>
+          <option>affRoot</option>
+        </select>
         <h3>IPA (Pronunciation)</h3>
         <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
         <label>Pronunciation of ⟨e⟩: </label><select @change="event => settingsUpdate(event, 'e')"><option>[ɛ]</option><option>[e]</option></select><br/><br/>
@@ -102,7 +108,7 @@
           <div v-if="modalID == 'c'">
             <div v-for="option in Object.keys(modalContent.options).slice(Object.keys(modalContent.options).indexOf(this.casePopupStart),Object.keys(modalContent.options).indexOf(this.casePopupEnd)+1)" v-bind:key="modalContent.options[option]">
               <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
-                <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
+                <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2","3","4","5","6","7","8","9"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
                 <p v-html="modalContent.options[option].desc"></p>
               </div>
             </div>
@@ -170,7 +176,9 @@ export default {
         "ill":"ASR",
         "exp":"COG",
         "vld":"OBS",
-        "suppType": "hl"
+        "suppType": "hl",
+        "affRoot": "",
+        "arDegree": 0,
       },
       sVowels: [ // the "Standard Vowel-Form Sequence" as an array
         ["a","ai","ia","ao"],
@@ -182,7 +190,7 @@ export default {
         ["o","oi","uo","oe"],
         ["ü","iu","ue","öa"],
         ["u","ui","ua","oa"],
-        ["ae","ea","äi"] // yes, this one is shorter
+        ["ae","ea","äi","öi"]
       ],
       ipaLookup: { // n, x, r, rr, řř, hl, hr, hm, hn (ph, th, kh, ch, čh)
         "p":"p",
@@ -250,6 +258,7 @@ export default {
       casePopupTitle: "Allcases",
       cascOrMood: false, // false if case scope, true if mood.
       tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
+      SRtabGroups: [["affRoot","arDegree","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
     }
   },
   methods: {
@@ -260,7 +269,7 @@ export default {
         })();
         (()=>{this.gOptions[code] = value})();
       if (this.wordType == 'normal'){
-        if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
+        //if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
         this.calculateWord();
         this.IPAcalcs();
         this.glossCalcs();
@@ -281,6 +290,7 @@ export default {
       this.modalContent = this.gData[code];
       if (this.wordType == "normal") {tG = JSON.parse(JSON.stringify(this.tabGroups));}
       else if (this.wordType == "suppletive") {tG = [["suppType","c"]];}
+      else if (this.wordType == "affRoot") {tG = JSON.parse(JSON.stringify(this.SRtabGroups));}
       for (let i of tG) {
         if (i.includes(code)) {
           this.modalTabs = [...i];
@@ -348,6 +358,7 @@ export default {
     calculateWord() {
       // this order is specifically because slots 4 and 6 can influence slots 1 through 5 due to shortcutting.
       // additionally, what slot 2 shows can influence what slot 7 shows
+      this.calculateSlot3();
       this.calculateSlot4();
       this.calculateSlot6();
       this.shortcutCalcs(); // this is because slots 1, 2 and 5 are dependant in a very specific way on what 4 and 6 are, IF shortcuts are enabled.
@@ -374,42 +385,60 @@ export default {
                 "s2":{"PRC":2,"CPT":3},
                 "s0":{"CPT":5,"PRC":6}, // standard vowel form 5 (4 here) is skipped, and everything after that is reversed
                 "s3":{"CPT":7,"PRC":8}};
-      if (!this.shortcutting){
-        var lastVII;
-        var vowelColumn = 0;
-        if (this.gOptions.shcut === 0) {
-          if (this.gOptions.VIIafx.length > 0) {
-            lastVII = [...this.gOptions.VIIafx[this.gOptions.VIIafx.length-1]];
-          } else {
-            lastVII = ["no",0,0];
+      var phh = {"PRC":{"STA":"ëi","DYN":"eë"},
+                 "CPT":{"STA":"ëu","DYN":"oë"}};
+      if (this.wordType == "normal") {
+        if (!this.shortcutting){
+          var lastVII;
+          var vowelColumn = 0;
+          if (this.gOptions.shcut === 0) {
+            if (this.gOptions.VIIafx.length > 0) {
+              lastVII = [...this.gOptions.VIIafx[this.gOptions.VIIafx.length-1]];
+            } else {
+              lastVII = ["no",0,0];
+            }
+            if (lastVII[0] === "r" && lastVII[1] === 4 && lastVII[2] === 1){
+              vowelColumn = 1;
+              this.slotVIIshortcut = true;
+            } else if (lastVII[0] === "t" && lastVII[1] === 4 && lastVII[2] === 1) {
+              vowelColumn = 2;
+              this.slotVIIshortcut = true;
+            } else if (lastVII[0] === "t" && lastVII[1] === 5 && lastVII[2] === 1) {
+              vowelColumn = 3;
+              this.slotVIIshortcut = true;
+            } else {
+              this.slotVIIshortcut = false;
+            }
           }
-          if (lastVII[0] === "r" && lastVII[1] === 4 && lastVII[2] === 1){
-            vowelColumn = 1;
-            this.slotVIIshortcut = true;
-          } else if (lastVII[0] === "t" && lastVII[1] === 4 && lastVII[2] === 1) {
-            vowelColumn = 2;
-            this.slotVIIshortcut = true;
-          } else if (lastVII[0] === "t" && lastVII[1] === 5 && lastVII[2] === 1) {
-            vowelColumn = 3;
-            this.slotVIIshortcut = true;
-          } else {
-            this.slotVIIshortcut = false;
-          }
+          this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][vowelColumn];
+        } else {
+          this.slotVIIshortcut = false;
+          this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][this.shcuttypeB];
         }
-        this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][vowelColumn];
-      } else {
-        this.slotVIIshortcut = false;
-        this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][this.shcuttypeB];
+      } else if (this.wordType == "affRoot") {
+        this.slots[1] = phh[this.gOptions.ver][this.gOptions.func];
       }
       if (this.gOptions.Vafx.length >= 2) {
         this.slots[1] = this.insertGStop(this.slots[1]);
+      }
+    },
+    calculateSlot3() {
+      if (this.wordType == 'normal') {
+        this.slots[2] = this.gOptions.root.toLowerCase();
+      } else if (this.wordType == "affRoot") {
+        this.slots[2] = this.gOptions.affRoot.toLowerCase();
       }
     },
     calculateSlot4() {
       var ph = {"STA":{"BSC":0,"CTE":1,"CSV":2,"OBJ":3},
                 "DYN":{"OBJ":5,"CSV":6,"CTE":7,"BSC":8}}; // again, svf 5 is skipped
       var phh = ["EXS","FNC","RPS","AMG"];
-      this.slots[3] = this.sVowels[ph[this.gOptions.func][this.gOptions.spec]][phh.indexOf(this.gOptions.ctxt)];
+      var pph = ["BSC","CTE","CSV","OBJ"];
+      if (this.wordType == "normal"){
+        this.slots[3] = this.sVowels[ph[this.gOptions.func][this.gOptions.spec]][phh.indexOf(this.gOptions.ctxt)];
+      } else if (this.wordType == "affRoot") {
+        this.slots[3] = this.sVowels[this.gOptions.arDegree][pph.indexOf(this.gOptions.spec)];
+      }
     },
     calculateSlot5() {
       // I have no idea if it was the Object.assign() or the async/await in handleSendMessage(), but it works and I'm not questioning it.
@@ -612,7 +641,7 @@ export default {
     shortcutCalcs() {
       // SHORTCUTTING!
       (() => {
-      if (this.gOptions.shcut === 1 && this.slots[3] == "a" && [["l","d","r","tļ","v","j","ř","dl"].includes(this.slots[10])]) {
+      if (this.gOptions.shcut === 1 && this.slots[3] == "a" && ["l","d","r","tļ","v","j","ř","dl"].includes(this.slots[10]) && this.wordType == "normal") {
         //l = ., d = PRX, r = G, tļ = RPV, v = N, j = A, ř = G.RPV, dl = PRX.RPV
         var ph = {"l":[1,0], "d":[2,0],
                   "r":[1,1],"tļ":[2,1],
@@ -728,7 +757,7 @@ export default {
                 (ra === "ç" && ["p","t","c","č","k","m","n","ň","l","r","ř"].includes(rb)) || // 3.2.4 - ç
                 (["f","ţ"].includes(ra) && this.getCons(["stop","unvoiced"],["affric","unvoiced"]).includes(rb)) || // 3.2.5 - f, v, ţ, ḑ
                 (["v","ḑ"].includes(ra) && this.getCons(["stop","voiced"],["affric","voiced"]).includes(rb)) ||
-                (["f","v","ţ","ḑ"] && ["r","l","w","y","ř","m","n","ň"].includes(rb)) ||
+                (["f","v","ţ","ḑ"].includes(ra) && ["r","l","w","y","ř","m","n","ň"].includes(rb)) ||
                 (ra === "ļ" && this.getCons(["stop","unvoiced"],["affric","unvoiced"],["nasal"]).includes(rb)) || // 3.2.6 - ļ
                 (ra === "ļ" && ["w","y"].includes(rb)) ||
                 (ra === "h" && ["l","r","m","n","w"].includes(rb)) || // 3.2.7 - h
@@ -1193,7 +1222,7 @@ export default {
     }
   },
   beforeMount() {
-    this.slots[2] = "";
+    //this.slots[2] = "";
     this.calculateWord();
     this.IPAcalcs();
     this.glossCalcs();

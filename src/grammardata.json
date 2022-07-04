@@ -1145,5 +1145,49 @@
             }
         },
         "popupdesc": "This describes which kind of Suppletive Adjunct is being used, as there are four kinds. They all refer to the words immediately after them, like all adjuncts."
+    },
+
+    "affRoot": {
+        "type": "text",
+        "title": "Root Affix",
+        "popupdesc": "This is a special kind of <a href=\"http://www.ithkuil.net/affixes%20v_0_7_5.pdf\" target=\"_blank\">Affix</a> that functions not as a modifier to a root but as the <i>actual root itself</i> of this word. It can have other affixes applied to it in Slots V and VII."
+    },
+    "arDegree": {
+        "type": "",
+        "title": "Degree",
+        "popupdesc": "The degree of the Root Affix. Functions like the degree of any other affix.",
+        "options": [
+            {
+                "name": "Degree 1"
+            },
+            {
+                "name": "Degree 2"
+            },
+            {
+                "name": "Degree 3"
+            },
+            {
+                "name": "Degree 4"
+            },
+            {
+                "name": "Degree 5"
+            },
+            {
+                "name": "Degree 6"
+            },
+            {
+                "name": "Degree 7"
+            },
+            {
+                "name": "Degree 8"
+            },
+            {
+                "name": "Degree 9"
+            },
+            {
+                "name": "Degree 0",
+                "desc": "This is a special degree which relates to the generic concept of the affix as a whole, similar to Stem 0 of a normal root."
+            }
+        ]
     }
 }
