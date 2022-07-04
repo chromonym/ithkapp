@@ -1024,7 +1024,7 @@
                 "desc":"Identifies the span of time / time frame at some point(s) during which, separate events, repetitions, or durationally segmented acts or states take place.<br/>Examples would be <i>He wrote the novel <b>in/over six months</b>, These clowns can corrupt your child <b>within a few days</b>, The woman has been ill a lot <b>this year</b>, <b>For the last several concerts</b>, my voice has been deteriorating.</i>"
             },
             "PRO":{
-                "name":"Prolapse",
+                "name":"Prolapsive",
                 "desc":"Signifies the duration of an act, condition, or event, i.e., how long it takes or lasts,<br/>e.g. <i>He prayed <b>through lunch</b>, It rained <b>all night</b>, It took <b>three days</b> for the fever to break, She sang <b>for an hour</b>.</i>"
             },
             "PCV":{
@@ -1121,5 +1121,29 @@
             }
         },
         "popupdesc":"Validation <b>only applies when the Illocution is Assertive</b>.<br/>It refers to the evidential basis for a statement (i.e. why it's true).<br/>Alongside Mood, Illocution and Validation, it refers to the whole statement."
+    },
+
+    "suppType": {
+        "type": "",
+        "title": "Adjunct Type",
+        "options": {
+            "hl": {
+                "name": "Carrier",
+                "desc": "This is a “shortcut” for a full carrier stem, providing Case information only. It is used when the identity/nature of the foreign word(s) or proper name following the adjunct is already known to the addressee."
+            },
+            "hm": {
+                "name": "Quotative",
+                "desc": "This adjunct combines the Carrier Adjunct with the DISCURSIVE Register Adjunct to allow direct quotes to be placed within a caseframe, useful for translating imbedded quotes within sentences such as <i>He told me “get out of the house!”</i>"
+            },
+            "hn": {
+                "name": "Naming",
+                "desc": "This adjunct indicates that the following word is a name being referred to as such, rather than referring to the entity that bears the name, i.e., it would be used before the name Emily in the sentence <i>‘He said “Emily”’</i> as opposed to the sentence <i>‘He said “tell Emily”’</i> which would use the Quotative adjunct, or <i>‘He said to tell Emily’</i> which would use the Carrier adjunct."
+            },
+            "hň": {
+                "name": "Phrasal",
+                "desc": "This adjunct is essentially a specialized form of the carrier adjunct above to apply meta-level grammatical information to an entire subsequent phrase as a whole. This is similar to a case-frame, except that where case-frames function solely as an equivalent to subordinate clauses in Western languages, this adjunct causes the subsequent phrase to become a conventionalized, (quasi-)lexicalized gestalt."
+            }
+        },
+        "popupdesc": "This describes which kind of Suppletive Adjunct is being used, as there are four kinds. They all refer to the words immediately after them, like all adjuncts."
     }
 }

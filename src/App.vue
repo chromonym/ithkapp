@@ -2,38 +2,38 @@
   <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
   <div id="content">
     <span class="close" @click="openModal('settings')"><i class="fa-solid fa-gear fa-xs"></i></span>
-    <h1> Ithkapp (hwirbuvie-ekţgyil)</h1>
+    <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
     <p class="smalltext">Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
-    <div class="section"> <!-- Section 1: Root, etc. -->
+    <div class="section" :class="{hidden: wordType != 'normal'}"> <!-- Section 1: Root, etc. -->
       <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" type="text" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
       <OptionBox :json="gData.stem" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
       <OptionBox :json="gData.spec" code="spec" @send-message="handleSendMessage" ref="spec" @modal="openModal"/>
       <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
       <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
     </div>
-    <div class="section"> <!-- Section 2: Concatenation & Affixes-->
+    <div class="section" :class="{hidden: wordType != 'normal'}"> <!-- Section 2: Concatenation & Affixes-->
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
       <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != 0"/>
       <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal"/>
       <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal"/>
     </div>
-    <div class="section"> <!-- Section 3: Configuration -->
+    <div class="section" :class="{hidden: wordType != 'normal'}"> <!-- Section 3: Configuration -->
       <h2 style="width:100%;">Configuration</h2>
       <OptionBox :json="gData.plex" code="plex" @send-message="handleSendMessage" ref="plex" @modal="openModal"/>
       <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="simil" @modal="openModal"/>
       <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="cctd" @modal="openModal"/>
     </div>
-    <div class="section"> <!-- Section 4: Slot 6 -->
+    <div class="section" :class="{hidden: wordType != 'normal'}"> <!-- Section 4: Slot 6 -->
       <OptionBox :json="gData.affil" code="affil" @send-message="handleSendMessage" ref="affil" @modal="openModal"/>
       <OptionBox :json="gData.ext" code="ext" @send-message="handleSendMessage" ref="ext" @modal="openModal"/>
       <OptionBox :json="gData.persp" code="persp" @send-message="handleSendMessage" ref="persp" @modal="openModal"/>
       <OptionBox :json="gData.ess" code="ess" @send-message="handleSendMessage" ref="ess" @modal="openModal"/>
     </div>
-    <div class="section"> <!-- Section 5: Slot 8a -->
+    <div class="section" :class="{hidden: wordType != 'normal'}"> <!-- Section 5: Slot 8a -->
       <OptionBox :json="gData.vn" code="vn" @send-message="handleSendMessage" ref="vn" @modal="openModal"/>
       <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage" ref="val" @modal="openModal" :disabled='this.gOptions.vn != "val"'/>
       <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage" ref="pha" @modal="openModal" :disabled='this.gOptions.vn != "pha"'/>
@@ -41,16 +41,18 @@
       <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"'/>
       <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal" :disabled='this.gOptions.vn != "asp"'/>
     </div>
-    <div class="section"> <!-- Section 6: Slot 8b to 10 -->
-      <OptionBox :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
-      <OptionBox :show='!cascOrMood' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
-      <OptionBox :show='cascOrMood' :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
-      <OptionBox :show="cascOrMood" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
-      <OptionBox :show="!cascOrMood" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
-      <OptionBox :show="!cascOrMood" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
-      <OptionBox :show="!cascOrMood" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
+    <div class="section"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct -->
+      <OptionBox :class="{hidden: wordType != 'suppletive'}" :json="gData.suppType" code="suppType" @send-message="handleSendMessage" ref="suppType" @modal="openModal"/>
+
+      <OptionBox :class="{hidden: wordType != 'normal'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType != 'normal'}" :show='!cascOrMood' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType != 'normal'}" :show='cascOrMood' :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
+      <OptionBox :show="cascOrMood && wordType == 'normal'" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType != 'normal'}" :show="!cascOrMood" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType != 'normal'}" :show="!cascOrMood" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType != 'normal'}" :show="!cascOrMood" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
     </div>
-    <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
+  <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   </div>
   <div id="footer">
     <p><span class="word"><b>{{ithkword}}</b></span><br/>
@@ -65,6 +67,7 @@
       </div>
       <div :class="{hidden: modalID != 'settings'}" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
         <h2 style="text-align:center;">Settings</h2>
+        <label>Word type: </label><select @change="wordType = $event.target.value; calculateAdjunct($event.target.value);"><option>normal</option><option>suppletive</option></select>
         <h3>IPA (Pronunciation)</h3>
         <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
         <label>Pronunciation of ⟨e⟩: </label><select @change="event => settingsUpdate(event, 'e')"><option>[ɛ]</option><option>[e]</option></select><br/><br/>
@@ -130,6 +133,7 @@ export default {
   },
   data() {
     return {
+      wordType: "normal",
       modalContent: "",
       modalID: "",
       modalTabs: [],
@@ -165,7 +169,8 @@ export default {
         "c":"THM",
         "ill":"ASR",
         "exp":"COG",
-        "vld":"OBS"
+        "vld":"OBS",
+        "suppType": "hl"
       },
       sVowels: [ // the "Standard Vowel-Form Sequence" as an array
         ["a","ai","ia","ao"],
@@ -250,22 +255,33 @@ export default {
   methods: {
     async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
       console.log("Recieved "+value+" from "+code);
-      await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
-        this.cut = [false,false,false]; // reset this.cut
-      })();
-      (()=>{this.gOptions[code] = value})();
-      if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
-      this.calculateWord();
-      this.IPAcalcs();
-      this.glossCalcs();
-      this.cascOrMood = (this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0');
+        await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
+          this.cut = [false,false,false]; // reset this.cut
+        })();
+        (()=>{this.gOptions[code] = value})();
+      if (this.wordType == 'normal'){
+        if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
+        this.calculateWord();
+        this.IPAcalcs();
+        this.glossCalcs();
+        this.cascOrMood = (this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0');
+      } else {
+        this.gloss = "",
+        this.fullGloss = ""
+        this.calculateAdjunct(this.wordType);
+        this.IPAcalcs();
+        // need to figure out how to gloss adjuncts/
+      }
     },
     openModal(code) {
       console.log("Modal opening for",code);
       let tGroupFound = false;
-      this.modalContent = this.gData[code];
+      let tG = [];
       this.modalID = code;
-      for (let i of this.tabGroups) {
+      this.modalContent = this.gData[code];
+      if (this.wordType == "normal") {tG = JSON.parse(JSON.stringify(this.tabGroups));}
+      else if (this.wordType == "suppletive") {tG = [["suppType","c"]];}
+      for (let i of tG) {
         if (i.includes(code)) {
           this.modalTabs = [...i];
           tGroupFound = true;
@@ -315,6 +331,19 @@ export default {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
       }
       document.getElementById(cTitle).className += " active";
+    },
+    calculateAdjunct(type) {
+      if (type == "suppletive") {
+        this.calculateSlot9();
+        this.slot9gStop();
+        this.ithkword = this.gOptions.suppType + this.slots[9]
+        this.gloss = "";
+        this.fullGloss = "";
+      } else {
+        this.calculateWord();
+        this.glossCalcs();
+      }
+      this.IPAcalcs();
     },
     calculateWord() {
       // this order is specifically because slots 4 and 6 can influence slots 1 through 5 due to shortcutting.
@@ -557,7 +586,7 @@ export default {
       var pphh = ["COG","RSP","EXE"];
       var pphnum = 0;
       var cfound = false;
-      if (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != '0') {
+      if (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != '0' || ["suppletive"].includes(this.wordType)) {
         for (var i in ph) {
           if (ph[i].includes(this.gOptions.c)) {
             this.slots[9] = this.sVowels[ph[i].indexOf(this.gOptions.c)][i];
@@ -649,20 +678,22 @@ export default {
       }
       return str.join("").slice(str, index);
     },
-    
-    finalCalcs() {
-      var slot9saved = "";
-      // Step 1: Glottal Stop Insertion in Slot 9
+    slot9gStop() {
       if (this.slots[9].charAt(this.slots[9].length-1) === "'") {
         if (this.gOptions.concat == '0') {
           this.slots[9] = this.slots[9].slice(0,-1);
           this.slots[9] = this.insertGStop(this.slots[9],true);
         } else {
-          slot9saved = this.slots[9];
           this.slots[9] = this.slots[9].slice(0,-1);
         }
       }
-      
+    },
+    finalCalcs() {
+      // Step 1: Glottal Stop Insertion in Slot 9
+      var slot9saved = "";
+      slot9saved = this.slots[9];
+      this.slot9gStop();
+
       if (this.gOptions.shcut !== 2) {
         // Step 2: Remove unnecessary vowels at the start - the logic is dependant on the length of the root, so that's what I've done.
         if (this.slots[0] === "" && this.slots[1] === "a") {
