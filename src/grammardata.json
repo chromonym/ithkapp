@@ -1189,5 +1189,92 @@
                 "desc": "This is a special degree which relates to the generic concept of the affix as a whole, similar to Stem 0 of a normal root."
             }
         ]
+    },
+
+    "affixjunct": {
+        "type": "affix",
+        "title": "Adjunct Affixes",
+        "popupdesc": "The affixes shown on this specific adjunct. This is how you apply affixes in other scope locations on a word."
+    },
+    "initialAffScope": {
+        "type": "",
+        "title": "Initial affix scope",
+        "popupdesc": "Where the first affix out of the Adjunct Affixes is applied on the next word",
+        "options": {
+            "lastV": {
+                "name": "Last of Slot V",
+                "desc": ""
+            },
+            "firstV": {
+                "name": "First of Slot V",
+                "desc": ""
+            },
+            "lastVII": {
+                "name": "Last of Slot VII",
+                "desc": ""
+            },
+            "firstVII": {
+                "name": "First of Slot VII",
+                "desc": ""
+            },
+            "word": {
+                "name": "Entire Formative",
+                "desc": ""
+            },
+            "all": {
+                "name": "Formative + Affixes",
+                "desc": ""
+            }
+        }
+    },
+    "otherAffScope": {
+        "type": "",
+        "title": "Other affix scopes",
+        "popupdesc": "Where the other affixes of the Adjunct Affixes are applied on the next word",
+        "options": {
+            "lastV": {
+                "name": "Last of Slot V",
+                "desc": ""
+            },
+            "firstV": {
+                "name": "First of Slot V",
+                "desc": ""
+            },
+            "lastVII": {
+                "name": "Last of Slot VII",
+                "desc": ""
+            },
+            "firstVII": {
+                "name": "First of Slot VII",
+                "desc": ""
+            },
+            "word": {
+                "name": "Entire Formative",
+                "desc": ""
+            },
+            "all": {
+                "name": "Formative + Affixes",
+                "desc": ""
+            },
+            "same": {
+                "name": "Same as Initial",
+                "desc": ""
+            }
+        }
+    },
+    "affScopeOf": {
+        "type": "",
+        "title": "Apply to...",
+        "popupdesc": "Which of the following concatenated formatives this actually applies to",
+        "options": {
+            "default": {
+                "name": "Default (all)",
+                "desc": "Apply this affix to the main formative"
+            },
+            "conc": {
+                "name": "Concatenated only",
+                "desc": "Apply this affix only to the concatenated formative"
+            }
+        }
     }
 }

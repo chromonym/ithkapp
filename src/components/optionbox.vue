@@ -33,6 +33,7 @@
     </select>
 
     <p v-if='json.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})'><b>ERROR:</b> Empty affixes</p> <!-- if there's an error, have text that says so -->
+    <p v-else-if='json.type == "affix" && this.affixes.length == 0 && reqAff'><b>ERROR:</b> Affixes are required</p>
     <p v-else-if='json.type == "text" && this.text == ""'><b>ERROR:</b> Empty root</p>
     <p v-else-if='(json.type == "text" && !this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())))
                 ||(json.type == "affix" && this.affixes.length != 0 && !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))'><b>ERROR:</b> Non-allowed characters</p>
@@ -50,6 +51,7 @@ export default {
     json: Object, // pass in grammardata[code] to here
     disabled: Boolean,
     show: Boolean,
+    reqAff: Boolean,
   },
   data() {
     return {
@@ -62,7 +64,7 @@ export default {
   computed: {
     OBclass() { // set class to error if the input is the default
       return {
-        error: (this.json.type == "affix" && this.affixes.length != 0 && (!this.affixes.every(function (e) {return e[0] != ""}) || !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))) || (this.json.type == "text" && (this.text == "" || !this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())))),
+        error: (this.json.type == "affix" && this.affixes.length != 0 && (!this.affixes.every(function (e) {return e[0] != ""}) || !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))) || (this.json.type == "text" && (this.text == "" || !this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())))) || (this.json.type == "affix" && this.affixes.length == 0 && this.reqAff),
         disabledbox: this.disabled,
         notShown: this.show
       }
