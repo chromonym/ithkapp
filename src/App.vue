@@ -62,7 +62,7 @@
     </div>
     <div class="section" :class="{hidden: wordType != 'register'}">
       <OptionBox :json="gData.register" code="register" @send-message="handleSendMessage" ref="register" @modal="openModal"/>
-      <OptionBox :json="gData.regStartOrEnd" code="regStartOrEnd" @send-message="handleSendMessage" ref="regStartOrEnd" @modal="openModal"/>
+      <OptionBox :json="gData.regStartOrEnd" code="regStartOrEnd" @send-message="handleSendMessage" ref="regStartOrEnd" @modal="openModal" :disabled='this.gOptions.register == "CAR"'/>
     </div>
   <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   </div>
@@ -401,8 +401,8 @@ export default {
         var wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
         this.ithkword = this.markStress(["conc","default"].indexOf(this.gOptions.affScopeOf),wordVowels,this.ithkword);
       } else if (type=="register") {
-        var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","öi"],"MTH":["u","ui"],"CAR":["","ü"],}
-        this.ithkword = (this.gOptions.register == "CAR" && this.gOptions.regStartOrEnd == 0) ? "" : "h" + ph[this.gOptions.register][this.gOptions.regStartOrEnd];
+        var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","öi"],"MTH":["u","ui"],"CAR":["ü","ü"],}
+        this.ithkword = "h" + ph[this.gOptions.register][this.gOptions.regStartOrEnd];
       } else {
         this.calculateWord();
         this.glossCalcs();
