@@ -1276,5 +1276,56 @@
                 "desc": "Apply this affix only to the concatenated formative"
             }
         }
+    },
+
+    "register": {
+        "type": "",
+        "title": "Register",
+        "popupdesc": "Which register the next (or previous) bit of text is in; what type of speaking is it?<br/>No specified register is the NARRATIVE, which is normal speech.",
+        "options": {
+            "DSV": {
+                "name": "Discursive",
+                "desc": "Direct speech"
+            },
+            "PNT": {
+                "name": "Parenthetical",
+                "desc": "Parenthetical aside"
+            },
+            "SPF": {
+                "name": "Specificative",
+                "desc": "Proper name of preceding referent<br/>(If the identification of the preceding referent is not a proper name, use PNT register instead)"
+            },
+            "EXM": {
+                "name": "Exemplificative",
+                "desc": "'for example, ...'"
+            },
+            "CGT": {
+                "name": "Cogitant",
+                "desc": "Silent/subjective thoughts"
+            },
+            "MTH": {
+                "name": "Mathematical",
+                "desc": "Expression in the mathematical sub-language"
+            },
+            "CAR": {
+                "name": "Carrier-End",
+                "desc": "End of term/phrase governed by carrier stem/adjunct<br/>(Use the CAR end-adjunct marker for any register where the referent within the register clause is a proper name or a foreign word/phrase)<br/><b>ONLY works if this is a Final marker.</b>"
+            }
+        }
+    },
+    "regStartOrEnd": {
+        "type": "",
+        "title": "Initial/Final",
+        "popupdesc": "Whether this adjunct marks the start or end of a register.",
+        "options": [
+            {
+                "name": "Initial",
+                "desc": "This adjunct marks the start of the appropriate register"
+            },
+            {
+                "name": "Final",
+                "desc": "This adjunct marks the end of the appropriate register<br/>Alternatively, use a low tone on the last word of the clause."
+            }
+        ]
     }
 }
