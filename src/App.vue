@@ -644,7 +644,8 @@ export default {
         PSPESS = {"m":"h","n":"ç"}[PSPESS];
       }
       if (CONF === "" && EXT === "" && PSPESS === "" && AFFIL != ""){ // if affiliation is the only one with a value AND isn't also empty
-        AFFIL += "ļ"
+        if (AFFIL == "l") { AFFIL = "nļ" }
+        else { AFFIL += "ļ" }
       } else if (AFFIL === "" && CONF === "" && EXT === "") { // if perspective + essence is the only one with a value (incl. empty)
         if (PSPESS === ""){PSPESS = "l"}
         else if (PSPESS === "l"){PSPESS = "tļ"}
@@ -668,55 +669,56 @@ export default {
       this.slots[10] = out;
       // step 4: apply gemination (apply nine rules) IF slot V contains affixes
       if (Object.keys(this.gOptions.Vafx).length != 0) {
-        var rulesApplied = [false,false,false,false,false,false,false,false,false];
-        if (out.length === 1) {
-          // 1. for forms consisting of a single consonant, geminate it.
-          rulesApplied[0] = true;
-          out += out
-        }
-        if (out === "tļ") {
-          // 2. the standalone form tļ becomes ttļ.
-          rulesApplied[1] = true;
-          out = "ttļ";
-        }
-        if (['t','k','p','d','g','b'].includes(out.charAt(0)) && ['l','r','ř','w','y'].includes(out.charAt(0))) {
-          // 3. for forms beginning with a stop followed by a liquid or approximant, geminate the stop.
-          rulesApplied[2] = true;
-          out = out.charAt(0) + out;
-        }
-        if (!rulesApplied[0] && (out.includes('s') || out.includes('š') || out.includes('z') || out.includes('ž') || out.includes('ç') || out.includes('c') || out.includes('č'))) {
-          // 4. for forms containing a sibilant fricative or affricative in any position, geminate it.
-          rulesApplied[3] = true;
-          out = out.replace("s","ss").replace("š","šš").replace("z","zz").replace("ž","žž").replace("ç","çç").replace('c',"cc").replace("č","čč");
-        }
-        if (!rulesApplied[4] && (["f","ţ","v","ḑ","n","m","ň"].includes(out.charAt(0)))) {
-          // 5. for forms beginning with either a non-sibilant fricative or a nasal, geminate it unless previous rule No. 4 applies.
-          rulesApplied[4] = true;
-          out = out.charAt(0) + out;
-        }
-        if (["t","k","p"].includes(out.charAt(0)) && ["s","š","f","ţ","ç"].includes(out.charAt(1))) {
-          // 6. for forms beginning with a voiceless stop followed by a fricative, geminate the fricative.
-          rulesApplied[5] = true;
-          out = out.charAt(0) + out.charAt(1) + out.slice(1);
-        }
-        var ph = {"pt":"bbḑ","pk":"bbv","kt":"ggḑ","kp":"ggv","tk":"ḑvv","tp":"ddv"};
-        if (rulesApplied.every(v => v === false) && Object.prototype.hasOwnProperty.call(ph, out.slice(-2))) {
-          // 7. For forms ending in two stops, for which the previous six rules are inapplicable, use the substitutions in ph.
-          rulesApplied[6] = true;
-          out = out.slice(0,-2) + ph[out.slice(-2)];
-        }
-        var phh = {"pm":"vmm","pn":"vvn","bm":"bžžm","bn":"bžžn","km":"xxm","kn":"xxn","gm":"gžžm","gn":"gžžn","tm":"ḑḑm","tn":"ḑḑn","dm":"jjm","dn":"jjn"};
-        if (rulesApplied.every(v => v === false) && Object.prototype.hasOwnProperty.call(phh, out.slice(-2))) {
-          // 8. For forms ending in a stop plus nasal for which the previous seven rules are inapplicable, use the substitutions in phh.
-          rulesApplied[7] = true;
-          out = out.slice(0,-2) + phh[out.slice(-2)];
-        }
-        // 9. (not yet coded) For forms beginning with l-, r- or ř-, apply one of the above eight rules as if the l-, r- or ř- were not present;
+        // 1-8. are in geminate()
+        var oldOut = out;
+        out = this.geminate(out);
+        // 9. For forms beginning with l-, r- or ř-, apply one of the above eight rules as if the l-, r- or ř- were not present;
         // if the resulting form including the initial l-, r- or ř- is not phonotactically permissible or is euphonically awkward,
         // geminate the l-, r- or ř- instead.
+        if (out == oldOut && ["l","r","ř"].includes(out.charAt(0))) {
+          out = out.charAt(0) + this.geminate(out.slice(1));
+        }
       }
       // finally: output
       this.slots[5] = out;
+    },
+    geminate(out) {
+      //var rulesApplied = [false,false,false,false,false,false,false,false,false];
+      var ph = {"pt":"bbḑ","pk":"bbv","kt":"ggḑ","kp":"ggv","tk":"ḑvv","tp":"ddv"};
+      var phh = {"pm":"vmm","pn":"vvn","bm":"bžžm","bn":"bžžn","km":"xxm","kn":"xxn","gm":"gžžm","gn":"gžžn","tm":"ḑḑm","tn":"ḑḑn","dm":"jjm","dn":"jjn"};
+      if (out.length === 1) {
+        // 1. for forms consisting of a single consonant, geminate it.
+        out += out
+      }
+      else if (out === "tļ") {
+        // 2. the standalone form tļ becomes ttļ.
+        out = "ttļ";
+      }
+      else if (['t','k','p','d','g','b'].includes(out.charAt(0)) && ['l','r','ř','w','y'].includes(out.charAt(0))) {
+        // 3. for forms beginning with a stop followed by a liquid or approximant, geminate the stop.
+        out = out.charAt(0) + out;
+      }
+      else if (out.includes('s') || out.includes('š') || out.includes('z') || out.includes('ž') || out.includes('ç') || out.includes('c') || out.includes('č')) {
+        // 4. for forms containing a sibilant fricative or affricative in any position, geminate it.
+        out = out.replace("s","ss").replace("š","šš").replace("z","zz").replace("ž","žž").replace("ç","çç").replace('c',"cc").replace("č","čč");
+      }
+      else if (["f","ţ","v","ḑ","n","m","ň"].includes(out.charAt(0))) {
+        // 5. for forms beginning with either a non-sibilant fricative or a nasal, geminate it unless previous rule No. 4 applies.
+        out = out.charAt(0) + out;
+      }
+      else if (["t","k","p"].includes(out.charAt(0)) && ["s","š","f","ţ","ç"].includes(out.charAt(1))) {
+        // 6. for forms beginning with a voiceless stop followed by a fricative, geminate the fricative.
+        out = out.charAt(0) + out.charAt(1) + out.slice(1);
+      }
+      else if (Object.prototype.hasOwnProperty.call(ph, out.slice(-2))) {
+        // 7. For forms ending in two stops, for which the previous six rules are inapplicable, use the substitutions in ph.
+        out = out.slice(0,-2) + ph[out.slice(-2)];
+      }
+      else if (Object.prototype.hasOwnProperty.call(phh, out.slice(-2))) {
+        // 8. For forms ending in a stop plus nasal for which the previous seven rules are inapplicable, use the substitutions in phh.
+        out = out.slice(0,-2) + phh[out.slice(-2)];
+      }
+      return out;
     },
     calculateSlot7() {
       // I have no idea if it was the Object.assign() or the async/await in handleSendMessage(), but it works and I'm not questioning it.
