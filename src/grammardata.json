@@ -1327,5 +1327,98 @@
                 "desc": "This adjunct marks the end of the appropriate register<br/>Alternatively, use a low tone on the last word of the clause."
             }
         ]
+    },
+
+    "modAppliesTo": {
+        "type": "",
+        "title": "Apply to...",
+        "popupdesc": "Where the various other things apply to",
+        "options": {
+            "all": {
+                "name": "All",
+                "desc": "Apply to both the concatenated and the parent formative after this adjunct (use this if no concatenation)"
+            },
+            "parent": {
+                "name": "Parent Only",
+                "desc": "Apply to only the parent formative after this adjunct"
+            },
+            "concat": {
+                "name": "Concatenated only",
+                "desc": "Apply to only the concatenated formative after this adjunct"
+            }
+        }
+    },
+    "modNumber": {
+        "type": "",
+        "title": "Number of modules",
+        "popupdesc": "How many VₙCₙs you want on this adjunct",
+        "options": {
+            "1": {
+                "name": "1 (no Vₕ, no Cₙ)",
+                "desc": "Only one VnCn, but without the Mood/Case-Scope"
+            },
+            "2": {
+                "name": "2 (no Vₕ) or 1"
+            },
+            "3": {
+                "name": "3 (no Vₕ) or 2"
+            },
+            "4": {
+                "name": "4 (no Vₕ) or 3"
+            }
+        }
+    },
+    "cn": {
+        "type": "",
+        "title": "Cₙ",
+        "popupdesc": "Whether this adjunct will show Mood or Case-Scope",
+        "options": {
+            "mood": {
+                "name": "Mood",
+                "desc": "Mood refers to the knowability and truthfulness of a statement, and describes both the truth of the actual statement and any underlying presuppositions."
+            },
+            "casc": {
+                "name": "Case-Scope",
+                "desc": "Formatives showing Case use the Case-Scope to indicate the scope of a case-marked formative over adjacent formatives. This is useful when there is a string of cases modifying another “head” formative; specifies which has scope over which other formative."
+            }
+        }
+    },
+    "vh": {
+        "type": "",
+        "title": "Vₕ/Vₙ",
+        "popupdesc": "Whether this adjunct will show Valence/Phase/Level/Effect(/Aspect) or the Specialized Scope.<br/><b>If the Number of Modules is 1, then this will show Aspect.</b>",
+        "options": {
+            "vn": {
+                "name": "Vₙ",
+                "desc": "Show an additional Vₙ on this affix"
+            },
+            "vh": {
+                "name": "Vₕ",
+                "desc": "Show the <b>Specialized Scope of the Adjunct</b> on this adjunct.<br/>Allows for modifying where the VPLEA and Mood/Case-Scopes are applied on the next formative."
+            }
+        }
+    },
+    "modScope": {
+        "type": "",
+        "title": "Specialised Scope",
+        "popupdesc": "Describes where on the following formative the meaning of this affix will be applied, scope-wise.<br/>All affixes have <b>right-to-left scope</b> on each other (Slot 2 < Slot 3 < Slot 4).<br/>If this is unspecified (i.e. not shown), then the options have the same scope as if they were in the main word.",
+        "options": {
+            "a": {
+                "name": "Scope over Case/Mood and IEV",
+                "desc": "This adjunct has scope over everything except Bias"
+            },
+            "e": {
+                "name": "Scope over Case/Mood",
+                "desc": "This adjunct has scope over everything except Bias, Illocution, Expectation, and Validation"
+            },
+            "i": {
+                "name": "Scope over entire Formative",
+                "desc": "This adjunct has scope over everything except any Adjuncts<br/><b>NOTE:</b> Do not use if an adjacent affixual adjunct shows scope over this adjunct"
+            },
+            "o": {
+                "name": "Scope over Formative + Adjuncts",
+                "desc": "This adjunct has scope over everything<br/><b>NOTE:</b> Do not use if an adjacent affixual adjunct shows scope over this adjunct"
+            }
+        }
     }
 }

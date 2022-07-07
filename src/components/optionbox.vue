@@ -28,7 +28,7 @@
     <!-- Otherwise, assume it's a dropdown list: -->
     <select v-else v-model="option" @change="this.$emit('send-message',option,code)" :disabled="disabled" :id="code">
       <!--<option v-for="(opt, short) in options" :key="opt" :value="short">{{opt}} {{short === short.toString().toUpperCase() ? "("+short+")" : ""}}</option>-->
-      <option v-for="(opt, short) in json.options" :key="opt.name" :value="short">{{opt.name}} {{short === short.toString().toUpperCase() ? "("+short+")" : ""}}</option>
+      <option v-for="(opt, short) in json.options" :key="opt.name" :value="short">{{opt.name}} {{(short === short.toString().toUpperCase() && !['1','2','3','4','5','6','7','8','9','0'].includes(short)) ? "("+short+")" : ""}}</option>
       <!-- above: show the long form of the option (opt), and IF the short form (short) is uppercase then show that in brackets as well -->
     </select>
 

@@ -7,7 +7,7 @@
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
       <OptionBox :json="gData.affRoot" :class="{hidden: wordType != 'affRoot'}" code="affRoot" @send-message="handleSendMessage" ref="affRoot" @modal="openModal"/>
       <OptionBox :json="gData.arDegree" :class="{hidden: wordType != 'affRoot'}" code="arDegree" @send-message="handleSendMessage" ref="arDegree" @modal="openModal"/>
       <OptionBox :json="gData.root" :class="{hidden: wordType == 'affRoot'}" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
@@ -16,34 +16,79 @@
       <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
       <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register'].includes(wordType)}"> <!-- Section 2: Concatenation & Affixes-->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 2: Concatenation & Affixes-->
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
       <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != 0"/>
       <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal"/>
       <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register'].includes(wordType)}"> <!-- Section 3: Configuration -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 3: Configuration -->
       <h2 style="width:100%;">Configuration</h2>
       <OptionBox :json="gData.plex" code="plex" @send-message="handleSendMessage" ref="plex" @modal="openModal"/>
       <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="simil" @modal="openModal"/>
       <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="cctd" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register'].includes(wordType)}"> <!-- Section 4: Slot 6 -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 4: Slot 6 -->
       <OptionBox :json="gData.affil" code="affil" @send-message="handleSendMessage" ref="affil" @modal="openModal"/>
       <OptionBox :json="gData.ext" code="ext" @send-message="handleSendMessage" ref="ext" @modal="openModal"/>
       <OptionBox :json="gData.persp" code="persp" @send-message="handleSendMessage" ref="persp" @modal="openModal"/>
       <OptionBox :json="gData.ess" code="ess" @send-message="handleSendMessage" ref="ess" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register'].includes(wordType)}"> <!-- Section 5: Slot 8a -->
-      <OptionBox :json="gData.vn" code="vn" @send-message="handleSendMessage" ref="vn" @modal="openModal"/>
-      <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage" ref="val" @modal="openModal" :disabled='this.gOptions.vn != "val"'/>
-      <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage" ref="pha" @modal="openModal" :disabled='this.gOptions.vn != "pha"'/>
-      <OptionBox :json="gData.eff" code="eff" @send-message="handleSendMessage" ref="eff" @modal="openModal" :disabled='this.gOptions.vn != "eff"'/>
-      <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"'/>
-      <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal" :disabled='this.gOptions.vn != "asp"'/>
+
+    <!-- MODULAR ADJUNCT -->
+    <div class="section" :class="{hidden: wordType != 'modular'}">
+      <OptionBox :json="gData.modAppliesTo" code="modAppliesTo" @send-message="handleSendMessage" ref="modAppliesTo" @modal="openModal"/>
+      <OptionBox :json="gData.modNumber" code="modNumber" @send-message="handleSendMessage" ref="modNumber" @modal="openModal"/>
+      <OptionBox :json="gData.cn" code="cn" @send-message="handleSendMessage" red="cn" @modal="openModal" />
     </div>
-    <div class="section" :class="{hidden: ['affixjunct','register'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct -->
+    <div class="section" :class="{hidden: wordType != 'modular' || (wordType == 'modular' && !['2','3','4'].includes(gOptions.modNumber))}">
+    <h2 style="width:100%;">Slot II</h2>
+      <OptionBox :json="gData.vn" code="vn2" @send-message="handleSendMessage" ref="vn2" @modal="openModal"/>
+      <OptionBox :json="gData.val" code="val2" @send-message="handleSendMessage" ref="val2" @modal="openModal" :class='{hidden: this.gOptions.vn2 != "val"}'/>
+      <OptionBox :json="gData.pha" code="pha2" @send-message="handleSendMessage" ref="pha2" @modal="openModal" :class='{hidden: this.gOptions.vn2 != "pha"}'/>
+      <OptionBox :json="gData.eff" code="eff2" @send-message="handleSendMessage" ref="eff2" @modal="openModal" :class='{hidden: this.gOptions.vn2 != "eff"}'/>
+      <OptionBox :json="gData.lvl" code="lvl2" @send-message="handleSendMessage" ref="lvl2" @modal="openModal" :class='{hidden: this.gOptions.vn2 != "lvl"}'/>
+      <OptionBox :json="gData.asp" code="asp2" @send-message="handleSendMessage" ref="asp2" @modal="openModal" :class='{hidden: this.gOptions.vn2 != "asp"}'/>
+      <OptionBox :json="gData.mood" code="mood2" @send-message="handleSendMessage" ref="mood2" @modal="openModal" :class='{hidden: this.gOptions.cn != "mood"}'/>
+      <OptionBox :json="gData.casc" code="casc2" @send-message="handleSendMessage" ref="casc2" @modal="openModal" :class='{hidden: this.gOptions.cn != "casc"}'/>
+    </div>
+    <div class="section" :class="{hidden: wordType != 'modular' || (wordType == 'modular' && !['3','4'].includes(gOptions.modNumber))}">
+    <h2 style="width:100%;">Slot III</h2>
+      <OptionBox :json="gData.vn" code="vn3" @send-message="handleSendMessage" ref="vn3" @modal="openModal"/>
+      <OptionBox :json="gData.val" code="val3" @send-message="handleSendMessage" ref="val3" @modal="openModal" :class='{hidden: this.gOptions.vn3 != "val"}'/>
+      <OptionBox :json="gData.pha" code="pha3" @send-message="handleSendMessage" ref="pha3" @modal="openModal" :class='{hidden: this.gOptions.vn3 != "pha"}'/>
+      <OptionBox :json="gData.eff" code="eff3" @send-message="handleSendMessage" ref="eff3" @modal="openModal" :class='{hidden: this.gOptions.vn3 != "eff"}'/>
+      <OptionBox :json="gData.lvl" code="lvl3" @send-message="handleSendMessage" ref="lvl3" @modal="openModal" :class='{hidden: this.gOptions.vn3 != "lvl"}'/>
+      <OptionBox :json="gData.asp" code="asp3" @send-message="handleSendMessage" ref="asp3" @modal="openModal" :class='{hidden: this.gOptions.vn3 != "asp"}'/>
+      <OptionBox :json="gData.mood" code="mood3" @send-message="handleSendMessage" ref="mood3" @modal="openModal" :class='{hidden: this.gOptions.cn != "mood"}'/>
+      <OptionBox :json="gData.casc" code="casc3" @send-message="handleSendMessage" ref="casc3" @modal="openModal" :class='{hidden: this.gOptions.cn != "casc"}'/>
+    </div>
+    <div class="section" :class="{hidden: wordType != 'modular' || (wordType == 'modular' && gOptions.modNumber != '4')}">
+    <h2 style="width:100%;">Slot IV</h2>
+      <OptionBox :json="gData.vn" code="vn4" @send-message="handleSendMessage" ref="vn4" @modal="openModal"/>
+      <OptionBox :json="gData.val" code="val4" @send-message="handleSendMessage" ref="val4" @modal="openModal" :class='{hidden: this.gOptions.vn4 != "val"}'/>
+      <OptionBox :json="gData.pha" code="pha4" @send-message="handleSendMessage" ref="pha4" @modal="openModal" :class='{hidden: this.gOptions.vn4 != "pha"}'/>
+      <OptionBox :json="gData.eff" code="eff4" @send-message="handleSendMessage" ref="eff4" @modal="openModal" :class='{hidden: this.gOptions.vn4 != "eff"}'/>
+      <OptionBox :json="gData.lvl" code="lvl4" @send-message="handleSendMessage" ref="lvl4" @modal="openModal" :class='{hidden: this.gOptions.vn4 != "lvl"}'/>
+      <OptionBox :json="gData.asp" code="asp4" @send-message="handleSendMessage" ref="asp4" @modal="openModal" :class='{hidden: this.gOptions.vn4 != "asp"}'/>
+      <OptionBox :json="gData.mood" code="mood4" @send-message="handleSendMessage" ref="mood4" @modal="openModal" :class='{hidden: this.gOptions.cn != "mood"}'/>
+      <OptionBox :json="gData.casc" code="casc4" @send-message="handleSendMessage" ref="casc4" @modal="openModal" :class='{hidden: this.gOptions.cn != "casc"}'/>
+    </div>
+    <!-- END OF MODULAR ADJUNCT -->
+
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register'].includes(wordType)}"> <!-- Section 5: Slot 8a -->
+      <h2 style="width:100%;" :class='{hidden: this.wordType != "modular" || this.gOptions.modNumber == "1"}'>Slot V</h2>
+      <OptionBox :json="gData.vh" code="vh" @send-message="handleSendMessage" ref="vh" @modal="openModal" :class='{hidden: this.wordType != "modular"}' :disabled='this.gOptions.modNumber == "1"'/>
+      <OptionBox :json="gData.modScope" code="modScope" @send-message="handleSendMessage" ref="modScope" @modal="openModal" :class='{hidden: this.wordType != "modular" || this.gOptions.modNumber == "1" || this.gOptions.vh == "vn"}'/>
+      <OptionBox :json="gData.vn" code="vn" @send-message="handleSendMessage" ref="vn" @modal="openModal" :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
+      <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage" ref="val" @modal="openModal" :disabled='this.gOptions.vn != "val"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
+      <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage" ref="pha" @modal="openModal" :disabled='this.gOptions.vn != "pha"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
+      <OptionBox :json="gData.eff" code="eff" @send-message="handleSendMessage" ref="eff" @modal="openModal" :disabled='this.gOptions.vn != "eff"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
+      <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
+      <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal" :disabled='(this.gOptions.vn != "asp" && this.wordType != "modular") || (this.wordType == "modular" && this.gOptions.modNumber != "1")' :class='{hidden: this.wordType == "modular" && this.gOptions.modNumber != "1"}'/>
+    </div>
+    <div class="section" :class="{hidden: ['affixjunct','register','modular'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct -->
       <OptionBox :class="{hidden: wordType != 'suppletive'}" :json="gData.suppType" code="suppType" @send-message="handleSendMessage" ref="suppType" @modal="openModal"/>
 
       <OptionBox :class="{hidden: wordType == 'suppletive'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
@@ -54,12 +99,15 @@
       <OptionBox :class="{hidden: wordType == 'suppletive'}" :show="!cascOrMood" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
       <OptionBox :class="{hidden: wordType == 'suppletive'}" :show="!cascOrMood" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
     </div>
+
+    <!-- AFFIXUAL ADJUNCT -->
     <div class="section" :class="{hidden: wordType != 'affixjunct'}">
       <OptionBox :json="gData.affixjunct" code="affixjunct" @send-message="handleSendMessage" ref="affixjunct" @modal="openModal" :reqAff="true"/>
       <OptionBox :json="gData.initialAffScope" code="initialAffScope" @send-message="handleSendMessage" ref="initialAffScope" @modal="openModal"/>
       <OptionBox :json="gData.otherAffScope" code="otherAffScope" @send-message="handleSendMessage" ref="otherAffScope" @modal="openModal" :disabled='this.gOptions.affixjunct.length < 2'/>
       <OptionBox :json="gData.affScopeOf" code="affScopeOf" @send-message="handleSendMessage" ref="affScopeOf" @modal="openModal"/>
     </div>
+    <!-- REGISTER ADJUNCT -->
     <div class="section" :class="{hidden: wordType != 'register'}">
       <OptionBox :json="gData.register" code="register" @send-message="handleSendMessage" ref="register" @modal="openModal"/>
       <OptionBox :json="gData.regStartOrEnd" code="regStartOrEnd" @send-message="handleSendMessage" ref="regStartOrEnd" @modal="openModal" :disabled='this.gOptions.register == "CAR"'/>
@@ -74,7 +122,7 @@
   <div id="modal" class="modal" @click.self="closeModal()">
     <div id="modal-content">
       <div class="tab">
-        <button v-for="tabcode in modalTabs" :key="tabcode" :class="{active: tabcode === modalID}" @click="closeModal(); openModal(tabcode);">{{gData[tabcode].title}}</button>
+        <button v-for="tabcode in modalTabs" :key="tabcode" :class="{active: tabcode === modalID}" @click="closeModal(); openModal(tabcode);">{{gData[(isNaN(tabcode.slice(-1)) ? tabcode : tabcode.slice(0,-1))].title}}</button>
         <span class="close" @click="closeModal()">&times;</span>
       </div>
       <div :class="{hidden: modalID != 'settings'}" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
@@ -85,6 +133,7 @@
           <option>affRoot</option>
           <option>affixjunct</option>
           <option>register</option>
+          <option>modular</option>
         </select>
         <h3>IPA (Pronunciation)</h3>
         <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
@@ -158,6 +207,7 @@ export default {
       gData: grammardata,
       cData: consdata,
       gOptions: { // grammar options
+        // NORMAL WORD OPTIONS
         "root":"",
         "stem":"s1",
         "func":"STA",
@@ -188,15 +238,49 @@ export default {
         "ill":"ASR",
         "exp":"COG",
         "vld":"OBS",
+        // SUPPLETIVE ADJUNCT OPTION
         "suppType": "hl",
+        // ROOT-AFFIX ADJUNCT OPTIONS
         "affRoot": "",
         "arDegree": 0,
+        // AFFIX ADJUNCT OPTIONS
         "affixjunct": [],
         "initialAffScope": "lastV",
         "otherAffScope": "lastV",
         "affScopeOf": "default",
+        // REGISTER ADJUNCT OPTIONS
         "register": "DSV",
-        "regStartOrEnd": 0
+        "regStartOrEnd": 0,
+        // MODULAR ADJUNCT OPTIONS
+        "vn2":"val",
+        "val2":"MNO",
+        "pha2":"PCT",
+        "eff2":"1:BEN",
+        "lvl2":"MIN",
+        "asp2":"RTR",
+        "mood2":"FAC",
+        "casc2":"CCN",
+        "vn3":"val",
+        "val3":"MNO",
+        "pha3":"PCT",
+        "eff3":"1:BEN",
+        "lvl3":"MIN",
+        "asp3":"RTR",
+        "mood3":"FAC",
+        "casc3":"CCN",
+        "vn4":"val",
+        "val4":"MNO",
+        "pha4":"PCT",
+        "eff4":"1:BEN",
+        "lvl4":"MIN",
+        "asp4":"RTR",
+        "mood4":"FAC",
+        "casc4":"CCN",
+        "cn": "mood",
+        "modAppliesTo":"all",
+        "modNumber": "1",
+        "vh": "vn",
+        "modScope": "a",
       },
       sVowels: [ // the "Standard Vowel-Form Sequence" as an array
         ["a","ai","ia","ao"],
@@ -305,12 +389,23 @@ export default {
       let tGroupFound = false;
       let tG = [];
       this.modalID = code;
-      this.modalContent = this.gData[code];
+      if (isNaN(code.charAt(code.length-1))) {
+        this.modalContent = this.gData[code];
+      } else {
+        this.modalContent = this.gData[code.slice(0,-1)]
+      }
       if (this.wordType == "normal") {tG = JSON.parse(JSON.stringify(this.tabGroups));}
       else if (this.wordType == "suppletive") {tG = [["suppType","c"]];}
       else if (this.wordType == "affRoot") {tG = JSON.parse(JSON.stringify(this.SRtabGroups));}
       else if (this.wordType == "affixjunct") {tG = [["affixjunct","initialAffScope","otherAffScope","affScopeOf"]];}
       else if (this.wordType == "register") {tG = [["register","regStartOrEnd"]];}
+      else if (this.wordType == "modular") {
+        tG = [["modAppliesTo","modNumber","cn","vh"],
+              ["vn","val","pha","eff","lvl"],
+              ["vn2","val2","pha2","eff2","lvl2","asp2"],
+              ["vn3","val3","pha3","eff3","lvl3","asp3"],
+              ["vn4","val4","pha4","eff4","lvl4","asp4"]];
+      }
       for (let i of tG) {
         if (i.includes(code)) {
           this.modalTabs = [...i];
@@ -398,12 +493,34 @@ export default {
           out += afxjunctV[this.gOptions.otherAffScope];
           this.ithkword = out;
         }
-        var wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
-        this.ithkword = this.markStress(["conc","default"].indexOf(this.gOptions.affScopeOf),wordVowels,this.ithkword);
+        //var wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
+        this.ithkword = this.markStress(["conc","default"].indexOf(this.gOptions.affScopeOf),this.ithkword);
       } else if (type=="register") {
         var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","öi"],"MTH":["u","ui"],"CAR":["ü","ü"],}
         this.ithkword = "h" + ph[this.gOptions.register][this.gOptions.regStartOrEnd];
-      } else {
+      } else if (type=="modular") {
+        var output = "";
+        output += {"all":"","parent":"w","concat":"y"}[this.gOptions.modAppliesTo];
+        if (["2","3","4"].includes(this.gOptions.modNumber)) {
+          output += this.calculateSlot8a("2");
+          output += this.calculateSlot8b("2",this.gOptions.cn);
+        } if (["3","4"].includes(this.gOptions.modNumber)) {
+          output += this.calculateSlot8a("3");
+          output += this.calculateSlot8b("3",this.gOptions.cn);
+        } if (this.gOptions.modNumber == "4") {
+          output += this.calculateSlot8a("4");
+          output += this.calculateSlot8b("4",this.gOptions.cn);
+        }
+        if (this.gOptions.modNumber == "1") {
+          output += this.calculateSlot8a("","asp");
+        } else if (this.gOptions.vh == "vn") {
+          output += this.calculateSlot8a();
+        } else {
+          output += this.gOptions.modScope;
+          output = this.markStress(0,output);
+        }
+        this.ithkword = output;
+      } else { // incorrect input = normal word
         this.calculateWord();
         this.glossCalcs();
       }
@@ -420,8 +537,8 @@ export default {
       this.calculateSlot2();
       this.calculateSlot5();
       this.calculateSlot7();
-      this.calculateSlot8a();
-      this.calculateSlot8b();
+      this.slots[7] = this.calculateSlot8a();
+      this.slots[8] = this.calculateSlot8b();
       this.calculateSlot9();
       this.finalCalcs();
     },
@@ -619,16 +736,19 @@ export default {
       }
       this.slots[6] = out;
     },
-    calculateSlot8a() {
-      if (this.gOptions.vn === "asp") {
+    calculateSlot8a(num="",override="") {
+      var vn;
+      if (override != "") {vn = override}
+      else {vn = this.gOptions["vn"+num]}
+      if (vn === "asp") {
         // aspect
         var pph = [["RTR","PRS","HAB","PRG","IMM","PCS","REG","SMM","ATP"],
                   ["RSM","CSS","PAU","RGR","PCL","CNT","ICS","EXP","IRP"],
                   ["PMP","CLM","DLT","TMP","XPD","LIM","EPD","PTC","PPR"],
                   ["DCL","CCL","CUL","IMD","TRD","TNS","ITC","MTV","SQN"]];
         for (var i in pph) {
-          if (pph[i].includes(this.gOptions.asp)) {
-            this.slots[7] = this.sVowels[pph[i].indexOf(this.gOptions.asp)][i];
+          if (pph[i].includes(this.gOptions["asp"+num])) {
+            return this.sVowels[pph[i].indexOf(this.gOptions["asp"+num])][i];
           }
         }
       } else {
@@ -638,21 +758,20 @@ export default {
                    "pha":["PCT","ITR","REP","ITM","RCT","FRE","FRG","VAC","FLC"],
                    "eff":["1:BEN","2:BEN","3:BEN","SLF:BEN","UNK","SLF:DET","3:DET","2:DET","1:DET"],
                    "lvl":["MIN","SBE","IFR","DFT","EQU","SUR","SPL","SPQ","MAX"]};
-        this.slots[7] = this.sVowels[phh[this.gOptions.vn].indexOf(this.gOptions[this.gOptions.vn])][ph.indexOf(this.gOptions.vn)];
+        return this.sVowels[phh[this.gOptions["vn"+num]].indexOf(this.gOptions[this.gOptions["vn"+num]+num])][ph.indexOf(this.gOptions["vn"+num])];
       }
     },
-    calculateSlot8b() {
+    calculateSlot8b(num="",ca="") {
       var ph = [];
       var phh = [];
-      if (this.gOptions.vn === "asp") { ph = ["w","hw","hlw","hly","hnw","hny"]; }
+      if (this.gOptions["vn"+num] === "asp") { ph = ["w","hw","hlw","hly","hnw","hny"]; }
       else { ph = ["h","hl","hr","hm","hn","hň"]; }
-      if (this.gOptions.rel != "UNF/K" || this.gOptions.concat != "0") {
+      if (this.wordType == "modular" ? ca == "casc" : (this.gOptions.rel != "UNF/K" || this.gOptions.concat != "0")) {
         phh = ["CCN","CCA","CCS","CCQ","CCP","CCV"];
-        this.slots[8] = ph[phh.indexOf(this.gOptions.casc)]
-      }
-      else {
+        return ph[phh.indexOf(this.gOptions["casc"+num])]
+      } else {
         phh = ["FAC","SUB","ASM","SPC","COU","HYP"];
-        this.slots[8] = ph[phh.indexOf(this.gOptions.mood)];
+        return ph[phh.indexOf(this.gOptions["mood"+num])];
       }
     },
     calculateSlot9() {
@@ -982,7 +1101,8 @@ export default {
       return false; // if NOTHING above triggered a return true, retirn false.
     },
 
-    markStress(stressType,wordVowels,thisword) {
+    markStress(stressType,thisword) {
+      var wordVowels = thisword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
       if (stressType === 0 && wordVowels.length > 1) { // if ultimate stress (and not single-syllable word, because that's already assumed to be ultimate)
         for (let i = thisword.length-1; i >= 0; i--) {
           if (["a","e","i","o","u","ä","ë","ö","ü"].includes(thisword.charAt(i))) {
@@ -1005,7 +1125,7 @@ export default {
                 thisword = thisword.substring(0, i) + this.sAccent[thisword.charAt(i)] + thisword.substring(i+1);
               }
               break;
-            } else {
+            } else if (!this.sDip.includes(thisword.charAt(i-1) + thisword.charAt(i))) {
               counter++
             }
           }
@@ -1084,7 +1204,7 @@ export default {
         wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi); // recalculate wordVowels because ithkword has updated
       }
       // 5c: marking the stress
-      this.ithkword = this.markStress(stressType, wordVowels, this.ithkword);
+      this.ithkword = this.markStress(stressType, this.ithkword);
       /*if (stressType === 0 && wordVowels.length > 1) { // if ultimate stress (and not single-syllable word, because that's already assumed to be ultimate)
         for (let i = this.ithkword.length-1; i >= 0; i--) {
           if (["a","e","i","o","u","ä","ë","ö","ü"].includes(this.ithkword.charAt(i))) {
