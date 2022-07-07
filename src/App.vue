@@ -10,8 +10,10 @@
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
       <OptionBox :json="gData.affRoot" :class="{hidden: wordType != 'affRoot'}" code="affRoot" @send-message="handleSendMessage" ref="affRoot" @modal="openModal"/>
       <OptionBox :json="gData.arDegree" :class="{hidden: wordType != 'affRoot'}" code="arDegree" @send-message="handleSendMessage" ref="arDegree" @modal="openModal"/>
-      <OptionBox :json="gData.root" :class="{hidden: wordType == 'affRoot'}" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
-      <OptionBox :json="gData.stem" :class="{hidden: wordType == 'affRoot'}" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
+      <OptionBox :json="gData.ref" :class="{hidden: wordType != 'reference'}" code="ref" @send-message="handleSendMessage" ref="ref" @modal="openModal"/>
+      <OptionBox :json="gData.refEff" :class="{hidden: wordType != 'reference'}" code="refEff" @send-message="handleSendMessage" ref="refEff" @modal="openModal"/>
+      <OptionBox :json="gData.root" :class="{hidden: wordType == 'affRoot' || wordType == 'reference'}" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
+      <OptionBox :json="gData.stem" :class="{hidden: wordType == 'affRoot' || wordType == 'reference'}" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
       <OptionBox :json="gData.spec" code="spec" @send-message="handleSendMessage" ref="spec" @modal="openModal"/>
       <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
       <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
@@ -134,6 +136,7 @@
           <option>affixjunct</option>
           <option>register</option>
           <option>modular</option>
+          <option>reference</option>
         </select>
         <h3>IPA (Pronunciation)</h3>
         <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
@@ -281,6 +284,9 @@ export default {
         "modNumber": "1",
         "vh": "vn",
         "modScope": "a",
+        // PERSONAL-REFERENCE ADJUNCT OPTIONS
+        "ref": "1m",
+        "refEff": "NEU",
       },
       sVowels: [ // the "Standard Vowel-Form Sequence" as an array
         ["a","ai","ia","ao"],
@@ -360,7 +366,8 @@ export default {
       casePopupTitle: "Allcases",
       cascOrMood: false, // false if case scope, true if mood.
       tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
-      SRtabGroups: [["affRoot","arDegree","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
+      SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
+      REFtabGroups: [["ref","refEff"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
     }
   },
   methods: {
@@ -397,6 +404,7 @@ export default {
       if (this.wordType == "normal") {tG = JSON.parse(JSON.stringify(this.tabGroups));}
       else if (this.wordType == "suppletive") {tG = [["suppType","c"]];}
       else if (this.wordType == "affRoot") {tG = JSON.parse(JSON.stringify(this.SRtabGroups));}
+      else if (this.wordType == "reference") {tG = JSON.parse(JSON.stringify(this.REFtabGroups));}
       else if (this.wordType == "affixjunct") {tG = [["affixjunct","initialAffScope","otherAffScope","affScopeOf"]];}
       else if (this.wordType == "register") {tG = [["register","regStartOrEnd"]];}
       else if (this.wordType == "modular") {
