@@ -702,7 +702,7 @@ export default {
         // 2. the standalone form tļ becomes ttļ.
         out = "ttļ";
       }
-      else if (['t','k','p','d','g','b'].includes(out.charAt(0)) && ['l','r','ř','w','y'].includes(out.charAt(0))) {
+      else if (['t','k','p','d','g','b'].includes(out.charAt(0)) && ['l','r','ř','w','y'].includes(out.charAt(1))) {
         // 3. for forms beginning with a stop followed by a liquid or approximant, geminate the stop.
         out = out.charAt(0) + out;
       }
