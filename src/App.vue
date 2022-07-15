@@ -10,10 +10,11 @@
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
       <OptionBox :json="gData.affRoot" :class="{hidden: wordType != 'affRoot'}" code="affRoot" @send-message="handleSendMessage" ref="affRoot" @modal="openModal"/>
       <OptionBox :json="gData.arDegree" :class="{hidden: wordType != 'affRoot'}" code="arDegree" @send-message="handleSendMessage" ref="arDegree" @modal="openModal"/>
-      <OptionBox :json="gData.ref" :class="{hidden: wordType != 'reference'}" code="ref" @send-message="handleSendMessage" ref="ref" @modal="openModal"/>
-      <OptionBox :json="gData.refEff" :class="{hidden: wordType != 'reference'}" code="refEff" @send-message="handleSendMessage" ref="refEff" @modal="openModal"/>
-      <OptionBox :json="gData.root" :class="{hidden: wordType == 'affRoot' || wordType == 'reference'}" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
-      <OptionBox :json="gData.stem" :class="{hidden: wordType == 'affRoot' || wordType == 'reference'}" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
+      <OptionBox :json="gData.ref" :class="{hidden: wordType != 'refRoot'}" code="ref" @send-message="handleSendMessage" ref="ref" @modal="openModal"/>
+      <OptionBox :json="gData.refEff" :class="{hidden: wordType != 'refRoot'}" code="refEff" @send-message="handleSendMessage" ref="refEff" @modal="openModal"/>
+      <OptionBox :json="gData.refPersp" :class="{hidden: wordType != 'refRoot'}" code="refPersp" @send-message="handleSendMessage" ref="refPersp" @modal="openModal"/>
+      <OptionBox :json="gData.root" :class="{hidden: wordType == 'affRoot' || wordType == 'refRoot'}" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
+      <OptionBox :json="gData.stem" :class="{hidden: wordType == 'affRoot' || wordType == 'refRoot'}" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
       <OptionBox :json="gData.spec" code="spec" @send-message="handleSendMessage" ref="spec" @modal="openModal"/>
       <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
       <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
@@ -136,7 +137,7 @@
           <option>affixjunct</option>
           <option>register</option>
           <option>modular</option>
-          <option>reference</option>
+          <option>refRoot</option>
         </select>
         <h3>IPA (Pronunciation)</h3>
         <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
@@ -285,8 +286,9 @@ export default {
         "vh": "vn",
         "modScope": "a",
         // PERSONAL-REFERENCE ADJUNCT OPTIONS
-        "ref": "1m",
+        "ref": "1M",
         "refEff": "NEU",
+        "refPersp": "M",
       },
       sVowels: [ // the "Standard Vowel-Form Sequence" as an array
         ["a","ai","ia","ao"],
@@ -367,7 +369,7 @@ export default {
       cascOrMood: false, // false if case scope, true if mood.
       tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
       SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
-      REFtabGroups: [["ref","refEff"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
+      REFtabGroups: [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
     }
   },
   methods: {
@@ -404,7 +406,7 @@ export default {
       if (this.wordType == "normal") {tG = JSON.parse(JSON.stringify(this.tabGroups));}
       else if (this.wordType == "suppletive") {tG = [["suppType","c"]];}
       else if (this.wordType == "affRoot") {tG = JSON.parse(JSON.stringify(this.SRtabGroups));}
-      else if (this.wordType == "reference") {tG = JSON.parse(JSON.stringify(this.REFtabGroups));}
+      else if (this.wordType == "refRoot") {tG = JSON.parse(JSON.stringify(this.REFtabGroups));}
       else if (this.wordType == "affixjunct") {tG = [["affixjunct","initialAffScope","otherAffScope","affScopeOf"]];}
       else if (this.wordType == "register") {tG = [["register","regStartOrEnd"]];}
       else if (this.wordType == "modular") {
@@ -534,6 +536,24 @@ export default {
       }
       this.IPAcalcs();
     },
+    calculateReference() {
+      /* "ref": "1m",
+        "refEff": "NEU",
+        "refPersp": "M", */
+      var ph = {"1M": {"NEU":"l","BEN":"r","DET":"ř"},
+                "2M": {"NEU":"s","BEN":"š","DET":"ž"},
+                "2P": {"NEU":"n","BEN":"t","DET":"d"},
+                "MA": {"NEU":"m","BEN":"p","DET":"b"},
+                "PA": {"NEU":"ň","BEN":"k","DET":"g"},
+                "MI": {"NEU":"z","BEN":"ţ","DET":"ḑ"},
+                "PI": {"NEU":"ẓ","BEN":"f","DET":"v"},
+                "MX": {"NEU":"c","BEN":"č","DET":"j"},
+                "RDP":{"NEU":"th","BEN":"ph","DET":"kh"},
+                "OBV":{"NEU":"ll","BEN":"rr","DET":"řř"},
+                "PVS":{"NEU":"mm","BEN":"nn","DET":"ňň"}
+      }
+      return ph[this.gOptions.ref][this.gOptions.refEff];
+    },
     calculateWord() {
       // this order is specifically because slots 4 and 6 can influence slots 1 through 5 due to shortcutting.
       // additionally, what slot 2 shows can influence what slot 7 shows
@@ -566,6 +586,7 @@ export default {
                 "s3":{"CPT":7,"PRC":8}};
       var phh = {"PRC":{"STA":"ëi","DYN":"eë"},
                  "CPT":{"STA":"ëu","DYN":"oë"}};
+      var pph = {"PRC":"ae","CPT":"ea"};
       if (this.wordType == "normal") {
         if (!this.shortcutting){
           var lastVII;
@@ -596,6 +617,8 @@ export default {
         }
       } else if (this.wordType == "affRoot") {
         this.slots[1] = phh[this.gOptions.ver][this.gOptions.func];
+      } else if (this.wordType == "refRoot") {
+        this.slots[1] = pph[this.gOptions.ver];
       }
       if (this.gOptions.Vafx.length >= 2) {
         this.slots[1] = this.insertGStop(this.slots[1]);
@@ -606,6 +629,8 @@ export default {
         this.slots[2] = this.gOptions.root.toLowerCase();
       } else if (this.wordType == "affRoot") {
         this.slots[2] = this.gOptions.affRoot.toLowerCase();
+      } else if (this.wordType == "refRoot") {
+        this.slots[2] = this.calculateReference();
       }
     },
     calculateSlot4() {
@@ -613,7 +638,7 @@ export default {
                 "DYN":{"OBJ":5,"CSV":6,"CTE":7,"BSC":8}}; // again, svf 5 is skipped
       var phh = ["EXS","FNC","RPS","AMG"];
       var pph = ["BSC","CTE","CSV","OBJ"];
-      if (this.wordType == "normal"){
+      if (this.wordType == "normal" || this.wordType == "refRoot"){
         this.slots[3] = this.sVowels[ph[this.gOptions.func][this.gOptions.spec]][phh.indexOf(this.gOptions.ctxt)];
       } else if (this.wordType == "affRoot") {
         this.slots[3] = this.sVowels[this.gOptions.arDegree][pph.indexOf(this.gOptions.spec)];
@@ -662,7 +687,7 @@ export default {
       }
       var out = AFFIL+CONF+EXT+PSPESS
       // step 3: applying allomorphic substitutions
-      var ph1 = {"pp":"mp","tt":"nt","kk":"nk","ll":"pļ","pb":"mb","kg":"ng","çy":"nd","rr":"ns","rř":"nš","řř":"ňš"}//,"ngn":"ňn","ff":"vw","ţţ":"ḑy"};
+      var ph1 = {"pp":"mp","tt":"nt","kk":"nk","ll":"pļ","pb":"mb","kg":"ng","çy":"nd","rr":"ns","rř":"nš","řř":"ňš","řr":"ňs"}//,"ngn":"ňn","ff":"vw","ţţ":"ḑy"};
       for (var key1 in ph1) {
         out = out.replace(key1,ph1[key1]);
       }
@@ -824,8 +849,10 @@ export default {
     shortcutCalcs() {
       // SHORTCUTTING!
       (() => {
-      if (this.gOptions.shcut === 1 && this.slots[3] == "a" && ["l","d","r","tļ","v","j","ř","dl"].includes(this.slots[10]) && this.wordType == "normal") {
+      if ((this.gOptions.shcut === 1 && this.slots[3] == "a" && ["l","d","r","tļ","v","j","ř","dl"].includes(this.slots[10]) && this.wordType == "normal")
+       || (this.wordType == "refRoot" && this.gOptions.shcut == 1 && this.slots[3] == "a" && ["l","d"].includes(this.slots[10]))) {
         //l = ., d = PRX, r = G, tļ = RPV, v = N, j = A, ř = G.RPV, dl = PRX.RPV
+        // if the word is a reference-root, only default and PRX can be shown
         var ph = {"l":[1,0], "d":[2,0],
                   "r":[1,1],"tļ":[2,1],
                   "v":[1,2], "j":[2,2],
@@ -901,214 +928,300 @@ export default {
       }
     },
     allowedAtStart(consonants) {
-      var nogem = this.removeDuplicate(consonants);
-      if (consonants.length === 1) {
-        //monocons. root
-        if (consonants !== "ļ"){ // not ļ
-          return true;
+      if (this.consAllowed(consonants)) {
+        var nogem = this.removeDuplicate(consonants);
+        if (consonants.length === 1) {
+          //monocons. root
+          if (consonants !== "ļ"){ // not ļ
+            return true;
+          }
+        } else if (nogem.length === 2) {
+          //bicons. root - this is VERY difficult to test and MAY have some errors, but I'm pretty confident that it shouldn't.
+          var ra = nogem.charAt(0);
+          var rb = nogem.charAt(1);
+          if ((this.getCons(["stop"]).includes(ra) && ["r","l","ř","w","y"].includes(rb)) || // 3.2.0 - first char is... stops
+              (["p","k"].includes(ra) && ["s","š"].includes(rb)) ||
+              (["b","g"].includes(ra) && ["z","ž"].includes(rb)) ||
+              (ra === "p" && ["f","ţ","ç","x","h","ļ"].includes(rb)) ||
+              (ra === "b" && ["v","ḑ"].includes(rb)) ||
+              (ra === "t" && ["f","v","ţ","ḑ","ç","x","h","ļ"].includes(rb)) ||
+              (ra === "d" && rb == "v") ||
+              (ra === "k" && ["f","ţ","ç","x","h"].includes(rb)) ||
+              (ra === "g" && ["v","ḑ"].includes(rb)) ||
+              (["s","š"].includes(ra) && this.getCons(["stop","unvoiced"],["fric","nonsibil","unvoiced"],["affric","unvoiced"]).includes(rb)) || // 3.2.1 - sibilant fricatives
+              (["z","ž"].includes(ra) && this.getCons(["stop","voiced"],["fric","nonsibil","voiced"],["affric","voiced"]).includes(rb)) ||
+              (["s","z","š","ž"].includes(ra) && ["m","n","ň","r","l","w","y","ř","v"].includes(rb)) ||
+              (["c","č"].includes(ra) && this.getCons(["fric","nonsibil","unvoiced"],["stop","unvoiced"]).includes(rb)) || // 3.2.2 - sibilant affricatives
+              (["c","č"].includes(ra) && rb === "h") ||
+              (["ẓ","j"].includes(ra) && this.getCons(["fric","nonsibil","voiced"],["stop","voiced"]).includes(rb)) ||
+              (["c","ẓ","č","j"].includes(ra) && ["r","l","m","n","ň","w","v"]) ||
+              (ra === "x" && ["p","t","c","č","m","n","l","r","w"].includes(rb)) || // 3.2.3 - x
+              (ra === "ç" && ["p","t","c","č","k","m","n","ň","l","r","ř"].includes(rb)) || // 3.2.4 - ç
+              (["f","ţ"].includes(ra) && this.getCons(["stop","unvoiced"],["affric","unvoiced"]).includes(rb)) || // 3.2.5 - f, v, ţ, ḑ
+              (["v","ḑ"].includes(ra) && this.getCons(["stop","voiced"],["affric","voiced"]).includes(rb)) ||
+              (["f","v","ţ","ḑ"].includes(ra) && ["r","l","w","y","ř","m","n","ň"].includes(rb)) ||
+              (ra === "ļ" && this.getCons(["stop","unvoiced"],["affric","unvoiced"],["nasal"]).includes(rb)) || // 3.2.6 - ļ
+              (ra === "ļ" && ["w","y"].includes(rb)) ||
+              (ra === "h" && ["l","r","m","n","w"].includes(rb)) || // 3.2.7 - h
+              (["m","n"].includes(ra) && ["l","r","w","y","ř"].includes(rb)) || // 3.2.8 - nasals
+              (ra === "ň" && ["l","r","w"].includes(rb)) ||
+              (["l","r"].includes(ra) && ["w","y"].includes(rb)) // 3.2.9 - liquids
+          ){
+            return true; // if ANY of the huge above if statement is true, return true
+          }
+        } else if (nogem.length === 3) {
+          //tricons. root
+          var da = nogem.charAt(0);
+          var db = nogem.charAt(1);
+          var dc = nogem.charAt(2);
+          var dab = da + db;
+          if (
+            // 3.3.0 - stop, sibil, anything permissible as of 3.2.2
+            (["ps","pš","ks","kš"].includes(dab) && this.getCons(["stop","unvoiced"],["fric","nonsibil","unvoiced"],["affric","unvoiced"]).includes(dc)) ||
+            (["bz","bž","gz","gž"].includes(dab) && this.getCons(["stop","voiced"],["fric","nonsibil","voiced"],["affric","voiced"]).includes(dc)) ||
+            (["ps","pš","ks","kš","bz","bž","gz","gž"].includes(dab) && ["m","n","ň","r","l","w","y","ř","v"].includes(dc)) ||
+            // 3.3.1 - stop, l/r, w/y
+            (["p","b","t","d","k","g"].includes(da) && ["l","r"].includes(db) && ["w","y"].includes(dc)) ||
+            // 3.3.2 - voiceless stop, ç, m/n/ň
+            (["p","t","k"].includes(da) && db === "ç" && ["m","n","ň"].includes(dc)) ||
+            // 3.3.3 - p/k, f/ţ, y/w  OR  p/t, ļ, w/y
+            (["p","k"].includes(da) && ["f","t"].includes(db) && ["y","w"].includes(dc)) ||
+            (["p","t"].includes(db) && db === "ļ" && ["w","y"].includes(dc)) ||
+            // 3.3.4 - sibil fric, stop, approx/liq.  OR  sibil, nasal, w/y based on 3.2.8
+            (["s","š","ç"].includes(da) && ["p","t","k"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
+            (["z","ž"].includes(da) && ["b","d","g"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
+            (["s","z","š","ž","ç"].includes(da) && ["m","n"].includes(db) && ["w","y"].includes(dc)) ||
+            (["s","z","š","ž","ç"].includes(da) && db === "ň" && dc === "w") ||
+            // 3.3.5 - hlw, hrw, hmw, hnw, hmy, hny
+            (["hlw","hrw","hmw","hnw","hmy","hny"].includes(nogem)) ||
+            // 3.3.6 - sibil affric, stop, liquid/approx  OR  sibil affric, nasal, w/y based on 3.2.8
+            (["c","č"].includes(da) && ["p","t","k"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
+            (["ẓ","j"].includes(da) && ["b","d","g"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
+            (["c","ẓ","č","j"].includes(da) && ["m","n"].includes(db) && ["w","y"].includes(dc)) ||
+            (["c","ẓ","č","j"].includes(da) && db === "ň" && dc === "w") ||
+            // 3.3.7 - flw, ţlw, fly, ţly
+            (["flw","ţly","fly","ţly"].includes(nogem)) ||
+            // 3.3.8 - xp/xt, l/r/w/y  OR  xm/xn, w/y  OR  xc/xč, w
+            (["xp","xt"].includes(dab) && ["l","r","w","y"].includes(dc)) ||
+            (["xm","xn"].includes(dab) && ["w","y"].includes(dc)) ||
+            (["xc","xč"].includes(dab) && dc === "w")
+          ) {
+            return true;
+          }
+        } else if (nogem.length === 4) {
+          // tetracons. roots
+          var qa = nogem.charAt(0);
+          var qb = nogem.charAt(1);
+          var qc = nogem.charAt(2);
+          var qd = nogem.charAt(3);
+          if (
+            // 3.4.1 - tri-cons ending in a stop, liq/approx WHICH MEANS p/b/k/g, s/z/š/ž, stop, affric/stop
+            (["p","k"].includes(qa) && ["s","š"].includes(qb) && ["p","t","k"].includes(qc) && ["r","l","w","y","ř"].includes(qd)) ||
+            (["b","g"].includes(qa) && ["z","ž"].includes(qb) && ["b","d","g"].includes(qc) && ["r","l","w","y","ř"].includes(qd)) ||
+            // 3.4.2 - sibil, stop, ly
+            (["s","š","ç","c","č"].includes(qa) && ["p","t","k"].includes(qb) && qc === "l" && qd === "y") ||
+            (["z","ž","ẓ","j"].includes(qa) && ["b","d","g"].includes(qb) && qc === "l" && qd === "y")
+          ) {
+            return true;
+          }
         }
-      } else if (nogem.length === 2) {
-        //bicons. root - this is VERY difficult to test and MAY have some errors, but I'm pretty confident that it shouldn't.
-        var ra = nogem.charAt(0);
-        var rb = nogem.charAt(1);
-        if ((this.getCons(["stop"]).includes(ra) && ["r","l","ř","w","y"].includes(rb)) || // 3.2.0 - first char is... stops
-            (["p","k"].includes(ra) && ["s","š"].includes(rb)) ||
-            (["b","g"].includes(ra) && ["z","ž"].includes(rb)) ||
-            (ra === "p" && ["f","ţ","ç","x","h","ļ"].includes(rb)) ||
-            (ra === "b" && ["v","ḑ"].includes(rb)) ||
-            (ra === "t" && ["f","v","ţ","ḑ","ç","x","h","ļ"].includes(rb)) ||
-            (ra === "d" && rb == "v") ||
-            (ra === "k" && ["f","ţ","ç","x","h"].includes(rb)) ||
-            (ra === "g" && ["v","ḑ"].includes(rb)) ||
-            (["s","š"].includes(ra) && this.getCons(["stop","unvoiced"],["fric","nonsibil","unvoiced"],["affric","unvoiced"]).includes(rb)) || // 3.2.1 - sibilant fricatives
-            (["z","ž"].includes(ra) && this.getCons(["stop","voiced"],["fric","nonsibil","voiced"],["affric","voiced"]).includes(rb)) ||
-            (["s","z","š","ž"].includes(ra) && ["m","n","ň","r","l","w","y","ř","v"].includes(rb)) ||
-            (["c","č"].includes(ra) && this.getCons(["fric","nonsibil","unvoiced"],["stop","unvoiced"]).includes(rb)) || // 3.2.2 - sibilant affricatives
-            (["c","č"].includes(ra) && rb === "h") ||
-            (["ẓ","j"].includes(ra) && this.getCons(["fric","nonsibil","voiced"],["stop","voiced"]).includes(rb)) ||
-            (["c","ẓ","č","j"].includes(ra) && ["r","l","m","n","ň","w","v"]) ||
-            (ra === "x" && ["p","t","c","č","m","n","l","r","w"].includes(rb)) || // 3.2.3 - x
-            (ra === "ç" && ["p","t","c","č","k","m","n","ň","l","r","ř"].includes(rb)) || // 3.2.4 - ç
-            (["f","ţ"].includes(ra) && this.getCons(["stop","unvoiced"],["affric","unvoiced"]).includes(rb)) || // 3.2.5 - f, v, ţ, ḑ
-            (["v","ḑ"].includes(ra) && this.getCons(["stop","voiced"],["affric","voiced"]).includes(rb)) ||
-            (["f","v","ţ","ḑ"].includes(ra) && ["r","l","w","y","ř","m","n","ň"].includes(rb)) ||
-            (ra === "ļ" && this.getCons(["stop","unvoiced"],["affric","unvoiced"],["nasal"]).includes(rb)) || // 3.2.6 - ļ
-            (ra === "ļ" && ["w","y"].includes(rb)) ||
-            (ra === "h" && ["l","r","m","n","w"].includes(rb)) || // 3.2.7 - h
-            (["m","n"].includes(ra) && ["l","r","w","y","ř"].includes(rb)) || // 3.2.8 - nasals
-            (ra === "ň" && ["l","r","w"].includes(rb)) ||
-            (["l","r"].includes(ra) && ["w","y"].includes(rb)) // 3.2.9 - liquids
-        ){
-          return true; // if ANY of the huge above if statement is true, return true
-        }
-      } else if (nogem.length === 3) {
-        //tricons. root
-        var da = nogem.charAt(0);
-        var db = nogem.charAt(1);
-        var dc = nogem.charAt(2);
-        var dab = da + db;
-        if (
-          // 3.3.0 - stop, sibil, anything permissible as of 3.2.2
-          (["ps","pš","ks","kš"].includes(dab) && this.getCons(["stop","unvoiced"],["fric","nonsibil","unvoiced"],["affric","unvoiced"]).includes(dc)) ||
-          (["bz","bž","gz","gž"].includes(dab) && this.getCons(["stop","voiced"],["fric","nonsibil","voiced"],["affric","voiced"]).includes(dc)) ||
-          (["ps","pš","ks","kš","bz","bž","gz","gž"].includes(dab) && ["m","n","ň","r","l","w","y","ř","v"].includes(dc)) ||
-          // 3.3.1 - stop, l/r, w/y
-          (["p","b","t","d","k","g"].includes(da) && ["l","r"].includes(db) && ["w","y"].includes(dc)) ||
-          // 3.3.2 - voiceless stop, ç, m/n/ň
-          (["p","t","k"].includes(da) && db === "ç" && ["m","n","ň"].includes(dc)) ||
-          // 3.3.3 - p/k, f/ţ, y/w  OR  p/t, ļ, w/y
-          (["p","k"].includes(da) && ["f","t"].includes(db) && ["y","w"].includes(dc)) ||
-          (["p","t"].includes(db) && db === "ļ" && ["w","y"].includes(dc)) ||
-          // 3.3.4 - sibil fric, stop, approx/liq.  OR  sibil, nasal, w/y based on 3.2.8
-          (["s","š","ç"].includes(da) && ["p","t","k"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
-          (["z","ž"].includes(da) && ["b","d","g"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
-          (["s","z","š","ž","ç"].includes(da) && ["m","n"].includes(db) && ["w","y"].includes(dc)) ||
-          (["s","z","š","ž","ç"].includes(da) && db === "ň" && dc === "w") ||
-          // 3.3.5 - hlw, hrw, hmw, hnw, hmy, hny
-          (["hlw","hrw","hmw","hnw","hmy","hny"].includes(nogem)) ||
-          // 3.3.6 - sibil affric, stop, liquid/approx  OR  sibil affric, nasal, w/y based on 3.2.8
-          (["c","č"].includes(da) && ["p","t","k"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
-          (["ẓ","j"].includes(da) && ["b","d","g"].includes(db) && ["r","l","w","y","ř"].includes(dc)) ||
-          (["c","ẓ","č","j"].includes(da) && ["m","n"].includes(db) && ["w","y"].includes(dc)) ||
-          (["c","ẓ","č","j"].includes(da) && db === "ň" && dc === "w") ||
-          // 3.3.7 - flw, ţlw, fly, ţly
-          (["flw","ţly","fly","ţly"].includes(nogem)) ||
-          // 3.3.8 - xp/xt, l/r/w/y  OR  xm/xn, w/y  OR  xc/xč, w
-          (["xp","xt"].includes(dab) && ["l","r","w","y"].includes(dc)) ||
-          (["xm","xn"].includes(dab) && ["w","y"].includes(dc)) ||
-          (["xc","xč"].includes(dab) && dc === "w")
-        ) {
-          return true;
-        }
-      } else if (nogem.length === 4) {
-        // tetracons. roots
-        var qa = nogem.charAt(0);
-        var qb = nogem.charAt(1);
-        var qc = nogem.charAt(2);
-        var qd = nogem.charAt(3);
-        if (
-          // 3.4.1 - tri-cons ending in a stop, liq/approx WHICH MEANS p/b/k/g, s/z/š/ž, stop, affric/stop
-          (["p","k"].includes(qa) && ["s","š"].includes(qb) && ["p","t","k"].includes(qc) && ["r","l","w","y","ř"].includes(qd)) ||
-          (["b","g"].includes(qa) && ["z","ž"].includes(qb) && ["b","d","g"].includes(qc) && ["r","l","w","y","ř"].includes(qd)) ||
-          // 3.4.2 - sibil, stop, ly
-          (["s","š","ç","c","č"].includes(qa) && ["p","t","k"].includes(qb) && qc === "l" && qd === "y") ||
-          (["z","ž","ẓ","j"].includes(qa) && ["b","d","g"].includes(qb) && qc === "l" && qd === "y")
-        ) {
-          return true;
-        }
+        return false; // if NOTHING above triggered a return true, retirn false.
+      } else {
+        return false;
       }
-      return false; // if NOTHING above triggered a return true, retirn false.
     },
     allowedAtEnd(lastCons) {
-      var nogem2 = this.removeDuplicate(lastCons);
-      if (lastCons.length == 1) {
-        //monocons.
-        if (lastCons !== "w" && lastCons !== "y" && lastCons !== "'") { // 4.1 any consonant except -w or -y
-          return true;
+      if (this.consAllowed(lastCons)) {
+        var nogem2 = this.removeDuplicate(lastCons);
+        if (lastCons.length == 1) {
+          //monocons.
+          if (lastCons !== "w" && lastCons !== "y" && lastCons !== "'") { // 4.1 any consonant except -w or -y
+            return true;
+          }
+        } else if (lastCons.length == 2) {
+          //bicons.
+          var eba = lastCons.charAt(0);
+          var ebb = lastCons.charAt(1);
+          if (
+            (["p","t","k"].includes(eba) && ["f","ţ","s","š","ç","x","h","ļ"].includes(ebb)) || // 4.2.1 - stop, fricative
+            (["b","d","g"].includes(eba) && ["v","ḑ","z","ž"].includes(ebb)) ||
+            (["k","p"].includes(eba) && ebb === "t") || // 4.2.2 - non-dental stop, dental stop
+            (["g","b"].includes(eba) && ebb === "d") ||
+            (["s","š"].includes(eba) && ["p","t","k"].includes(ebb)) || // 4.2.3 - sibilant fric, stop
+            (["z","ž"].includes(eba) && ["b","d","g"].includes(ebb)) ||
+            (["c","č"].includes(eba) && ["t","k"].includes(ebb)) || // 4.2.4 - sibilant affric, nonlabial stop
+            (["ẓ","j"].includes(eba) && ["d","g"].includes(ebb)) ||
+            (eba === "f" && ["t","k","s","š","ç"].includes(ebb)) || // 4.2.5 - f/v, nonlabial stop/sibilant fric
+            (eba === "v" && ["d","g","z","ž"].includes(ebb)) ||
+            (eba === "ţ" && ["t","k"].includes(ebb)) || // 4.2.6 - ţ/ḑ, nonlabial stop
+            (eba === "ḑ" && ["d","g"].includes(ebb)) ||
+            (["ļ","x"].includes(eba) && ["p","t","k"].includes(ebb)) || // 4.2.7 - ļ/x, voiceless stop
+            (["m","n"].includes(eba) && ["p","b","t","d","k","g","f","v","ţ","ḑ","s","z","š","ž","ç","x","h","ļ"].includes(ebb)) || // 4.2.8 - m/n, stop/fric
+            (eba === "ň" && ["t","d","f","v","ţ","ḑ","s","z","š","ž","ç","h"]) || // 4.2.9 - ň, dental stop/fric (NOT ļ/x)
+            (eba === "r" && ebb !== "w" && ebb !== "y" && ebb !== "'") || // 4.2.10 - r, anything except w/y/'
+            (eba === "l" && !(["'","w","y","r","ň"].includes(ebb))) || // 4.2.11 - l, anything except w/y/r/ň/'
+            (eba === ebb && !(["p","t","k","b","d","g","'"].includes(eba))) // 4.2.12 - any geminated consonant except stops
+          ){
+            return true;
+          }
+        } else if (lastCons.length == 3) {
+          // tricons.
+          var eca = lastCons.charAt(0);
+          var ecb = lastCons.charAt(1);
+          var ecc = lastCons.charAt(2);
+          if (
+            (ecb === "p" && ((["r","ř","l"].includes(eca) && ["t","k","f","ţ","x","s","š","h","ļ","ç"].includes(ecc))
+                        || (["m","ň"].includes(eca) && ["h","ļ","ç"].includes(ecc))
+                        || (["s","š","ç"].includes(eca) && ["f","ţ","s","š","ļ","ç"].includes(ecc)))) ||
+            (ecb === "t" && ((["l","r","ř"].includes(eca) && ["k","f","x","h","ļ","ç"].includes(ecc))
+                        || (eca === "n" && ["k","f","x","h"].includes(ecc))
+                        || (["m","ň","s","š","ç"].includes(eca) && ["h","ļ","ç"].includes(ecc)))) ||
+            (ecb === "k" && ((["l","r","ř"].includes(eca) && ["t","f","ţ","s","š","h","ç"].includes(ecc))
+                        || (["n","f","ţ","l"].includes(eca) && ["h","ç"].includes(ecc))
+                        || (eca === "m" && ["f","ţ","h","ç"].includes(ecc))
+                        || (["s","š","ç"].includes(eca) && ["f","ţ","s","š","h","ç"].includes(ecc)))) ||
+            (ecb === "b" && ((["r","ř"].includes(eca) && ["d","g","v","ḑ","z","ž"].includes(ecc))
+                        || (eca === "l" && ["v","ḑ","z","ž"].includes(ecc)))) ||
+            (ecb === "d" && (["r","ř"].includes(eca) && ["b","g","v"].includes(ecc))) ||
+            (ecb === "g" && ((["r","ř"].includes(eca) && ["b","d","v","ḑ","z","ž"].includes(ecc))
+                        || (eca === "l" && ["v","ḑ","z","ž"].includes(ecc)))) ||
+            (ecb === "f" && ((["l","r","ř","m","ň"].includes(eca) && ["t","k","f","s","š"].includes(ecc))
+                        || (["p","t","k"].includes(eca) && ["k","f"].includes(ecc))
+                        || (eca === "f" && ["t","k","s","š"].includes(ecc)))) ||
+            (ecb === "ţ" && ((["p","k","r","l","ř","m","n","ň"].includes(eca) && ["t","k","ţ"].includes(ecc))
+                        || (eca === "ţ" && ["t","k"].includes(ecc)))) ||
+            (ecb === "x" && ((["r","l","ř"].includes(eca) && ["t","x"].includes(ecc))
+                        || (["p","t","f","s","š","n","m"].includes(eca) && ecc === "x")
+                        || (eca === "x" && ecc === "t"))) ||
+            (ecb === "ļ" && ((["p","t","r","ř","m","n","ň"].includes(eca) && ["t","k","ļ"].includes(ecc))
+                        || (["ļ","l"].includes(eca) && ["t","k"].includes(ecc)))) ||
+            (ecb === "s" && ((["r","l","ř","m","n","ň","p","k","f"].includes(eca) && ["p","t","k","f","ţ","x","s"].includes(ecc))
+                        || (eca === "ţ" && ["p","t","k","s"].includes(ecc))
+                        || (eca === "s" && ["p","t","k","f","ţ","x"].includes(ecc)))) ||
+            (ecb === "š" && ((["r","l","ř","m","n","ň","p","k","f"].includes(eca) && ["p","t","k","f","ţ","x","š"].includes(ecc))
+                        || (eca === "ţ" && ["p","t","k","š"].includes(ecc))
+                        || (eca === "š" && ["p","t","k","f","ţ","x"].includes(ecc)))) ||
+            (ecb === "v" && ((["r","ř","l"].includes(eca) && ["v","z","ž"].includes(ecc))
+                        || (["b","g","m","ň"].includes(eca) && ecc === "v")
+                        || (eca === "v" && ["z","ž"].includes(ecc)))) ||
+            (ecb === "ḑ" && (["b","g","r","ř","l","n","m","ň"].includes(eca) && ecc === "ḑ")) ||
+            (ecb === "z" && ((["r","ř","l","n","m","ň"].includes(eca) && ["b","d","g","z"].includes(ecc))
+                        || (["b","g","v"].includes(eca) && ecc === "z")
+                        || (eca === "z" && ["b","d","g"].includes(ecc)))) ||
+            (ecb === "ž" && ((["r","ř","l","n","m","ň"].includes(eca) && ["b","d","g","ž"].includes(ecc))
+                        || (["b","g","v"].includes(eca) && ecc === "ž")
+                        || (eca === "ž" && ["b","d","g"].includes(ecc)))) ||
+            (ecb === "c" && (["r","ř","l"].includes(eca) && ["t","k","c","h"].includes(ecc))) ||
+            (ecb === "č" && (["r","ř","l"].includes(eca) && ["t","k","č","h"].includes(ecc))) ||
+            (ecb === "ẓ" && (["r","ř","l"].includes(eca) && ["d","g","ẓ"].includes(ecc))) ||
+            (ecb === "j" && (["r","ř","l"].includes(eca) && ["d","g","j"].includes(ecc))) ||
+            (ecb === "m" && ((["r","l","ř"].includes(eca) && ["p","t","k","b","d","f","ţ","x","s","š","v","ḑ","z","ž","m","ļ","ç"].includes(ecc))
+                        || (eca === "m" && ["p","t","k","b","d","f","ţ","x","s","š","v","ḑ","z","ž","ļ","ç"].includes(ecc)))) ||
+            (ecb === "n" && ((["r","ř"].includes(eca) && ["t","k","d","g","f","ţ","x","s","š","v","ḑ","z","ž","n","ļ","ç"].includes(ecc))
+                        || (eca === "l" && ["t","k","d","g","ţ","s","š","z","ž","ļ","ç"].includes(ecc))
+                        || (eca === "n" && ["t","k","d","g","f","ţ","x","s","š","v","ḑ","z","ž","ļ","ç"].includes(ecc)))) ||
+            (ecb === "l" && (eca === "l" && ["p","t","k","b","d","g","f","ţ","x","s","š","v","ḑ","z","ž","c","č","ẓ","j","m","n","ň","ç"].includes(ecc))) ||
+            (["r","ř"].includes(ecb) && (["r","ř"].includes(eca) && ["p","t","k","b","d","g","f","ţ","x","s","š","v","ḑ","z","ž","c","č","ẓ","j","m","n","ň","l","ļ","ç"].includes(ecc))) ||
+            (ecb === "ç" && ((["p","t","k","m","n","ň","r","l","ř"].includes(eca) && ["t","k","ç"].includes(ecc))
+                        || (eca === "ç" && ["t","k"].includes(ecc))))
+          ) {
+            return true;
+          }
+        } else if (nogem2.length == 4) {
+          // tetracons. & pentacons.
+          var eda = nogem2.charAt(0);
+          var edb = nogem2.charAt(1);
+          var edc = nogem2.charAt(2);
+          var edbc = edb + edc;
+          var edd = nogem2.charAt(3);
+          if (((["l","r","ř"].includes(eda) && (["tç","pf","fs","fš"].includes(edbc) || (["k","p"].includes(edb) && ["s","š","ţ","ç"].includes(edc)))) ||
+          (eda === "r" && ((["n","ň","m"].includes(edb) && ["s","š","ţ","ç"].includes(edc)) || (["ň","m"].includes(edb) && edc === "f"))))
+          && ["t","k"].includes(edd)) {
+            return true;
+          }
         }
-      } else if (lastCons.length == 2) {
-        //bicons.
-        var eba = lastCons.charAt(0);
-        var ebb = lastCons.charAt(1);
-        if (
-          (["p","t","k"].includes(eba) && ["f","ţ","s","š","ç","x","h","ļ"].includes(ebb)) || // 4.2.1 - stop, fricative
-          (["b","d","g"].includes(eba) && ["v","ḑ","z","ž"].includes(ebb)) ||
-          (["k","p"].includes(eba) && ebb === "t") || // 4.2.2 - non-dental stop, dental stop
-          (["g","b"].includes(eba) && ebb === "d") ||
-          (["s","š"].includes(eba) && ["p","t","k"].includes(ebb)) || // 4.2.3 - sibilant fric, stop
-          (["z","ž"].includes(eba) && ["b","d","g"].includes(ebb)) ||
-          (["c","č"].includes(eba) && ["t","k"].includes(ebb)) || // 4.2.4 - sibilant affric, nonlabial stop
-          (["ẓ","j"].includes(eba) && ["d","g"].includes(ebb)) ||
-          (eba === "f" && ["t","k","s","š","ç"].includes(ebb)) || // 4.2.5 - f/v, nonlabial stop/sibilant fric
-          (eba === "v" && ["d","g","z","ž"].includes(ebb)) ||
-          (eba === "ţ" && ["t","k"].includes(ebb)) || // 4.2.6 - ţ/ḑ, nonlabial stop
-          (eba === "ḑ" && ["d","g"].includes(ebb)) ||
-          (["ļ","x"].includes(eba) && ["p","t","k"].includes(ebb)) || // 4.2.7 - ļ/x, voiceless stop
-          (["m","n"].includes(eba) && ["p","b","t","d","k","g","f","v","ţ","ḑ","s","z","š","ž","ç","x","h","ļ"].includes(ebb)) || // 4.2.8 - m/n, stop/fric
-          (eba === "ň" && ["t","d","f","v","ţ","ḑ","s","z","š","ž","ç","h"]) || // 4.2.9 - ň, dental stop/fric (NOT ļ/x)
-          (eba === "r" && ebb !== "w" && ebb !== "y" && ebb !== "'") || // 4.2.10 - r, anything except w/y/'
-          (eba === "l" && !(["'","w","y","r","ň"].includes(ebb))) || // 4.2.11 - l, anything except w/y/r/ň/'
-          (eba === ebb && !(["p","t","k","b","d","g","'"].includes(eba))) // 4.2.12 - any geminated consonant except stops
-        ){
-          return true;
-        }
-      } else if (lastCons.length == 3) {
-        // tricons.
-        var eca = lastCons.charAt(0);
-        var ecb = lastCons.charAt(1);
-        var ecc = lastCons.charAt(2);
-        if (
-          (ecb === "p" && ((["r","ř","l"].includes(eca) && ["t","k","f","ţ","x","s","š","h","ļ","ç"].includes(ecc))
-                      || (["m","ň"].includes(eca) && ["h","ļ","ç"].includes(ecc))
-                      || (["s","š","ç"].includes(eca) && ["f","ţ","s","š","ļ","ç"].includes(ecc)))) ||
-          (ecb === "t" && ((["l","r","ř"].includes(eca) && ["k","f","x","h","ļ","ç"].includes(ecc))
-                      || (eca === "n" && ["k","f","x","h"].includes(ecc))
-                      || (["m","ň","s","š","ç"].includes(eca) && ["h","ļ","ç"].includes(ecc)))) ||
-          (ecb === "k" && ((["l","r","ř"].includes(eca) && ["t","f","ţ","s","š","h","ç"].includes(ecc))
-                      || (["n","f","ţ","l"].includes(eca) && ["h","ç"].includes(ecc))
-                      || (eca === "m" && ["f","ţ","h","ç"].includes(ecc))
-                      || (["s","š","ç"].includes(eca) && ["f","ţ","s","š","h","ç"].includes(ecc)))) ||
-          (ecb === "b" && ((["r","ř"].includes(eca) && ["d","g","v","ḑ","z","ž"].includes(ecc))
-                      || (eca === "l" && ["v","ḑ","z","ž"].includes(ecc)))) ||
-          (ecb === "d" && (["r","ř"].includes(eca) && ["b","g","v"].includes(ecc))) ||
-          (ecb === "g" && ((["r","ř"].includes(eca) && ["b","d","v","ḑ","z","ž"].includes(ecc))
-                      || (eca === "l" && ["v","ḑ","z","ž"].includes(ecc)))) ||
-          (ecb === "f" && ((["l","r","ř","m","ň"].includes(eca) && ["t","k","f","s","š"].includes(ecc))
-                      || (["p","t","k"].includes(eca) && ["k","f"].includes(ecc))
-                      || (eca === "f" && ["t","k","s","š"].includes(ecc)))) ||
-          (ecb === "ţ" && ((["p","k","r","l","ř","m","n","ň"].includes(eca) && ["t","k","ţ"].includes(ecc))
-                      || (eca === "ţ" && ["t","k"].includes(ecc)))) ||
-          (ecb === "x" && ((["r","l","ř"].includes(eca) && ["t","x"].includes(ecc))
-                      || (["p","t","f","s","š","n","m"].includes(eca) && ecc === "x")
-                      || (eca === "x" && ecc === "t"))) ||
-          (ecb === "ļ" && ((["p","t","r","ř","m","n","ň"].includes(eca) && ["t","k","ļ"].includes(ecc))
-                      || (["ļ","l"].includes(eca) && ["t","k"].includes(ecc)))) ||
-          (ecb === "s" && ((["r","l","ř","m","n","ň","p","k","f"].includes(eca) && ["p","t","k","f","ţ","x","s"].includes(ecc))
-                      || (eca === "ţ" && ["p","t","k","s"].includes(ecc))
-                      || (eca === "s" && ["p","t","k","f","ţ","x"].includes(ecc)))) ||
-          (ecb === "š" && ((["r","l","ř","m","n","ň","p","k","f"].includes(eca) && ["p","t","k","f","ţ","x","š"].includes(ecc))
-                      || (eca === "ţ" && ["p","t","k","š"].includes(ecc))
-                      || (eca === "š" && ["p","t","k","f","ţ","x"].includes(ecc)))) ||
-          (ecb === "v" && ((["r","ř","l"].includes(eca) && ["v","z","ž"].includes(ecc))
-                      || (["b","g","m","ň"].includes(eca) && ecc === "v")
-                      || (eca === "v" && ["z","ž"].includes(ecc)))) ||
-          (ecb === "ḑ" && (["b","g","r","ř","l","n","m","ň"].includes(eca) && ecc === "ḑ")) ||
-          (ecb === "z" && ((["r","ř","l","n","m","ň"].includes(eca) && ["b","d","g","z"].includes(ecc))
-                      || (["b","g","v"].includes(eca) && ecc === "z")
-                      || (eca === "z" && ["b","d","g"].includes(ecc)))) ||
-          (ecb === "ž" && ((["r","ř","l","n","m","ň"].includes(eca) && ["b","d","g","ž"].includes(ecc))
-                      || (["b","g","v"].includes(eca) && ecc === "ž")
-                      || (eca === "ž" && ["b","d","g"].includes(ecc)))) ||
-          (ecb === "c" && (["r","ř","l"].includes(eca) && ["t","k","c","h"].includes(ecc))) ||
-          (ecb === "č" && (["r","ř","l"].includes(eca) && ["t","k","č","h"].includes(ecc))) ||
-          (ecb === "ẓ" && (["r","ř","l"].includes(eca) && ["d","g","ẓ"].includes(ecc))) ||
-          (ecb === "j" && (["r","ř","l"].includes(eca) && ["d","g","j"].includes(ecc))) ||
-          (ecb === "m" && ((["r","l","ř"].includes(eca) && ["p","t","k","b","d","f","ţ","x","s","š","v","ḑ","z","ž","m","ļ","ç"].includes(ecc))
-                      || (eca === "m" && ["p","t","k","b","d","f","ţ","x","s","š","v","ḑ","z","ž","ļ","ç"].includes(ecc)))) ||
-          (ecb === "n" && ((["r","ř"].includes(eca) && ["t","k","d","g","f","ţ","x","s","š","v","ḑ","z","ž","n","ļ","ç"].includes(ecc))
-                      || (eca === "l" && ["t","k","d","g","ţ","s","š","z","ž","ļ","ç"].includes(ecc))
-                      || (eca === "n" && ["t","k","d","g","f","ţ","x","s","š","v","ḑ","z","ž","ļ","ç"].includes(ecc)))) ||
-          (ecb === "l" && (eca === "l" && ["p","t","k","b","d","g","f","ţ","x","s","š","v","ḑ","z","ž","c","č","ẓ","j","m","n","ň","ç"].includes(ecc))) ||
-          (["r","ř"].includes(ecb) && (["r","ř"].includes(eca) && ["p","t","k","b","d","g","f","ţ","x","s","š","v","ḑ","z","ž","c","č","ẓ","j","m","n","ň","l","ļ","ç"].includes(ecc))) ||
-          (ecb === "ç" && ((["p","t","k","m","n","ň","r","l","ř"].includes(eca) && ["t","k","ç"].includes(ecc))
-                      || (eca === "ç" && ["t","k"].includes(ecc))))
-        ) {
-          return true;
-        }
-      } else if (nogem2.length == 4) {
-        // tetracons. & pentacons.
-        var eda = nogem2.charAt(0);
-        var edb = nogem2.charAt(1);
-        var edc = nogem2.charAt(2);
-        var edbc = edb + edc;
-        var edd = nogem2.charAt(3);
-        if (((["l","r","ř"].includes(eda) && (["tç","pf","fs","fš"].includes(edbc) || (["k","p"].includes(edb) && ["s","š","ţ","ç"].includes(edc)))) ||
-        (eda === "r" && ((["n","ň","m"].includes(edb) && ["s","š","ţ","ç"].includes(edc)) || (["ň","m"].includes(edb) && edc === "f"))))
-        && ["t","k"].includes(edd)) {
-          return true;
+        return false; // if NOTHING above triggered a return true, retirn false.
+      } else {
+        return false;
+      }
+    },
+    consAllowed(conson) {
+      for (var i in conson.slice(0,-1)) {
+        let a = conson.charAt(i);
+        let b = conson.charAt(i+1);
+        let c = conson.charAt(i+2);
+        if ((a != 'ʔ' && conson.split("ʔ").length >= 2) || conson.split("ʔ").length >= 3) {
+          // 2.1 No glottal stops immediately after any consonant
+          return false;
+        } else if (["t","d"].includes(a) && ["s","z","š","ž","c","ẓ","č","j","ţ","ḑ"].includes(b)) {
+          // 2.2 no t/d followed by sibilant or same-location fricative
+          return false;
+        } else if (["k","g"].includes(a) && ["x","ň"].includes(b)) {
+          // 2.3 no k/g followed by ň/x
+          return false;
+        } else if (["kg","gk","td","dt","pb","bp"].includes(a+b)) {
+          // 2.4 no homologous stop pairings
+          return false;
+        } else if (["fv","vf","ţḑ","ḑţ","cẓ","ẓc","čj","jč","čc","jc","čẓ","jẓ"].includes(a+b)) {
+          // 2.5 no homologous fricatives or affricatives, no "čc", "jc", "čẓ", "jẓ"
+          return false;
+        } else if (["šc","šẓ","žc","žẓ","sẓ"].includes(a+b)) {
+          // 2.6-7 none of the above
+          return false;
+        } else if (a != b && ["s","š","z","ž"].includes(a) && ["s","š","z","ž"].includes(b)) {
+          // 2.8 aside from gemination, no s/š/z/š followed by another one
+          return false;
+        } else if (["c","ẓ","č","j"].includes(a) && ["s","š","z","ž"].includes(b)) {
+          // 2.9 Conjunction of a sibilant affricate followed by a sibilant fricative is prohibited
+          return false;
+        } else if (a == "ç" && ["s","z","š","ž","ẓ","j","ļ","h"].includes(b)) {
+          // 2.10a ç cannot be followed by...
+          return false;
+        } else if (b == "ç" && ["c","ẓ","č","j","ļ","h","x"].includes(a)) {
+          // 2.10b ç cannot be preceded by...
+          return false;
+        } else if (a == "n" && ["c","č","ẓ","j"].includes(b)) {
+          // 2.11 no n followed by similar-location affricatives
+          return false;
+        } else if (a == "m" && ["b","p"].includes(b) && ["f","v","ţ","ḑ","t","d","s","z","š","ž"].includes(c)) {
+          // 2.12 & 2.13a no m followed by bilabial stop followed by anything in a similar location
+          return false;
+        } else if (a == "n" && ["k","g"].includes(b) && ["s","z","š","ž"].includes(c)) {
+          // 2.13b no n followed by k/g followed by sibilants
+          return false;
+        } else if (a == "n" && ["p","b"].includes(b)) {
+          // 2.14 no n followed by p/b
+          return false;
+        } else if (a == "n" && ["f","v"].includes(b) && c != "") {
+          // 2.15 nf & nv must be followed by a vowel (i.e. be at the end of the cons phrase)
+          return false;
+        } else if (a == "ň" && ["g","k","x","y"].includes(b)) {
+          // 2.16 ň cannot occur before g, k, x, or y (as either n assimilates to it or it is too similar to n)
+          return false;
+        } else if (a == "x" && ["s","z","š","ž","ç","g","ļ","ň","y","h","ř"].includes(b)) {
+          // 2.17 x cannot occur before any of the above
+          return false;
+        } else if (a == "ļ" && ["s","z","š","ž","h","ç"].includes(b)) {
+          // 2.18a ļ cannot occur before any sibilant fricative, h, or ç
+          return false;
+        } else if (b == "ļ" && ["b","d","g","h","ç"].includes(a)) {
+          // 2.18b ļ cannot occur after any voiced stop, h, or ç
+          return false;
+        } else if (c == "" && b == "h" && ["ļ","x","ç"].includes(a)) {
+          // 2.19 if h is the last letter in a conjunct, then it cannot be preceded by ļ, x, or ç
+          return false;
+        } else if (b == "ř" && ["r","h"].includes(a)) {
+          // 2.20 r and h cannot be followed by ř
+          return false;
+        } else if (a+b == "řr") {
+          // 2.21 ř cannot be followed by r
+          return false;
+        } else if (["w","y"].includes(a) && b != "") {
+          // 2.22 w and y can only appear as the end of a conjunct
+          return false;
         }
       }
-      return false; // if NOTHING above triggered a return true, retirn false.
+      return true; // if nothing not-allowed was detected above, then return true.
     },
 
     markStress(stressType,thisword) {
@@ -1215,34 +1328,6 @@ export default {
       }
       // 5c: marking the stress
       this.ithkword = this.markStress(stressType, this.ithkword);
-      /*if (stressType === 0 && wordVowels.length > 1) { // if ultimate stress (and not single-syllable word, because that's already assumed to be ultimate)
-        for (let i = this.ithkword.length-1; i >= 0; i--) {
-          if (["a","e","i","o","u","ä","ë","ö","ü"].includes(this.ithkword.charAt(i))) {
-            if (this.sDip.includes(this.ithkword.charAt(i-1) + this.ithkword.charAt(i))) {
-              this.ithkword = this.ithkword.substring(0, i-1) + this.sAccent[this.ithkword.charAt(i-1)] + this.ithkword.substring(i);
-            } else {
-              this.ithkword = this.ithkword.substring(0, i) + this.sAccent[this.ithkword.charAt(i)] + this.ithkword.substring(i+1);
-            }
-            break;
-          }
-        }
-      } else if (stressType === 2) { // if antepenultimate stress
-        var counter = 0;
-        for (let i = this.ithkword.length-1; i >= 0; i--) {
-          if (["a","e","i","o","u","ä","ë","ö","ü"].includes(this.ithkword.charAt(i))) {
-            if (counter == 2) {
-              if (this.sDip.includes(this.ithkword.charAt(i-1) + this.ithkword.charAt(i))) {
-                this.ithkword = this.ithkword.substring(0, i-1) + this.sAccent[this.ithkword.charAt(i-1)] + this.ithkword.substring(i);
-              } else {
-                this.ithkword = this.ithkword.substring(0, i) + this.sAccent[this.ithkword.charAt(i)] + this.ithkword.substring(i+1);
-              }
-              break;
-            } else {
-              counter++
-            }
-          }
-        }
-      } // penultimate stress is unmarked, so I don't have to do anything*/
     },
     glossCalcs() {
       this.gloss = "";
@@ -1275,8 +1360,17 @@ export default {
         this.fullGloss += ".[fix this]"
       }
       // Slot 3
-      this.gloss += '-"' + this.gOptions.root.toLowerCase() + '"'; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
-      this.fullGloss += '-"' + this.gOptions.root.toLowerCase() + '"';
+      if (this.wordType == "normal") {
+        this.gloss += '-"' + this.gOptions.root.toLowerCase() + '"'; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
+        this.fullGloss += '-"' + this.gOptions.root.toLowerCase() + '"';
+      } else if (this.wordType == "affRoot") {
+        this.gloss += '-"' + this.gOptions.affRoot.toLowerCase() + '"';
+        this.fullGloss += '-"' + this.gOptions.affRoot.toLowerCase() + '"';
+      } else if (this.wordType == "refRoot") {
+        this.gloss += "-" + this.gOptions.ref
+        this.fullGloss += "-" + this.gOptions.ref + "." + this.gOptions.refEff;
+        if (this.gOptions.refEff != "NEU") {this.gloss += "." + this.gOptions.refEff}
+      }
       // Slot 4
       this.fullGloss += "-"+this.gOptions.func+"."+this.gOptions.spec+"."+this.gOptions.ctxt;
       var s4c = [];

@@ -1177,8 +1177,8 @@
     },
     "refEff": {
         "type": "",
-        "title": "Effect",
-        "popupdesc": "Similar to the normal <b>Effect</b> below, this describes if this person is being referred to beneficially or detrimentally.<br/>May potentially be linked to the Effect of another word (e.g. 'the detrimental 3rd party')",
+        "title": "Referential Effect",
+        "popupdesc": "Similar to the normal <b>Effect</b>, this describes if this person is being referred to beneficially or detrimentally.<br/>May potentially be linked to the Effect of another word (e.g. 'the detrimental 3rd party')",
         "options": {
             "NEU": {
                 "name": "Neutral"
@@ -1188,6 +1188,29 @@
             },
             "DET": {
                 "name": "Detrimental"
+            }
+        }
+    },
+    "refPersp": {
+        "type": "",
+        "title": "Referential Perspective",
+        "popupdesc": "The same as the normal <b>Perspective</b>, but applied to the referential.<br/>Does nothing, currently.",
+        "options": {
+            "M": {
+                "name":"Monadic",
+                "desc":"The MONADIC means that there is a certain number of (relevant) instances of the word. When combined with things like the MULTIPLEX, it means that the entire group is being considered as a whole (\"forest(s)\", not \"trees\")."
+            },
+            "G": {
+                "name":"Agglomerative",
+                "desc":"The AGGLOMERATIVE is similar to the MONADIC, except it doesn't imply any sense of number; as in, \"one or more X\". It is also used for turning nouns (such as \"a strand of hair\" in the MONADIC) into mass nouns (such as \"hair\" in the AGGLOMERATIVE)"
+            },
+            "N": {
+                "name":"Nomic",
+                "desc":"The NOMIC refers to the general archetype of the word as opposed to any specific instance of it. Examples are: <i><b>The dog</b> is a noble beast, <b>Clowns</b> are what children love most, There is nothing like <b>a tree</b></i>."
+            },
+            "A": {
+                "name":"Abstract",
+                "desc":"Similar to the formation of English abstract nouns using suffixes such as <i>-hood</i> or <i>-ness</i>, the ABSTRACT transforms a configurative category into an abstract concept considered in a non-spatial, timeless, numberless context.<br/>Examples: <i>grove → the idea of being a grove or “grovehood”</i>; <i>book → everything about books, having to do with books, involvement with books</i>.<br/><br/>With verbs, the ABSTRACT is used in verbal constructions to create a temporal abstraction, where the temporal relationship of the action, event, or state to the present is irrelevant or inapplicable, similar to the way in which the English infinitive or gerund form (used as substitutes for a verb phrase) do not convey a specific tense in the following sentences: <i><b>Singing</b> is not his strong suit; It makes no sense <b>to worry</b> about it; I can't stand her <b>pouting</b></i>."
             }
         }
     },
