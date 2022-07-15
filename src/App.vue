@@ -550,9 +550,27 @@ export default {
                 "MX": {"NEU":"c","BEN":"č","DET":"j"},
                 "RDP":{"NEU":"th","BEN":"ph","DET":"kh"},
                 "OBV":{"NEU":"ll","BEN":"rr","DET":"řř"},
-                "PVS":{"NEU":"mm","BEN":"nn","DET":"ňň"}
+                "PVS":{"NEU":"mm","BEN":"nn","DET":"ňň"}};
+      var output = ph[this.gOptions.ref][this.gOptions.refEff];
+      var pph = [];
+      if (this.gOptions.refPersp == "A") {
+        if (!this.consAllowed(output+"w")) {output += "y"}
+        else {output += "w"}
+      } else if (this.gOptions.refPersp == "G" || this.gOptions.refPersp == "N") {
+        if (this.gOptions.refPersp == "G") {pph = ["v","tļ"]}
+        else {pph = ["ç","x"]}
+        // first, check for the first combination allowed at the end of a word, in case of shortcutting
+        if (this.allowedAtEnd(pph[0]+output)) {output = pph[0] + output}
+        else if (this.allowedAtEnd(pph[1]+output)) {output = pph[1] + output}
+        else if (this.allowedAtEnd(output+pph[0])) {output += pph[0]}
+        else if (this.allowedAtEnd(output+pph[1])) {output += pph[1]}
+        // then just check for the first viable combination
+        else if (this.consAllowed(output+pph[0])) {output += pph[0]}
+        else if (this.consAllowed(output+pph[1])) {output += pph[1]}
+        else if (this.consAllowed(pph[0]+output)) {output = output + pph[0]}
+        else {output = output + pph[1]}
       }
-      return ph[this.gOptions.ref][this.gOptions.refEff];
+      return output;
     },
     calculateWord() {
       // this order is specifically because slots 4 and 6 can influence slots 1 through 5 due to shortcutting.
@@ -1340,11 +1358,13 @@ export default {
         this.fullGloss += "T" + this.gOptions.concat + "-";
       }
       // Slot 2
-      this.gloss += "S" + this.gOptions.stem.charAt(1);
-      if (this.gOptions.ver === "CPT") {
-        this.gloss += ".CPT"
+      if (this.wordType == "normal") {
+        this.gloss += "S" + this.gOptions.stem.charAt(1);
+          if (this.gOptions.ver === "CPT") {
+            this.gloss += ".CPT"
+          }
+          this.fullGloss += "S" + this.gOptions.stem.charAt(1) + "." + this.gOptions.ver;
       }
-      this.fullGloss += "S" + this.gOptions.stem.charAt(1) + "." + this.gOptions.ver;
       if (this.shortcutting) {
         var configgCode = (this.gOptions.plex+this.gOptions.simil+this.gOptions.cctd).slice(0,3);
         this.fullGloss += "."+this.gOptions.affil+"."+configgCode+"."+this.gOptions.ext+"."+this.gOptions.persp+"."+this.gOptions.ess;
@@ -1364,11 +1384,11 @@ export default {
         this.gloss += '-"' + this.gOptions.root.toLowerCase() + '"'; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
         this.fullGloss += '-"' + this.gOptions.root.toLowerCase() + '"';
       } else if (this.wordType == "affRoot") {
-        this.gloss += '-"' + this.gOptions.affRoot.toLowerCase() + '"';
-        this.fullGloss += '-"' + this.gOptions.affRoot.toLowerCase() + '"';
+        this.gloss += '"' + this.gOptions.affRoot.toLowerCase() + '"';
+        this.fullGloss += '"' + this.gOptions.affRoot.toLowerCase() + '"';
       } else if (this.wordType == "refRoot") {
-        this.gloss += "-" + this.gOptions.ref
-        this.fullGloss += "-" + this.gOptions.ref + "." + this.gOptions.refEff;
+        this.gloss += this.gOptions.ref
+        this.fullGloss += this.gOptions.ref + "." + this.gOptions.refEff;
         if (this.gOptions.refEff != "NEU") {this.gloss += "." + this.gOptions.refEff}
       }
       // Slot 4
