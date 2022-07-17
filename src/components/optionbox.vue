@@ -101,7 +101,7 @@ export default {
   float: left;
   border-style: solid;
   border-width: 1px;
-  border-color: black;
+  border-color: #363247;
   flex-grow: 1;
   /*flex-basis: 20vw;*/
   margin: 2px;
@@ -111,26 +111,13 @@ h3:hover {
   cursor: pointer;
 }
 .error {
-  border-color: red;
-  color: red;
+  border-color: #FF2C3E; /* #006C67 */
+  color: #FF2C3E;
+  background-color: #FFEFEF;
 }
 .disabledbox {
   border-color: black;
-  background-color: silver;
-  color: dimgray;
-}
-/*h3 {
-  margin: 40px 0 0;
-}*/
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+  background-color: rgb(176, 181, 184);
+  color: rgb(94, 102, 107);
 }
 </style>

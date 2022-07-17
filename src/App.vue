@@ -150,6 +150,7 @@
           <option>modular</option> <!-- modular adjunct (more slot 8 stuff) -->
           <option>refRoot</option> <!-- personal-reference root adjunct (normal but root is a referential) -->
           <option>ref</option> <!-- single/dual referential (just referentials) -->
+          <option>refCS</option> <!-- referential with case-stacking, affixes, specification, and essence -->
         </select>
         <h3>IPA (Pronunciation)</h3>
         <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
@@ -1606,20 +1607,24 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap');
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #363247;
   margin-top: 60px;
+  background-color: #EDF3F5;
 }
 .word {
   font-size: 20px;
+  /*font-family: 'Noto Sans', Avenir, Helvetica Arial, sans-serif*/
 }
 .smalltext {
   font-size: 13px;
   color: gray;
+  font-family: Arial, sans-serif;
 }
 #content {
   position: absolute;
@@ -1638,7 +1643,7 @@ export default {
   border-style: solid;
   border-width: 1px;
   border-color: black;
-  background-color: white;
+  background-color: #EDF3F5;
   overflow: hidden;
 }
 .section {
@@ -1669,7 +1674,7 @@ export default {
   background-color: rgba(0,0,0,0.4);
 }
 #modal-content {
-  background-color: #fefefe;
+  background-color: white;
   margin: 15% auto;
   /*padding: 20px;*/
   border: 1px solid #888;
@@ -1688,7 +1693,7 @@ export default {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: rgb(36, 156, 116);
+  background-color: #218580;
   color: white;
   border-color: white;
   width: 50px;
@@ -1749,5 +1754,11 @@ export default {
 }
 .hidden {
   display: none;
+}
+a {
+  color: #3B3575;
+}
+a:active {
+  color: #98838F;
 }
 </style>
