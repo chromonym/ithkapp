@@ -7,7 +7,7 @@
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','mcs'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
       <!-- used only for affix-root adjuncts -->
       <OptionBox :json="gData.affRoot" :class="{hidden: wordType != 'affRoot'}" code="affRoot" @send-message="handleSendMessage" ref="affRoot" @modal="openModal"/>
       <OptionBox :json="gData.arDegree" :class="{hidden: wordType != 'affRoot'}" code="arDegree" @send-message="handleSendMessage" ref="arDegree" @modal="openModal"/>
@@ -23,20 +23,20 @@
       <OptionBox :json="gData.func" :class="{hidden: wordType == 'ref' || wordType == 'refCS'}" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
       <OptionBox :json="gData.ver" :class="{hidden: wordType == 'ref' || wordType == 'refCS'}" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS'].includes(wordType)}"> <!-- Section 2: Concatenation & Affixes-->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs'].includes(wordType)}"> <!-- Section 2: Concatenation & Affixes-->
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
       <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != 0"/>
       <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal"/>
       <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS'].includes(wordType)}"> <!-- Section 3: Configuration -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs'].includes(wordType)}"> <!-- Section 3: Configuration -->
       <h2 style="width:100%;">Configuration</h2>
       <OptionBox :json="gData.plex" code="plex" @send-message="handleSendMessage" ref="plex" @modal="openModal"/>
       <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="simil" @modal="openModal"/>
       <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="cctd" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS'].includes(wordType)}"> <!-- Section 4: Slot 6 -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs'].includes(wordType)}"> <!-- Section 4: Slot 6 -->
       <OptionBox :json="gData.affil" code="affil" @send-message="handleSendMessage" ref="affil" @modal="openModal"/>
       <OptionBox :json="gData.ext" code="ext" @send-message="handleSendMessage" ref="ext" @modal="openModal"/>
       <OptionBox :json="gData.persp" code="persp" @send-message="handleSendMessage" ref="persp" @modal="openModal"/>
@@ -47,7 +47,7 @@
     <div class="section" :class="{hidden: wordType != 'modular'}">
       <OptionBox :json="gData.modAppliesTo" code="modAppliesTo" @send-message="handleSendMessage" ref="modAppliesTo" @modal="openModal"/>
       <OptionBox :json="gData.modNumber" code="modNumber" @send-message="handleSendMessage" ref="modNumber" @modal="openModal"/>
-      <OptionBox :json="gData.cn" code="cn" @send-message="handleSendMessage" red="cn" @modal="openModal" />
+      <OptionBox :json="gData.cn" code="cn" @send-message="handleSendMessage" ref="cn" @modal="openModal"/>
     </div>
     <div class="section" :class="{hidden: wordType != 'modular' || (wordType == 'modular' && !['2','3','4'].includes(gOptions.modNumber))}">
     <h2 style="width:100%;">Slot II</h2>
@@ -84,7 +84,7 @@
     </div>
     <!-- END OF MODULAR ADJUNCT -->
 
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','ref','refCS'].includes(wordType)}"> <!-- Section 5: Slot 8a -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','ref','refCS','mcs'].includes(wordType)}"> <!-- Section 5: Slot 8a -->
       <h2 style="width:100%;" :class='{hidden: this.wordType != "modular" || this.gOptions.modNumber == "1"}'>Slot V</h2>
       <OptionBox :json="gData.vh" code="vh" @send-message="handleSendMessage" ref="vh" @modal="openModal" :class='{hidden: this.wordType != "modular"}' :disabled='this.gOptions.modNumber == "1"'/>
       <OptionBox :json="gData.modScope" code="modScope" @send-message="handleSendMessage" ref="modScope" @modal="openModal" :class='{hidden: this.wordType != "modular" || this.gOptions.modNumber == "1" || this.gOptions.vh == "vn"}'/>
@@ -95,16 +95,17 @@
       <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
       <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal" :disabled='(this.gOptions.vn != "asp" && this.wordType != "modular") || (this.wordType == "modular" && this.gOptions.modNumber != "1")' :class='{hidden: this.wordType == "modular" && this.gOptions.modNumber != "1"}'/>
     </div>
-    <div class="section" :class="{hidden: ['affixjunct','register','modular','ref','refCS'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct -->
+    <div class="section" :class="{hidden: ['affixjunct','register','modular','ref','refCS'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct / M/CS Adjunct -->
       <OptionBox :class="{hidden: wordType != 'suppletive'}" :json="gData.suppType" code="suppType" @send-message="handleSendMessage" ref="suppType" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType != 'mcs'}" :json="gData.cn" code="cn2" @send-message="handleSendMessage" ref="cn2" @modal="openModal" />
 
-      <OptionBox :class="{hidden: wordType == 'suppletive'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='!cascOrMood' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='cascOrMood' :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
-      <OptionBox :show="cascOrMood" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show="!cascOrMood" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show="!cascOrMood" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show="!cascOrMood" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive' || wordType == 'mcs'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='!cascOrMood && wordType!="mcs"' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='cascOrMood && wordType!="mcs"' :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'mcs'}" :show="cascOrMood" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive' || wordType == 'mcs'}" :show="!cascOrMood" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive' || wordType == 'mcs'}" :show="!cascOrMood" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive' || wordType == 'mcs'}" :show="!cascOrMood" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
     </div>
 
     <!-- AFFIXUAL ADJUNCT -->
@@ -156,6 +157,7 @@
           <option>refRoot</option> <!-- personal-reference root adjunct (normal but root is a referential) -->
           <option>ref</option> <!-- single/dual referential (just referentials) -->
           <option>refCS</option> <!-- referential with case-stacking, affixes, specification, and essence -->
+          <option>mcs</option> <!-- mood/case-scope adjunct -->
         </select>
         <h3>IPA (Pronunciation)</h3>
         <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
@@ -316,6 +318,8 @@ export default {
         "twoRefs": false,
         "twoCs": false,
         "refAffix": [],
+        // MOOD/CASE-SCOPE ADJUNCTS
+        "cn2": "mood",
       },
       sVowels: [ // the "Standard Vowel-Form Sequence" as an array
         ["a","ai","ia","ao"],
@@ -445,6 +449,7 @@ export default {
       }
       else if (this.wordType == "ref") {tG = [["ref","refEff","refPersp","c1"],["twoCs","twoRefs","ref2","refEff2","refPersp2","c2","ess2"]];}
       else if (this.wordType == "refCS") {tG = [["ref","refEff","refPersp","c1","spec"],["refAffix","twoCs","c2","ess2"]]}
+      else if (this.wordType == "mcs") {tG = [["cn2","mood","casc"]]}
       for (let i of tG) {
         if (i.includes(code)) {
           this.modalTabs = [...i];
@@ -604,6 +609,14 @@ export default {
           }
         }
         if (this.gOptions.ess2 == "RPV") {output = this.markStress(0,output);}
+        this.ithkword = output;
+      } else if (type=="mcs") {
+        output += "hr";
+        if (this.gOptions.cn2 == "mood") {
+          output += {"FAC":"a","SUB":"e","ASM":"i","SPC":"o","COU":"ö","HYP":"u"}[this.gOptions.mood];
+        } else {
+          output += {"CCN":"ai","CCA":"ei","CCS":"iu","CCQ":"oi","CCP":"öi","CCV":"ui"}[this.gOptions.casc];
+        }
         this.ithkword = output;
       } else { // incorrect input = normal word
         this.calculateWord();
