@@ -1,4 +1,5 @@
 <template>
+  <title>Ithkapp | {{ithkword}}</title>
   <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
   <div id="content">
     <span class="close" @click="openModal('settings')"><i class="fa-solid fa-gear fa-xs"></i></span>
