@@ -1527,5 +1527,318 @@
                 "desc": "This adjunct has scope over everything<br/><b>NOTE:</b> Do not use if an adjacent affixual adjunct shows scope over this adjunct"
             }
         }
+    },
+
+    "bias": {
+        "type": "",
+        "title": "Bias",
+        "popupdesc": "Bias adjuncts function much like English \"supra-segmental\" interjections such as \"Phew!\", \"Damn!\", \"tsk-tsk\", \"Pssshhh\", \"huh?\", \"meh\", \"hmmm\", etc<br/>Sentence-initial Bias adjuncts scope over the entire sentence. Otherwise, they scope over the <i>preceding</i> formative. They should be pronounced with a preceding and following pause.",
+        "options": {
+            "ACC": {
+                "name": "Accidental",
+                "desc": "<i>‘As luck would have it...’ ‘Fate has decided that...’ ‘What luck!’</i>",
+                "word": "lf"
+            },
+            "ACH": {
+                "name": "Archetypal",
+                "desc": "<i>what (a) ...!; how . . .! ; Boy! Did (does) X ever …</i>",
+                "word": "mçt"
+            },
+            "ADM": {
+                "name": "Admissive",
+                "desc": "<i>‘Mm-hm’ ‘Uh-huh’ (said as mere acknowledgement of a statement without any implied agreement with or assent to the statement)</i>",
+                "word": "lļ"
+            },
+            "ANN": {
+                "name": "Annunciative",
+                "desc": "<i>‘Guess what!’ or ‘Wait till you hear this!’</i>",
+                "word": "drr"
+            },
+            "ANP": {
+                "name": "Anticipative",
+                "desc": "<i>‘I’m looking foward to this!’ </i>",
+                "word": "lst"
+            },
+            "APB": {
+                "name": "Approbative",
+                "desc": "<i>‘(That’s) OK’ ‘(That’s) alright’ ‘(That’s) good’ ‘(That’s) fine’ ‘Very well’ ‘Sure’</i>",
+                "word": "řs"
+            },
+            "APH": {
+                "name": "Apprehensive",
+                "desc": "<i>‘I’m worried...’ ‘I’ve got a bad feeling about this...’ </i>",
+                "word": "vvz"
+            },
+            "ARB": {
+                "name": "Arbitrary",
+                "desc": "<i>‘..Yeah, whatever...’, ‘...Ah, what the hell, I’m going ahead and....’ </i>",
+                "word": "xtļ"
+            },
+            "ATE": {
+                "name": "Attentive",
+                "desc": "<i>‘Well, whaddya know...’ ‘Well, will you look at that...!’ ‘Well, go figure...’ ‘Who would’ve thought...?’ ‘Well I’ll be!’</i>",
+                "word": "ňj"
+            },
+            "CMD": {
+                "name": "Comedic",
+                "desc": "<i>‘Funny!’ ‘LOL’</i>",
+                "word": "pļļ"
+            },
+            "CNV": {
+                "name": "Contensive",
+                "desc": "<i>‘I’m telling you...’, ‘I told you so!’, ‘You see?!’</i>",
+                "word": "rrj"
+            },
+            "COI": {
+                "name": "Coincidental",
+                "desc": "<i>‘What a coincidence!’</i>",
+                "word": "ššč"
+            },
+            "CRP": {
+                "name": "Corruptive",
+                "desc": "<i>‘How corrupt!’ ‘What corruption!’</i>",
+                "word": "gžž"
+            },
+            "CRR": {
+                "name": "Corrective",
+                "desc": "<i>‘that is to say…,’ ‘What I mean(t) to say is…’ ‘I mean….’</i>",
+                "word": "ňţ"
+            },
+            "CTP": {
+                "name": "Contemptive",
+                "desc": "<i>‘What nonsense!’ or ‘What bullshit!’</i>",
+                "word": "kšš"
+            },
+            "CTV": {
+                "name": "Contemplative",
+                "desc": "<i>‘I wonder how…,’ ‘that’s odd…,’ ‘I don’t get it…,’ or a quizzical ‘hmmmm.’</i>",
+                "word": "gvv"
+            },
+            "DCC": {
+                "name": "Disconcertive",
+                "desc": "<i>‘I’m not sure about this.’ ‘I don’t feel comfortable about this.’ ‘I’m feeling out of my element here.’</i>",
+                "word": "gzj"
+            },
+            "DEJ": {
+                "name": "Dejective",
+                "desc": "<i>‘(sigh)’</i> [of dejection/disillusionment]",
+                "word": "žžg"
+            },
+            "DES": {
+                "name": "Desperative",
+                "desc": "<i>‘I don’t know how to say this, but…’ ‘I’m afraid that….’ ‘I’m sorry to have to tell you, but...’</i>",
+                "word": "mřř"
+            },
+            "DFD": {
+                "name": "Diffident",
+                "desc": "<i>‘sorry, but…’ ‘It’s nothing. It’s just…’</i>",
+                "word": "cč"
+            },
+            "DIS": {
+                "name": "Dismissive",
+                "desc": "<i>‘Is that it?’ ‘Big deal!’ ‘So what!?’ </i>",
+                "word": "kff"
+            },
+            "DLC": {
+                "name": "Delectative",
+                "desc": "<i>‘Whee!’</i>",
+                "word": "ẓmm"
+            },
+            "DOL": {
+                "name": "Dolorous",
+                "desc": "<i>‘Ow!’ ‘Ouch!’</i>",
+                "word": "řřx"
+            },
+            "DPB": {
+                "name": "Disapprobative",
+                "desc": "<i>‘I don’t like the fact that…’ ‘It bothers me that….’ ‘Unacceptable!’ ‘I hate it!’</i>",
+                "word": "ffx"
+            },
+            "DRS": {
+                "name": "Derisive",
+                "desc": "<i>‘How foolish!’ ‘How silly!’ ‘Look at how foolish/silly/ridiculous this is!’</i>",
+                "word": "pfc"
+            },
+            "DUB": {
+                "name": "Dubitative",
+                "desc": "<i>‘Hmm, not likely.’ ‘I doubt it.’ ‘Sounds fishy to me’ ‘I don’t trust this/it/him/her/them...’</i>",
+                "word": "mmf"
+            },
+            "EUH": {
+                "name": "Euphoric",
+                "desc": "<i>‘(Sigh) What bliss!’</i>",
+                "word": "gzz"
+            },
+            "EUP": {
+                "name": "Euphemistic",
+                "desc": "<i>‘Let’s just say that….’ or ‘Well, let me put it this way….’</i>",
+                "word": "vvt"
+            },
+            "EXA": {
+                "name": "Exasperative",
+                "desc": "<i>‘Dammit!’ ‘Look, don’t you get it?…’ ‘Look, I’m trying to tell you….’</i>",
+                "word": "kçç"
+            },
+            "EXG": {
+                "name": "Exigent",
+                "desc": "<i>‘It’s now or never!’</i>",
+                "word": "rrs"
+            },
+            "EXP": {
+                "name": "Experiential",
+                "desc": "<i>‘Ah!’, ‘Well, now!’ ‘So!’</i> [Italian <i>‘Allora!’</i>]",
+                "word": "pss"
+            },
+            "FOR": {
+                "name": "Fortuitous",
+                "desc": "<i>‘It’s just as well that...’ or ‘All’s well that ends well...’</i>",
+                "word": "lzp"
+            },
+            "FSC": {
+                "name": "Fascinative",
+                "desc": "<i>‘Cool!’ ‘Wow!’ ‘Awesome!’</i>",
+                "word": "žžj"
+            },
+            "GRT": {
+                "name": "Gratificative",
+                "desc": "<i>‘Ah! What bliss...!’ ‘Oh, there’s nothing like….’ [physical pleasure only]</i>",
+                "word": "mmh"
+            },
+            "IDG": {
+                "name": "Indignative",
+                "desc": "<i>‘The nerve!’ or ‘How dare…!?’</i>",
+                "word": "pšš"
+            },
+            "IFT": {
+                "name": "Infatuative",
+                "desc": "<i>‘Praise be to...!’ ‘Oh, thank God for...!’ ‘There’s nothing more sacred/holy/important than...!’</i>",
+                "word": "vvr"
+            },
+            "IPL": {
+                "name": "Implicative",
+                "desc": "<i>‘of course,’ ‘after all,’ ‘needless to say.’</i>",
+                "word": "vll"
+            },
+            "IPT": {
+                "name": "Impatient",
+                "desc": "<i>‘C’mon!,’ ‘What’re you waiting for?’ ‘so…already!’</i> as in the sentence <i>‘So dance already!’</i>",
+                "word": "žžv"
+            },
+            "IRO": {
+                "name": "Ironic",
+                "desc": "<i>‘Oh, nice!’ ‘Just great!’ ‘Well, now, isn’t this lovely!’</i>",
+                "word": "mmž"
+            },
+            "ISP": {
+                "name": "Insipid",
+                "desc": "<i>‘Meh... (said due to lack of interest)’ ‘How boring/tedious/dull!’</i>",
+                "word": "lçp"
+            },
+            "IVD": {
+                "name": "Invidious",
+                "desc": "<i>‘Why does he/she/they get to... and I don’t?!’ ‘How unfair (that I don’t get to...)!’</i>",
+                "word": "řřn"
+            },
+            "MAN": {
+                "name": "Mandatory",
+                "desc": "<i>‘take it or leave it,’ ‘this is your last chance,’</i>",
+                "word": "msk"
+            },
+            "OPT": {
+                "name": "Optimal",
+                "desc": "prolonged <i>‘so’</i> or <i>‘totally’</i> as in <i>‘I so don’t care!’</i> or <i>‘That is totally not what I meant.’</i>",
+                "word": "ççk"
+            },
+            "PES": {
+                "name": "Pessimistic",
+                "desc": "<i>‘Yeah, like it really matters that...’ ‘Pfft! What’s it to me?’</i>",
+                "word": "ksp"
+            },
+            "PPT": {
+                "name": "Propitious",
+                "desc": "<i>‘it’s a wonder that’ as in It’s a wonder he didn’t break a bone in that fall. </i>",
+                "word": "mll"
+            },
+            "PPX": {
+                "name": "Perplexive",
+                "desc": "<i>‘Huh? What do you mean…? What the hell? ‘WTF!?’ ‘You gotta be kidding me!’</i>",
+                "word": "llh"
+            },
+            "PPV": {
+                "name": "Propositive",
+                "desc": "<i>‘what if…’ ‘It could be that….’ ‘Consider this: …’ ‘Posit the following: …’ ‘Assume for the sake of argument that….’</i>",
+                "word": "sl"
+            },
+            "PSC": {
+                "name": "Prosaic",
+                "desc": "<i>‘Meh... (said in disappointment)’ ‘How ordinary!’</i>",
+                "word": "žžt"
+            },
+            "PSM": {
+                "name": "Presumptive",
+                "desc": "<i>‘It can only mean one thing…,’ ‘and that’s that!’ ‘and that’s all there is to it!’ or ‘There’s no two ways about it,….’</i>",
+                "word": "nnţ"
+            },
+            "RAC": {
+                "name": "Reactive",
+                "desc": "<i>‘My goodness! ‘Wow!’ ‘Amazing!’</i>",
+                "word": "kll"
+            },
+            "RFL": {
+                "name": "Reflective",
+                "desc": "<i>‘Look at it this way…’ ‘As I see it,…’ ‘In my opinion…’ ‘From my point of view…’</i>",
+                "word": "llm"
+            },
+            "RNC": {
+                "name": "Renunciative",
+                "desc": "<i>‘So much for...!’ ‘There goes...!’</i>",
+                "word": "msf"
+            },
+            "RPU": {
+                "name": "Repulsive",
+                "desc": "<i>‘Yuck! Ew! How gross!’</i>",
+                "word": "šštļ"
+            },
+            "RVL": {
+                "name": "Revelative",
+                "desc": "<i>‘No wonder…!’ or ‘So that’s why…!’ ‘A-ha!….’ ‘Well, well, well!….’</i>",
+                "word": "mmļ"
+            },
+            "SAT": {
+                "name": "Satiative",
+                "desc": "<i>‘How satisfying...!’ ‘At last, the pleasue of knowing/being/seeing/doing….’ [psychological/emotional pleasure/satiety only]</i>",
+                "word": "ļţ"
+            },
+            "SGS": {
+                "name": "Suggestive",
+                "desc": "<i>‘How about...’ ‘We could...’ ‘Might I suggest...’</i>",
+                "word": "ltç"
+            },
+            "SKP": {
+                "name": "Skeptical",
+                "desc": "<i>‘Yeah, right!’ ‘Oh, sure! Like anyone’s supposed to believe that!’</i>",
+                "word": "rnž"
+            },
+            "SOL": {
+                "name": "Solicitative",
+                "desc": "<i>‘please’</i>",
+                "word": "ňňs"
+            },
+            "STU": {
+                "name": "Stupefactive",
+                "desc": "<i>‘Woah!’ ‘Holy, bejeezus!’ ‘What the...!’ ‘Jeez, Louise...!’</i>",
+                "word": "ļļč"
+            },
+            "TRP": {
+                "name": "Trepidative",
+                "desc": "<i>‘Oh, God…’ ‘Oh, no!….’ ‘Oh, dear!’</i> [fear-based]",
+                "word": "llč"
+            },
+            "VEX": {
+                "name": "Vexative",
+                "desc": "<i>‘How annoying!’ ‘What a bother!’ ‘What a pain!’</i>",
+                "word": "ksk"
+            }
+        }
     }
 }
