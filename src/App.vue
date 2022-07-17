@@ -10,29 +10,31 @@
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
       <OptionBox :json="gData.affRoot" :class="{hidden: wordType != 'affRoot'}" code="affRoot" @send-message="handleSendMessage" ref="affRoot" @modal="openModal"/>
       <OptionBox :json="gData.arDegree" :class="{hidden: wordType != 'affRoot'}" code="arDegree" @send-message="handleSendMessage" ref="arDegree" @modal="openModal"/>
-      <OptionBox :json="gData.ref" :class="{hidden: wordType != 'refRoot'}" code="ref" @send-message="handleSendMessage" ref="ref" @modal="openModal"/>
-      <OptionBox :json="gData.refEff" :class="{hidden: wordType != 'refRoot'}" code="refEff" @send-message="handleSendMessage" ref="refEff" @modal="openModal"/>
-      <OptionBox :json="gData.refPersp" :class="{hidden: wordType != 'refRoot'}" code="refPersp" @send-message="handleSendMessage" ref="refPersp" @modal="openModal"/>
-      <OptionBox :json="gData.root" :class="{hidden: wordType == 'affRoot' || wordType == 'refRoot'}" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
-      <OptionBox :json="gData.stem" :class="{hidden: wordType == 'affRoot' || wordType == 'refRoot'}" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
-      <OptionBox :json="gData.spec" code="spec" @send-message="handleSendMessage" ref="spec" @modal="openModal"/>
-      <OptionBox :json="gData.func" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
-      <OptionBox :json="gData.ver" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
+      <OptionBox :json="gData.ref" :class="{hidden: wordType != 'refRoot' && wordType != 'ref'}" code="ref" @send-message="handleSendMessage" ref="ref" @modal="openModal"/>
+      <OptionBox :json="gData.refEff" :class="{hidden: wordType != 'refRoot' && wordType != 'ref'}" code="refEff" @send-message="handleSendMessage" ref="refEff" @modal="openModal"/>
+      <OptionBox :json="gData.refPersp" :class="{hidden: wordType != 'refRoot' && wordType != 'ref'}" code="refPersp" @send-message="handleSendMessage" ref="refPersp" @modal="openModal"/>
+      <OptionBox :json="gData.root" :class="{hidden: ['affRoot','refRoot','ref'].includes(wordType)}" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal"/> <!-- @modal="openModal", ref="code" for each of these -->
+      <OptionBox :json="gData.stem" :class="{hidden: ['affRoot','refRoot','ref'].includes(wordType)}" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
+      <OptionBox :json="gData.spec" :class="{hidden: wordType == 'ref'}" code="spec" @send-message="handleSendMessage" ref="spec" @modal="openModal"/>
+      <OptionBox :json="gData.func" :class="{hidden: wordType == 'ref'}" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
+      <OptionBox :json="gData.ver" :class="{hidden: wordType == 'ref'}" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
+      <OptionBox :json="gData.c" :class="{hidden: wordType != 'ref'}" code="c1" @send-message="handleSendMessage" ref="c1" @modal="openModal" />
+      <OptionBox :json="gData.ess" :class="{hidden: wordType != 'ref'}" code="ess2" @send-message="handleSendMessage" ref="ess2" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 2: Concatenation & Affixes-->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref'].includes(wordType)}"> <!-- Section 2: Concatenation & Affixes-->
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
       <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != 0"/>
       <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal"/>
       <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 3: Configuration -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref'].includes(wordType)}"> <!-- Section 3: Configuration -->
       <h2 style="width:100%;">Configuration</h2>
       <OptionBox :json="gData.plex" code="plex" @send-message="handleSendMessage" ref="plex" @modal="openModal"/>
       <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="simil" @modal="openModal"/>
       <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="cctd" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular'].includes(wordType)}"> <!-- Section 4: Slot 6 -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref'].includes(wordType)}"> <!-- Section 4: Slot 6 -->
       <OptionBox :json="gData.affil" code="affil" @send-message="handleSendMessage" ref="affil" @modal="openModal"/>
       <OptionBox :json="gData.ext" code="ext" @send-message="handleSendMessage" ref="ext" @modal="openModal"/>
       <OptionBox :json="gData.persp" code="persp" @send-message="handleSendMessage" ref="persp" @modal="openModal"/>
@@ -80,7 +82,7 @@
     </div>
     <!-- END OF MODULAR ADJUNCT -->
 
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register'].includes(wordType)}"> <!-- Section 5: Slot 8a -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','ref'].includes(wordType)}"> <!-- Section 5: Slot 8a -->
       <h2 style="width:100%;" :class='{hidden: this.wordType != "modular" || this.gOptions.modNumber == "1"}'>Slot V</h2>
       <OptionBox :json="gData.vh" code="vh" @send-message="handleSendMessage" ref="vh" @modal="openModal" :class='{hidden: this.wordType != "modular"}' :disabled='this.gOptions.modNumber == "1"'/>
       <OptionBox :json="gData.modScope" code="modScope" @send-message="handleSendMessage" ref="modScope" @modal="openModal" :class='{hidden: this.wordType != "modular" || this.gOptions.modNumber == "1" || this.gOptions.vh == "vn"}'/>
@@ -91,7 +93,7 @@
       <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
       <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal" :disabled='(this.gOptions.vn != "asp" && this.wordType != "modular") || (this.wordType == "modular" && this.gOptions.modNumber != "1")' :class='{hidden: this.wordType == "modular" && this.gOptions.modNumber != "1"}'/>
     </div>
-    <div class="section" :class="{hidden: ['affixjunct','register','modular'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct -->
+    <div class="section" :class="{hidden: ['affixjunct','register','modular','ref'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct -->
       <OptionBox :class="{hidden: wordType != 'suppletive'}" :json="gData.suppType" code="suppType" @send-message="handleSendMessage" ref="suppType" @modal="openModal"/>
 
       <OptionBox :class="{hidden: wordType == 'suppletive'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
@@ -115,7 +117,16 @@
       <OptionBox :json="gData.register" code="register" @send-message="handleSendMessage" ref="register" @modal="openModal"/>
       <OptionBox :json="gData.regStartOrEnd" code="regStartOrEnd" @send-message="handleSendMessage" ref="regStartOrEnd" @modal="openModal" :disabled='this.gOptions.register == "CAR"'/>
     </div>
+    <!-- DUAL-REFERENTIAL -->
+    <div class="section" :class="{hidden: wordType != 'ref'}">
+      <OptionBox :json="gData.twoRefs" code="twoRefs" @send-message="handleSendMessage" ref="twoRefs" @modal="openModal"/>
+      <OptionBox :json="gData.ref" code="ref2" @send-message="handleSendMessage" ref="ref2" @modal="openModal" :disabled="!this.gOptions.twoRefs"/>
+      <OptionBox :json="gData.refEff" code="refEff2" @send-message="handleSendMessage" ref="refEff2" @modal="openModal" :disabled="!this.gOptions.twoRefs"/>
+      <OptionBox :json="gData.refPersp" code="refPersp2" @send-message="handleSendMessage" ref="refPersp2" @modal="openModal" :disabled="!this.gOptions.twoRefs"/>
+      <OptionBox :json="gData.c" code="c2" @send-message="handleSendMessage" ref="c2" @modal="openModal" :disabled="!this.gOptions.twoRefs"/>
+    </div>
   <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
+
   </div>
   <div id="footer">
     <p><span class="word"><b>{{ithkword}}</b></span><br/>
@@ -131,13 +142,14 @@
       <div :class="{hidden: modalID != 'settings'}" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
         <h2 style="text-align:center;">Settings</h2>
         <label>Word type: </label><select @change="wordType = $event.target.value; calculateAdjunct($event.target.value);">
-          <option>normal</option>
-          <option>suppletive</option>
-          <option>affRoot</option>
-          <option>affixjunct</option>
-          <option>register</option>
-          <option>modular</option>
-          <option>refRoot</option>
+          <option>normal</option> <!-- normal words; formatives -->
+          <option>suppletive</option> <!-- suppletive adjuncts; type+case -->
+          <option>affRoot</option> <!-- affix-root adjuncts (normal but root is an affix) -->
+          <option>affixjunct</option> <!-- affixual adjunct (just affixes) -->
+          <option>register</option> <!-- register adjunct -->
+          <option>modular</option> <!-- modular adjunct (more slot 8 stuff) -->
+          <option>refRoot</option> <!-- personal-reference root adjunct (normal but root is a referential) -->
+          <option>ref</option> <!-- single/dual referential (just referentials) -->
         </select>
         <h3>IPA (Pronunciation)</h3>
         <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
@@ -160,7 +172,7 @@
         <h2 style="text-align:center;">{{modalContent.title}}</h2>
         <p style="text-align:center;" v-html="modalContent.popupdesc"></p>
         <div v-if="modalContent.type == ''">
-          <div v-if="modalID == 'c'" class="tab">
+          <div v-if="['c','c1','c2'].includes(modalID)" class="tab">
             <button class="tablinks active" @click="changeClassTab('THM','PLM','Allcases')" id="Allcases">All</button>
             <button class="tablinks" @click="changeClassTab('THM','IND','Transrelative')" id="Transrelative">Transrelative</button>
             <button class="tablinks" @click="changeClassTab('POS','PAR','Appositive')" id="Appositive">Appositive</button>
@@ -170,7 +182,7 @@
             <button class="tablinks" @click="changeClassTab('ACT','VOC','Affinitive')" id="Affinitive">Affinitive</button>
             <button class="tablinks" @click="changeClassTab('LOC','PLM','Spatio-Temporal')" id="Spatio-Temporal">Spatio-Temporal</button>
           </div>
-          <div v-if="modalID == 'c'">
+          <div v-if="['c','c1','c2'].includes(modalID)">
             <div v-for="option in Object.keys(modalContent.options).slice(Object.keys(modalContent.options).indexOf(this.casePopupStart),Object.keys(modalContent.options).indexOf(this.casePopupEnd)+1)" v-bind:key="modalContent.options[option]">
               <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
                 <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2","3","4","5","6","7","8","9"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
@@ -289,6 +301,13 @@ export default {
         "ref": "1M",
         "refEff": "NEU",
         "refPersp": "M",
+        "ref2": "1M",
+        "refEff2": "NEU",
+        "refPersp2": "M",
+        "ess2": "NRM",
+        "c1": "THM",
+        "c2": "THM",
+        "twoRefs": false,
       },
       sVowels: [ // the "Standard Vowel-Form Sequence" as an array
         ["a","ai","ia","ao"],
@@ -416,6 +435,7 @@ export default {
               ["vn3","val3","pha3","eff3","lvl3","asp3"],
               ["vn4","val4","pha4","eff4","lvl4","asp4"]];
       }
+      else if (this.wordType == "ref") {tG = [["ref","refEff","refPersp","c1","ess2"],["twoRefs","ref2","refEff2","refPersp2","c2"]];}
       for (let i of tG) {
         if (i.includes(code)) {
           this.modalTabs = [...i];
@@ -468,6 +488,7 @@ export default {
       document.getElementById(cTitle).className += " active";
     },
     calculateAdjunct(type) {
+      var output = "";
       if (type == "suppletive") {
         this.calculateSlot9();
         this.slot9gStop();
@@ -509,7 +530,6 @@ export default {
         var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","öi"],"MTH":["u","ui"],"CAR":["ü","ü"],}
         this.ithkword = "h" + ph[this.gOptions.register][this.gOptions.regStartOrEnd];
       } else if (type=="modular") {
-        var output = "";
         output += {"all":"","parent":"w","concat":"y"}[this.gOptions.modAppliesTo];
         if (["2","3","4"].includes(this.gOptions.modNumber)) {
           output += this.calculateSlot8a("2");
@@ -530,13 +550,30 @@ export default {
           output = this.markStress(0,output);
         }
         this.ithkword = output;
+      } else if (type=="ref") {
+        var refA = this.calculateReference(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
+        output += this.allowedAtStart(refA) && !(!this.gOptions.twoRefs && this.gOptions.ess2 == "RPV") ? "" : "ë";
+        output += refA;
+        this.calculateSlot9("1");
+        this.slot9gStop();
+        output += this.slots[9];
+        if (this.gOptions.twoRefs) {
+          var refB = this.calculateReference(this.gOptions.ref2,this.gOptions.refEff2,this.gOptions.refPersp2);
+          output += "w"
+          this.calculateSlot9("2");
+          this.slot9gStop();
+          output += this.slots[9] + refB;
+          output += this.allowedAtEnd(refB) ? "": "ë";
+        }
+        if (this.gOptions.ess2 == "RPV") {output = this.markStress(0,output);}
+        this.ithkword = output;
       } else { // incorrect input = normal word
         this.calculateWord();
         this.glossCalcs();
       }
       this.IPAcalcs();
     },
-    calculateReference() {
+    calculateReference(ref,refEff,refPersp) {
       /* "ref": "1m",
         "refEff": "NEU",
         "refPersp": "M", */
@@ -551,13 +588,13 @@ export default {
                 "RDP":{"NEU":"th","BEN":"ph","DET":"kh"},
                 "OBV":{"NEU":"ll","BEN":"rr","DET":"řř"},
                 "PVS":{"NEU":"mm","BEN":"nn","DET":"ňň"}};
-      var output = ph[this.gOptions.ref][this.gOptions.refEff];
+      var output = ph[ref][refEff];
       var pph = [];
-      if (this.gOptions.refPersp == "A") {
+      if (refPersp == "A") {
         if (!this.consAllowed(output+"w")) {output += "y"}
         else {output += "w"}
-      } else if (this.gOptions.refPersp == "G" || this.gOptions.refPersp == "N") {
-        if (this.gOptions.refPersp == "G") {pph = ["v","tļ"]}
+      } else if (refPersp == "G" || refPersp == "N") {
+        if (refPersp == "G") {pph = ["v","tļ"]}
         else {pph = ["ç","x"]}
         // first, check for the first combination allowed at the end of a word, in case of shortcutting
         if (this.allowedAtEnd(pph[0]+output)) {output = pph[0] + output}
@@ -648,7 +685,7 @@ export default {
       } else if (this.wordType == "affRoot") {
         this.slots[2] = this.gOptions.affRoot.toLowerCase();
       } else if (this.wordType == "refRoot") {
-        this.slots[2] = this.calculateReference();
+        this.slots[2] = this.calculateReference(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
       }
     },
     calculateSlot4() {
@@ -827,7 +864,7 @@ export default {
         return ph[phh.indexOf(this.gOptions["mood"+num])];
       }
     },
-    calculateSlot9() {
+    calculateSlot9(num="") {
       //"rel","c","ill","exp","vld"
       var ph = [["THM","INS","ABS","AFF","STM","EFF","ERG","DAT","IND"],
                 ["POS","PRP","GEN","ATT","PDC","ITP","OGN","IDP","PAR"],
@@ -841,17 +878,17 @@ export default {
       var pphh = ["COG","RSP","EXE"];
       var pphnum = 0;
       var cfound = false;
-      if (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != '0' || ["suppletive"].includes(this.wordType)) {
+      if (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != '0' || ["suppletive","ref"].includes(this.wordType)) {
         for (var i in ph) {
-          if (ph[i].includes(this.gOptions.c)) {
-            this.slots[9] = this.sVowels[ph[i].indexOf(this.gOptions.c)][i];
+          if (ph[i].includes(this.gOptions["c"+num])) {
+            this.slots[9] = this.sVowels[ph[i].indexOf(this.gOptions["c"+num])][i];
             cfound = true;
           }
         }
         if (!cfound) {
           for (var j in phh) {
-            if (phh[j].includes(this.gOptions.c)) {
-              this.slots[9] = this.sVowels[phh[j].indexOf(this.gOptions.c)][j] + "'";
+            if (phh[j].includes(this.gOptions["c"+num])) {
+              this.slots[9] = this.sVowels[phh[j].indexOf(this.gOptions["c"+num])][j] + "'";
             }
           }
         }
@@ -937,7 +974,7 @@ export default {
     },
     slot9gStop() {
       if (this.slots[9].charAt(this.slots[9].length-1) === "'") {
-        if (this.gOptions.concat == '0') {
+        if (this.gOptions.concat == '0' || ["suppletive","ref"].includes(this.wordType)) {
           this.slots[9] = this.slots[9].slice(0,-1);
           this.slots[9] = this.insertGStop(this.slots[9],true);
         } else {

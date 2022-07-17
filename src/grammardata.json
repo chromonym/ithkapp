@@ -1214,6 +1214,11 @@
             }
         }
     },
+    "twoRefs": {
+        "type": "checkbox",
+        "title": "Use two Referentials?",
+        "popupdesc": "Fairly self-explanatory. Check the box to show two referentials on this word, rather than one."
+    },
 
     "suppType": {
         "type": "",

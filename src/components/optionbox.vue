@@ -25,6 +25,11 @@
       <input type="button" value="Remove" @click="affixes.pop(); this.$emit('send-message',affixes,code)"/> <!-- Button to remove an affix -->
     </div>
 
+    <!-- If it's a checkbox -->
+    <div v-else-if="json.type=='checkbox'">
+      <input type="checkbox" v-model="option" @change="this.$emit('send-message',option,code)"/>
+    </div>
+
     <!-- Otherwise, assume it's a dropdown list: -->
     <select v-else v-model="option" @change="this.$emit('send-message',option,code)" :disabled="disabled" :id="code">
       <!--<option v-for="(opt, short) in options" :key="opt" :value="short">{{opt}} {{short === short.toString().toUpperCase() ? "("+short+")" : ""}}</option>-->
