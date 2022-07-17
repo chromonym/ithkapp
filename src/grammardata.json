@@ -1217,7 +1217,17 @@
     "twoRefs": {
         "type": "checkbox",
         "title": "Use two Referentials?",
-        "popupdesc": "Fairly self-explanatory. Check the box to show two referentials on this word, rather than one."
+        "popupdesc": "Please note that the referential will use the second case.<br/>If this is turned off, the second case is stacked on the first referential."
+    },
+    "twoCs": {
+        "type": "checkbox",
+        "title": "Apply two Cases?",
+        "popupdesc": "Fairly self-explanatory. Applies another case to the word."
+    },
+    "refAffix": {
+        "type": "affix",
+        "title": "Referential Affixes",
+        "popupdesc": "Affixes to be applied to this referential. Again, fairly self-explanatory."
     },
 
     "suppType": {

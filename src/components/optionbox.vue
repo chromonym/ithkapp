@@ -27,7 +27,7 @@
 
     <!-- If it's a checkbox -->
     <div v-else-if="json.type=='checkbox'">
-      <input type="checkbox" v-model="option" @change="this.$emit('send-message',option,code)"/>
+      <input type="checkbox" v-model="option" @change="this.$emit('send-message',option,code)" :disabled="disabled"/>
     </div>
 
     <!-- Otherwise, assume it's a dropdown list: -->
