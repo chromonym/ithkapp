@@ -1,8 +1,32 @@
 <template>
   <title>Ithkapp | {{ithkword}}</title>
   <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
+  <div class="tab" id="header">
+    <h1 style="float: left; padding-left: 20px; font-size: 16px; padding-top:2px;">Ithkapp</h1>
+    <span class="close" style="padding-left:10px;" @click="openModal('settings')"><i class="fa-solid fa-gear fa-xs"></i></span>
+    <div class="dropdown">
+      <button :class="{active: !['normal','affRoot','refRoot'].includes(wordType)}" @click="openDropdown('adjDD')" v-click-outside="event => closeDropdown('adjDD',event)">Adjunct ▼</button>
+      <div class="dropdown-content hidden" id="adjDD">
+        <span @click="switchWordType('affixjunct')" :class="{active: wordType == 'affixjunct'}">Affixual</span>
+        <span @click="switchWordType('modular')" :class="{active: wordType == 'modular'}">Modular</span>
+        <span @click="switchWordType('register')" :class="{active: wordType == 'register'}">Register</span>
+        <span @click="switchWordType('suppletive')" :class="{active: wordType == 'suppletive'}">Suppletive</span>
+        <span @click="switchWordType('ref')" :class="{active: wordType == 'ref'}">Single/Dual-Referential</span>
+        <span @click="switchWordType('refCS')" :class="{active: wordType == 'refCS'}">Single Referential w/ Case-Stacking</span>
+        <span @click="switchWordType('mcs')" :class="{active: wordType == 'mcs'}">Mood/Case-Scope</span>
+        <span @click="switchWordType('bias')" :class="{active: wordType == 'bias'}">Bias</span>
+      </div>
+    </div>
+    <div class="dropdown">
+      <button :class="{active: ['normal','affRoot','refRoot'].includes(wordType)}" @click="openDropdown('formDD')" v-click-outside="event => closeDropdown('formDD',event)">Formative ▼</button>
+      <div class="dropdown-content hidden" id="formDD">
+        <span @click="switchWordType('normal')" :class="{active: wordType == 'normal'}">Normal</span>
+        <span @click="switchWordType('affRoot')" :class="{active: wordType == 'affRoot'}">Affix as Root</span>
+        <span @click="switchWordType('refRoot')" :class="{active: wordType == 'refRoot'}">Personal-Reference Root</span>
+      </div>
+    </div>
+  </div>
   <div id="content">
-    <span class="close" @click="openModal('settings')"><i class="fa-solid fa-gear fa-xs"></i></span>
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
     <p class="smalltext">Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
@@ -152,19 +176,6 @@
       </div>
       <div :class="{hidden: modalID != 'settings'}" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
         <h2 style="text-align:center;">Settings</h2>
-        <label>Word type: </label><select @change="wordType = $event.target.value; calculateAdjunct($event.target.value);">
-          <option>normal</option> <!-- normal words; formatives -->
-          <option>suppletive</option> <!-- suppletive adjuncts; type+case -->
-          <option>affRoot</option> <!-- affix-root adjuncts (normal but root is an affix) -->
-          <option>affixjunct</option> <!-- affixual adjunct (just affixes) -->
-          <option>register</option> <!-- register adjunct -->
-          <option>modular</option> <!-- modular adjunct (more slot 8 stuff) -->
-          <option>refRoot</option> <!-- personal-reference root adjunct (normal but root is a referential) -->
-          <option>ref</option> <!-- single/dual referential (just referentials) -->
-          <option>refCS</option> <!-- referential with case-stacking, affixes, specification, and essence -->
-          <option>mcs</option> <!-- mood/case-scope adjunct -->
-          <option>bias</option> <!-- bias adjuncts -->
-        </select>
         <h3>IPA (Pronunciation)</h3>
         <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
         <label>Pronunciation of ⟨e⟩: </label><select @change="event => settingsUpdate(event, 'e')"><option>[ɛ]</option><option>[e]</option></select><br/><br/>
@@ -219,6 +230,7 @@
 </template>
 
 <script>
+import vClickOutside from "click-outside-vue3"
 import OptionBox from './components/optionbox.vue'
 import grammardata from './grammardata.json'
 import consdata from './consdata.json'
@@ -234,6 +246,7 @@ export default {
       modalContent: "",
       modalID: "",
       modalTabs: [],
+      isHovering: [false,false,false,false,false,false,false,false,false,false,false],
       gData: grammardata,
       cData: consdata,
       gOptions: { // grammar options
@@ -474,6 +487,18 @@ export default {
       console.log("Modal closing for",this.modalID);
       document.getElementById("modal").style.display = "none";
     },
+    openDropdown(id) {
+      document.getElementById(id).classList.toggle("hidden");
+    },
+    closeDropdown(id,event={}) {
+      try {
+        if (event.path[1].id != id) {
+          document.getElementById(id).classList.add("hidden");
+        }
+      } catch {
+        console.log("uh")
+      }
+    },
     settingsUpdate(event,val="") {
       if (["a","e","ë","i","o","ö","u","ü","x","řř"].includes(val)) {
         this.ipaPreference[val] = event.target.value.slice(1, -1);
@@ -508,6 +533,10 @@ export default {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
       }
       document.getElementById(cTitle).className += " active";
+    },
+    switchWordType(type) {
+      this.wordType = type;
+      this.calculateAdjunct(type);
     },
     calculateAdjunct(type) {
       var output = "";
@@ -1662,6 +1691,9 @@ export default {
     this.calculateWord();
     this.IPAcalcs();
     this.glossCalcs();
+  },
+  directives: {
+    clickOutside: vClickOutside.directive
   }
 }
 </script>
@@ -1677,30 +1709,39 @@ export default {
   background-color: #EDF3F5;
 }
 .word {
-  font-size: 20px;
+  font-size: 25px;
 }
 .smalltext {
   font-size: 13px;
   color: gray;
   font-family: Arial, sans-serif;
 }
+#header {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  overflow: visible;
+  background-color: #EDF3F5;
+}
 #content {
   position: absolute;
-  top: 0px;
+  top: 45px;
   left: 0px;
   bottom: 90px;
   right: 0px;
   overflow: auto;
+  z-index: -10;
 }
 #footer {
   position: fixed;
   left: 0;
   bottom: 0;
-  height: 90px;
+  height: 95px;
   width: 100%;
-  border-style: solid;
-  border-width: 1px;
-  border-color: black;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: black;
   background-color: #EDF3F5;
   overflow: hidden;
 }
@@ -1722,7 +1763,7 @@ export default {
 .modal {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;
@@ -1793,7 +1834,7 @@ export default {
 }
 .tab {
   overflow: hidden;
-  border: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   background-color: #f1f1f1;
 }
 .tab button {
@@ -1818,5 +1859,31 @@ a {
 }
 a:active {
   color: #98838F;
+}
+.dropdown {
+  position: relative;
+  float: right;
+}
+.dropdown-content {
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 3;
+  right: 0;
+  top: 43px;
+}
+.dropdown-content span {
+  color: black;
+  padding: 12px 16px;
+  display: block;
+  cursor: pointer;
+  z-index: 3;
+}
+.dropdown-content span:hover {
+  background-color: #ddd;
+}
+.dropdown-content span.active {
+  background-color: rgb(196, 255, 235);
 }
 </style>
