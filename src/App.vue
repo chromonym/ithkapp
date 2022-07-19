@@ -1690,7 +1690,7 @@ export default {
     resetWord() {
       this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
       for (var property in this.gDefault) {
-        this.updateFromModal(property,this.gDefault[property]);
+        this.updateFromModal(property,JSON.parse(JSON.stringify(this.gDefault[property])));
       }
     }
   },
