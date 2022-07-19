@@ -27,6 +27,7 @@
     </div>
   </div>
   <div id="content">
+    <button @click="resetWord">Reset word (for testing)</button>
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
     <p class="smalltext">Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
@@ -249,7 +250,7 @@ export default {
       isHovering: [false,false,false,false,false,false,false,false,false,false,false],
       gData: grammardata,
       cData: consdata,
-      gOptions: { // grammar options
+      gDefault: { // default grammar options
         // NORMAL WORD OPTIONS
         "root":"",
         "stem":"s1",
@@ -342,6 +343,7 @@ export default {
         // BIAS ADJUNCTS
         "bias": "ACC",
       },
+      gOptions: {}, // grammar options,
       sVowels: [ // the "Standard Vowel-Form Sequence" as an array
         ["a","ai","ia","ao"],
         ["ä","au","ie","aö"],
@@ -1684,9 +1686,16 @@ export default {
           skipnext = false;
         }
       }
+    },
+    resetWord() {
+      this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
+      for (var property in this.gDefault) {
+        this.updateFromModal(property,this.gDefault[property]);
+      }
     }
   },
   beforeMount() {
+    this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
     //this.slots[2] = "";
     this.calculateWord();
     this.IPAcalcs();
@@ -1866,7 +1875,7 @@ a:active {
 }
 .dropdown-content {
   position: absolute;
-  background-color: #f1f1f1;
+  background-color: #EDF3F5;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 3;

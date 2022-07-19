@@ -82,10 +82,21 @@ export default {
   },
   methods: {
     updateValue(toUpdate) {
-      if (this.$props.type != "affix" && this.$props.type != "text" && Object.keys(this.$props.json.options).includes(toUpdate)) {
+      if (this.$props.json.type == "affix") {
+        this.affixes = toUpdate;
+        this.$emit('send-message',this.affixes,this.$props.code);
+      } else if (this.$props.json.type == "text") {
+        this.text = toUpdate;
+        this.$emit('send-message',this.text,this.$props.code);
+      } else if (this.$props.json.type == "checkbox") {
         this.option = toUpdate;
-        document.getElementById(this.$props.code).selectedIndex = Object.keys(this.$props.json.options).findIndex(x => x === toUpdate);
         this.$emit('send-message',this.option,this.$props.code);
+      } else {
+        if (Object.keys(this.$props.json.options).includes(toUpdate)) {
+          this.option = toUpdate;
+          document.getElementById(this.$props.code).selectedIndex = Object.keys(this.$props.json.options).findIndex(x => x === toUpdate);
+          this.$emit('send-message',this.option,this.$props.code);
+        }
       }
     }
   }
