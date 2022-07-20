@@ -3,7 +3,8 @@
   <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
   <div class="tab" id="header">
     <h1 style="float: left; padding-left: 20px; font-size: 16px; padding-top:2px;">Ithkapp</h1>
-    <span class="close" style="padding-left:10px;" @click="openModal('settings')"><i class="fa-solid fa-gear fa-xs"></i></span>
+    <span class="close" style="padding-left:10px;" @click="openModal('settings')" title="Settings"><i class="fa-solid fa-gear fa-xs"></i></span>
+    <span class="close" style="padding-left: 10px; padding-bottom: 6px;" :style="sentenceOpen ? 'background-color:rgb(196, 255, 235); color:#333;' : ''" @click="openNav" title="Sentence Menu"><i class="fa-solid fa-align-right fa-xs"></i></span>
     <div class="dropdown">
       <button :class="{active: !['normal','affRoot','refRoot'].includes(wordType)}" @click="openDropdown('adjDD')" v-click-outside="event => closeDropdown('adjDD',event)">Adjunct ▼</button>
       <div class="dropdown-content hidden" id="adjDD">
@@ -28,6 +29,8 @@
   </div>
   <div id="content">
     <button @click="resetWord">Reset word (for testing)</button>
+    <button @click="openNav">Open sidenav (for testing)</button>
+    <button @click="closeNav">Close sidenav (for testing)</button>
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
     <p class="smalltext">Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
@@ -228,6 +231,10 @@
     </div>
     <button id="modalToTop" @click="scrollToTop">↑</button>
   </div>
+  <div id="sidebar">
+    <span class="close" @click="closeNav()">&times;</span>
+    <p>Test</p>
+  </div>
 </template>
 
 <script>
@@ -424,6 +431,7 @@ export default {
       tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
       SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
       REFtabGroups: [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
+      sentenceOpen: false,
     }
   },
   methods: {
@@ -1692,6 +1700,32 @@ export default {
       for (var property in this.gDefault) {
         this.updateFromModal(property,JSON.parse(JSON.stringify(this.gDefault[property])));
       }
+    },
+    openNav() {
+      console.log(window.innerWidth);
+      if (window.innerWidth >= 650) {
+        if (this.sentenceOpen) {this.closeNav()}
+        else {
+          this.sentenceOpen = true;
+          document.getElementById('sidebar').style.width = "250px";
+          document.getElementById('content').style.marginRight = "250px";
+          document.getElementById('header').style.marginRight = "250px";
+          document.getElementById('footer').style.marginRight = "250px";
+          document.getElementById('modal').style.marginRight = "250px";
+          document.getElementById('modalToTop').style.right = "270px";
+        }
+      } else {
+        document.getElementById('sidebar').style.width = "100%";
+      }
+    },
+    closeNav() {
+      this.sentenceOpen = false;
+      document.getElementById('sidebar').style.width = "0";
+      document.getElementById('content').style.marginRight = "0";
+      document.getElementById('header').style.marginRight = "0";
+      document.getElementById('footer').style.marginRight = "0";
+      document.getElementById('modal').style.marginRight = "0";
+      document.getElementById('modalToTop').style.right = "20px";
     }
   },
   beforeMount() {
@@ -1729,9 +1763,11 @@ export default {
   position: fixed;
   top: 0px;
   left: 0px;
-  width: 100%;
+  right: 0px;
+  /*width: 100%;*/
   overflow: visible;
   background-color: #EDF3F5;
+  transition: margin-right 0.5s;
 }
 #content {
   position: absolute;
@@ -1741,18 +1777,20 @@ export default {
   right: 0px;
   overflow: auto;
   z-index: -10;
+  transition: margin-right 0.5s;
 }
 #footer {
   position: fixed;
   left: 0;
+  right: 0;
   bottom: 0;
   height: 95px;
-  width: 100%;
   border-top-style: solid;
   border-top-width: 1px;
   border-top-color: black;
   background-color: #EDF3F5;
   overflow: hidden;
+  transition: margin-right 0.5s;
 }
 .section {
   display: flex;
@@ -1775,11 +1813,12 @@ export default {
   z-index: 2;
   left: 0;
   top: 0;
-  width: 100%;
+  right: 0;
   height: 100%;
   overflow: auto;
   background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.4);
+  transition: margin-right 0.5s; /* this is here just in case it's possible to open the menu while a modal is open. it shouldn't be, but it might. */
 }
 #modal-content {
   background-color: white;
@@ -1810,6 +1849,7 @@ export default {
   border-radius: 25px;
   text-align: center;
   font-size: 35px;
+  transition: right 0.5s; /* this is here just in case it's possible to open the menu while a modal is open. it shouldn't be, but it might. */
 }
 .modalOption {
   border: 1px solid black;
@@ -1894,5 +1934,20 @@ a:active {
 }
 .dropdown-content span.active {
   background-color: rgb(196, 255, 235);
+}
+#sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+#main {
+  margin-right: 0;
+  transition: 0.5s;
 }
 </style>
