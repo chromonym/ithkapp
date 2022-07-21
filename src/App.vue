@@ -1,6 +1,7 @@
 <template>
   <title>Ithkapp | {{ithkword}}</title>
   <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
+  <!-- HEADER -->
   <div class="tab" id="header">
     <h1 style="float: left; padding-left: 20px; font-size: 16px; padding-top:2px;">Ithkapp</h1>
     <span class="close" style="padding-left:10px;" @click="openModal('settings')" title="Settings"><i class="fa-solid fa-gear fa-xs"></i></span>
@@ -27,6 +28,8 @@
       </div>
     </div>
   </div>
+
+  <!-- MAIN (contains word-creation options) -->
   <div id="content">
     <button @click="resetWord">Reset word (for testing)</button>
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
@@ -163,13 +166,17 @@
       <OptionBox :json="gData.bias" code="bias" @send-message="handleSendMessage" ref="bias" @modal="openModal"/>
     </div>
   <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
+  <!-- END OF MAIN -->
 
+  <!-- FOOTER (contains word, pronunciation, and gloss) -->
   </div>
   <div id="footer">
     <p><span class="word"><b>{{ithkword}}</b></span><br/>
     <span class="smalltext">[{{ipa}}]<br/>
     <span :title="fullGloss">{{gloss}}</span></span></p>
   </div>
+
+  <!-- MODALS (POPUPS) -->
   <div id="modal" class="modal" @click.self="closeModal()">
     <div id="modal-content">
       <div class="tab">
@@ -229,16 +236,22 @@
     </div>
     <button id="modalToTop" @click="scrollToTop">↑</button>
   </div>
+
+  <!-- SIDEBAR (sentence constructor) -->
   <div id="sidebar">
     <div id="sHeader">
       <span class="close" @click="closeNav()" style="transform: translateY(-20px)">&times;</span>
       <h3 style="padding-left: 20px;">Sentence Menu</h3>
     </div>
     <div id="sContent">
-      <div class="sentWord"><p style="text-align: left;">{{ithkword}}</p></div>
+      <div v-for="(word,index) in sentence" :key="index" class="sentWord" :class="{active: selectedWord == index}" @click="switchWord(index)">
+        <p style="text-align: left;">{{word[0]}} - {{word[2]}}</p>
+        <input type="text" style="float:left; transform:translateY(-5px)"/>
+        <br/><br/>
+      </div>
     </div>
     <div id="sFooter">
-      <button title="Add New Word"><i class="fa-solid fa-plus fa-xl"></i></button>
+      <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify(['aal', gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
       <button title="Save Words"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
       <button title="Upload"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></button>
       <button title="Export/Share"><i class="fa-solid fa-link fa-xl"></i></button>
@@ -442,6 +455,8 @@ export default {
       SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
       REFtabGroups: [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
       sentenceOpen: false,
+      sentence: [], // things in this are of the form [word, grammarOptions, description]
+      selectedWord: 0,
     }
   },
   methods: {
@@ -464,6 +479,7 @@ export default {
         this.IPAcalcs();
         // need to figure out how to gloss adjuncts/
       }
+      this.sentence[this.selectedWord] = [this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),this.wordType,"a"];
     },
     openModal(code) {
       console.log("Modal opening for",code);
@@ -563,6 +579,7 @@ export default {
       this.calculateAdjunct(type);
       this.closeDropdown('adjDD',{},true);
       this.closeDropdown('formDD',{},true);
+      this.handleSendMessage(this.gOptions.root,"root");
     },
     calculateAdjunct(type) {
       var output = "";
@@ -1711,10 +1728,13 @@ export default {
         }
       }
     },
-    resetWord() {
-      this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
-      for (var property in this.gDefault) {
-        this.updateFromModal(property,JSON.parse(JSON.stringify(this.gDefault[property])));
+    resetWord(gO=null) {
+      if (gO == null) {
+        gO = this.gDefault;
+      }
+      this.gOptions = JSON.parse(JSON.stringify(gO));
+      for (var property in gO) {
+        this.updateFromModal(property,JSON.parse(JSON.stringify(gO[property])));
       }
     },
     openNav() {
@@ -1724,6 +1744,7 @@ export default {
         else {
           this.sentenceOpen = true;
           document.getElementById('sidebar').style.width = "250px";
+          document.getElementById('sFooter').style.width = "250px";
           document.getElementById('content').style.marginRight = "250px";
           document.getElementById('header').style.marginRight = "250px";
           document.getElementById('footer').style.marginRight = "250px";
@@ -1732,16 +1753,26 @@ export default {
         }
       } else {
         document.getElementById('sidebar').style.width = "100%";
+        document.getElementById('sFooter').style.width = "100%";
       }
     },
     closeNav() {
       this.sentenceOpen = false;
       document.getElementById('sidebar').style.width = "0";
+      document.getElementById('sFooter').style.width = "0";
       document.getElementById('content').style.marginRight = "0";
       document.getElementById('header').style.marginRight = "0";
       document.getElementById('footer').style.marginRight = "0";
       document.getElementById('modal').style.marginRight = "0";
       document.getElementById('modalToTop').style.right = "20px";
+    },
+    switchWord(index) {
+      this.selectedWord = index;
+      this.ithkword = this.sentence[index][0]
+      //this.gOptions = JSON.parse(JSON.stringify(this.sentence[index][1]));
+      this.wordType = this.sentence[index][2];
+      //this.handleSendMessage(this.gOptions.root,"root");
+      this.resetWord(this.sentence[index][1]);
     }
   },
   beforeMount() {
@@ -1750,6 +1781,7 @@ export default {
     this.calculateWord();
     this.IPAcalcs();
     this.glossCalcs();
+    this.sentence.push([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
   },
   directives: {
     clickOutside: vClickOutside.directive
@@ -1972,14 +2004,26 @@ a:active {
   max-width: 100%;
   padding: 0 10px;
 }
-#sFooter {
+.sentWord.active {
+  background-color: rgb(196, 255, 235);
+}
+#sContent {
+  bottom: 50px;
+  right: 0;
+  top: 50px;
+  width: inherit;
+  overflow: auto;
   position: absolute;
+}
+#sFooter {
+  position: fixed;
   bottom: 0;
   right: 0;
-  left: 0;
+  width: 0;
   height: 50px;
   border-top: 1px solid rgb(189, 189, 189);
   overflow: hidden;
+  transition: 0.5s;
 }
 #sFooter button {
   height: 40px;
