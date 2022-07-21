@@ -244,18 +244,18 @@
       <h3 style="padding-left: 20px;">Sentence Menu</h3>
     </div>
     <div id="sContent">
-      <div v-for="(word,index) in sentence" :key="index" class="sentWord" :class="{active: selectedWord == index}" @click="switchWord(index)">
-        <p style="text-align: left;">{{word[0]}} - {{word[2]}}</p>
-        <input type="text" style="float:left; transform:translateY(-5px)"/>
-        <br/><br/>
+      <div v-for="(word,index) in sentence" :key="index" class="sentWord" :class="{active: selectedWord == index, deletable: deleteWordMode}" @click="switchWord(index)">
+        <p><b>{{word[0]}}</b></p>
+        <textarea placeholder="Description..." rows="1" v-model="sentence[index][3]"></textarea>
+        <br/>
       </div>
     </div>
     <div id="sFooter">
       <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify(['aal', gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
       <button title="Save Words"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
-      <button title="Upload"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></button>
+      <button title="Upload" @click="importSnt"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></button>
       <button title="Export/Share"><i class="fa-solid fa-link fa-xl"></i></button>
-      <button title="Delete Words"><i class="fa-solid fa-xmark fa-xl"></i></button>
+      <button title="Delete Words" @click="deleteWordMode = !deleteWordMode" :class="{active: deleteWordMode}"><i :class="deleteWordMode ? 'fa-solid fa-check fa-xl' : 'fa-solid fa-trash-can fa-xl'"></i></button>
     </div>
   </div>
 </template>
@@ -277,7 +277,6 @@ export default {
       modalContent: "",
       modalID: "",
       modalTabs: [],
-      isHovering: [false,false,false,false,false,false,false,false,false,false,false],
       gData: grammardata,
       cData: consdata,
       gDefault: { // default grammar options
@@ -457,6 +456,7 @@ export default {
       sentenceOpen: false,
       sentence: [], // things in this are of the form [word, grammarOptions, description]
       selectedWord: 0,
+      deleteWordMode: false,
     }
   },
   methods: {
@@ -479,7 +479,7 @@ export default {
         this.IPAcalcs();
         // need to figure out how to gloss adjuncts/
       }
-      this.sentence[this.selectedWord] = [this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),this.wordType,"a"];
+      this.sentence[this.selectedWord] = JSON.parse(JSON.stringify([this.ithkword,this.gOptions,this.wordType,this.sentence[this.selectedWord][3]]));
     },
     openModal(code) {
       console.log("Modal opening for",code);
@@ -580,6 +580,10 @@ export default {
       this.closeDropdown('adjDD',{},true);
       this.closeDropdown('formDD',{},true);
       this.handleSendMessage(this.gOptions.root,"root");
+    },
+    importSnt() {
+      var snt = prompt("Import sentence:");
+      alert(snt);
     },
     calculateAdjunct(type) {
       var output = "";
@@ -1767,12 +1771,18 @@ export default {
       document.getElementById('modalToTop').style.right = "20px";
     },
     switchWord(index) {
-      this.selectedWord = index;
-      this.ithkword = this.sentence[index][0]
-      //this.gOptions = JSON.parse(JSON.stringify(this.sentence[index][1]));
-      this.wordType = this.sentence[index][2];
-      //this.handleSendMessage(this.gOptions.root,"root");
-      this.resetWord(this.sentence[index][1]);
+      if (this.deleteWordMode) {
+        if (confirm("Really delete "+this.sentence[index][0]+(this.sentence[index][3] ? " ("+this.sentence[index][3]+")" : "")+"?")) {
+          this.sentence.splice(index,1);
+        }
+      } else {
+        this.selectedWord = index;
+        this.ithkword = this.sentence[index][0]
+        //this.gOptions = JSON.parse(JSON.stringify(this.sentence[index][1]));
+        this.wordType = this.sentence[index][2];
+        //this.handleSendMessage(this.gOptions.root,"root");
+        this.resetWord(this.sentence[index][1]);
+      }
     }
   },
   beforeMount() {
@@ -2003,9 +2013,31 @@ a:active {
   background-color: #afbdc2;
   max-width: 100%;
   padding: 0 10px;
+  cursor: pointer;
+  height: auto;
 }
 .sentWord.active {
   background-color: rgb(196, 255, 235);
+}
+.sentWord.deletable {
+  color: #FF2C3E;
+  border-color: #FF2C3E;
+}
+.sentWord p {
+  overflow-wrap: break-word;
+  text-align: left;
+  font-size: 20px;
+}
+.sentWord textarea {
+  background-color: inherit;
+  border: none;
+  font-size: 16px;
+  font-style: italic;
+  width: 100%;
+  left: 0;
+  resize: vertical;
+  transform: translate(-3px,-10px);
+  cursor: auto;
 }
 #sContent {
   bottom: 50px;
@@ -2039,6 +2071,9 @@ a:active {
 }
 #sFooter button:active {
   background-color: #b8e2f0
+}
+#sFooter button.active {
+  background-color: rgb(179, 255, 230);
 }
 @media (max-width: 650px) {
   #sFooter {
