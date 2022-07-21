@@ -4,7 +4,7 @@
   <div class="tab" id="header">
     <h1 style="float: left; padding-left: 20px; font-size: 16px; padding-top:2px;">Ithkapp</h1>
     <span class="close" style="padding-left:10px;" @click="openModal('settings')" title="Settings"><i class="fa-solid fa-gear fa-xs"></i></span>
-    <span class="close" style="padding-left: 10px; padding-bottom: 6px;" :style="sentenceOpen ? 'background-color:rgb(196, 255, 235); color:#333;' : ''" @click="openNav" title="Sentence Menu"><i class="fa-solid fa-align-right fa-xs"></i></span>
+    <span class="close" style="padding-left: 10px; height: 38px;" :style="sentenceOpen ? 'background-color:rgb(179, 255, 230); color:#333;' : ''" @click="openNav" title="Sentence Menu"><i class="fa-solid fa-align-right fa-xs"></i></span>
     <div class="dropdown">
       <button :class="{active: !['normal','affRoot','refRoot'].includes(wordType)}" @click="openDropdown('adjDD')" v-click-outside="event => closeDropdown('adjDD',event)">Adjunct ▼</button>
       <div class="dropdown-content hidden" id="adjDD">
@@ -29,8 +29,6 @@
   </div>
   <div id="content">
     <button @click="resetWord">Reset word (for testing)</button>
-    <button @click="openNav">Open sidenav (for testing)</button>
-    <button @click="closeNav">Close sidenav (for testing)</button>
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
     <p class="smalltext">Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
@@ -232,8 +230,20 @@
     <button id="modalToTop" @click="scrollToTop">↑</button>
   </div>
   <div id="sidebar">
-    <span class="close" @click="closeNav()">&times;</span>
-    <p>Test</p>
+    <div id="sHeader">
+      <span class="close" @click="closeNav()" style="transform: translateY(-20px)">&times;</span>
+      <h3 style="padding-left: 20px;">Sentence Menu</h3>
+    </div>
+    <div id="sContent">
+      <div class="sentWord"><p style="text-align: left;">{{ithkword}}</p></div>
+    </div>
+    <div id="sFooter">
+      <button title="Add New Word"><i class="fa-solid fa-plus fa-xl"></i></button>
+      <button title="Save Words"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
+      <button title="Upload"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></button>
+      <button title="Export/Share"><i class="fa-solid fa-link fa-xl"></i></button>
+      <button title="Delete Words"><i class="fa-solid fa-xmark fa-xl"></i></button>
+    </div>
   </div>
 </template>
 
@@ -500,13 +510,17 @@ export default {
     openDropdown(id) {
       document.getElementById(id).classList.toggle("hidden");
     },
-    closeDropdown(id,event={}) {
-      try {
-        if (event.path[1].id != id) {
-          document.getElementById(id).classList.add("hidden");
+    closeDropdown(id,event={},override=false) {
+      if (override) {
+        document.getElementById(id).classList.add("hidden");
+      } else {
+        try {
+          if (event.path[1].id != id) {
+            document.getElementById(id).classList.add("hidden");
+          }
+        } catch {
+          console.log("uh")
         }
-      } catch {
-        console.log("uh")
       }
     },
     settingsUpdate(event,val="") {
@@ -547,6 +561,8 @@ export default {
     switchWordType(type) {
       this.wordType = type;
       this.calculateAdjunct(type);
+      this.closeDropdown('adjDD',{},true);
+      this.closeDropdown('formDD',{},true);
     },
     calculateAdjunct(type) {
       var output = "";
@@ -1942,12 +1958,52 @@ a:active {
   z-index: 10;
   top: 0;
   right: 0;
-  background-color: #111;
+  background-color: #d8e2e6; /* #EDF3F5 */
+  border-left: 1px solid rgb(189, 189, 189);
   overflow-x: hidden;
   transition: 0.5s;
 }
-#main {
-  margin-right: 0;
-  transition: 0.5s;
+.sentWord {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  border: 1px solid black;
+  background-color: #afbdc2;
+  max-width: 100%;
+  padding: 0 10px;
+}
+#sFooter {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 50px;
+  border-top: 1px solid rgb(189, 189, 189);
+  overflow: hidden;
+}
+#sFooter button {
+  height: 40px;
+  width: 40px;
+  margin: 5px;
+  background-color: #EDF3F5;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#sFooter button:hover {
+  background-color: #c7f3f1;
+}
+#sFooter button:active {
+  background-color: #b8e2f0
+}
+@media (max-width: 650px) {
+  #sFooter {
+    height: 20vw;
+  }
+  #sFooter button {
+  height: 16vw;
+  width: 16vw;
+  margin: 2vw;
+}
 }
 </style>
