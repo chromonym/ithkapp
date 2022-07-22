@@ -1770,10 +1770,15 @@ export default {
       document.getElementById('modal').style.marginRight = "0";
       document.getElementById('modalToTop').style.right = "20px";
     },
-    switchWord(index) {
-      if (this.deleteWordMode) {
+    switchWord(index,override=false) { // use override=true to NOT delete a word, even if it's in delete mode
+      if (this.deleteWordMode && !override) {
         if (confirm("Really delete "+this.sentence[index][0]+(this.sentence[index][3] ? " ("+this.sentence[index][3]+")" : "")+"?")) {
           this.sentence.splice(index,1);
+          if (this.sentence.length == 0) {
+            this.sentence.push(["aal",JSON.parse(JSON.stringify(this.gDefault)),"normal",""]);
+          }
+          if ((this.sentence.length <= this.selectedWord || index < this.selectedWord) && this.selectedWord != 0) {this.switchWord(this.selectedWord-1,true)}
+          else {this.switchWord(this.selectedWord,true);}
         }
       } else {
         this.selectedWord = index;
@@ -2038,6 +2043,7 @@ a:active {
   resize: vertical;
   transform: translate(-3px,-10px);
   cursor: auto;
+  color: inherit;
 }
 #sContent {
   bottom: 50px;
