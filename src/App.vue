@@ -244,7 +244,9 @@
       <h3 style="padding-left: 20px;">Sentence Menu</h3>
     </div>
     <div id="sContent">
-      <div v-for="(word,index) in sentence" :key="index" class="sentWord" :class="{active: selectedWord == index, deletable: deleteWordMode}" @click="switchWord(index)">
+      <div v-for="(word,index) in sentence" :key="index" class="sentWord noSelecting"
+      :class="{active: selectedWord == index, deletable: deleteWordMode, dragging: draggedWord === index}"
+      @click="switchWord(index)" @mouseover="hoverChange(index)" @mouseleave="hovering = null" @mousedown="draggedWord = index" @touchstart="draggedWord = index"> <!-- @touchmove.prevent -->
         <p><b>{{word[0]}}</b></p>
         <textarea placeholder="Description..." rows="1" v-model="sentence[index][3]"></textarea>
         <br/>
@@ -458,6 +460,9 @@ export default {
       selectedWord: 0,
       deleteWordMode: false,
       oldScreenSize: 0,
+      hovering: null,
+      isMouseDown: false,
+      draggedWord: null,
     }
   },
   methods: {
@@ -1796,6 +1801,29 @@ export default {
         this.openNav(true);
       }
       this.oldScreenSize = window.innerWidth;
+    },
+    hoverChange(index){
+      this.hovering = index;
+      if (this.isMouseDown && this.draggedWord !== null && this.draggedWord !== this.hovering) {
+        console.log(this.draggedWord);
+        var sW = JSON.parse(JSON.stringify(this.sentence[this.draggedWord]));
+        this.sentence.splice(this.draggedWord,1);
+        this.sentence.splice(this.hovering,0,JSON.parse(JSON.stringify(sW)));
+        if (this.selectedWord === this.draggedWord) {
+          this.switchWord(this.hovering,true);
+        } else if (this.selectedWord === this.hovering) {
+          this.switchWord(this.draggedWord,true);
+        }
+        //this.isMouseDown = false;
+        this.draggedWord = index;
+      }
+    },
+    onMouseDownF() {
+      this.isMouseDown = true;
+    },
+    onMouseUpF() {
+      this.isMouseDown = false;
+      this.draggedWord = null;
     }
   },
   beforeMount() {
@@ -1812,9 +1840,17 @@ export default {
   created() {
     this.oldScreenSize = window.innerWidth;
     window.addEventListener("resize",this.onScreenResize);
+    window.addEventListener("mousedown",this.onMouseDownF);
+    window.addEventListener("mouseup",this.onMouseUpF);
+    window.addEventListener("touchstart",this.onMouseDownF);
+    window.addEventListener("touchend",this.onMouseUpF);
   },
   unmounted() {
     window.removeEventListener("resize",this.onScreenResize);
+    window.removeEventListener("mousedown",this.onMouseUpF);
+    window.removeEventListener("mouseup",this.onMouseDownF);
+    window.removeEventListener("touchstart",this.onMouseUpF);
+    window.removeEventListener("touchend",this.onMouseDownF);
   }
 }
 </script>
@@ -1981,6 +2017,11 @@ export default {
 .hidden {
   display: none;
 }
+.noSelecting {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
 a {
   color: #3B3575;
 }
@@ -2043,6 +2084,11 @@ a:active {
   color: #FF2C3E;
   border-color: #FF2C3E;
 }
+.sentWord.dragging {
+  border-radius: 5px;
+  opacity: 0.5;
+  cursor: grabbing;
+}
 .sentWord p {
   overflow-wrap: break-word;
   text-align: left;
@@ -2076,7 +2122,7 @@ a:active {
   height: 50px;
   border-top: 1px solid rgb(189, 189, 189);
   overflow: hidden;
-  transition: 0.5s;
+  transition: width 0.5s;
 }
 #sFooter button {
   height: 40px;
@@ -2101,9 +2147,12 @@ a:active {
     height: 20vw;
   }
   #sFooter button {
-  height: 16vw;
-  width: 16vw;
-  margin: 2vw;
-}
+    height: 16vw;
+    width: 16vw;
+    margin: 2vw;
+  }
+  #sContent {
+    bottom: 20vw;
+  }
 }
 </style>
