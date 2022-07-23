@@ -246,7 +246,7 @@
     <div id="sContent">
       <div v-for="(word,index) in sentence" :key="index" class="sentWord noSelecting"
       :class="{active: selectedWord == index, deletable: deleteWordMode, dragging: draggedWord === index}"
-      @click="switchWord(index)" @mouseover="hoverChange(index)" @mouseleave="hovering = null" @mousedown="draggedWord = index" @touchstart="draggedWord = index"> <!-- @touchmove.prevent -->
+      @click="switchWord(index)" @mouseover="hoverChange(index)" @mouseleave="hovering = null" @mousedown="beginDrag(index)" @touchstart="beginDrag(index)"> <!-- @touchmove.prevent -->
         <p><b>{{word[0]}}</b></p>
         <textarea placeholder="Description..." rows="1" v-model="sentence[index][3]"></textarea>
         <br/>
@@ -1819,11 +1819,22 @@ export default {
       }
     },
     onMouseDownF() {
-      this.isMouseDown = true;
+      if (!this.deleteWordMode) {
+        this.isMouseDown = true;
+      }
     },
     onMouseUpF() {
-      this.isMouseDown = false;
-      this.draggedWord = null;
+      if (!this.deleteWordMode) {
+        this.isMouseDown = false;
+        this.draggedWord = null;
+      }
+    },
+    beginDrag(index) {
+      if (!this.deleteWordMode) {
+        this.draggedWord = index;
+      } else {
+        this.draggedWord = null;
+      }
     }
   },
   beforeMount() {
