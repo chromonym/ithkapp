@@ -31,7 +31,7 @@
 
   <!-- MAIN (contains word-creation options) -->
   <div id="content">
-    <button @click="resetWord">Reset word (for testing)</button>
+    <button @click="resetWord()">Reset word (for testing)</button>
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
     <p class="smalltext">Compatible with TNIL Morpho-Phonology v0.19, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
@@ -246,9 +246,9 @@
     <div id="sContent">
       <div v-for="(word,index) in sentence" :key="index" class="sentWord noSelecting"
       :class="{active: selectedWord == index, deletable: deleteWordMode, dragging: draggedWord === index}"
-      @click="switchWord(index)" @mouseover="hoverChange(index)" @mouseleave="hovering = null" @mousedown="beginDrag(index)" @touchstart="beginDrag(index)"> <!-- @touchmove.prevent -->
+      @click="switchWord(index)" @mouseover="hoverChange(index)" @mouseleave="hovering = null" @mousemove="beginDrag(index)" @touchstart="beginDrag(index)"> <!-- @touchmove.prevent -->
         <p><b>{{word[0]}}</b></p>
-        <textarea placeholder="Description..." rows="1" v-model="sentence[index][3]"></textarea>
+        <textarea placeholder="Description..." v-model="sentence[index][3]" @input="resizeTA" rows="1" class="ta"></textarea>
         <br/>
       </div>
     </div>
@@ -467,7 +467,6 @@ export default {
   },
   methods: {
     async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
-      console.log("Recieved "+value+" from "+code);
         await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
           this.cut = [false,false,false]; // reset this.cut
         })();
@@ -488,7 +487,6 @@ export default {
       this.sentence[this.selectedWord] = JSON.parse(JSON.stringify([this.ithkword,this.gOptions,this.wordType,this.sentence[this.selectedWord][3]]));
     },
     openModal(code) {
-      console.log("Modal opening for",code);
       let tGroupFound = false;
       let tG = [];
       this.modalID = code;
@@ -526,7 +524,6 @@ export default {
       if(code === "c") { this.changeClassTab('THM','PLM','Allcases'); }
     },
     closeModal() {
-      console.log("Modal closing for",this.modalID);
       document.getElementById("modal").style.display = "none";
     },
     openDropdown(id) {
@@ -541,7 +538,7 @@ export default {
             document.getElementById(id).classList.add("hidden");
           }
         } catch {
-          console.log("uh")
+          console.log("uh");
         }
       }
     },
@@ -1805,7 +1802,6 @@ export default {
     hoverChange(index){
       this.hovering = index;
       if (this.isMouseDown && this.draggedWord !== null && this.draggedWord !== this.hovering) {
-        console.log(this.draggedWord);
         var sW = JSON.parse(JSON.stringify(this.sentence[this.draggedWord]));
         this.sentence.splice(this.draggedWord,1);
         this.sentence.splice(this.hovering,0,JSON.parse(JSON.stringify(sW)));
@@ -1814,6 +1810,9 @@ export default {
         } else if (this.selectedWord === this.hovering) {
           this.switchWord(this.draggedWord,true);
         }
+        let j = document.getElementsByClassName("ta")[this.draggedWord].style.height;
+        document.getElementsByClassName("ta")[this.draggedWord].style.height = document.getElementsByClassName("ta")[index].style.height;
+        document.getElementsByClassName("ta")[index].style.height = j;
         //this.isMouseDown = false;
         this.draggedWord = index;
       }
@@ -1831,10 +1830,16 @@ export default {
     },
     beginDrag(index) {
       if (!this.deleteWordMode) {
-        this.draggedWord = index;
+        if (this.isMouseDown) {
+          this.draggedWord = index;
+        }
       } else {
         this.draggedWord = null;
       }
+    },
+    resizeTA(e) {
+      e.target.style.height = "18px";
+      e.target.style.height = e.target.scrollHeight + "px";
     }
   },
   beforeMount() {
@@ -2098,6 +2103,9 @@ a:active {
 .sentWord.dragging {
   border-radius: 5px;
   opacity: 0.5;
+  cursor: grabbing;
+}
+.sentWord.dragging textarea {
   cursor: grabbing;
 }
 .sentWord p {
