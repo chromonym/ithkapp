@@ -5,7 +5,7 @@
   <div class="tab" id="header">
     <h1 style="float: left; padding-left: 20px; font-size: 16px; padding-top:2px;">Ithkapp</h1>
     <span class="close" style="padding-left:10px;" @click="openModal('settings')" title="Settings"><i class="fa-solid fa-gear fa-xs"></i></span>
-    <span class="close" style="padding-left: 10px; height: 38px;" :style="sentenceOpen ? 'background-color:rgb(179, 255, 230); color:#333;' : ''" @click="openNav" title="Sentence Menu"><i class="fa-solid fa-align-right fa-xs"></i></span>
+    <span class="close" style="padding-left: 10px; height: 38px;" :style="sentenceOpen ? 'background-color:rgb(179, 255, 230); color:#333;' : ''" @click="openNav(false)" title="Sentence Menu"><i class="fa-solid fa-align-right fa-xs"></i></span>
     <div class="dropdown">
       <button :class="{active: !['normal','affRoot','refRoot'].includes(wordType)}" @click="openDropdown('adjDD')" v-click-outside="event => closeDropdown('adjDD',event)">Adjunct ▼</button>
       <div class="dropdown-content hidden" id="adjDD">
@@ -457,6 +457,7 @@ export default {
       sentence: [], // things in this are of the form [word, grammarOptions, description]
       selectedWord: 0,
       deleteWordMode: false,
+      oldScreenSize: 0,
     }
   },
   methods: {
@@ -1741,10 +1742,9 @@ export default {
         this.updateFromModal(property,JSON.parse(JSON.stringify(gO[property])));
       }
     },
-    openNav() {
-      console.log(window.innerWidth);
+    openNav(override=false) {
       if (window.innerWidth >= 650) {
-        if (this.sentenceOpen) {this.closeNav()}
+        if (this.sentenceOpen && !override) {this.closeNav()}
         else {
           this.sentenceOpen = true;
           document.getElementById('sidebar').style.width = "250px";
@@ -1756,6 +1756,8 @@ export default {
           document.getElementById('modalToTop').style.right = "270px";
         }
       } else {
+        if (override) {this.closeNav()}
+        this.sentenceOpen = true;
         document.getElementById('sidebar').style.width = "100%";
         document.getElementById('sFooter').style.width = "100%";
       }
@@ -1788,6 +1790,12 @@ export default {
         //this.handleSendMessage(this.gOptions.root,"root");
         this.resetWord(this.sentence[index][1]);
       }
+    },
+    onScreenResize(){
+      if (((this.oldScreenSize >= 650 && window.innerWidth < 650) || (this.oldScreenSize < 650 && window.innerWidth >= 650)) && this.sentenceOpen) {
+        this.openNav(true);
+      }
+      this.oldScreenSize = window.innerWidth;
     }
   },
   beforeMount() {
@@ -1800,6 +1808,13 @@ export default {
   },
   directives: {
     clickOutside: vClickOutside.directive
+  },
+  created() {
+    this.oldScreenSize = window.innerWidth;
+    window.addEventListener("resize",this.onScreenResize);
+  },
+  unmounted() {
+    window.removeEventListener("resize",this.onScreenResize);
   }
 }
 </script>
