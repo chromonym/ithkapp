@@ -320,8 +320,8 @@ export default {
         "arDegree": 0,
         // AFFIX ADJUNCT OPTIONS
         "affixjunct": [],
-        "initialAffScope": "lastV",
-        "otherAffScope": "lastV",
+        "initialAffScope": "VDom",
+        "otherAffScope": "VDom",
         "affScopeOf": "default",
         // REGISTER ADJUNCT OPTIONS
         "register": "DSV",
@@ -590,15 +590,21 @@ export default {
     },
     calculateAdjunct(type) {
       var output = "";
+
       if (type == "suppletive") {
         this.calculateSlot9();
         this.slot9gStop();
         this.ithkword = this.gOptions.suppType + this.slots[9]
         this.gloss = {"hl":"[CAR]","hm":"[QUO]","hn":"[NAM]","hň":"[PHR]"}[this.gOptions.suppType]+(this.gOptions.c == "THM" ? "" : "-"+this.gOptions.c);
         this.fullGloss = {"hl":"[CAR]","hm":"[QUO]","hn":"[NAM]","hň":"[PHR]"}[this.gOptions.suppType]+"-"+this.gOptions.c+"\\NRM";
+
       } else if (type == "affixjunct") {
-        var afxjunctV = {"lastV":"a","firstV":"u","lastVII":"e","firstVII":"i","word":"o","all":"ö","same":"ai"};
-        var afxjunctC = {"lastV":"h","firstV":"'h","lastVII":"'hl","firstVII":"'hr","word":"hw","all":"'hw"};
+        var afxjunctV = {"VDom":"a","VSub":"u","VIIDom":"e","VIISub":"i","formative":"o","adjacent":"ö","same":"ai"};
+        var afxjunctC = {"VDom":"h","VSub":"'h","VIIDom":"'hl","VIISub":"'hr","formative":"hw","adjacent":"'hw"};
+        this.gloss = "'" + this.gOptions.affixjunct[0][0] + "'/" + this.gOptions.affixjunct[0][1] + {1:"₁",2:"₂",3:"₃"}[this.gOptions.affixjunct[0][2]];
+        this.fullGloss = this.gloss;
+        this.gloss += (this.gOptions.initialAffScope == "VDom" ? "" : "-{"+this.gOptions.initialAffScope+"}");
+        this.fullGloss += "-{"+this.gOptions.initialAffScope+"}";
         if (this.gOptions.affixjunct.length < 1) {
           this.ithkword = "";
         } else if (this.gOptions.affixjunct.length == 1) {
@@ -624,12 +630,22 @@ export default {
           }
           out += afxjunctV[this.gOptions.otherAffScope];
           this.ithkword = out;
+          for (let i of this.gOptions.affixjunct.slice(1)) {
+            this.gloss += "-'" + i[0] + "'/" + i[1] + {1:"₁",2:"₂",3:"₃"}[i[2]];
+            this.fullGloss += "-'" + i[0] + "'/" + i[1] + {1:"₁",2:"₂",3:"₃"}[i[2]];
+          }
+          this.gloss += (this.gOptions.otherAffScope == "same" ? "" : "-{" + this.gOptions.otherAffScope + "}");
+          this.fullGloss += "-{" + this.gOptions.otherAffScope + "}"
         }
         //var wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
+        this.gloss += (this.gOptions.affScopeOf == "conc" ? "{concat.}" : "");
+        this.fullGloss += (this.gOptions.affScopeOf == "conc" ? "{concat.}" : "");
         this.ithkword = this.markStress(["conc","default"].indexOf(this.gOptions.affScopeOf),this.ithkword);
+
       } else if (type=="register") {
         var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","öi"],"MTH":["u","ui"],"CAR":["ü","ü"],}
         this.ithkword = "h" + ph[this.gOptions.register][this.gOptions.regStartOrEnd];
+
       } else if (type=="modular") {
         output += {"all":"","parent":"w","concat":"y"}[this.gOptions.modAppliesTo];
         if (["2","3","4"].includes(this.gOptions.modNumber)) {
@@ -651,6 +667,7 @@ export default {
           output = this.markStress(0,output);
         }
         this.ithkword = output;
+
       } else if (type=="ref") {
         var refA = this.calculateReference(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
         output += this.allowedAtStart(refA) && !(!this.gOptions.twoCs && this.gOptions.ess2 == "RPV") ? "" : "ë";
@@ -671,6 +688,7 @@ export default {
         }
         if (this.gOptions.ess2 == "RPV") {output = this.markStress(0,output);}
         this.ithkword = output;
+
       } else if (type=="refCS") {
         var Aref = this.calculateReference(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
         output += this.allowedAtStart(Aref) ? "" : "ë";
@@ -697,6 +715,7 @@ export default {
         }
         if (this.gOptions.ess2 == "RPV") {output = this.markStress(0,output);}
         this.ithkword = output;
+
       } else if (type=="mcs") {
         output += "hr";
         if (this.gOptions.cn2 == "mood") {
@@ -705,8 +724,10 @@ export default {
           output += {"CCN":"ai","CCA":"ei","CCS":"iu","CCQ":"oi","CCP":"öi","CCV":"ui"}[this.gOptions.casc];
         }
         this.ithkword = output;
+
       } else if (type=="bias") {
         this.ithkword = this.gData.bias.options[this.gOptions.bias].word;
+
       } else { // incorrect input = normal word
         this.calculateWord();
         this.glossCalcs();

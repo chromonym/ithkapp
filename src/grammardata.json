@@ -1308,27 +1308,27 @@
         "title": "Initial affix scope",
         "popupdesc": "Where the first affix out of the Adjunct Affixes is applied on the next word",
         "options": {
-            "lastV": {
+            "VDom": {
                 "name": "Last of Slot V",
                 "desc": ""
             },
-            "firstV": {
+            "VSub": {
                 "name": "First of Slot V",
                 "desc": ""
             },
-            "lastVII": {
+            "VIIDom": {
                 "name": "Last of Slot VII",
                 "desc": ""
             },
-            "firstVII": {
+            "VIISub": {
                 "name": "First of Slot VII",
                 "desc": ""
             },
-            "word": {
+            "formative": {
                 "name": "Entire Formative",
                 "desc": ""
             },
-            "all": {
+            "adjacent": {
                 "name": "Formative + Affixes",
                 "desc": ""
             }
@@ -1339,27 +1339,27 @@
         "title": "Other affix scopes",
         "popupdesc": "Where the other affixes of the Adjunct Affixes are applied on the next word",
         "options": {
-            "lastV": {
+            "VDom": {
                 "name": "Last of Slot V",
                 "desc": ""
             },
-            "firstV": {
+            "VSub": {
                 "name": "First of Slot V",
                 "desc": ""
             },
-            "lastVII": {
+            "VIIDom": {
                 "name": "Last of Slot VII",
                 "desc": ""
             },
-            "firstVII": {
+            "VIISub": {
                 "name": "First of Slot VII",
                 "desc": ""
             },
-            "word": {
+            "formative": {
                 "name": "Entire Formative",
                 "desc": ""
             },
-            "all": {
+            "adjacent": {
                 "name": "Formative + Affixes",
                 "desc": ""
             },
