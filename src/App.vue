@@ -594,8 +594,8 @@ export default {
         this.calculateSlot9();
         this.slot9gStop();
         this.ithkword = this.gOptions.suppType + this.slots[9]
-        this.gloss = "";
-        this.fullGloss = "";
+        this.gloss = {"hl":"[CAR]","hm":"[QUO]","hn":"[NAM]","hň":"[PHR]"}[this.gOptions.suppType]+(this.gOptions.c == "THM" ? "" : "-"+this.gOptions.c);
+        this.fullGloss = {"hl":"[CAR]","hm":"[QUO]","hn":"[NAM]","hň":"[PHR]"}[this.gOptions.suppType]+"-"+this.gOptions.c+"\\NRM";
       } else if (type == "affixjunct") {
         var afxjunctV = {"lastV":"a","firstV":"u","lastVII":"e","firstVII":"i","word":"o","all":"ö","same":"ai"};
         var afxjunctC = {"lastV":"h","firstV":"'h","lastVII":"'hl","firstVII":"'hr","word":"hw","all":"'hw"};
