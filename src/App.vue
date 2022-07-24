@@ -727,6 +727,8 @@ export default {
 
       } else if (type=="bias") {
         this.ithkword = this.gData.bias.options[this.gOptions.bias].word;
+        this.gloss = this.gOptions.bias; // these aren't the same as irburučpozwa's glossing, but I think this is better.
+        this.fullGloss = this.gOptions.bias;
 
       } else { // incorrect input = normal word
         this.calculateWord();
