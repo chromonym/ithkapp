@@ -11,11 +11,11 @@
     <!-- If it's a list of text entries: -->
     <div v-else-if="json.type=='affix'">
       <div v-for="(affix,index) in affixes" :key="affix"> <!-- For each affix/degree pair in the array "affixes", add a textbox and two dropdowns linked to each-->
-        <input v-model="affixes[index][0]" @input="this.$emit('send-message',affixes,code)" placeholder="Enter..." maxlength=3/> <!-- Textbox -->
-        <select v-model="affixes[index][1]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block"> <!-- Dropdown 1 (Degree) -->
+        <input v-model="affixes[index][0]" @input="this.$emit('send-message',affixes,code)" placeholder="Enter..." maxlength=3 :id="code+'affW'+index"/> <!-- Textbox -->
+        <select v-model="affixes[index][1]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block" :id="code+'affD'+index.toString()"> <!-- Dropdown 1 (Degree) -->
           <option v-for="num in Array(10).keys()" :key="(num+1)%10" :value="(num+1)%10">Deg. {{(num+1)%10}}</option>
         </select>
-        <select v-model="affixes[index][2]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block"> <!-- Dropdown 2 (Type) -->
+        <select v-model="affixes[index][2]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block" :id="code+'affT'+index"> <!-- Dropdown 2 (Type) -->
           <option :value="1">Type-1</option>
           <option :value="2">Type-2</option>
           <option :value="3">Type-3</option>
@@ -84,6 +84,17 @@ export default {
     updateValue(toUpdate) {
       if (this.$props.json.type == "affix") {
         this.affixes = toUpdate;
+        for (let i in this.affixes) {
+          this.waitForElm("#"+this.$props.code+"affW"+i.toString()).then((elm) => {
+            elm.value = toUpdate[i][0];
+          })
+          this.waitForElm("#"+this.$props.code+"affD"+i.toString()).then((elm) => {
+            elm.value = toUpdate[i][1];
+          })
+          this.waitForElm("#"+this.$props.code+"affT"+i.toString()).then((elm) => {
+            elm.value = toUpdate[i][2];
+          })
+        }
         this.$emit('send-message',this.affixes,this.$props.code);
       } else if (this.$props.json.type == "text") {
         this.text = toUpdate;
@@ -98,6 +109,26 @@ export default {
           this.$emit('send-message',this.option,this.$props.code);
         }
       }
+    },
+    waitForElm(selector) { // code for this is by Yong Wang (https://stackoverflow.com/questions/5525071/how-to-wait-until-an-element-exists)
+                           // basically, it waits for the element described by (selector) to exist on the page before resolving
+      return new Promise(resolve => {
+          if (document.querySelector(selector)) {
+              return resolve(document.querySelector(selector));
+          }
+
+          const observer = new MutationObserver(() => {
+              if (document.querySelector(selector)) {
+                  resolve(document.querySelector(selector));
+                  observer.disconnect();
+              }
+          });
+
+          observer.observe(document.body, {
+              childList: true,
+              subtree: true
+          });
+      });
     }
   }
 }
