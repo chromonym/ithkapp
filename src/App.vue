@@ -607,6 +607,8 @@ export default {
         this.fullGloss += "-{"+this.gOptions.initialAffScope+"}";
         if (this.gOptions.affixjunct.length < 1) {
           this.ithkword = "";
+          this.gloss = "";
+          this.fullGloss = "";
         } else if (this.gOptions.affixjunct.length == 1) {
           var finalvowel = afxjunctV[this.gOptions.initialAffScope];
           var ll = this.gOptions.affixjunct[0];
@@ -637,14 +639,17 @@ export default {
           this.gloss += (this.gOptions.otherAffScope == "same" ? "" : "-{" + this.gOptions.otherAffScope + "}");
           this.fullGloss += "-{" + this.gOptions.otherAffScope + "}"
         }
-        //var wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
-        this.gloss += (this.gOptions.affScopeOf == "conc" ? "{concat.}" : "");
-        this.fullGloss += (this.gOptions.affScopeOf == "conc" ? "{concat.}" : "");
-        this.ithkword = this.markStress(["conc","default"].indexOf(this.gOptions.affScopeOf),this.ithkword);
+        if (this.gOptions.affixjunct.length > 0) {
+          this.gloss += (this.gOptions.affScopeOf == "conc" ? "{concat.}" : "");
+          this.fullGloss += (this.gOptions.affScopeOf == "conc" ? "{concat.}" : "");
+          this.ithkword = this.markStress(["conc","default"].indexOf(this.gOptions.affScopeOf),this.ithkword);
+        }
 
       } else if (type=="register") {
         var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","öi"],"MTH":["u","ui"],"CAR":["ü","ü"],}
         this.ithkword = "h" + ph[this.gOptions.register][this.gOptions.regStartOrEnd];
+        this.gloss = this.gOptions.register + (this.gOptions.regStartOrEnd == 1 || this.gOptions.register == "CAR" ? "_END" : "");
+        this.fullGloss = this.gloss;
 
       } else if (type=="modular") {
         output += {"all":"","parent":"w","concat":"y"}[this.gOptions.modAppliesTo];
