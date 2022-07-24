@@ -203,11 +203,11 @@
           <option value="dev">Devoiced</option>
           <option value="h+">As written</option>
         </select>
-        <br/><br/>
+        <br/><p><b>WARNING:</b> The below doesn't work on mobile for some reason and will mean the webpage won't load until you close your web browser if you use this.</p>
         <button @click="setCookie('settings',JSON.stringify(settingRaw),365)">Save settings as cookies</button>
-        <button @click="setCookie('sentence',JSON.stringify(sentence),365)">Save words as cookies (warning: buggy)</button><br/>
+        <!--<button @click="setCookie('sentence',JSON.stringify(sentence),365)">Save words as cookies (warning: buggy)</button><br/>-->
         <button @click="deleteCookie('settings')">Remove settings cookies</button>
-        <button @click="deleteCookie('sentence')">Remove word cookies</button>
+        <!--<button @click="deleteCookie('sentence')">Remove word cookies</button>-->
       </div>
       <div v-if="modalID != 'settings' && modalID != 'share'">
         <h2 style="text-align:center;">{{modalContent.title}}</h2>
