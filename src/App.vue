@@ -652,24 +652,45 @@ export default {
         this.fullGloss = this.gloss;
 
       } else if (type=="modular") {
-        output += {"all":"","parent":"w","concat":"y"}[this.gOptions.modAppliesTo];
+        output += {"all":"","parent":"w","concat.":"y"}[this.gOptions.modAppliesTo];
+        this.gloss = this.gOptions.modAppliesTo != "all" ? "{"+this.gOptions.modAppliesTo+"}-" : "";
         if (["2","3","4"].includes(this.gOptions.modNumber)) {
           output += this.calculateSlot8a("2");
           output += this.calculateSlot8b("2",this.gOptions.cn);
+          this.gloss += (this.gOptions[this.gOptions.vn2+"2"] != "MNO" ? this.gOptions[this.gOptions.vn2+"2"] : "");
+          this.gloss += (this.gOptions[this.gOptions.vn2+"2"] != "MNO" && this.gOptions[this.gOptions.cn+"2"] != "FAC" && this.gOptions[this.gOptions.cn+"2"] != "CCN" ? "." : "");
+          this.gloss += (this.gOptions[this.gOptions.cn+"2"] != "FAC" && this.gOptions[this.gOptions.cn+"2"] != "CCN" ? this.gOptions[this.gOptions.cn+"2"] : "")
+          this.fullGloss += this.gOptions[this.gOptions.vn2+"2"] + "." + this.gOptions[this.gOptions.cn+"2"];
         } if (["3","4"].includes(this.gOptions.modNumber)) {
           output += this.calculateSlot8a("3");
           output += this.calculateSlot8b("3",this.gOptions.cn);
+          this.gloss += (this.gOptions[this.gOptions.vn3+"3"] != "MNO" || this.gOptions[this.gOptions.cn+"3"] != "FAC" && this.gOptions[this.gOptions.cn+"3"] != "CCN" ? "-" : "");
+          this.gloss += (this.gOptions[this.gOptions.vn3+"3"] != "MNO" ? this.gOptions[this.gOptions.vn3+"3"] : "");
+          this.gloss += (this.gOptions[this.gOptions.vn3+"3"] != "MNO" && this.gOptions[this.gOptions.cn+"3"] != "FAC" && this.gOptions[this.gOptions.cn+"3"] != "CCN" ? "." : "");
+          this.gloss += (this.gOptions[this.gOptions.cn+"3"] != "FAC" && this.gOptions[this.gOptions.cn+"3"] != "CCN" ? this.gOptions[this.gOptions.cn+"3"] : "")
+          this.fullGloss += "-" + this.gOptions[this.gOptions.vn3+"3"] + "." + this.gOptions[this.gOptions.cn+"3"];
         } if (this.gOptions.modNumber == "4") {
           output += this.calculateSlot8a("4");
           output += this.calculateSlot8b("4",this.gOptions.cn);
+          this.gloss += (this.gOptions[this.gOptions.vn4+"4"] != "MNO" || this.gOptions[this.gOptions.cn+"4"] != "FAC" && this.gOptions[this.gOptions.cn+"4"] != "CCN" ? "-" : "");
+          this.gloss += (this.gOptions[this.gOptions.vn4+"4"] != "MNO" ? this.gOptions[this.gOptions.vn4+"4"] : "");
+          this.gloss += (this.gOptions[this.gOptions.vn4+"4"] != "MNO" && this.gOptions[this.gOptions.cn+"4"] != "FAC" && this.gOptions[this.gOptions.cn+"4"] != "CCN" ? "." : "");
+          this.gloss += (this.gOptions[this.gOptions.cn+"4"] != "FAC" && this.gOptions[this.gOptions.cn+"4"] != "CCN" ? this.gOptions[this.gOptions.cn+"4"] : "")
+          this.fullGloss += "-" + this.gOptions[this.gOptions.vn4+"4"] + "." + this.gOptions[this.gOptions.cn+"4"];
         }
         if (this.gOptions.modNumber == "1") {
           output += this.calculateSlot8a("","asp");
+          this.gloss += this.gOptions.asp;
+          this.fullGloss += this.gOptions.asp;
         } else if (this.gOptions.vh == "vn") {
           output += this.calculateSlot8a();
+          this.gloss += (this.gOptions[this.gOptions.vn] != "MNO" ? "-" + this.gOptions[this.gOptions.vn] : "");
+          this.fullGloss += "-" + this.gOptions[this.gOptions.vn];
         } else {
           output += this.gOptions.modScope;
           output = this.markStress(0,output);
+          this.gloss += "-{"+{"a":"form.","e":"mood","i":"under adj.","o":"over adj.","u":"under adj."}[this.gOptions.modScope]+"}"
+          this.fullGloss += "-{"+{"a":"form.","e":"mood","i":"under adj.","o":"over adj.","u":"under adj."}[this.gOptions.modScope]+"}"
         }
         this.ithkword = output;
 

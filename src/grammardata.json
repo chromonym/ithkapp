@@ -1449,7 +1449,7 @@
                 "name": "Parent Only",
                 "desc": "Apply to only the parent formative after this adjunct"
             },
-            "concat": {
+            "concat.": {
                 "name": "Concatenated only",
                 "desc": "Apply to only the concatenated formative after this adjunct"
             }
