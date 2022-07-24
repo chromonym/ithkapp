@@ -7,24 +7,24 @@
     <span class="close" style="padding-left:10px;" @click="openModal('settings')" title="Settings"><i class="fa-solid fa-gear fa-xs"></i></span>
     <span class="close" style="padding-left: 10px; height: 38px;" :style="sentenceOpen ? 'background-color:rgb(179, 255, 230); color:#333;' : ''" @click="openNav(false)" title="Sentence Menu"><i class="fa-solid fa-align-right fa-xs"></i></span>
     <div class="dropdown">
-      <button :class="{active: !['normal','affRoot','refRoot'].includes(wordType)}" @click="openDropdown('adjDD')" v-click-outside="event => closeDropdown('adjDD',event)">Adjunct ▼</button>
+      <button :class="{active: !['normal','affRoot','refRoot','ref','refCS'].includes(wordType)}" @click="openDropdown('adjDD')" v-click-outside="event => closeDropdown('adjDD',event)">Adjunct ▼</button>
       <div class="dropdown-content hidden" id="adjDD">
         <span @click="switchWordType('affixjunct')" :class="{active: wordType == 'affixjunct'}">Affixual</span>
         <span @click="switchWordType('modular')" :class="{active: wordType == 'modular'}">Modular</span>
         <span @click="switchWordType('register')" :class="{active: wordType == 'register'}">Register</span>
         <span @click="switchWordType('suppletive')" :class="{active: wordType == 'suppletive'}">Suppletive</span>
-        <span @click="switchWordType('ref')" :class="{active: wordType == 'ref'}">Single/Dual-Referential</span>
-        <span @click="switchWordType('refCS')" :class="{active: wordType == 'refCS'}">Single Referential w/ Case-Stacking</span>
         <span @click="switchWordType('mcs')" :class="{active: wordType == 'mcs'}">Mood/Case-Scope</span>
         <span @click="switchWordType('bias')" :class="{active: wordType == 'bias'}">Bias</span>
       </div>
     </div>
     <div class="dropdown">
-      <button :class="{active: ['normal','affRoot','refRoot'].includes(wordType)}" @click="openDropdown('formDD')" v-click-outside="event => closeDropdown('formDD',event)">Formative ▼</button>
+      <button :class="{active: ['normal','affRoot','refRoot','ref','refCS'].includes(wordType)}" @click="openDropdown('formDD')" v-click-outside="event => closeDropdown('formDD',event)">Formative ▼</button>
       <div class="dropdown-content hidden" id="formDD">
         <span @click="switchWordType('normal')" :class="{active: wordType == 'normal'}">Normal</span>
         <span @click="switchWordType('affRoot')" :class="{active: wordType == 'affRoot'}">Affix as Root</span>
-        <span @click="switchWordType('refRoot')" :class="{active: wordType == 'refRoot'}">Personal-Reference Root</span>
+        <span @click="switchWordType('refRoot')" :class="{active: wordType == 'refRoot'}">Personal-Referential Root</span>
+        <span @click="switchWordType('ref')" :class="{active: wordType == 'ref'}">Single/Dual-Referential</span>
+        <span @click="switchWordType('refCS')" :class="{active: wordType == 'refCS'}">Single Referential w/ Case-Stacking</span>
       </div>
     </div>
   </div>
