@@ -129,7 +129,7 @@
       <OptionBox :class="{hidden: wordType != 'suppletive'}" :json="gData.suppType" code="suppType" @send-message="handleSendMessage" ref="suppType" @modal="openModal"/>
       <OptionBox :class="{hidden: wordType != 'mcs'}" :json="gData.cn" code="cn2" @send-message="handleSendMessage" ref="cn2" @modal="openModal" />
 
-      <OptionBox :class="{hidden: wordType == 'suppletive' || wordType == 'mcs'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive' || wordType == 'mcs'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal" :disabled="wordType == 'affRoot'"/>
       <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='!cascOrMood && wordType!="mcs"' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
       <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='cascOrMood && wordType!="mcs"' :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
       <OptionBox :class="{hidden: wordType == 'mcs'}" :show="cascOrMood" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
@@ -777,9 +777,12 @@ export default {
         output += "hr";
         if (this.gOptions.cn2 == "mood") {
           output += {"FAC":"a","SUB":"e","ASM":"i","SPC":"o","COU":"ö","HYP":"u"}[this.gOptions.mood];
+          this.gloss = this.gOptions.mood;
         } else {
           output += {"CCN":"ai","CCA":"ei","CCS":"iu","CCQ":"oi","CCP":"öi","CCV":"ui"}[this.gOptions.casc];
+          this.gloss = this.gOptions.casc;
         }
+        this.fullGloss = this.gloss;
         this.ithkword = output;
 
       } else if (type=="bias") {
@@ -1621,20 +1624,41 @@ export default {
             this.gloss += ".CPT"
           }
           this.fullGloss += "S" + this.gOptions.stem.charAt(1) + "." + this.gOptions.ver;
+      } else if (this.wordType == "refRoot") {
+        this.gloss += (this.gOptions.ver == "CPT" ? "CPT-" : "");
+        this.fullGloss += this.gOptions.ver + "-";
+      } else if (this.wordType == "affRoot") {
+        this.gloss += (this.gOptions.ver == "CPT" ? "CPT" : "");
+        this.gloss += (this.gOptions.ver == "CPT" && this.gOptions.func == "DYN" ? "." : "");
+        this.gloss += (this.gOptions.func == "DYN" ? "DYN" : "");
+        this.gloss += (this.gOptions.ver == "CPT" || this.gOptions.func == "DYN" ? "-" : "");
+        this.fullGloss += this.gOptions.ver + "." + this.gOptions.func + "-";
       }
       if (this.shortcutting) {
         var configgCode = (this.gOptions.plex+this.gOptions.simil+this.gOptions.cctd).slice(0,3);
-        this.fullGloss += "."+this.gOptions.affil+"."+configgCode+"."+this.gOptions.ext+"."+this.gOptions.persp+"."+this.gOptions.ess;
+        if (this.wordType == "normal") {this.fullGloss += "."}
+        this.fullGloss += this.gOptions.affil+"."+configgCode+"."+this.gOptions.ext+"."+this.gOptions.persp+"."+this.gOptions.ess;
         var s2c = [];
         if (this.gOptions.affil != "CSL") {s2c.push(this.gOptions.affil)}
         if (configgCode != "UPX") {s2c.push(configgCode)}
         if (this.gOptions.ext != "DEL") {s2c.push(this.gOptions.ext)}
         if (this.gOptions.persp != "M") {s2c.push(this.gOptions.persp)}
         if (this.gOptions.ess != "NRM") {s2c.push(this.gOptions.ess)}
-        if (s2c.length > 0) {this.gloss += "." + s2c.join(".")}
+        if (s2c.length > 0 && this.wordType == "normal") {this.gloss += "." + s2c.join(".")}
+        else if (s2c.length > 0) {this.gloss += s2c.join(".") + "-"}
+        if (this.wordType == "refRoot") {this.fullGloss += "-"}
       } else if (this.slotVIIshortcut) {
-        this.gloss += ".[fix this]"
-        this.fullGloss += ".[fix this]"
+        let viaf = this.gOptions.VIIafx[this.gOptions.VIIafx.length - 1];
+        if (viaf[0] == "r" && viaf[1] == "4") {
+          this.gloss += ".'relative negation'";
+          this.fullGloss += ".'relative negation'";
+        } else if (viaf[0] == "t" && viaf[1] == "4") {
+          this.gloss += ".'previously mentioned'";
+          this.fullGloss += ".'previously mentioned'";
+        } else if (viaf[0] == "t" && viaf[1] == "5") {
+          this.gloss += ".'[+head]'";
+          this.fullGloss += ".'[+head]'";
+        }
       }
       // Slot 3
       if (this.wordType == "normal") {
@@ -1649,12 +1673,18 @@ export default {
         this.fullGloss += gla[1];
       }
       // Slot 4
-      this.fullGloss += "-"+this.gOptions.func+"."+this.gOptions.spec+"."+this.gOptions.ctxt;
-      var s4c = [];
-      if (this.gOptions.func != "STA") {s4c.push(this.gOptions.func)}
-      if (this.gOptions.spec != "BSC") {s4c.push(this.gOptions.spec)}
-      if (this.gOptions.ctxt != "EXS") {s4c.push(this.gOptions.ctxt)}
-      if (s4c.length > 0) {this.gloss += "-" + s4c.join(".")}
+      if (this.wordType != "affRoot") {
+        var s4c = [];
+        if (this.gOptions.func != "STA") {s4c.push(this.gOptions.func)}
+        if (this.gOptions.spec != "BSC") {s4c.push(this.gOptions.spec)}
+        if (this.gOptions.ctxt != "EXS") {s4c.push(this.gOptions.ctxt)}
+        if (s4c.length > 0) {this.gloss += "-" + s4c.join(".")}
+        this.fullGloss += "-"+this.gOptions.func+"."+this.gOptions.spec+"."+this.gOptions.ctxt;
+      } else {
+        this.gloss += "-D" + (this.gOptions.arDegree+1).toString().slice((this.gOptions.arDegree+1).toString().length - 1);
+        if (this.gOptions.spec != "BSC") {this.gloss += "." + this.gOptions.spec}
+        this.fullGloss += "-D" + (this.gOptions.arDegree+1).toString().slice((this.gOptions.arDegree+1).toString().length - 1)+"."+this.gOptions.spec;
+      }
       // Slot 5
       for (var i in this.gOptions.Vafx) {
         let affx = this.gOptions.Vafx[i];
@@ -1708,7 +1738,7 @@ export default {
         if (this.gOptions.ill === "ASR") {this.fullGloss+="."+this.gOptions.vld}
         if (this.gOptions.ill !== "ASR") {s9c.push(this.gOptions.ill)}
         if (this.gOptions.exp !== "COG") {s9c.push(this.gOptions.exp)}
-        if (this.gOptions.vld !== "OBS" && this.gOptions.ill === "ASR") {s9c.push(this.gOptions.vld)}
+        if (this.gOptions.ill === "ASR") {s9c.push(this.gOptions.vld)}
         if (s9c.length > 0) {this.gloss += "-" + s9c.join(".")}
       } else {
         //case
