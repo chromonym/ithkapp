@@ -188,21 +188,26 @@
       <div :class="{hidden: modalID != 'settings'}" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
         <h2 style="text-align:center;">Settings</h2>
         <h3>IPA (Pronunciation)</h3>
-        <label>Pronunciation of ⟨a⟩: </label><select @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
-        <label>Pronunciation of ⟨e⟩: </label><select @change="event => settingsUpdate(event, 'e')"><option>[ɛ]</option><option>[e]</option></select><br/><br/>
-        <label>Pronunciation of ⟨ë⟩: </label><select @change="event => settingsUpdate(event, 'ë')"><option>[ɤ]</option><option>[ʌ]</option><option>[ə]</option></select><br/><br/>
-        <label>Pronunciation of ⟨i⟩: </label><select @change="event => settingsUpdate(event, 'i')"><option>[i]</option><option>[ɪ]</option></select><br/><br/>
-        <label>Pronunciation of ⟨o⟩: </label><select @change="event => settingsUpdate(event, 'o')"><option>[ɔ]</option><option>[o]</option></select><br/><br/>
-        <label>Pronunciation of ⟨ö⟩: </label><select @change="event => settingsUpdate(event, 'ö')"><option>[œ]</option><option>[ø]</option></select><br/><br/>
-        <label>Pronunciation of ⟨u⟩: </label><select @change="event => settingsUpdate(event, 'u')"><option>[ʊ]</option><option>[u]</option></select><br/><br/>
-        <label>Pronunciation of ⟨ü⟩: </label><select @change="event => settingsUpdate(event, 'ü')"><option>[ʉ]</option><option>[y]</option></select><br/><br/>
-        <label>Pronunciation of ⟨x⟩: </label><select @change="event => settingsUpdate(event, 'x')"><option>[x]</option><option>[χ]</option></select><br/><br/>
-        <label>Pronunciation of ⟨řř⟩: </label><select @change="event => settingsUpdate(event, 'řř')"><option>[ʁː]</option><option>[ʀ]</option></select><br/><br/>
+        <label>Pronunciation of ⟨a⟩: </label><select id="sett0" v-model="settingRaw[0]" @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
+        <label>Pronunciation of ⟨e⟩: </label><select id="sett1" v-model="settingRaw[1]" @change="event => settingsUpdate(event, 'e')"><option>[ɛ]</option><option>[e]</option></select><br/><br/>
+        <label>Pronunciation of ⟨ë⟩: </label><select id="sett2" v-model="settingRaw[2]" @change="event => settingsUpdate(event, 'ë')"><option>[ɤ]</option><option>[ʌ]</option><option>[ə]</option></select><br/><br/>
+        <label>Pronunciation of ⟨i⟩: </label><select id="sett3" v-model="settingRaw[3]" @change="event => settingsUpdate(event, 'i')"><option>[i]</option><option>[ɪ]</option></select><br/><br/>
+        <label>Pronunciation of ⟨o⟩: </label><select id="sett4" v-model="settingRaw[4]" @change="event => settingsUpdate(event, 'o')"><option>[ɔ]</option><option>[o]</option></select><br/><br/>
+        <label>Pronunciation of ⟨ö⟩: </label><select id="sett5" v-model="settingRaw[5]" @change="event => settingsUpdate(event, 'ö')"><option>[œ]</option><option>[ø]</option></select><br/><br/>
+        <label>Pronunciation of ⟨u⟩: </label><select id="sett6" v-model="settingRaw[6]" @change="event => settingsUpdate(event, 'u')"><option>[ʊ]</option><option>[u]</option></select><br/><br/>
+        <label>Pronunciation of ⟨ü⟩: </label><select id="sett7" v-model="settingRaw[7]" @change="event => settingsUpdate(event, 'ü')"><option>[ʉ]</option><option>[y]</option></select><br/><br/>
+        <label>Pronunciation of ⟨x⟩: </label><select id="sett8" v-model="settingRaw[8]" @change="event => settingsUpdate(event, 'x')"><option>[x]</option><option>[χ]</option></select><br/><br/>
+        <label>Pronunciation of ⟨řř⟩: </label><select id="sett9" v-model="settingRaw[9]" @change="event => settingsUpdate(event, 'řř')"><option>[ʁː]</option><option>[ʀ]</option></select><br/><br/>
         <label>Pronunciation of ⟨hl⟩, ⟨hr⟩, ⟨hm⟩, ⟨hn⟩ at the start of a word: </label>
-        <select @change="event => settingsUpdate(event, 'hX')">
+        <select id="sett10" v-model="settingRaw[10]" @change="event => settingsUpdate(event, 'hX')">
           <option value="dev">Devoiced</option>
           <option value="h+">As written</option>
         </select>
+        <br/><br/>
+        <button @click="setCookie('settings',JSON.stringify(settingRaw),365)">Save settings as cookies</button>
+        <button @click="setCookie('sentence',JSON.stringify(sentence),365)">Save words as cookies (warning: buggy)</button><br/>
+        <button @click="deleteCookie('settings')">Remove settings cookies</button>
+        <button @click="deleteCookie('sentence')">Remove word cookies</button>
       </div>
       <div v-if="modalID != 'settings' && modalID != 'share'">
         <h2 style="text-align:center;">{{modalContent.title}}</h2>
@@ -473,6 +478,7 @@ export default {
       hovering: null,
       isMouseDown: false,
       draggedWord: null,
+      settingRaw: ["[a]","[ɛ]","[ɤ]","[i]","[ɔ]","[œ]","[ʊ]","[ʉ]","[x]","[ʁː]","dev"],
     }
   },
   methods: {
@@ -497,6 +503,13 @@ export default {
       this.sentence[this.selectedWord] = JSON.parse(JSON.stringify([this.ithkword,this.gOptions,this.wordType,this.sentence[this.selectedWord][3]]));
     },
     openModal(code) {
+      if (code == "settings") {
+        for (let i = 0; i < 11; i++) {
+          console.log(i);
+          console.log(this.settingRaw[i]);
+          document.getElementById("sett"+i.toString()).value = this.settingRaw[i];
+        }
+      }
       let tGroupFound = false;
       let tG = [];
       this.modalID = code;
@@ -2001,15 +2014,64 @@ export default {
       } catch {
         alert("Could not copy to clipboard");
       }
-    }
+    },
+    setCookie(cname, cvalue, exdays) { // from w3schools
+      const d = new Date();
+      d.setTime(d.getTime() + (exdays*24*60*60*1000));
+      let expires = "expires="+ d.toUTCString();
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    },
+    getCookie(cname) { // from w3schools
+      let name = cname + "=";
+      let decodedCookie = decodeURIComponent(document.cookie);
+      let ca = decodedCookie.split(';');
+      for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    },
+    deleteCookie(name) { // from stackoverflow (https://stackoverflow.com/questions/10593013/delete-cookie-by-name)
+      document.cookie = name +'=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    },
   },
   beforeMount() {
     this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
+    let sCookie = this.getCookie("settings");
+    let wCookie = this.getCookie("sentence");
+    if (sCookie != "") {
+      for (let i in JSON.parse(sCookie)) {
+        this.settingRaw[i] = JSON.parse(sCookie)[i];
+        if (this.settingRaw[i] != "h+" && this.settingRaw[i] != "dev") {
+          this.ipaPreference[["a","e","ë","i","o","ö","u","ü","x","řř"][i]] = this.settingRaw[i].slice(1, -1);
+        } else {
+          if (this.settingRaw[i] == "dev") {
+            this.ipaPreference["hl"] = "ɬ";
+            this.ipaPreference["hr"] = "ɾ̥";
+            this.ipaPreference["hm"] = "m̥";
+            this.ipaPreference["hn"] = "n̥";
+          } else {
+            this.ipaPreference["hl"] = "hl";
+            this.ipaPreference["hr"] = "hɾ";
+            this.ipaPreference["hm"] = "hm";
+            this.ipaPreference["hn"] = "hn";
+          }
+        }
+      }
+    }
+    if (wCookie != "") {
+      this.sentence = JSON.parse(wCookie);
+    }
     //this.slots[2] = "";
     this.calculateWord();
     this.IPAcalcs();
     this.glossCalcs();
-    this.sentence.push([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
+    this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
   },
   directives: {
     clickOutside: vClickOutside.directive
