@@ -181,6 +181,8 @@
     <div id="modal-content">
       <div class="tab">
         <button v-for="tabcode in modalTabs" :key="tabcode" :class="{active: tabcode === modalID}" @click="closeModal(); openModal(tabcode);">{{gData[(isNaN(tabcode.slice(-1)) ? tabcode : tabcode.slice(0,-1))].title}}</button>
+        <button v-if="modalID == 'share'">Create Hyperlink</button>
+        <button v-if="modalID == 'share'" @click="copytoCB(concatenateSentence(sentence))">Copy to Clipboard</button>
         <span class="close" @click="closeModal()">&times;</span>
       </div>
       <div :class="{hidden: modalID != 'settings'}" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
@@ -202,7 +204,7 @@
           <option value="h+">As written</option>
         </select>
       </div>
-      <div v-if="modalID != 'settings'">
+      <div v-if="modalID != 'settings' && modalID != 'share'">
         <h2 style="text-align:center;">{{modalContent.title}}</h2>
         <p style="text-align:center;" v-html="modalContent.popupdesc"></p>
         <div v-if="modalContent.type == ''">
@@ -233,8 +235,16 @@
           </div>
         </div>
       </div>
+      <div v-else-if="modalID == 'share'">
+        <br/>
+        <br/>
+        <p style="text-align:center">Your sentence:</p>
+        <h1 style="text-align:center;">{{concatenateSentence(sentence)}}</h1>
+        <br/>
+        <br/>
+      </div>
     </div>
-    <button id="modalToTop" @click="scrollToTop">↑</button>
+    <button id="modalToTop" @click="scrollToTop" :class="{hidden: modalID == 'share'}">↑</button>
   </div>
 
   <!-- SIDEBAR (sentence constructor) -->
@@ -254,9 +264,9 @@
     </div>
     <div id="sFooter">
       <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify(['aal', gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
-      <button title="Save Words"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
-      <button title="Upload" @click="importSnt"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></button>
-      <button title="Export/Share"><i class="fa-solid fa-link fa-xl"></i></button>
+      <button title="Save Words" disabled><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
+      <button title="Upload" @click="importSnt" disabled><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></button>
+      <button title="Export/Share" @click="openModal('share'); closeNav()"><i class="fa-solid fa-share-from-square fa-xl"></i></button>
       <button title="Delete Words" @click="deleteWordMode = !deleteWordMode" :class="{active: deleteWordMode}"><i :class="deleteWordMode ? 'fa-solid fa-check fa-xl' : 'fa-solid fa-trash-can fa-xl'"></i></button>
     </div>
   </div>
@@ -1858,6 +1868,21 @@ export default {
         }
       }
     },
+    concatenateSentence(sent) {
+      let output = " "
+      for (let i of sent) {
+        output += i[0];
+        if (["normal","affRoot","refRoot"].includes(i[2]) && i[1].concat != 0) {
+          output += "-";
+        } else {
+          output += " ";
+        }
+      }
+      if (output.charAt(output.length-1) == " ") {
+        output = output.slice(0,-1);
+      }
+      return output;
+    },
     resetWord(gO=null) {
       if (gO == null) {
         gO = this.gDefault;
@@ -1963,6 +1988,19 @@ export default {
     resizeTA(e) {
       e.target.style.height = "18px";
       e.target.style.height = e.target.scrollHeight + "px";
+    },
+    copytoCB(val) {
+      try {
+        navigator.clipboard.writeText(val).then(
+          function() {
+            alert("Copied to clipboard successfully");
+          }, function() {
+            alert("Could not copy to clipboard");
+          }
+        )
+      } catch {
+        alert("Could not copy to clipboard");
+      }
     }
   },
   beforeMount() {
@@ -2071,7 +2109,7 @@ export default {
   overflow: auto;
   background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.4);
-  transition: margin-right 0.5s; /* this is here just in case it's possible to open the menu while a modal is open. it shouldn't be, but it might. */
+  transition: margin-right 0.5s;
 }
 #modal-content {
   background-color: white;
@@ -2152,6 +2190,9 @@ export default {
 }
 .tab button.active {
   background-color: rgb(179, 255, 230);
+}
+.tab button:active {
+  background-color: rgb(174, 221, 205);
 }
 .hidden {
   display: none;
