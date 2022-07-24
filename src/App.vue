@@ -701,18 +701,34 @@ export default {
         this.calculateSlot9("1");
         this.slot9gStop();
         output += this.slots[9];
+        let gla = this.refGloss(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
+        this.gloss = gla[0];
+        this.fullGloss = gla[1];
+        this.gloss += this.gOptions.c1 == "THM" && !this.gOptions.twoCs ? "" : "-" + this.gOptions.c1;
+        this.fullGloss += "-" + this.gOptions.c1;
         if (this.gOptions.twoCs) {
-          output += "w"
+          output += "w";
           this.calculateSlot9("2");
           this.slot9gStop();
           output += this.slots[9];
+          this.gloss += "-" + this.gOptions.c2;
+          this.fullGloss += "-" + this.gOptions.c2;
           if (this.gOptions.twoRefs) {
             var refB = this.calculateReference(this.gOptions.ref2,this.gOptions.refEff2,this.gOptions.refPersp2);
             output += refB
             output += this.allowedAtEnd(refB) ? "": "ë";
+            let glb = this.refGloss(this.gOptions.ref2,this.gOptions.refEff2,this.gOptions.refPersp2);
+            this.gloss += "-" + glb[0];
+            this.fullGloss += "-" + glb[1];
           }
         }
-        if (this.gOptions.ess2 == "RPV") {output = this.markStress(0,output);}
+        if (this.gOptions.ess2 == "RPV") {
+          output = this.markStress(0,output);
+          this.gloss += "\\RPV";
+          this.fullGloss += "\\RPV";
+        } else {
+          this.fullGloss += "\\NRM";
+        }
         this.ithkword = output;
 
       } else if (type=="refCS") {
@@ -723,15 +739,24 @@ export default {
         this.slot9gStop();
         output += this.slots[9];
         output += {"BSC":"x","CTE":"xt","CSV":"xp","OBJ":"xx"}[this.gOptions.spec];
+        let gla = this.refGloss(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
+        this.gloss = gla[0];
+        this.gloss += (this.gOptions.c1 == "THM" && !this.gOptions.twoCs ? "" : "-" + this.gOptions.c1);
+        this.gloss += (this.gOptions.spec == "BSC" ? "" : "-" + this.gOptions.spec);
+        this.fullGloss = gla[1] + "-" + this.gOptions.c1 + "-" + this.gOptions.spec;
         for (var q in this.gOptions.refAffix) {
           var p = Object.assign({},this.gOptions.refAffix[q]);
           output += this.sVowels[(p[1]+9)%10][p[2]-1];
           output += p[0];
+          this.gloss += "-'" + p[0] + "'/" + p[1] + {1:"₁",2:"₂",3:"₃"}[p[2]];
+          this.fullGloss += "-'" + p[0] + "'/" + p[1] + {1:"₁",2:"₂",3:"₃"}[p[2]];
         }
         if (this.gOptions.twoCs) {
           this.calculateSlot9("2");
           this.slot9gStop();
           output += this.slots[9] == "a" ? "üa" : this.slots[9];
+          this.gloss += "-" + this.gOptions.c2;
+          this.fullGloss += "-" + this.gOptions.c2;
         } else if(this.gOptions.refAffix.length == 0 && !this.gOptions.twoCs && this.gOptions.ess2 == "RPV") {
           output += "a";
         } else if (this.gOptions.refAffix.length > 0) {
@@ -739,7 +764,13 @@ export default {
             output += "a";
           }
         }
-        if (this.gOptions.ess2 == "RPV") {output = this.markStress(0,output);}
+        if (this.gOptions.ess2 == "RPV") {
+          output = this.markStress(0,output);
+          this.gloss += "\\RPV";
+          this.fullGloss += "\\RPV";
+        } else {
+          this.fullGloss += "\\NRM";
+        }
         this.ithkword = output;
 
       } else if (type=="mcs") {
@@ -1613,9 +1644,9 @@ export default {
         this.gloss += '"' + this.gOptions.affRoot.toLowerCase() + '"';
         this.fullGloss += '"' + this.gOptions.affRoot.toLowerCase() + '"';
       } else if (this.wordType == "refRoot") {
-        this.gloss += this.gOptions.ref
-        this.fullGloss += this.gOptions.ref + "." + this.gOptions.refEff;
-        if (this.gOptions.refEff != "NEU") {this.gloss += "." + this.gOptions.refEff}
+        let gla = this.refGloss(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
+        this.gloss += gla[0];
+        this.fullGloss += gla[1];
       }
       // Slot 4
       this.fullGloss += "-"+this.gOptions.func+"."+this.gOptions.spec+"."+this.gOptions.ctxt;
@@ -1694,6 +1725,19 @@ export default {
         this.gloss = this.fullGloss;
         this.fullGloss = ph;
       }
+    },
+    refGloss(ref,refEff,refPersp) {
+      console.log("RG: "+ref+", "+refEff+", "+refPersp);
+      var output = "";
+      var fullPut = ""
+      output += refPersp == "M" ? "" : "[";
+      fullPut += refPersp == "M" ? "" : "[";
+      output += ref;
+      output += refEff == "NEU" ? "" : "."+refEff;
+      fullPut += ref + "." + refEff;
+      output += refPersp == "M" ? "" : "+"+refPersp+"]";
+      fullPut += refPersp == "M" ? "" : "+"+refPersp+"]";
+      return [output,fullPut];
     },
     IPAcalcs() {
       // Calculate the IPA pronunciation of the Ithkuil word
