@@ -1780,7 +1780,6 @@ export default {
       }
     },
     refGloss(ref,refEff,refPersp) {
-      console.log("RG: "+ref+", "+refEff+", "+refPersp);
       var output = "";
       var fullPut = ""
       output += refPersp == "M" ? "" : "[";
@@ -2042,11 +2041,11 @@ export default {
     handleImportedWord(snt) {
       // snt is a list representative of the sentence, like this.sentence
       try {
+        this.sentence = [];
         for (let wID in snt) {
-          console.log(snt[wID]);
+          this.sentence.push(["",{},"",""]);
           for (let gopt in snt[wID][1]) {
-            if (Object.prototype.hasOwnProperty.call(this.gOptions,gopt)) {
-              console.log(gopt);
+            if (Object.prototype.hasOwnProperty.call(this.gOptions, gopt)) {
               this.sentence[wID][1][gopt] = JSON.parse(JSON.stringify(snt[wID][1][gopt]));
             }
           }
@@ -2064,16 +2063,18 @@ export default {
         let reader = new FileReader();
         reader.readAsText(files[0]);
         reader.onload = () => {
-          console.log(reader.result);  // prints file contents
-          this.handleImportedWord(JSON.parse(reader.result));
-          this.switchWord(0,true);
+          //console.log(reader.result);
+          try {
+            this.handleImportedWord(JSON.parse(reader.result));
+            this.switchWord(0,true);
+          } catch {alert("Could not import correctly.");}
         }
       }
     },
     exportToJsonFile(jsonData) { // code is from https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
       let dataStr = JSON.stringify(jsonData);
       let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-      let exportFileDefaultName = 'maleutrait.json';
+      let exportFileDefaultName = 'sentence.json';
       let linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', exportFileDefaultName);
