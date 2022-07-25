@@ -7,7 +7,7 @@
     <span class="close" style="padding-left:10px;" @click="openModal('settings')" title="Settings"><i class="fa-solid fa-gear fa-xs"></i></span>
     <span class="close" style="padding-left: 10px; height: 38px;" :style="sentenceOpen ? 'background-color:rgb(179, 255, 230); color:#333;' : ''" @click="openNav(false)" title="Sentence Menu"><i class="fa-solid fa-align-right fa-xs"></i></span>
     <div class="dropdown">
-      <button :class="{active: !['normal','affRoot','refRoot','ref','refCS'].includes(wordType)}" @click="openDropdown('adjDD')" v-click-outside="event => closeDropdown('adjDD',event)">Adjunct ▼</button>
+      <button :class="{active: !['normal','affRoot','refRoot','ref','refCS','free'].includes(wordType)}" @click="openDropdown('adjDD')" v-click-outside="event => closeDropdown('adjDD',event)">Adjunct ▼</button>
       <div class="dropdown-content hidden" id="adjDD">
         <span @click="switchWordType('affixjunct')" :class="{active: wordType == 'affixjunct'}">Affixual</span>
         <span @click="switchWordType('modular')" :class="{active: wordType == 'modular'}">Modular</span>
@@ -18,13 +18,14 @@
       </div>
     </div>
     <div class="dropdown">
-      <button :class="{active: ['normal','affRoot','refRoot','ref','refCS'].includes(wordType)}" @click="openDropdown('formDD')" v-click-outside="event => closeDropdown('formDD',event)">Formative ▼</button>
+      <button :class="{active: ['normal','affRoot','refRoot','ref','refCS','free'].includes(wordType)}" @click="openDropdown('formDD')" v-click-outside="event => closeDropdown('formDD',event)">Formative ▼</button>
       <div class="dropdown-content hidden" id="formDD">
         <span @click="switchWordType('normal')" :class="{active: wordType == 'normal'}">Normal</span>
         <span @click="switchWordType('affRoot')" :class="{active: wordType == 'affRoot'}">Affix as Root</span>
         <span @click="switchWordType('refRoot')" :class="{active: wordType == 'refRoot'}">Personal-Referential Root</span>
         <span @click="switchWordType('ref')" :class="{active: wordType == 'ref'}">Single/Dual-Referential</span>
         <span @click="switchWordType('refCS')" :class="{active: wordType == 'refCS'}">Single Referential w/ Case-Stacking</span>
+        <span @click="switchWordType('free')" :class="{active: wordType == 'free'}">Non-Ithkuil (Borrowed) Word</span>
       </div>
     </div>
   </div>
@@ -37,7 +38,7 @@
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/morpho-phonology_v_0_19.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','mcs','bias'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','mcs','bias','free'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
       <!-- used only for affix-root adjuncts -->
       <OptionBox :json="gData.affRoot" :class="{hidden: wordType != 'affRoot'}" code="affRoot" @send-message="handleSendMessage" ref="affRoot" @modal="openModal"/>
       <OptionBox :json="gData.arDegree" :class="{hidden: wordType != 'affRoot'}" code="arDegree" @send-message="handleSendMessage" ref="arDegree" @modal="openModal"/>
@@ -53,20 +54,20 @@
       <OptionBox :json="gData.func" :class="{hidden: wordType == 'ref' || wordType == 'refCS'}" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
       <OptionBox :json="gData.ver" :class="{hidden: wordType == 'ref' || wordType == 'refCS'}" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs','bias'].includes(wordType)}"> <!-- Section 2: Concatenation & Affixes-->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs','bias','free'].includes(wordType)}"> <!-- Section 2: Concatenation & Affixes-->
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
       <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != 0"/>
       <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal"/>
       <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs','bias'].includes(wordType)}"> <!-- Section 3: Configuration -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs','bias','free'].includes(wordType)}"> <!-- Section 3: Configuration -->
       <h2 style="width:100%;">Configuration</h2>
       <OptionBox :json="gData.plex" code="plex" @send-message="handleSendMessage" ref="plex" @modal="openModal"/>
       <OptionBox :json="gData.simil" code="simil" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="simil" @modal="openModal"/>
       <OptionBox :json="gData.cctd" code="cctd" @send-message="handleSendMessage" :disabled='["UPX","DPX"].includes(this.gOptions.plex)' ref="cctd" @modal="openModal"/>
     </div>
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs','bias'].includes(wordType)}"> <!-- Section 4: Slot 6 -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs','bias','free'].includes(wordType)}"> <!-- Section 4: Slot 6 -->
       <OptionBox :json="gData.affil" code="affil" @send-message="handleSendMessage" ref="affil" @modal="openModal"/>
       <OptionBox :json="gData.ext" code="ext" @send-message="handleSendMessage" ref="ext" @modal="openModal"/>
       <OptionBox :json="gData.persp" code="persp" @send-message="handleSendMessage" ref="persp" @modal="openModal"/>
@@ -114,7 +115,7 @@
     </div>
     <!-- END OF MODULAR ADJUNCT -->
 
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','ref','refCS','mcs','bias'].includes(wordType)}"> <!-- Section 5: Slot 8a -->
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','ref','refCS','mcs','bias','free'].includes(wordType)}"> <!-- Section 5: Slot 8a -->
       <h2 style="width:100%;" :class='{hidden: this.wordType != "modular" || this.gOptions.modNumber == "1"}'>Slot V</h2>
       <OptionBox :json="gData.vh" code="vh" @send-message="handleSendMessage" ref="vh" @modal="openModal" :class='{hidden: this.wordType != "modular"}' :disabled='this.gOptions.modNumber == "1"'/>
       <OptionBox :json="gData.modScope" code="modScope" @send-message="handleSendMessage" ref="modScope" @modal="openModal" :class='{hidden: this.wordType != "modular" || this.gOptions.modNumber == "1" || this.gOptions.vh == "vn"}'/>
@@ -125,7 +126,7 @@
       <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
       <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal" :disabled='(this.gOptions.vn != "asp" && this.wordType != "modular") || (this.wordType == "modular" && this.gOptions.modNumber != "1")' :class='{hidden: this.wordType == "modular" && this.gOptions.modNumber != "1"}'/>
     </div>
-    <div class="section" :class="{hidden: ['affixjunct','register','modular','ref','refCS','bias'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct / M/CS Adjunct -->
+    <div class="section" :class="{hidden: ['affixjunct','register','modular','ref','refCS','bias','free'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct / M/CS Adjunct -->
       <OptionBox :class="{hidden: wordType != 'suppletive'}" :json="gData.suppType" code="suppType" @send-message="handleSendMessage" ref="suppType" @modal="openModal"/>
       <OptionBox :class="{hidden: wordType != 'mcs'}" :json="gData.cn" code="cn2" @send-message="handleSendMessage" ref="cn2" @modal="openModal" />
 
@@ -164,6 +165,10 @@
     <!-- BIAS ADJUNCT -->
     <div class="section" :class="{hidden: wordType != 'bias'}">
       <OptionBox :json="gData.bias" code="bias" @send-message="handleSendMessage" ref="bias" @modal="openModal"/>
+    </div>
+    <!-- BORROWED WORD -->
+    <div class="section" :class="{hidden: wordType != 'free'}">
+      <OptionBox :json="gData.freeType" code="freeType" ref="freeType" @send-message="handleSendMessage" @modal="openModal" :utdText="true"/>
     </div>
   <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   <!-- END OF MAIN -->
@@ -389,6 +394,8 @@ export default {
         "cn2": "mood",
         // BIAS ADJUNCTS
         "bias": "ACC",
+        // BORROWED WORD
+        "freeType": "",
       },
       gOptions: {}, // grammar options,
       sVowels: [ // the "Standard Vowel-Form Sequence" as an array
@@ -812,6 +819,9 @@ export default {
         this.ithkword = this.gData.bias.options[this.gOptions.bias].word;
         this.gloss = this.gOptions.bias; // these aren't the same as irburučpozwa's glossing, but I think this is better.
         this.fullGloss = this.gOptions.bias;
+
+      } else if (type=="free") {
+        this.ithkword = this.gOptions.freeType;
 
       } else { // incorrect input = normal word
         this.calculateWord();

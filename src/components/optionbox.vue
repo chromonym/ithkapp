@@ -6,7 +6,7 @@
     <!-- The following depends on which TYPE of grammar option this is: -->
 
     <!-- If it's a simple text entry: -->
-    <input v-if="json.type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." maxlength=4/>
+    <input v-if="json.type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." :maxlength="utdText ? '' : '4'"/>
 
     <!-- If it's a list of text entries: -->
     <div v-else-if="json.type=='affix'">
@@ -39,8 +39,8 @@
 
     <p v-if='json.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})'><b>ERROR:</b> Empty affixes</p> <!-- if there's an error, have text that says so -->
     <p v-else-if='json.type == "affix" && this.affixes.length == 0 && reqAff'><b>ERROR:</b> Affixes are required</p>
-    <p v-else-if='json.type == "text" && this.text == ""'><b>ERROR:</b> Empty root</p>
-    <p v-else-if='(json.type == "text" && !this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())))
+    <p v-else-if='json.type == "text" && this.text == ""'><b>ERROR:</b> Empty text</p>
+    <p v-else-if='(json.type == "text" && (!this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())) && !this.$props.utdText))
                 ||(json.type == "affix" && this.affixes.length != 0 && !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))'><b>ERROR:</b> Non-allowed characters</p>
     <p v-else></p> <!-- This is here so that the padding works regardless of if there's a <p> element or not -->
   </div>
@@ -57,6 +57,7 @@ export default {
     disabled: Boolean,
     show: Boolean,
     reqAff: Boolean,
+    utdText: Boolean,
   },
   data() {
     return {
@@ -69,7 +70,7 @@ export default {
   computed: {
     OBclass() { // set class to error if the input is the default
       return {
-        error: (this.json.type == "affix" && this.affixes.length != 0 && (!this.affixes.every(function (e) {return e[0] != ""}) || !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))) || (this.json.type == "text" && (this.text == "" || !this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())))) || (this.json.type == "affix" && this.affixes.length == 0 && this.reqAff),
+        error: (this.json.type == "affix" && this.affixes.length != 0 && (!this.affixes.every(function (e) {return e[0] != ""}) || !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))) || (this.json.type == "text" && (this.text == "" || (!this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())) && !this.$props.utdText))) || (this.json.type == "affix" && this.affixes.length == 0 && this.reqAff),
         disabledbox: this.disabled,
         notShown: this.show
       }
