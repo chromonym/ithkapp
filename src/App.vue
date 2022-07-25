@@ -181,7 +181,7 @@
     <div id="modal-content">
       <div class="tab">
         <button v-for="tabcode in modalTabs" :key="tabcode" :class="{active: tabcode === modalID}" @click="closeModal(); openModal(tabcode);">{{gData[(isNaN(tabcode.slice(-1)) ? tabcode : tabcode.slice(0,-1))].title}}</button>
-        <button v-if="modalID == 'share'">Create Hyperlink</button>
+        <button v-if="modalID == 'share'" @click="notAvailableAlert('Sharing sentences via hyperlink')">Create Hyperlink</button>
         <button v-if="modalID == 'share'" @click="copytoCB(concatenateSentence(sentence))">Copy to Clipboard</button>
         <span class="close" @click="closeModal()">&times;</span>
       </div>
@@ -268,9 +268,10 @@
       </div>
     </div>
     <div id="sFooter">
+      <input type="file" @change="uploadJSON" accept=".json" id="fimport" class="hidden"/>
       <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify(['aal', gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
-      <button title="Save Words" disabled><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
-      <button title="Upload" @click="importSnt" disabled><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></button>
+      <button title="Save Words" @click="exportToJsonFile(sentence)"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
+      <button title="Upload" @click.self="openFileDialog()"><label id="filab" for="fimport"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></label></button>
       <button title="Export/Share" @click="openModal('share'); closeNav()"><i class="fa-solid fa-share-from-square fa-xl"></i></button>
       <button title="Delete Words" @click="deleteWordMode = !deleteWordMode" :class="{active: deleteWordMode}"><i :class="deleteWordMode ? 'fa-solid fa-check fa-xl' : 'fa-solid fa-trash-can fa-xl'"></i></button>
     </div>
@@ -502,6 +503,9 @@ export default {
       }
       this.sentence[this.selectedWord] = JSON.parse(JSON.stringify([this.ithkword,this.gOptions,this.wordType,this.sentence[this.selectedWord][3]]));
     },
+    notAvailableAlert(al) {
+      alert(al + " is not available yet!");
+    },
     openModal(code) {
       if (code == "settings") {
         for (let i = 0; i < 11; i++) {
@@ -606,10 +610,6 @@ export default {
       this.closeDropdown('adjDD',{},true);
       this.closeDropdown('formDD',{},true);
       this.handleSendMessage(this.gOptions.root,"root");
-    },
-    importSnt() {
-      var snt = prompt("Import sentence:");
-      alert(snt);
     },
     calculateAdjunct(type) {
       var output = "";
@@ -2039,6 +2039,49 @@ export default {
     deleteCookie(name) { // from stackoverflow (https://stackoverflow.com/questions/10593013/delete-cookie-by-name)
       document.cookie = name +'=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     },
+    handleImportedWord(snt) {
+      // snt is a list representative of the sentence, like this.sentence
+      try {
+        for (let wID in snt) {
+          console.log(snt[wID]);
+          for (let gopt in snt[wID][1]) {
+            if (Object.prototype.hasOwnProperty.call(this.gOptions,gopt)) {
+              console.log(gopt);
+              this.sentence[wID][1][gopt] = JSON.parse(JSON.stringify(snt[wID][1][gopt]));
+            }
+          }
+          this.sentence[wID][0] = snt[wID][0]; // actual word
+          this.sentence[wID][2] = snt[wID][2]; // word type
+          this.sentence[wID][3] = snt[wID][3]; // user description
+        }
+      } catch {
+        alert("Could not import correctly.");
+      }
+    },
+    uploadJSON(event) {
+      var files = event.target.files;
+      if (files.length > 0) {
+        let reader = new FileReader();
+        reader.readAsText(files[0]);
+        reader.onload = () => {
+          console.log(reader.result);  // prints file contents
+          this.handleImportedWord(JSON.parse(reader.result));
+          this.switchWord(0,true);
+        }
+      }
+    },
+    exportToJsonFile(jsonData) { // code is from https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
+      let dataStr = JSON.stringify(jsonData);
+      let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      let exportFileDefaultName = 'maleutrait.json';
+      let linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    },
+    openFileDialog() {
+      document.getElementById('filab').click();
+    }
   },
   beforeMount() {
     this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
@@ -2386,6 +2429,9 @@ a:active {
 }
 #sFooter button.active {
   background-color: rgb(179, 255, 230);
+}
+#sFooter button label {
+  cursor: pointer;
 }
 @media (max-width: 650px) {
   #sFooter {
