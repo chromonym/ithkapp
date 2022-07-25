@@ -1816,7 +1816,10 @@ export default {
           if (Object.values(this.sAccent).includes(char)) {
             this.ipa += "ˈ";
           }
-          if (char === "n") {
+          if (char == " ") {
+            this.ipa += " "
+          }
+          else if (char === "n") {
             if (["k","g","x"].includes(nextchar)) {this.ipa += "ŋ";}
             else {this.ipa += "n"}
           } else if (char === "r" && nextchar !== "r") {
