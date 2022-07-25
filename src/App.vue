@@ -631,7 +631,7 @@ export default {
       } else if (type == "affixjunct") {
         var afxjunctV = {"VDom":"a","VSub":"u","VIIDom":"e","VIISub":"i","formative":"o","adjacent":"ö","same":"ai"};
         var afxjunctC = {"VDom":"h","VSub":"'h","VIIDom":"'hl","VIISub":"'hr","formative":"hw","adjacent":"'hw"};
-        this.gloss = "'" + this.gOptions.affixjunct[0][0] + "'/" + this.gOptions.affixjunct[0][1] + {1:"₁",2:"₂",3:"₃"}[this.gOptions.affixjunct[0][2]];
+        this.gloss = "'" + this.gOptions.affixjunct[0][0] + "'/" + this.gOptions.affixjunct[0][1] + (this.gOptions.affixjunct[0][1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[this.gOptions.affixjunct[0][2]] : "");
         this.fullGloss = this.gloss;
         this.gloss += (this.gOptions.initialAffScope == "VDom" ? "" : "-{"+this.gOptions.initialAffScope+"}");
         this.fullGloss += "-{"+this.gOptions.initialAffScope+"}";
@@ -642,29 +642,48 @@ export default {
         } else if (this.gOptions.affixjunct.length == 1) {
           var finalvowel = afxjunctV[this.gOptions.initialAffScope];
           var ll = this.gOptions.affixjunct[0];
-          if (finalvowel == "a" && this.allowedAtEnd(ll[0]) && (this.gOptions.affScopeOf == "conc" || (this.sVowels[(ll[1]+9)%10][ll[2]-1].length > 1 && !this.sDip.includes(this.sVowels[(ll[1]+9)%10][ll[2]-1])))) {
-            // if: the final vowel can be dropped (is a), the final consonants can be at the end,
-            // and either the word can be one syllable long OR the other vowel cluster is two syllables,
-            finalvowel = ""; // then drop the final vowel.
+          if (ll[1] != "CA") {
+            if (finalvowel == "a" && this.allowedAtEnd(ll[0]) && (this.gOptions.affScopeOf == "conc" || (this.sVowels[(ll[1]+9)%10][ll[2]-1].length > 1 && !this.sDip.includes(this.sVowels[(ll[1]+9)%10][ll[2]-1])))) {
+              // if: the final vowel can be dropped (is a), the final consonants can be at the end,
+              // and either the word can be one syllable long OR the other vowel cluster is two syllables,
+              finalvowel = ""; // then drop the final vowel.
+            }
+          } else {
+            if (finalvowel == "a" && this.allowedAtEnd(ll[0]) && (this.gOptions.affScopeOf == "conc" || ("öi".length > 1 && !this.sDip.includes("öi")))) {
+              // same as above, but if CA
+              finalvowel = "";
+            }
           }
-          this.ithkword = this.sVowels[(ll[1]+9)%10][ll[2]-1]+ll[0]+finalvowel;
+          if (ll[1] != "CA") {
+            this.ithkword = this.sVowels[(ll[1]+9)%10][ll[2]-1]+ll[0]+finalvowel;
+          } else {
+            this.ithkword = "öi"+ll[0]+finalvowel;
+          }
         } else {
           var out = "";
           var lll = this.gOptions.affixjunct[0]
           if (!this.allowedAtStart(lll[0])) {
             out += "ë";
           }
-          out += lll[0] + this.sVowels[(lll[1]+9)%10][lll[2]-1];
+          if (lll[1] != "CA") {
+            out += lll[0] + this.sVowels[(lll[1]+9)%10][lll[2]-1];
+          } else {
+            out += lll[0] + "öi";
+          }
           out += afxjunctC[this.gOptions.initialAffScope];
           for (var k of this.gOptions.affixjunct.slice(1)) {
-            out += this.sVowels[(k[1]+9)%10][k[2]-1];
+            if (k[1] != "CA") {
+              out += this.sVowels[(k[1]+9)%10][k[2]-1];
+            } else {
+              out += "öi";
+            }
             out += k[0];
           }
           out += afxjunctV[this.gOptions.otherAffScope];
           this.ithkword = out;
           for (let i of this.gOptions.affixjunct.slice(1)) {
-            this.gloss += "-'" + i[0] + "'/" + i[1] + {1:"₁",2:"₂",3:"₃"}[i[2]];
-            this.fullGloss += "-'" + i[0] + "'/" + i[1] + {1:"₁",2:"₂",3:"₃"}[i[2]];
+            this.gloss += "-'" + i[0] + "'/" + i[1] + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
+            this.fullGloss += "-'" + i[0] + "'/" + i[1] + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
           }
           this.gloss += (this.gOptions.otherAffScope == "same" ? "" : "-{" + this.gOptions.otherAffScope + "}");
           this.fullGloss += "-{" + this.gOptions.otherAffScope + "}"
@@ -776,10 +795,14 @@ export default {
         this.fullGloss = gla[1] + "-" + this.gOptions.c1 + "-" + this.gOptions.spec;
         for (var q in this.gOptions.refAffix) {
           var p = Object.assign({},this.gOptions.refAffix[q]);
-          output += this.sVowels[(p[1]+9)%10][p[2]-1];
+          if (p[1] != "CA") {
+            output += this.sVowels[(p[1]+9)%10][p[2]-1];
+          } else {
+            output += "öi";
+          }
           output += p[0];
-          this.gloss += "-'" + p[0] + "'/" + p[1] + {1:"₁",2:"₂",3:"₃"}[p[2]];
-          this.fullGloss += "-'" + p[0] + "'/" + p[1] + {1:"₁",2:"₂",3:"₃"}[p[2]];
+          this.gloss += "-'" + p[0] + "'/" + p[1] + (p[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[p[2]] : "");
+          this.fullGloss += "-'" + p[0] + "'/" + p[1] + (p[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[p[2]] : "");
         }
         if (this.gOptions.twoCs) {
           this.calculateSlot9("2");
@@ -962,14 +985,26 @@ export default {
         var i = Object.assign({},this.gOptions.Vafx[j]);
         if (this.shortcutting) {
           if (j == (this.gOptions.Vafx.length-1)) {
-            out += this.insertGStop(this.sVowels[(i[1]+9)%10][i[2]-1]); // if it's the last slot 5 and slot 6 has been dropped, insert a glottal stop into the vowel
+            if (i[1] != "CA") {
+              out += this.insertGStop(this.sVowels[(i[1]+9)%10][i[2]-1]); // if it's the last slot 5 and slot 6 has been dropped, insert a glottal stop into the vowel
+            } else {
+              out += this.insertGStop("öi");
+            }
           } else {
-            out += this.sVowels[(i[1]+9)%10][i[2]-1];
+            if (i[1] != "CA") {
+              out += this.sVowels[(i[1]+9)%10][i[2]-1];
+            } else {
+              out += "öi";
+            }
           }
           out += i[0];
         } else {
           out += i[0];
-          out += this.sVowels[(i[1]+9)%10][i[2]-1];
+          if (i[1] != "CA") {
+            out += this.sVowels[(i[1]+9)%10][i[2]-1];
+          } else {
+            out += "öi";
+          }
         }
       }
       this.slots[4] = out;
@@ -1070,13 +1105,21 @@ export default {
       if (this.slotVIIshortcut) {
         for (var j in this.gOptions.VIIafx.slice(0,-1)) {
           var i = Object.assign({},this.gOptions.VIIafx[j]);
-          out += this.sVowels[(i[1]+9)%10][i[2]-1];
+          if (i[1] != "CA") {
+            out += this.sVowels[(i[1]+9)%10][i[2]-1];
+          } else {
+            out += "öi";
+          }
           out += i[0];
         }
       } else {
         for (var k in this.gOptions.VIIafx) {
           var l = Object.assign({},this.gOptions.VIIafx[k]);
-          out += this.sVowels[(l[1]+9)%10][l[2]-1];
+          if (l[1] != "CA") {
+            out += this.sVowels[(l[1]+9)%10][l[2]-1];
+          } else {
+            out += "öi";
+          }
           out += l[0];
         }
       }
@@ -1721,8 +1764,8 @@ export default {
       // Slot 5
       for (var i in this.gOptions.Vafx) {
         let affx = this.gOptions.Vafx[i];
-        this.gloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]]; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
-        this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]];
+        this.gloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : ""); // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
+        this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
       }
       // Slot 6
       if (!this.shortcutting) {
@@ -1746,14 +1789,14 @@ export default {
       if (this.slotVIIshortcut) {
         for (var j in this.gOptions.VIIafx.slice(0,-1)) {
           let affx = this.gOptions.VIIafx[j];
-          this.gloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]]; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
-          this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]];
+          this.gloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : ""); // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
+          this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
         }
       } else {
         for (var k in this.gOptions.VIIafx) {
           let affx = this.gOptions.VIIafx[k];
-          this.gloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]]; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
-          this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + {1:"₁",2:"₂",3:"₃"}[affx[2]];
+          this.gloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : ""); // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
+          this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
         }
       }
       // Slot 8

@@ -13,12 +13,14 @@
       <div v-for="(affix,index) in affixes" :key="affix"> <!-- For each affix/degree pair in the array "affixes", add a textbox and two dropdowns linked to each-->
         <input v-model="affixes[index][0]" @input="this.$emit('send-message',affixes,code)" placeholder="Enter..." maxlength=3 :id="code+'affW'+index"/> <!-- Textbox -->
         <select v-model="affixes[index][1]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block" :id="code+'affD'+index.toString()"> <!-- Dropdown 1 (Degree) -->
-          <option v-for="num in Array(10).keys()" :key="(num+1)%10" :value="(num+1)%10">Deg. {{(num+1)%10}}</option>
+          <option v-for="num in (['sy','zy','čy','šy','žy','jy','ly'].includes(affixes[index][0])) ? [0,1,2,3,4,5,6,8] : Array(10).keys()" :key="(num+1)%10" :value="(num+1)%10">Deg. {{(num+1)%10}}</option>
+          <option key="CA" value="CA">Cₐ-stacking</option>
         </select>
-        <select v-model="affixes[index][2]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block" :id="code+'affT'+index"> <!-- Dropdown 2 (Type) -->
-          <option :value="1">Type-1</option>
-          <option :value="2">Type-2</option>
-          <option :value="3">Type-3</option>
+        <select v-model="affixes[index][2]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block" :id="code+'affT'+index" :disabled="affixes[index][1] == 'CA'"> <!-- Dropdown 2 (Type) -->
+          <option :value="1">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? 'Series ' : 'Type-'}}1</option>
+          <option :value="2">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series " : 'Type-'}}2</option>
+          <option :value="3">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series " : "Type-"}}3</option>
+          <option :value="4" v-if="['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0])">Series 4</option>
         </select>
       </div>
       <input type="button" value="Add" @click="affixes.push(['',1,1]); this.$emit('send-message',affixes,code)"/> <!-- Button to add another affix -->

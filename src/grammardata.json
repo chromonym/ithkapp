@@ -172,13 +172,13 @@
     "Vafx": {
         "type":"affix",
         "title":"Slot V Affixes",
-        "popupdesc":"<a href=\"http://www.ithkuil.net/affixes%20v_0_7_5.pdf\" target=\"_blank\">Slot V Affixes</a> are simple definitional modifications to your word applied <b>before</b> any concatenated words, Configuration, Affiliation, Extension, Perspective, and Essence.<br/><b>Degree 0</b> refers to the affix's general semantic concept as a whole, similar to Stem 0.<br/><br/><u>Types:</u><br/><b>Type 1:</b> circumstantial relation to the word<br/><b>Type 2:</b> derivational relation to the word (i.e. it's a new word/phrase, as in 'polar bear')<br/><b>Type 3:</b> Apply to the previous affix"
+        "popupdesc":"<a href=\"http://www.ithkuil.net/affixes%20v_0_7_5.pdf\" target=\"_blank\">Slot V Affixes</a> are simple definitional modifications to your word applied <b>before</b> any concatenated words, Configuration, Affiliation, Extension, Perspective, and Essence.<br/><b>Degree 0</b> refers to the affix's general semantic concept as a whole, similar to Stem 0.<br/><br/><u>Types:</u><br/><b>Type 1:</b> circumstantial relation to the word<br/><b>Type 2:</b> derivational relation to the word (i.e. it's a new word/phrase, as in 'polar bear')<br/><b>Type 3:</b> Apply to the previous affix<br/><br/><b>Cₐ-stacking</b> is the ability to add a Cₐ (Configuration+Affiliation+Extension+Perspective+Essence) consonant-form as an affix."
     },
 
     "VIIafx": {
         "type":"affix",
         "title":"Slot VII Affixes",
-        "popupdesc":"<a href=\"http://www.ithkuil.net/affixes%20v_0_7_5.pdf\" target=\"_blank\">Slot VII Affixes</a> are simple definitional modifications to your word applied <b>after</b> any concatenated words, Configuration, Affiliation, Extension, Perspective, and Essence.<br/><b>Degree 0</b> refers to the affix's general semantic concept as a whole, similar to Stem 0.<br/><br/><u>Types:</u><br/><b>Type 1:</b> circumstantial relation to the word<br/><b>Type 2:</b> derivational relation to the word (i.e. it's a new word/phrase, as in 'polar bear')<br/><b>Type 3:</b> Apply to the previous affix"
+        "popupdesc":"<a href=\"http://www.ithkuil.net/affixes%20v_0_7_5.pdf\" target=\"_blank\">Slot VII Affixes</a> are simple definitional modifications to your word applied <b>after</b> any concatenated words, Configuration, Affiliation, Extension, Perspective, and Essence.<br/><b>Degree 0</b> refers to the affix's general semantic concept as a whole, similar to Stem 0.<br/><br/><u>Types:</u><br/><b>Type 1:</b> circumstantial relation to the word<br/><b>Type 2:</b> derivational relation to the word (i.e. it's a new word/phrase, as in 'polar bear')<br/><b>Type 3:</b> Apply to the previous affix<br/><br/><b>Cₐ-stacking</b> is the ability to add a Cₐ (Configuration+Affiliation+Extension+Perspective+Essence) consonant-form as an affix."
     },
 
     "plex": {
