@@ -198,12 +198,12 @@
         <label>Pronunciation of ⟨ü⟩: </label><select id="sett7" v-model="settingRaw[7]" @change="event => settingsUpdate(event, 'ü')"><option>[ʉ]</option><option>[y]</option></select><br/><br/>
         <label>Pronunciation of ⟨x⟩: </label><select id="sett8" v-model="settingRaw[8]" @change="event => settingsUpdate(event, 'x')"><option>[x]</option><option>[χ]</option></select><br/><br/>
         <label>Pronunciation of ⟨řř⟩: </label><select id="sett9" v-model="settingRaw[9]" @change="event => settingsUpdate(event, 'řř')"><option>[ʁː]</option><option>[ʀ]</option></select><br/><br/>
-        <label>Pronunciation of ⟨hl⟩, ⟨hr⟩, ⟨hm⟩, ⟨hn⟩ at the start of a word: </label>
+        <label>Pronunciation of ⟨hl⟩, ⟨hr⟩, ⟨hm⟩, ⟨hn⟩: </label>
         <select id="sett10" v-model="settingRaw[10]" @change="event => settingsUpdate(event, 'hX')">
           <option value="dev">Devoiced</option>
           <option value="h+">As written</option>
         </select>
-        <br/><p><b>WARNING:</b> The below doesn't work on mobile for some reason and will mean the webpage won't load until you close your web browser if you use this.</p>
+        <br/><br/><hr/><br/><b>WARNING:</b> The below doesn't work on mobile and will cause the the webpage to not load after reloading (until you close your web browser).<br/><br/>
         <button @click="setCookie('settings',JSON.stringify(settingRaw),365)">Save settings as cookies</button>
         <!--<button @click="setCookie('sentence',JSON.stringify(sentence),365)">Save words as cookies (warning: buggy)</button><br/>-->
         <button @click="deleteCookie('settings')">Remove settings cookies</button>
@@ -270,8 +270,8 @@
     <div id="sFooter">
       <input type="file" @change="uploadJSON" accept=".json" id="fimport" class="hidden"/>
       <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify(['aal', gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
-      <button title="Save Words" @click="exportToJsonFile(sentence)"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
-      <button title="Upload" @click.self="openFileDialog()"><label id="filab" for="fimport"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></label></button>
+      <button title="Save" @click="exportToJsonFile(sentence)"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
+      <button title="Import" @click.self="openFileDialog()"><label id="filab" for="fimport"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></label></button>
       <button title="Export/Share" @click="openModal('share'); closeNav()"><i class="fa-solid fa-share-from-square fa-xl"></i></button>
       <button title="Delete Words" @click="deleteWordMode = !deleteWordMode" :class="{active: deleteWordMode}"><i :class="deleteWordMode ? 'fa-solid fa-check fa-xl' : 'fa-solid fa-trash-can fa-xl'"></i></button>
     </div>
@@ -2043,7 +2043,7 @@ export default {
       try {
         this.sentence = [];
         for (let wID in snt) {
-          this.sentence.push(["",{},"",""]);
+          this.sentence.push(["aal",JSON.parse(JSON.stringify(this.gDefault)),"normal",""]);
           for (let gopt in snt[wID][1]) {
             if (Object.prototype.hasOwnProperty.call(this.gOptions, gopt)) {
               this.sentence[wID][1][gopt] = JSON.parse(JSON.stringify(snt[wID][1][gopt]));
