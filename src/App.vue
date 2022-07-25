@@ -2058,15 +2058,15 @@ export default {
       }
     },
     uploadJSON(event) {
-      var files = event.target.files;
-      if (files.length > 0) {
+      if (event.target.files.length > 0) {
+        console.log(event.target.files);
         let reader = new FileReader();
-        reader.readAsText(files[0]);
+        reader.readAsText(event.target.files[0]);
         reader.onload = () => {
-          //console.log(reader.result);
           try {
             this.handleImportedWord(JSON.parse(reader.result));
             this.switchWord(0,true);
+            document.getElementById("fimport").value = "";
           } catch {alert("Could not import correctly.");}
         }
       }
