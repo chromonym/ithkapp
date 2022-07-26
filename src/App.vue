@@ -57,7 +57,7 @@
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs','bias','free'].includes(wordType)}"> <!-- Section 2: Concatenation & Affixes-->
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
-      <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != 0"/>
+      <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != '0'"/>
       <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal"/>
       <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal"/>
     </div>
@@ -311,7 +311,7 @@ export default {
         "ctxt":"EXS",
         "ver":"PRC",
         "concat":"0",
-        "shcut":0,
+        "shcut":"0",
         "Vafx":[],
         "VIIafx":[],
         "plex":"UPX",
@@ -346,7 +346,7 @@ export default {
         "affScopeOf": "default",
         // REGISTER ADJUNCT OPTIONS
         "register": "DSV",
-        "regStartOrEnd": 0,
+        "regStartOrEnd": "0",
         // MODULAR ADJUNCT OPTIONS
         "vn2":"val",
         "val2":"MNO",
@@ -697,7 +697,7 @@ export default {
       } else if (type=="register") {
         var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","öi"],"MTH":["u","ui"],"CAR":["ü","ü"],}
         this.ithkword = "h" + ph[this.gOptions.register][this.gOptions.regStartOrEnd];
-        this.gloss = this.gOptions.register + (this.gOptions.regStartOrEnd == 1 || this.gOptions.register == "CAR" ? "_END" : "");
+        this.gloss = this.gOptions.register + (this.gOptions.regStartOrEnd == "1" || this.gOptions.register == "CAR" ? "_END" : "");
         this.fullGloss = this.gloss;
 
       } else if (type=="modular") {
@@ -925,7 +925,7 @@ export default {
         if (!this.shortcutting){
           var lastVII;
           var vowelColumn = 0;
-          if (this.gOptions.shcut === 0) {
+          if (this.gOptions.shcut == "0") {
             if (this.gOptions.VIIafx.length > 0) {
               lastVII = [...this.gOptions.VIIafx[this.gOptions.VIIafx.length-1]];
             } else {
@@ -1203,8 +1203,8 @@ export default {
     shortcutCalcs() {
       // SHORTCUTTING!
       (() => {
-      if ((this.gOptions.shcut === 1 && this.slots[3] == "a" && ["l","d","r","tļ","v","j","ř","dl"].includes(this.slots[10]) && this.wordType == "normal")
-       || (this.wordType == "refRoot" && this.gOptions.shcut == 1 && this.slots[3] == "a" && ["l","d"].includes(this.slots[10]))) {
+      if ((this.gOptions.shcut == "1" && this.slots[3] == "a" && ["l","d","r","tļ","v","j","ř","dl"].includes(this.slots[10]) && this.wordType == "normal")
+       || (this.wordType == "refRoot" && this.gOptions.shcut == "1" && this.slots[3] == "a" && ["l","d"].includes(this.slots[10]))) {
         //l = ., d = PRX, r = G, tļ = RPV, v = N, j = A, ř = G.RPV, dl = PRX.RPV
         // if the word is a reference-root, only default and PRX can be shown
         var ph = {"l":[1,0], "d":[2,0],
@@ -1617,7 +1617,7 @@ export default {
       slot9saved = this.slots[9];
       this.slot9gStop();
 
-      if (this.gOptions.shcut !== 2) {
+      if (this.gOptions.shcut != "2") {
         // Step 2: Remove unnecessary vowels at the start - the logic is dependant on the length of the root, so that's what I've done.
         if (this.slots[0] === "" && this.slots[1] === "a") {
           if (this.allowedAtStart(this.slots[2])) {
@@ -1826,7 +1826,7 @@ export default {
         this.fullGloss += "\\" + this.gOptions.rel.split("/")[0];
         if (this.gOptions.rel.split("/")[0] !== "UNF") {this.gloss += "\\" + this.gOptions.rel.split("/")[0]}
       }
-      if (this.gOptions.shcut === 2) {
+      if (this.gOptions.shcut == "2") {
         let ph = this.gloss;
         this.gloss = this.fullGloss;
         this.fullGloss = ph;
@@ -1940,7 +1940,7 @@ export default {
       let output = " "
       for (let i of sent) {
         output += i[0];
-        if (["normal","affRoot","refRoot"].includes(i[2]) && i[1].concat != 0) {
+        if (["normal","affRoot","refRoot"].includes(i[2]) && i[1].concat != '0') {
           output += "-";
         } else {
           output += " ";
