@@ -207,7 +207,8 @@
         <select id="sett10" v-model="settingRaw[10]" @change="event => settingsUpdate(event, 'hX')">
           <option value="dev">Devoiced</option>
           <option value="h+">As written</option>
-        </select>
+        </select><br/><br/>
+        <label>Don't calculate External Juncture: </label><input v-model="skipEJ" type="checkbox"/>
         <br/><br/><hr/><br/><b>WARNING:</b> The below doesn't work on mobile and will cause the the webpage to not load after reloading (until you close your web browser).<br/><br/>
         <button @click="setCookie('settings',JSON.stringify(settingRaw),365)">Save settings as cookies</button>
         <!--<button @click="setCookie('sentence',JSON.stringify(sentence),365)">Save words as cookies (warning: buggy)</button><br/>-->
@@ -487,6 +488,7 @@ export default {
       isMouseDown: false,
       draggedWord: null,
       settingRaw: ["[a]","[ɛ]","[ɤ]","[i]","[ɔ]","[œ]","[ʊ]","[ʉ]","[x]","[ʁː]","dev"],
+      skipEJ: false,
     }
   },
   methods: {
@@ -771,6 +773,11 @@ export default {
             this.fullGloss += "-" + glb[1];
           }
         }
+        if (this.selectedWord+1 in this.sentence) {
+          if (!["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(output.charAt(output.length - 1)) && !["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(this.sentence[this.selectedWord+1][0].charAt(0)) && !this.skipEJ) {
+            output += "ë"; // checking for external juncture violation
+          }
+        }
         if (this.gOptions.ess2 == "RPV") {
           output = this.markStress(0,output);
           this.gloss += "\\RPV";
@@ -815,6 +822,11 @@ export default {
         } else if (this.gOptions.refAffix.length > 0) {
           if (!this.allowedAtEnd(this.gOptions.refAffix[this.gOptions.refAffix.length-1][0])) {
             output += "a";
+          }
+        }
+        if (this.selectedWord+1 in this.sentence) {
+          if (!["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(output.charAt(output.length - 1)) && !["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(this.sentence[this.selectedWord+1][0].charAt(0)) && !this.skipEJ) {
+            output += "a"; // checking for external juncture violation
           }
         }
         if (this.gOptions.ess2 == "RPV") {
@@ -1656,7 +1668,7 @@ export default {
       // Step 4: Join everything together
       (() => {this.ithkword = this.slots.slice(0,-1).join("")})();
 
-      // Step 5: Apply Slot 10 (stress)
+      // Step 5: Apply Slot 10 (stress) & calculate External Juncture
       // Penultimate stress is unmarked, others are marked with a diacritic; a -> á, ä -> â.
       var wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
       var stressType = 0;
@@ -1672,13 +1684,21 @@ export default {
       }
       // 5b: making sure the word can actually take the required stress
       while (wordVowels.length <= stressType) { // i.e. stress 0 needs 1 vowel, stress 1 needs 2 vowels, stress 2 needs 3 vowels
-        var cutVal = this.cut.indexOf(true);
+        var cutVal = this.cut[1] == true ? 1 : this.cut[0] == true ? 0 : this.cut[2] == true ? 2 : null; //this.cut.indexOf(true);
         var ph = [1,9,7];
         if (ph[cutVal] === 7) {this.slots[8] = "h"}
         this.slots[ph[cutVal]] = "a";
         this.cut[cutVal] = false;
         (() => {this.ithkword = this.slots.slice(0,-1).join("")})(); // recalculate ithkword because slots have updated
         wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi); // recalculate wordVowels because ithkword has updated
+      }
+      if (this.selectedWord+1 in this.sentence) { // if not the last word in a sentence...
+        if (this.cut[1] && !["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(this.sentence[this.selectedWord+1][0].charAt(0)) && !this.skipEJ) {
+          // if slot 9 isn't already filled* and the first letter of the next word is a consonant and the user is okay with doing this
+          // (*not strictly necessary to check for but better safe than sorry)
+          this.ithkword += "a";
+          // add an a at the end
+        }
       }
       // 5c: marking the stress
       this.ithkword = this.markStress(stressType, this.ithkword);
