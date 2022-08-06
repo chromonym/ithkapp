@@ -6,12 +6,12 @@
     <!-- The following depends on which TYPE of grammar option this is: -->
 
     <!-- If it's a simple text entry: -->
-    <input v-if="json.type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." :maxlength="utdText ? '' : '4'"/>
+    <input v-if="json.type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." :maxlength="utdText ? '' : '6'"/>
 
     <!-- If it's a list of text entries: -->
     <div v-else-if="json.type=='affix'">
       <div v-for="(affix,index) in affixes" :key="affix"> <!-- For each affix/degree pair in the array "affixes", add a textbox and two dropdowns linked to each-->
-        <input v-model="affixes[index][0]" @input="this.$emit('send-message',affixes,code)" placeholder="Enter..." maxlength=3 :id="code+'affW'+index"/> <!-- Textbox -->
+        <input v-model="affixes[index][0]" @input="this.$emit('send-message',affixes,code)" placeholder="Enter..." maxlength=5 :id="code+'affW'+index"/> <!-- Textbox -->
         <select v-model="affixes[index][1]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block" :id="code+'affD'+index.toString()"> <!-- Dropdown 1 (Degree) -->
           <option v-for="num in (['sy','zy','čy','šy','žy','jy','ly'].includes(affixes[index][0])) ? [0,1,2,3,4,5,6,8] : Array(10).keys()" :key="(num+1)%10" :value="(num+1)%10">Deg. {{(num+1)%10}}</option>
           <option key="CA" value="CA">Cₐ-stacking</option>

@@ -504,8 +504,9 @@ export default {
         this.glossCalcs();
         this.cascOrMood = (this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0');
       } else {
-        this.gloss = "",
-        this.fullGloss = ""
+        this.gloss = "";
+        this.fullGloss = "";
+        this.cascOrMood = false;
         this.calculateAdjunct(this.wordType);
         this.IPAcalcs();
         // need to figure out how to gloss adjuncts/
@@ -937,7 +938,7 @@ export default {
         if (!this.shortcutting){
           var lastVII;
           var vowelColumn = 0;
-          if (this.gOptions.shcut == "0") {
+          if (this.gOptions.shcut != "2") {
             if (this.gOptions.VIIafx.length > 0) {
               lastVII = [...this.gOptions.VIIafx[this.gOptions.VIIafx.length-1]];
             } else {
@@ -1114,7 +1115,7 @@ export default {
     calculateSlot7() {
       // I have no idea if it was the Object.assign() or the async/await in handleSendMessage(), but it works and I'm not questioning it.
       var out="";
-      if (this.slotVIIshortcut) {
+      if (this.slotVIIshortcut && !this.shortcutting && this.gOptions.shcut != "2") {
         for (var j in this.gOptions.VIIafx.slice(0,-1)) {
           var i = Object.assign({},this.gOptions.VIIafx[j]);
           if (i[1] != "CA") {
@@ -1214,7 +1215,7 @@ export default {
     },
     shortcutCalcs() {
       // SHORTCUTTING!
-      (() => {
+      //(() => {
       if ((this.gOptions.shcut == "1" && this.slots[3] == "a" && ["l","d","r","tļ","v","j","ř","dl"].includes(this.slots[10]) && this.wordType == "normal")
        || (this.wordType == "refRoot" && this.gOptions.shcut == "1" && this.slots[3] == "a" && ["l","d"].includes(this.slots[10]))) {
         //l = ., d = PRX, r = G, tļ = RPV, v = N, j = A, ř = G.RPV, dl = PRX.RPV
@@ -1236,7 +1237,7 @@ export default {
         }
       } else {
         this.shortcutting = false;
-      }})();
+      }//})();
     },
     insertGStop(vowels,endOfWord=false) { // inserting a glottal stop given a set of vowels
       if (vowels.length === 1 || this.sDip.includes(vowels)) {
@@ -1296,9 +1297,9 @@ export default {
     allowedAtStart(consonants) {
       if (this.consAllowed(consonants)) {
         var nogem = this.removeDuplicate(consonants);
-        if (consonants.length === 1) {
+        if (nogem.length === 1) {
           //monocons. root
-          if (consonants !== "ļ"){ // not ļ
+          if (nogem !== "ļ"){ // not ļ
             return true;
           }
         } else if (nogem.length === 2) {
@@ -1399,15 +1400,15 @@ export default {
     allowedAtEnd(lastCons) {
       if (this.consAllowed(lastCons)) {
         var nogem2 = this.removeDuplicate(lastCons);
-        if (lastCons.length == 1) {
+        if (nogem2.length == 1) {
           //monocons.
-          if (lastCons !== "w" && lastCons !== "y" && lastCons !== "'") { // 4.1 any consonant except -w or -y
+          if (nogem2 !== "w" && nogem2 !== "y" && nogem2 !== "'") { // 4.1 any consonant except -w or -y
             return true;
           }
-        } else if (lastCons.length == 2) {
+        } else if (nogem2.length == 2) {
           //bicons.
-          var eba = lastCons.charAt(0);
-          var ebb = lastCons.charAt(1);
+          var eba = nogem2.charAt(0);
+          var ebb = nogem2.charAt(1);
           if (
             (["p","t","k"].includes(eba) && ["f","ţ","s","š","ç","x","h","ļ"].includes(ebb)) || // 4.2.1 - stop, fricative
             (["b","d","g"].includes(eba) && ["v","ḑ","z","ž"].includes(ebb)) ||
@@ -1430,11 +1431,11 @@ export default {
           ){
             return true;
           }
-        } else if (lastCons.length == 3) {
+        } else if (nogem2.length == 3) {
           // tricons.
-          var eca = lastCons.charAt(0);
-          var ecb = lastCons.charAt(1);
-          var ecc = lastCons.charAt(2);
+          var eca = nogem2.charAt(0);
+          var ecb = nogem2.charAt(1);
+          var ecc = nogem2.charAt(2);
           if (
             (ecb === "p" && ((["r","ř","l"].includes(eca) && ["t","k","f","ţ","x","s","š","h","ļ","ç"].includes(ecc))
                         || (["m","ň"].includes(eca) && ["h","ļ","ç"].includes(ecc))
@@ -1631,7 +1632,7 @@ export default {
 
       if (this.gOptions.shcut != "2") {
         // Step 2: Remove unnecessary vowels at the start - the logic is dependant on the length of the root, so that's what I've done.
-        if (this.slots[0] === "" && this.slots[1] === "a") {
+        if (this.slots[0] === "" && this.slots[1] === "a" && !this.slotVIIshortcut) {
           if (this.allowedAtStart(this.slots[2])) {
             this.slots[1] = "";
             this.cut[0] = true; // slot 2 removed
