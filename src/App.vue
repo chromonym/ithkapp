@@ -1643,7 +1643,7 @@ export default {
           this.slots[7] = "";
           this.slots[8] = "";
           this.cut[2] = true; // slot 8a removed
-          if (this.slots[9] === "a") { // here i have to check that the consonant before this is allowed at the end of a word
+          if (this.slots[9] === "a" && this.gOptions.c != "PRN") { // here i have to check that the consonant before this is allowed at the end of a word
             var lastCons;
             var shortenSlot8 = true;
             if (this.gOptions.VIIafx.length == 0 && this.gOptions.Vafx.length == 0 && this.shortcutting) { // if slots 5 & 7 are empty and there's shortcutting,
@@ -1676,6 +1676,8 @@ export default {
       if (this.gOptions.concat != '0') { // if it's a concatenated word
         if (slot9saved.charAt(slot9saved.length-1) === "'") { //if you'd normally add a glottal stop into slot 9
           stressType = 0; // ultimate stress
+        } else if (this.cut[2] && this.cut[1] && this.shortcutting) {
+          stressType = 0; // if it can be monosyllabic, make it
         } else {
           stressType = 1; // penultimate stress
         }
