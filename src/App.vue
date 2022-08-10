@@ -1644,11 +1644,15 @@ export default {
           this.slots[7] = "";
           this.slots[8] = "";
           this.cut[2] = true; // slot 8a removed
-          if (this.slots[9] === "a" && this.gOptions.c != "PRN") { // here i have to check that the consonant before this is allowed at the end of a word
+          if (this.slots[9] === "a") { // here i have to check that the consonant before this is allowed at the end of a word
             var lastCons;
             var shortenSlot8 = true;
             if (this.gOptions.VIIafx.length == 0 && this.gOptions.Vafx.length == 0 && this.shortcutting) { // if slots 5 & 7 are empty and there's shortcutting,
-              lastCons = this.slots[2]; // then the last consonant is the root.
+              if (this.gOptions.c == "PRN") { // with the edge case of if the case is Pertinental
+                shortenSlot8 = false; // then don't drop the last consonant so there's two syllables
+              } else { // otherwise,
+                lastCons = this.slots[2]; // the last consonant is the root.
+              }
             } else if (this.gOptions.VIIafx.length == 0 && this.shortcutting) { // if that but slot 5 is filled,
               shortenSlot8 = false; // don't remove slot 8, because 5 must have a glottal stop at the end which is not permitted.
             } else if (this.gOptions.VIIafx.length == 0) { // if that but no shortcutting,
