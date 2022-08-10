@@ -1681,7 +1681,7 @@ export default {
       if (this.gOptions.concat != '0') { // if it's a concatenated word
         if (slot9saved.charAt(slot9saved.length-1) === "'") { //if you'd normally add a glottal stop into slot 9
           stressType = 0; // ultimate stress
-        } else if (this.cut[2] && this.cut[1] && this.shortcutting) {
+        } else if (this.cut[2] && this.cut[1] && this.gOptions.c == "THM" && this.gOptions.concat != '0' && this.gOptions.VIIafx.length == 0 && this.shortcutting) {
           stressType = 0; // if it can be monosyllabic, make it
         } else {
           stressType = 1; // penultimate stress
