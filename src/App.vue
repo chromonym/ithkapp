@@ -683,6 +683,7 @@ export default {
             out += k[0];
           }
           out += afxjunctV[this.gOptions.otherAffScope];
+          out = this.recalcVowels(out);
           this.ithkword = out;
           for (let i of this.gOptions.affixjunct.slice(1)) {
             this.gloss += "-'" + i[0] + "'/" + i[1] + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
@@ -730,6 +731,7 @@ export default {
           this.gloss += (this.gOptions[this.gOptions.cn+"4"] != "FAC" && this.gOptions[this.gOptions.cn+"4"] != "CCN" ? this.gOptions[this.gOptions.cn+"4"] : "")
           this.fullGloss += "-" + this.gOptions[this.gOptions.vn4+"4"] + "." + this.gOptions[this.gOptions.cn+"4"];
         }
+        output = this.recalcVowels(output);
         if (this.gOptions.modNumber == "1") {
           output += this.calculateSlot8a("","asp");
           this.gloss += this.gOptions.asp;
@@ -779,6 +781,7 @@ export default {
             output += "ë"; // checking for external juncture violation
           }
         }
+        output = this.recalcVowels(output);
         if (this.gOptions.ess2 == "RPV") {
           output = this.markStress(0,output);
           this.gloss += "\\RPV";
@@ -830,6 +833,7 @@ export default {
             output += "a"; // checking for external juncture violation
           }
         }
+        output = this.recalcVowels(output);
         if (this.gOptions.ess2 == "RPV") {
           output = this.markStress(0,output);
           this.gloss += "\\RPV";
@@ -1624,6 +1628,10 @@ export default {
       return thisword;
     },
 
+    recalcVowels(word) { // replace series 3 vowel forms if necessary
+      return word.replace("yia","yuä").replace("yie","yuë").replace("yio","yüä").replace("yiö","yüë").replace("wuö","wöë").replace("wuo","wöä").replace("wue","wië").replace("wua","wiä");
+    },
+
     finalCalcs() {
       // Step 1: Glottal Stop Insertion in Slot 9
       var slot9saved = "";
@@ -1672,6 +1680,7 @@ export default {
 
       // Step 4: Join everything together
       (() => {this.ithkword = this.slots.slice(0,-1).join("")})();
+      this.ithkword = this.recalcVowels(this.ithkword); // recalculate series 3 vowels
 
       // Step 5: Apply Slot 10 (stress) & calculate External Juncture
       // Penultimate stress is unmarked, others are marked with a diacritic; a -> á, ä -> â.
