@@ -1648,7 +1648,7 @@ export default {
             var lastCons;
             var shortenSlot8 = true;
             if (this.gOptions.VIIafx.length == 0 && this.gOptions.Vafx.length == 0 && this.shortcutting) { // if slots 5 & 7 are empty and there's shortcutting,
-              if (this.gOptions.c == "PRN") { // with the edge case of if the case is Pertinental
+              if (this.gOptions.c == "PRN" && (this.sDip.includes(this.slots[1]) || Object.keys(this.sAccent).includes(this.slots[1]))) { // with the edge case of if the case is Pertinental
                 shortenSlot8 = false; // then don't drop the last consonant so there's two syllables
               } else { // otherwise,
                 lastCons = this.slots[2]; // the last consonant is the root.
@@ -1681,7 +1681,7 @@ export default {
       if (this.gOptions.concat != '0') { // if it's a concatenated word
         if (slot9saved.charAt(slot9saved.length-1) === "'") { //if you'd normally add a glottal stop into slot 9
           stressType = 0; // ultimate stress
-        } else if (this.cut[2] && this.cut[1] && this.gOptions.c == "THM" && this.gOptions.concat != '0' && this.gOptions.VIIafx.length == 0 && this.shortcutting) {
+        } else if (this.cut[2] && this.cut[1] && this.gOptions.c == "THM" && this.gOptions.concat != '0' && this.gOptions.VIIafx.length == 0 && this.shortcutting && (this.sDip.includes(this.slots[1]) || Object.keys(this.sAccent).includes(this.slots[1]))) {
           stressType = 0; // if it can be monosyllabic, make it
         } else {
           stressType = 1; // penultimate stress
