@@ -497,7 +497,7 @@ export default {
           this.cut = [false,false,false]; // reset this.cut
         })();
         (()=>{this.gOptions[code] = value})();
-      if (this.wordType == 'normal'){
+      if (this.wordType == 'normal' || this.wordType == 'affRoot' || this.wordType == 'refRoot'){
         //if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
         this.calculateWord();
         this.IPAcalcs();
