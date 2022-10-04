@@ -87,6 +87,7 @@
       <OptionBox :json="gData.pha" code="pha2" @send-message="handleSendMessage" ref="pha2" @modal="openModal" :class='{hidden: this.gOptions.vn2 != "pha"}'/>
       <OptionBox :json="gData.eff" code="eff2" @send-message="handleSendMessage" ref="eff2" @modal="openModal" :class='{hidden: this.gOptions.vn2 != "eff"}'/>
       <OptionBox :json="gData.lvl" code="lvl2" @send-message="handleSendMessage" ref="lvl2" @modal="openModal" :class='{hidden: this.gOptions.vn2 != "lvl"}'/>
+      <OptionBox :json="gData.abslvl" code="abslvl2" @send-message="handleSendMessage" ref="abslvl2" @modal="openModal" :class='{hidden: this.gOptions.vn2 != "lvl"}'/>
       <OptionBox :json="gData.asp" code="asp2" @send-message="handleSendMessage" ref="asp2" @modal="openModal" :class='{hidden: this.gOptions.vn2 != "asp"}'/>
       <OptionBox :json="gData.mood" code="mood2" @send-message="handleSendMessage" ref="mood2" @modal="openModal" :class='{hidden: this.gOptions.cn != "mood"}'/>
       <OptionBox :json="gData.casc" code="casc2" @send-message="handleSendMessage" ref="casc2" @modal="openModal" :class='{hidden: this.gOptions.cn != "casc"}'/>
@@ -98,6 +99,7 @@
       <OptionBox :json="gData.pha" code="pha3" @send-message="handleSendMessage" ref="pha3" @modal="openModal" :class='{hidden: this.gOptions.vn3 != "pha"}'/>
       <OptionBox :json="gData.eff" code="eff3" @send-message="handleSendMessage" ref="eff3" @modal="openModal" :class='{hidden: this.gOptions.vn3 != "eff"}'/>
       <OptionBox :json="gData.lvl" code="lvl3" @send-message="handleSendMessage" ref="lvl3" @modal="openModal" :class='{hidden: this.gOptions.vn3 != "lvl"}'/>
+      <OptionBox :json="gData.abslvl" code="abslvl3" @send-message="handleSendMessage" ref="abslvl3" @modal="openModal" :class='{hidden: this.gOptions.vn3 != "lvl"}'/>
       <OptionBox :json="gData.asp" code="asp3" @send-message="handleSendMessage" ref="asp3" @modal="openModal" :class='{hidden: this.gOptions.vn3 != "asp"}'/>
       <OptionBox :json="gData.mood" code="mood3" @send-message="handleSendMessage" ref="mood3" @modal="openModal" :class='{hidden: this.gOptions.cn != "mood"}'/>
       <OptionBox :json="gData.casc" code="casc3" @send-message="handleSendMessage" ref="casc3" @modal="openModal" :class='{hidden: this.gOptions.cn != "casc"}'/>
@@ -109,6 +111,7 @@
       <OptionBox :json="gData.pha" code="pha4" @send-message="handleSendMessage" ref="pha4" @modal="openModal" :class='{hidden: this.gOptions.vn4 != "pha"}'/>
       <OptionBox :json="gData.eff" code="eff4" @send-message="handleSendMessage" ref="eff4" @modal="openModal" :class='{hidden: this.gOptions.vn4 != "eff"}'/>
       <OptionBox :json="gData.lvl" code="lvl4" @send-message="handleSendMessage" ref="lvl4" @modal="openModal" :class='{hidden: this.gOptions.vn4 != "lvl"}'/>
+      <OptionBox :json="gData.abslvl" code="abslvl4" @send-message="handleSendMessage" ref="abslvl4" @modal="openModal" :class='{hidden: this.gOptions.vn4 != "lvl"}'/>
       <OptionBox :json="gData.asp" code="asp4" @send-message="handleSendMessage" ref="asp4" @modal="openModal" :class='{hidden: this.gOptions.vn4 != "asp"}'/>
       <OptionBox :json="gData.mood" code="mood4" @send-message="handleSendMessage" ref="mood4" @modal="openModal" :class='{hidden: this.gOptions.cn != "mood"}'/>
       <OptionBox :json="gData.casc" code="casc4" @send-message="handleSendMessage" ref="casc4" @modal="openModal" :class='{hidden: this.gOptions.cn != "casc"}'/>
@@ -124,6 +127,7 @@
       <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage" ref="pha" @modal="openModal" :disabled='this.gOptions.vn != "pha"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
       <OptionBox :json="gData.eff" code="eff" @send-message="handleSendMessage" ref="eff" @modal="openModal" :disabled='this.gOptions.vn != "eff"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
       <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
+      <OptionBox :json="gData.abslvl" code="abslvl" @send-message="handleSendMessage" ref="abslvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
       <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal" :disabled='(this.gOptions.vn != "asp" && this.wordType != "modular") || (this.wordType == "modular" && this.gOptions.modNumber != "1")' :class='{hidden: this.wordType == "modular" && this.gOptions.modNumber != "1"}'/>
     </div>
     <div class="section" :class="{hidden: ['affixjunct','register','modular','ref','refCS','bias','free'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct / M/CS Adjunct -->
@@ -293,8 +297,8 @@ import consdata from './consdata.json'
 export default {
   name: 'App',
   components: {
-    OptionBox,
-  },
+    OptionBox
+},
   data() {
     return {
       wordType: "normal",
@@ -327,6 +331,7 @@ export default {
         "pha":"PCT",
         "eff":"1:BEN",
         "lvl":"MIN",
+        "abslvl": false,
         "asp":"RTR",
         "mood":"FAC",
         "casc":"CCN",
@@ -354,6 +359,7 @@ export default {
         "pha2":"PCT",
         "eff2":"1:BEN",
         "lvl2":"MIN",
+        "abslvl2": false,
         "asp2":"RTR",
         "mood2":"FAC",
         "casc2":"CCN",
@@ -362,6 +368,7 @@ export default {
         "pha3":"PCT",
         "eff3":"1:BEN",
         "lvl3":"MIN",
+        "abslvl3": false,
         "asp3":"RTR",
         "mood3":"FAC",
         "casc3":"CCN",
@@ -370,6 +377,7 @@ export default {
         "pha4":"PCT",
         "eff4":"1:BEN",
         "lvl4":"MIN",
+        "abslvl4": false,
         "asp4":"RTR",
         "mood4":"FAC",
         "casc4":"CCN",
@@ -476,9 +484,9 @@ export default {
       casePopupEnd: "PLM",
       casePopupTitle: "Allcases",
       cascOrMood: false, // false if case scope, true if mood.
-      tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
-      SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
-      REFtabGroups: [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
+      tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
+      SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
+      REFtabGroups: [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
       sentenceOpen: false,
       sentence: [], // things in this are of the form [word, grammarOptions, description]
       selectedWord: 0,
@@ -540,10 +548,10 @@ export default {
       else if (this.wordType == "register") {tG = [["register","regStartOrEnd"]];}
       else if (this.wordType == "modular") {
         tG = [["modAppliesTo","modNumber","cn","vh"],
-              ["vn","val","pha","eff","lvl"],
-              ["vn2","val2","pha2","eff2","lvl2","asp2"],
-              ["vn3","val3","pha3","eff3","lvl3","asp3"],
-              ["vn4","val4","pha4","eff4","lvl4","asp4"]];
+              ["vn","val","pha","eff","lvl","abslvl"],
+              ["vn2","val2","pha2","eff2","lvl2","abslvl2","asp2"],
+              ["vn3","val3","pha3","eff3","lvl3","abslvl3","asp3"],
+              ["vn4","val4","pha4","eff4","lvl4","abslvl4","asp4"]];
       }
       else if (this.wordType == "ref") {tG = [["ref","refEff","refPersp","c1"],["twoCs","twoRefs","ref2","refEff2","refPersp2","c2","ess2"]];}
       else if (this.wordType == "refCS") {tG = [["ref","refEff","refPersp","c1","spec"],["refAffix","twoCs","c2","ess2"]]}
@@ -634,10 +642,15 @@ export default {
       } else if (type == "affixjunct") {
         var afxjunctV = {"VDom":"a","VSub":"u","VIIDom":"e","VIISub":"i","formative":"o","adjacent":"ö","same":"ai"};
         var afxjunctC = {"VDom":"h","VSub":"'h","VIIDom":"'hl","VIISub":"'hr","formative":"hw","adjacent":"'hw"};
-        this.gloss = "'" + this.gOptions.affixjunct[0][0] + "'/" + this.gOptions.affixjunct[0][1] + (this.gOptions.affixjunct[0][1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[this.gOptions.affixjunct[0][2]] : "");
-        this.fullGloss = this.gloss;
-        this.gloss += (this.gOptions.initialAffScope == "VDom" ? "" : "-{"+this.gOptions.initialAffScope+"}");
-        this.fullGloss += "-{"+this.gOptions.initialAffScope+"}";
+        try {
+          this.gloss = "'" + this.gOptions.affixjunct[0][0] + "'/" + this.gOptions.affixjunct[0][1] + (this.gOptions.affixjunct[0][1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[this.gOptions.affixjunct[0][2]] : "");
+          this.fullGloss = this.gloss;
+          this.gloss += (this.gOptions.initialAffScope == "VDom" ? "" : "-{"+this.gOptions.initialAffScope+"}");
+          this.fullGloss += "-{"+this.gOptions.initialAffScope+"}";
+        } catch {
+          this.gloss = "";
+          this.fullGloss = "";
+        }
         if (this.gOptions.affixjunct.length < 1) {
           this.ithkword = "";
           this.gloss = "";
@@ -710,26 +723,26 @@ export default {
         if (["2","3","4"].includes(this.gOptions.modNumber)) {
           output += this.calculateSlot8a("2");
           output += this.calculateSlot8b("2",this.gOptions.cn);
-          this.gloss += (this.gOptions[this.gOptions.vn2+"2"] != "MNO" ? this.gOptions[this.gOptions.vn2+"2"] : "");
+          this.gloss += (this.gOptions[this.gOptions.vn2+"2"] != "MNO" ? this.gOptions[this.gOptions.vn2+"2"] + (this.gOptions.vn2 == "lvl" ? (this.gOptions.abslvl2 ? "a" : "r") : "") : "");
           this.gloss += (this.gOptions[this.gOptions.vn2+"2"] != "MNO" && this.gOptions[this.gOptions.cn+"2"] != "FAC" && this.gOptions[this.gOptions.cn+"2"] != "CCN" ? "." : "");
           this.gloss += (this.gOptions[this.gOptions.cn+"2"] != "FAC" && this.gOptions[this.gOptions.cn+"2"] != "CCN" ? this.gOptions[this.gOptions.cn+"2"] : "")
-          this.fullGloss += this.gOptions[this.gOptions.vn2+"2"] + "." + this.gOptions[this.gOptions.cn+"2"];
+          this.fullGloss += this.gOptions[this.gOptions.vn2+"2"] + (this.gOptions.vn2 == "lvl" ? (this.gOptions.abslvl2 ? "a" : "r") : "") + "." + this.gOptions[this.gOptions.cn+"2"];
         } if (["3","4"].includes(this.gOptions.modNumber)) {
           output += this.calculateSlot8a("3");
           output += this.calculateSlot8b("3",this.gOptions.cn);
           this.gloss += (this.gOptions[this.gOptions.vn3+"3"] != "MNO" || this.gOptions[this.gOptions.cn+"3"] != "FAC" && this.gOptions[this.gOptions.cn+"3"] != "CCN" ? "-" : "");
-          this.gloss += (this.gOptions[this.gOptions.vn3+"3"] != "MNO" ? this.gOptions[this.gOptions.vn3+"3"] : "");
+          this.gloss += (this.gOptions[this.gOptions.vn3+"3"] != "MNO" ? this.gOptions[this.gOptions.vn3+"3"] + (this.gOptions.vn3 == "lvl" ? (this.gOptions.abslvl3 ? "a" : "r") : "") : "");
           this.gloss += (this.gOptions[this.gOptions.vn3+"3"] != "MNO" && this.gOptions[this.gOptions.cn+"3"] != "FAC" && this.gOptions[this.gOptions.cn+"3"] != "CCN" ? "." : "");
           this.gloss += (this.gOptions[this.gOptions.cn+"3"] != "FAC" && this.gOptions[this.gOptions.cn+"3"] != "CCN" ? this.gOptions[this.gOptions.cn+"3"] : "")
-          this.fullGloss += "-" + this.gOptions[this.gOptions.vn3+"3"] + "." + this.gOptions[this.gOptions.cn+"3"];
+          this.fullGloss += "-" + this.gOptions[this.gOptions.vn3+"3"] + (this.gOptions.vn3 == "lvl" ? (this.gOptions.abslvl3 ? "a" : "r") : "") + "." + this.gOptions[this.gOptions.cn+"3"];
         } if (this.gOptions.modNumber == "4") {
           output += this.calculateSlot8a("4");
           output += this.calculateSlot8b("4",this.gOptions.cn);
           this.gloss += (this.gOptions[this.gOptions.vn4+"4"] != "MNO" || this.gOptions[this.gOptions.cn+"4"] != "FAC" && this.gOptions[this.gOptions.cn+"4"] != "CCN" ? "-" : "");
-          this.gloss += (this.gOptions[this.gOptions.vn4+"4"] != "MNO" ? this.gOptions[this.gOptions.vn4+"4"] : "");
+          this.gloss += (this.gOptions[this.gOptions.vn4+"4"] != "MNO" ? this.gOptions[this.gOptions.vn4+"4"] + (this.gOptions.vn4 == "lvl" ? (this.gOptions.abslvl4 ? "a" : "r") : "") : "");
           this.gloss += (this.gOptions[this.gOptions.vn4+"4"] != "MNO" && this.gOptions[this.gOptions.cn+"4"] != "FAC" && this.gOptions[this.gOptions.cn+"4"] != "CCN" ? "." : "");
           this.gloss += (this.gOptions[this.gOptions.cn+"4"] != "FAC" && this.gOptions[this.gOptions.cn+"4"] != "CCN" ? this.gOptions[this.gOptions.cn+"4"] : "")
-          this.fullGloss += "-" + this.gOptions[this.gOptions.vn4+"4"] + "." + this.gOptions[this.gOptions.cn+"4"];
+          this.fullGloss += "-" + this.gOptions[this.gOptions.vn4+"4"] + (this.gOptions.vn4 == "lvl" ? (this.gOptions.abslvl4 ? "a" : "r") : "") + "." + this.gOptions[this.gOptions.cn+"4"];
         }
         output = this.recalcVowels(output);
         if (this.gOptions.modNumber == "1") {
@@ -738,8 +751,8 @@ export default {
           this.fullGloss += this.gOptions.asp;
         } else if (this.gOptions.vh == "vn") {
           output += this.calculateSlot8a();
-          this.gloss += (this.gOptions[this.gOptions.vn] != "MNO" ? "-" + this.gOptions[this.gOptions.vn] : "");
-          this.fullGloss += "-" + this.gOptions[this.gOptions.vn];
+          this.gloss += (this.gOptions[this.gOptions.vn] != "MNO" ? "-" + this.gOptions[this.gOptions.vn] + (this.gOptions.vn == "lvl" ? (this.gOptions.abslvl ? "a" : "r") : "") : "");
+          this.fullGloss += "-" + this.gOptions[this.gOptions.vn] + (this.gOptions.vn == "lvl" ? (this.gOptions.abslvl ? "a" : "r") : "");
         } else {
           output += this.gOptions.modScope;
           output = this.markStress(0,output);
@@ -1164,7 +1177,11 @@ export default {
                    "pha":["PCT","ITR","REP","ITM","RCT","FRE","FRG","VAC","FLC"],
                    "eff":["1:BEN","2:BEN","3:BEN","SLF:BEN","UNK","SLF:DET","3:DET","2:DET","1:DET"],
                    "lvl":["MIN","SBE","IFR","DFT","EQU","SUR","SPL","SPQ","MAX"]};
-        return this.sVowels[phh[this.gOptions["vn"+num]].indexOf(this.gOptions[this.gOptions["vn"+num]+num])][ph.indexOf(this.gOptions["vn"+num])];
+        let out = this.sVowels[phh[this.gOptions["vn"+num]].indexOf(this.gOptions[this.gOptions["vn"+num]+num])][ph.indexOf(this.gOptions["vn"+num])];
+        if (this.gOptions["vn"+num] == "lvl" && this.gOptions["abslvl"+num]) {
+          out = out[0]+"y"+out[1];
+        }
+        return out;
       }
     },
     calculateSlot8b(num="",ca="") {
@@ -1837,11 +1854,11 @@ export default {
       }
       // Slot 8
       var s8c = [];
-      if (this.gOptions[this.gOptions.vn] !== "MNO") {s8c.push(this.gOptions[this.gOptions.vn])}
+      if (this.gOptions[this.gOptions.vn] !== "MNO") {s8c.push(this.gOptions[this.gOptions.vn] + (this.gOptions.vn == "lvl" ? (this.gOptions.abslvl ? "a" : "r") : ""))}
       if (this.gOptions.mood !== "FAC" && this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") {s8c.push(this.gOptions.mood)}
       if (this.gOptions.casc !== "CCN" && (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != "0")) {s8c.push(this.gOptions.casc)}
       if (s8c.length > 0) {this.gloss += "-" + s8c.join(".")}
-      this.fullGloss += "-" + this.gOptions[this.gOptions.vn] + "." + ((this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") ? this.gOptions.mood : this.gOptions.casc)
+      this.fullGloss += "-" + this.gOptions[this.gOptions.vn] + (this.gOptions.vn == "lvl" ? (this.gOptions.abslvl ? "a" : "r") : "") + "." + ((this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") ? this.gOptions.mood : this.gOptions.casc)
       // Slot 9
       if (this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") {
         //IEV
