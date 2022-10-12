@@ -32,10 +32,16 @@
 
   <!-- MAIN (contains word-creation options) -->
   <div id="content">
-    <Ithkuil_v4 v-if="langVer != '3'" ref="4"
+
+    <Ithkuil_v4 v-if="langVer == '4'" ref="4"
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
     @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
     :listenModal="modalListen" :listenWordtype="wordType" :listenWord="gSOptions" :calculateEJ="false"/>
+
+    <Ithkuil_v3 v-if="langVer == '3'" ref="3"
+    @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
+    @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
+    :listenModal="modalListen" :listenWord="gSOptions"/> <!-- add :listenWordtype="wordType" to add multiple word types -->
     
   <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   <!-- END OF MAIN -->
@@ -52,7 +58,7 @@
   <div id="modal" class="modal" @click.self="closeModal()">
     <div id="modal-content">
       <div class="tab">
-        <button v-for="tabcode in modalTabs" :key="tabcode" :class="{active: tabcode === modalID}" @click="closeModal(); openModal(tabcode);">{{gData[(isNaN(tabcode.slice(-1)) ? tabcode : tabcode.slice(0,-1))].title}}</button>
+        <button v-for="tabcode in modalTabs" :key="tabcode" :class="{active: tabcode === modalID}" @click="closeModal(); openModal(tabcode);">{{this.$refs[langVer].gData[(isNaN(tabcode.slice(-1)) ? tabcode : tabcode.slice(0,-1))].title}}</button>
         <button v-if="modalID == 'share'" @click="notAvailableAlert('Sharing sentences via hyperlink')">Create Hyperlink</button>
         <button v-if="modalID == 'share'" @click="copytoCB(concatenateSentence(sentence))">Copy to Clipboard</button>
         <span class="close" @click="closeModal()">&times;</span>
@@ -142,7 +148,7 @@
     </div>
     <div id="sFooter">
       <input type="file" @change="uploadJSON" accept=".json" id="fimport" class="hidden"/>
-      <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify(['aal', this.$refs['4'].gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
+      <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify(['aal', this.$refs[langVer].gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
       <button title="Save" @click="exportToJsonFile(sentence)"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
       <button title="Import" @click.self="openFileDialog()"><label id="filab" for="fimport"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></label></button>
       <button title="Export/Share" @click="openModal('share'); closeNav()"><i class="fa-solid fa-share-from-square fa-xl"></i></button>
@@ -153,24 +159,25 @@
 
 <script>
 import vClickOutside from "click-outside-vue3"
-import grammardata from './grammardata.json'
+
 import Ithkuil_v4 from './qitVersions/4.vue'
+import Ithkuil_v3 from './qitVersions/3.vue'
 
 export default {
   name: 'App',
   components: {
     Ithkuil_v4,
+    Ithkuil_v3, // THIS ONE FOR TESTING
 },
   data() {
     return {
-      langVer: "",
+      langVer: "4",
 
       modalListen: [],
       wordType: "normal",
       modalContent: "",
       modalID: "",
       modalTabs: [],
-      gData: grammardata,
       gOptions: {}, // grammar options,
       gSOptions: {},
       ithkword: "", // the calculated ithkuil word
@@ -210,9 +217,9 @@ export default {
       let tG = [];
       this.modalID = code;
       if (isNaN(code.charAt(code.length-1))) {
-        this.modalContent = this.gData[code];
+        this.modalContent = this.$refs[this.langVer].gData[code];
       } else {
-        this.modalContent = this.gData[code.slice(0,-1)]
+        this.modalContent = this.$refs[this.langVer].gData[code.slice(0,-1)]
       }
       if (this.wordType == "normal") {tG = JSON.parse(JSON.stringify(this.tabGroups));}
       else if (this.wordType == "suppletive") {tG = [["suppType","c"]];}
@@ -262,7 +269,6 @@ export default {
       }
     },
     updateFromModal(reference,value) {
-      //this.$refs[reference].updateValue(value);
       this.modalListen = [reference,value];
     },
     scrollToTop() {
@@ -302,7 +308,7 @@ export default {
     },
     resetWord(gO=null) {
       if (gO == null) {
-        gO = this.$refs["4"].gDefault;
+        gO = this.$refs[this.langVer].gDefault;
       }
       this.gSOptions = JSON.parse(JSON.stringify(gO));
       /*for (var property in gO) {
@@ -345,7 +351,7 @@ export default {
         if (confirm("Really delete "+this.sentence[index][0]+(this.sentence[index][3] ? " ("+this.sentence[index][3]+")" : "")+"?")) {
           this.sentence.splice(index,1);
           if (this.sentence.length == 0) {
-            this.sentence.push(["aal",JSON.parse(JSON.stringify(this.$refs["4"].gDefault)),"normal",""]);
+            this.sentence.push(["aal",JSON.parse(JSON.stringify(this.$refs[this.langVer].gDefault)),"normal",""]);
           }
           if ((this.sentence.length <= this.selectedWord || index < this.selectedWord) && this.selectedWord != 0) {this.switchWord(this.selectedWord-1,true)}
           else {this.switchWord(this.selectedWord,true);}
@@ -449,7 +455,7 @@ export default {
       try {
         this.sentence = [];
         for (let wID in snt) {
-          this.sentence.push(["aal",JSON.parse(JSON.stringify(this.$refs["4"].gDefault)),"normal",""]);
+          this.sentence.push(["aal",JSON.parse(JSON.stringify(this.$refs[this.langVer].gDefault)),"normal",""]);
           for (let gopt in snt[wID][1]) {
             if (Object.prototype.hasOwnProperty.call(this.gOptions, gopt)) {
               this.sentence[wID][1][gopt] = JSON.parse(JSON.stringify(snt[wID][1][gopt]));
@@ -526,7 +532,11 @@ export default {
   created() {
     let urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('v')) {
-      this.langVer = urlParams.get('v');
+      if (urlParams.get('v') != "3") {
+        this.langVer = "4";
+      } else {
+        this.langVer = urlParams.get('v');
+      }
     }
     this.oldScreenSize = window.innerWidth;
     window.addEventListener("resize",this.onScreenResize);

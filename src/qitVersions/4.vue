@@ -178,11 +178,11 @@ export default {
         },
         // emit variables
         ithkword(word) {
-            this.$emit("ithkword",[word,this.ipa,this.gloss]);
+            this.$emit("ithkword",[word,this.ipa,this.gloss,this.fullGloss]);
             this.$emit("gEmit",this.gOptions);
         },
         ipa(ipa) {
-            this.$emit("ithkword",[this.ithkword,ipa,this.gloss]);
+            this.$emit("ithkword",[this.ithkword,ipa,this.gloss,this.fullGloss]);
         },
         gloss(gloss) {
             this.$emit("ithkword",[this.ithkword,this.ipa,gloss,this.fullGloss]);
@@ -1060,26 +1060,16 @@ export default {
     }
     return outp;
     },
-    removeDuplicate(strin){ // Code by shivanisinghss2110 @ https://www.geeksforgeeks.org/javascript-program-to-remove-duplicates-from-a-given-string/
-      // Used as index in the modified string
-      var index = 0;
-      var n = strin.length;
-      var str = strin.split("");
-      // Traverse through all characters
-      for (var i = 0; i < n; i++) {
-        // Check if str[i] is present before it
-        var j;
-        for (j = 0; j < i; j++) {
-          if (str[i] == str[j]) {
-            break;
-          }
+    removeDuplicate(strin){
+        var out = "";
+        var prevChar = "";
+        for (var char of strin) {
+            if (char != prevChar) {
+                out += char;
+                prevChar = char;
+            }
         }
-        // If not present, then add it to result.
-        if (j == i) {
-          str[index++] = str[i];
-        }
-      }
-      return str.join("").slice(str, index);
+        return out;
     },
     slot9gStop() {
       if (this.slots[9].charAt(this.slots[9].length-1) === "'") {
