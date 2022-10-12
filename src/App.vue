@@ -32,7 +32,10 @@
 
   <!-- MAIN (contains word-creation options) -->
   <div id="content">
-    <Ithkuil_v4 v-if="langVer != '3'" @modal="openModal" :listenModal="modalListen" :listenWordtype="wordType" ref="4" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))" @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]}"/>
+    <Ithkuil_v4 v-if="langVer != '3'" ref="4"
+    @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
+    @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
+    :listenModal="modalListen" :listenWordtype="wordType" :listenWord="gSOptions" :calculateEJ="false"/>
     
   <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
   <!-- END OF MAIN -->
@@ -72,7 +75,7 @@
           <option value="dev">Devoiced</option>
           <option value="h+">As written</option>
         </select><br/><br/>
-        <label>Don't calculate External Juncture: </label><input v-model="skipEJ" type="checkbox"/>
+        <!--<label>Don't calculate External Juncture: </label><input v-model="skipEJ" type="checkbox"/>-->
         <br/><br/><hr/><br/><b>WARNING:</b> The below doesn't work on mobile and will cause the the webpage to not load after reloading (until you close your web browser).<br/><br/>
         <button @click="setCookie('settings',JSON.stringify(settingRaw),365)">Save settings as cookies</button>
         <!--<button @click="setCookie('sentence',JSON.stringify(sentence),365)">Save words as cookies (warning: buggy)</button><br/>-->
@@ -139,7 +142,7 @@
     </div>
     <div id="sFooter">
       <input type="file" @change="uploadJSON" accept=".json" id="fimport" class="hidden"/>
-      <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify(['aal', gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
+      <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify(['aal', this.$refs['4'].gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
       <button title="Save" @click="exportToJsonFile(sentence)"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
       <button title="Import" @click.self="openFileDialog()"><label id="filab" for="fimport"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></label></button>
       <button title="Export/Share" @click="openModal('share'); closeNav()"><i class="fa-solid fa-share-from-square fa-xl"></i></button>
@@ -151,7 +154,6 @@
 <script>
 import vClickOutside from "click-outside-vue3"
 import grammardata from './grammardata.json'
-import consdata from './consdata.json'
 import Ithkuil_v4 from './qitVersions/4.vue'
 
 export default {
@@ -162,183 +164,15 @@ export default {
   data() {
     return {
       langVer: "",
+
       modalListen: [],
       wordType: "normal",
-
       modalContent: "",
       modalID: "",
       modalTabs: [],
       gData: grammardata,
-      cData: consdata,
-      gDefault: { // default grammar options
-        // NORMAL WORD OPTIONS
-        "root":"",
-        "stem":"s1",
-        "func":"STA",
-        "spec":"BSC",
-        "ctxt":"EXS",
-        "ver":"PRC",
-        "concat":"0",
-        "shcut":"0",
-        "Vafx":[],
-        "VIIafx":[],
-        "plex":"UPX",
-        "simil":"S",
-        "cctd":"S",
-        "affil":"CSL",
-        "ext":"DEL",
-        "persp":"M",
-        "ess":"NRM",
-        "vn":"val",
-        "val":"MNO",
-        "pha":"PCT",
-        "eff":"1:BEN",
-        "lvl":"MIN",
-        "abslvl": false,
-        "asp":"RTR",
-        "mood":"FAC",
-        "casc":"CCN",
-        "rel": "UNF/C",
-        "c":"THM",
-        "ill":"ASR",
-        "exp":"COG",
-        "vld":"OBS",
-        // SUPPLETIVE ADJUNCT OPTION
-        "suppType": "hl",
-        // ROOT-AFFIX ADJUNCT OPTIONS
-        "affRoot": "",
-        "arDegree": 0,
-        // AFFIX ADJUNCT OPTIONS
-        "affixjunct": [],
-        "initialAffScope": "VDom",
-        "otherAffScope": "VDom",
-        "affScopeOf": "default",
-        // REGISTER ADJUNCT OPTIONS
-        "register": "DSV",
-        "regStartOrEnd": "0",
-        // MODULAR ADJUNCT OPTIONS
-        "vn2":"val",
-        "val2":"MNO",
-        "pha2":"PCT",
-        "eff2":"1:BEN",
-        "lvl2":"MIN",
-        "abslvl2": false,
-        "asp2":"RTR",
-        "mood2":"FAC",
-        "casc2":"CCN",
-        "vn3":"val",
-        "val3":"MNO",
-        "pha3":"PCT",
-        "eff3":"1:BEN",
-        "lvl3":"MIN",
-        "abslvl3": false,
-        "asp3":"RTR",
-        "mood3":"FAC",
-        "casc3":"CCN",
-        "vn4":"val",
-        "val4":"MNO",
-        "pha4":"PCT",
-        "eff4":"1:BEN",
-        "lvl4":"MIN",
-        "abslvl4": false,
-        "asp4":"RTR",
-        "mood4":"FAC",
-        "casc4":"CCN",
-        "cn": "mood",
-        "modAppliesTo":"all",
-        "modNumber": "1",
-        "vh": "vn",
-        "modScope": "a",
-        // PERSONAL-REFERENCE ADJUNCT OPTIONS
-        "ref": "1M",
-        "refEff": "NEU",
-        "refPersp": "M",
-        "ref2": "1M",
-        "refEff2": "NEU",
-        "refPersp2": "M",
-        "ess2": "NRM",
-        "c1": "THM",
-        "c2": "THM",
-        "twoRefs": false,
-        "twoCs": false,
-        "refAffix": [],
-        // MOOD/CASE-SCOPE ADJUNCTS
-        "cn2": "mood",
-        // BIAS ADJUNCTS
-        "bias": "ACC",
-        // BORROWED WORD
-        "freeType": "",
-      },
       gOptions: {}, // grammar options,
-      sVowels: [ // the "Standard Vowel-Form Sequence" as an array
-        ["a","ai","ia","ao"],
-        ["ä","au","ie","aö"],
-        ["e","ei","io","eo"],
-        ["i","eu","iö","eö"],
-        ["ëi","ëu","eë","oë"],
-        ["ö","ou","uö","öe"],
-        ["o","oi","uo","oe"],
-        ["ü","iu","ue","öa"],
-        ["u","ui","ua","oa"],
-        ["ae","ea","äi","öi"]
-      ],
-      ipaLookup: { // n, x, r, rr, řř, hl, hr, hm, hn (ph, th, kh, ch, čh)
-        "p":"p",
-        "b":"b",
-        "m":"m",
-        "f":"f",
-        "v":"v",
-        "w":"w",
-        "t":"t",
-        "d":"d",
-        "ţ":"θ",
-        "ḑ":"ð",
-        "s":"s",
-        "z":"z",
-        "c":"ts",
-        "ẓ":"dz",
-        "š":"ʃ",
-        "ž":"ʒ",
-        "č":"tʃ",
-        "j":"dʒ",
-        "ç":"ç",
-        "y":"j",
-        "k":"k",
-        "g":"g",
-        "ň":"ŋ",
-        "ř":"ʁ",
-        "'":"ʔ",
-        "h":"h",
-        "ļ":"ɬ",
-        "l":"l",
-        // everything else has a reliance on the surrounding letters
-      },
-      ipaPreference: { // because with most vowels the user will eventually be able to choose which pronunciation they want
-        "a": "a", // [a] or [ɑ]
-        "ä": "æ", // only [æ]
-        "e": "ɛ", // [ɛ] or [e]
-        "ë": "ɤ", // [ɤ] or [ʌ] or [ə]
-        "i": "i", // [i] or [ɪ]
-        "ì":"iː", // only [iː]
-        "o": "ɔ", // [ɔ] or [o]
-        "ö": "œ", // [œ] or [ø]
-        "u": "ʊ", // [ʊ] or [u]
-        "ü": "ʉ", // [ʉ] or [y]
-        "x": "x", // [x] or [χ]
-        "řř": "ʁː", // [ʁː] and [ʀ]
-        "hl": "ɬ", // [ɬ] or [hl]
-        "hr": "ɾ̥", // [ɾ̥] or [hɾ]
-        "hm": "m̥", // [m̥] or [hm]
-        "hn": "n̥"  // [n̥] or [hn]
-      },
-      shortcutting: false,
-      shcuttypeA: 0,
-      shcuttypeB: 0,
-      slotVIIshortcut: false,
-      sDip: ["ai","äi","ei","ëi","oi","öi","ui","au","eu","ëu","ou","iu"], // permissible diphthongs
-      sAccent: {"a":"á","e":"é","i":"í","ì":"í","o":"ó","u":"ú","ä":"â","ë":"ê","ö":"ô","ü":"û"}, // how to accent vowels
-      slots: ["","","","","","","","","","",""], // ithkuil word, split into slots (0-6 = I-VII, 7-8 = VIII, 9 = IX, 10 = ungeminated VI)
-      cut: [false,false,false], // cut vowels - slots 2, 9, and 8a
+      gSOptions: {},
       ithkword: "", // the calculated ithkuil word
       gloss: "", // gloss of word
       fullGloss: "", // full version of above
@@ -346,7 +180,6 @@ export default {
       casePopupStart: "THM",
       casePopupEnd: "PLM",
       casePopupTitle: "Allcases",
-      cascOrMood: false, // false if case scope, true if mood.
       tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
       SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
       REFtabGroups: [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
@@ -359,7 +192,6 @@ export default {
       isMouseDown: false,
       draggedWord: null,
       settingRaw: ["[a]","[ɛ]","[ɤ]","[i]","[ɔ]","[œ]","[ʊ]","[ʉ]","[x]","[ʁː]","dev"],
-      skipEJ: false,
     }
   },
   methods: {
@@ -470,14 +302,15 @@ export default {
     },
     resetWord(gO=null) {
       if (gO == null) {
-        gO = this.gDefault;
+        gO = this.$refs["4"].gDefault;
       }
-      this.gOptions = JSON.parse(JSON.stringify(gO));
-      for (var property in gO) {
+      this.gSOptions = JSON.parse(JSON.stringify(gO));
+      /*for (var property in gO) {
         this.updateFromModal(property,JSON.parse(JSON.stringify(gO[property])));
-      }
+      }*/
     },
     openNav(override=false) {
+      this.gSOptions = JSON.parse(JSON.stringify(this.gOptions));
       if (window.innerWidth >= 650) {
         if (this.sentenceOpen && !override) {this.closeNav()}
         else {
@@ -512,7 +345,7 @@ export default {
         if (confirm("Really delete "+this.sentence[index][0]+(this.sentence[index][3] ? " ("+this.sentence[index][3]+")" : "")+"?")) {
           this.sentence.splice(index,1);
           if (this.sentence.length == 0) {
-            this.sentence.push(["aal",JSON.parse(JSON.stringify(this.gDefault)),"normal",""]);
+            this.sentence.push(["aal",JSON.parse(JSON.stringify(this.$refs["4"].gDefault)),"normal",""]);
           }
           if ((this.sentence.length <= this.selectedWord || index < this.selectedWord) && this.selectedWord != 0) {this.switchWord(this.selectedWord-1,true)}
           else {this.switchWord(this.selectedWord,true);}
@@ -616,7 +449,7 @@ export default {
       try {
         this.sentence = [];
         for (let wID in snt) {
-          this.sentence.push(["aal",JSON.parse(JSON.stringify(this.gDefault)),"normal",""]);
+          this.sentence.push(["aal",JSON.parse(JSON.stringify(this.$refs["4"].gDefault)),"normal",""]);
           for (let gopt in snt[wID][1]) {
             if (Object.prototype.hasOwnProperty.call(this.gOptions, gopt)) {
               this.sentence[wID][1][gopt] = JSON.parse(JSON.stringify(snt[wID][1][gopt]));
@@ -658,7 +491,7 @@ export default {
     }
   },
   beforeMount() {
-    this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
+    //this.gSentenceOptions = JSON.parse(JSON.stringify(this.gDefault));
     let sCookie = this.getCookie("settings");
     let wCookie = this.getCookie("sentence");
     if (sCookie != "") {

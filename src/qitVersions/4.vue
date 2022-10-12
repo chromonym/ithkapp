@@ -159,6 +159,7 @@ export default {
         listenModal: Array, // listener for updateModal - is an array of [reference,value]
         listenWordtype: String, // listener for switchWordType - is the word type
         listenWord: Object, // listener for handleSendMessage - is gOptions
+        calculateEJ: Boolean,
     },
     watch: {
         // listen for variables
@@ -170,25 +171,29 @@ export default {
         },
         listenWord(obj) {
             this.gOptions = JSON.parse(JSON.stringify(obj));
-            this.handleSendMessage(this.obj.root, "root"); // recalculate the word
+            for (var property in obj) {
+                this.updateFromModal(property,JSON.parse(JSON.stringify(obj[property])));
+            }
+            this.handleSendMessage(obj.root, "root"); // recalculate the word
         },
         // emit variables
         ithkword(word) {
             this.$emit("ithkword",[word,this.ipa,this.gloss]);
+            this.$emit("gEmit",this.gOptions);
         },
         ipa(ipa) {
             this.$emit("ithkword",[this.ithkword,ipa,this.gloss]);
         },
         gloss(gloss) {
-            this.$emit("ithkword",[this.ithkword,this.ipa,gloss]);
+            this.$emit("ithkword",[this.ithkword,this.ipa,gloss,this.fullGloss]);
+        },
+        fullGloss(gloss) {
+            this.$emit("ithkword",[this.ithkword,this.ipa,this.gloss,gloss]);
         }
     },
     data() {
         return {
             wordType: "normal",
-            modalContent: "",
-            modalID: "",
-            modalTabs: [],
             gData: grammardata,
             cData: consdata,
             gDefault: { // default grammar options
@@ -364,23 +369,7 @@ export default {
             gloss: "", // gloss of word
             fullGloss: "", // full version of above
             ipa: "", // IPA transcription
-            casePopupStart: "THM",
-            casePopupEnd: "PLM",
-            casePopupTitle: "Allcases",
             cascOrMood: false, // false if case scope, true if mood.
-            tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
-            SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
-            REFtabGroups: [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
-            sentenceOpen: false,
-            sentence: [], // things in this are of the form [word, grammarOptions, description]
-            selectedWord: 0,
-            deleteWordMode: false,
-            oldScreenSize: 0,
-            hovering: null,
-            isMouseDown: false,
-            draggedWord: null,
-            settingRaw: ["[a]","[ɛ]","[ɤ]","[i]","[ɔ]","[œ]","[ʊ]","[ʉ]","[x]","[ʁː]","dev"],
-            skipEJ: false,
         }
     },
     methods: {
@@ -389,7 +378,6 @@ export default {
             this.cut = [false,false,false]; // reset this.cut
             })();
             (()=>{this.gOptions[code] = value})();
-            this.$emit("gEmit",this.gOptions)
             if (this.wordType == 'normal' || this.wordType == 'affRoot' || this.wordType == 'refRoot'){
                 //if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
                 this.calculateWord();
@@ -404,7 +392,6 @@ export default {
                 this.IPAcalcs();
                 // need to figure out how to gloss adjuncts/
             }
-            this.sentence[this.selectedWord] = JSON.parse(JSON.stringify([this.ithkword,this.gOptions,this.wordType,this.sentence[this.selectedWord][3]]));
         },
         notAvailableAlert(al) {
             alert(al + " is not available yet!");
@@ -582,10 +569,8 @@ export default {
             this.fullGloss += "-" + glb[1];
           }
         }
-        if (this.selectedWord+1 in this.sentence) {
-          if (!["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(output.charAt(output.length - 1)) && !["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(this.sentence[this.selectedWord+1][0].charAt(0)) && !this.skipEJ) {
+        if (!["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(output.charAt(output.length - 1)) && this.$props.calculateEJ) {
             output += "ë"; // checking for external juncture violation
-          }
         }
         output = this.recalcVowels(output);
         if (this.gOptions.ess2 == "RPV") {
@@ -634,10 +619,8 @@ export default {
             output += "a";
           }
         }
-        if (this.selectedWord+1 in this.sentence) {
-          if (!["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(output.charAt(output.length - 1)) && !["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(this.sentence[this.selectedWord+1][0].charAt(0)) && !this.skipEJ) {
+        if (!["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(output.charAt(output.length - 1)) && this.$props.calculateEJ) {
             output += "a"; // checking for external juncture violation
-          }
         }
         output = this.recalcVowels(output);
         if (this.gOptions.ess2 == "RPV") {
@@ -1518,13 +1501,11 @@ export default {
         (() => {this.ithkword = this.slots.slice(0,-1).join("")})(); // recalculate ithkword because slots have updated
         wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi); // recalculate wordVowels because ithkword has updated
       }
-      if (this.selectedWord+1 in this.sentence) { // if not the last word in a sentence...
-        if (this.cut[1] && !["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(this.sentence[this.selectedWord+1][0].charAt(0)) && !this.skipEJ) {
+      if (this.cut[1] && this.$props.calculateEJ) {
           // if slot 9 isn't already filled* and the first letter of the next word is a consonant and the user is okay with doing this
           // (*not strictly necessary to check for but better safe than sorry)
           this.ithkword += "a";
           // add an a at the end
-        }
       }
       // 5c: marking the stress
       this.ithkword = this.markStress(stressType, this.ithkword);
@@ -1824,7 +1805,7 @@ export default {
         this.calculateWord();
         this.IPAcalcs();
         this.glossCalcs();
-        this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
+        //this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
     },
 }
 </script>
