@@ -148,7 +148,7 @@
     </div>
     <div id="sFooter">
       <input type="file" @change="uploadJSON" accept=".json" id="fimport" class="hidden"/>
-      <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify(['aal', this.$refs[langVer].gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
+      <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify([this.$refs[langVer].defaultWord, this.$refs[langVer].gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
       <button title="Save" @click="exportToJsonFile(sentence)"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
       <button title="Import" @click.self="openFileDialog()"><label id="filab" for="fimport"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></label></button>
       <button title="Export/Share" @click="openModal('share'); closeNav()"><i class="fa-solid fa-share-from-square fa-xl"></i></button>
@@ -351,7 +351,7 @@ export default {
         if (confirm("Really delete "+this.sentence[index][0]+(this.sentence[index][3] ? " ("+this.sentence[index][3]+")" : "")+"?")) {
           this.sentence.splice(index,1);
           if (this.sentence.length == 0) {
-            this.sentence.push(["aal",JSON.parse(JSON.stringify(this.$refs[this.langVer].gDefault)),"normal",""]);
+            this.sentence.push([this.$refs[this.langVer].defaultWord,JSON.parse(JSON.stringify(this.$refs[this.langVer].gDefault)),"normal",""]);
           }
           if ((this.sentence.length <= this.selectedWord || index < this.selectedWord) && this.selectedWord != 0) {this.switchWord(this.selectedWord-1,true)}
           else {this.switchWord(this.selectedWord,true);}
@@ -455,7 +455,7 @@ export default {
       try {
         this.sentence = [];
         for (let wID in snt) {
-          this.sentence.push(["aal",JSON.parse(JSON.stringify(this.$refs[this.langVer].gDefault)),"normal",""]);
+          this.sentence.push([this.$refs[this.langVer].defaultWord,JSON.parse(JSON.stringify(this.$refs[this.langVer].gDefault)),"normal",""]);
           for (let gopt in snt[wID][1]) {
             if (Object.prototype.hasOwnProperty.call(this.gOptions, gopt)) {
               this.sentence[wID][1][gopt] = JSON.parse(JSON.stringify(snt[wID][1][gopt]));

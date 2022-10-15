@@ -6,8 +6,14 @@
     <!-- The following depends on which TYPE of grammar option this is: -->
 
     <!-- If it's a simple text entry: -->
-    <input v-if="json.type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." :maxlength="utdText ? '' : '6'"/>
+    <input v-if="json.type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." :maxlength="length"/>
 
+    <!-- If it's a checkbox -->
+    <div v-else-if="json.type=='checkbox'">
+      <input type="checkbox" v-model="option" @change="this.$emit('send-message',option,code)" :disabled="disabled"/>
+    </div>
+
+    <!-- V4-SPECIFIC ENTRIES -->
     <!-- If it's a list of text entries: -->
     <div v-else-if="json.type=='affix'">
       <div v-for="(affix,index) in affixes" :key="affix"> <!-- For each affix/degree pair in the array "affixes", add a textbox and two dropdowns linked to each-->
@@ -26,11 +32,7 @@
       <input type="button" value="Add" @click="affixes.push(['',1,1]); this.$emit('send-message',affixes,code)"/> <!-- Button to add another affix -->
       <input type="button" value="Remove" @click="affixes.pop(); this.$emit('send-message',affixes,code)"/> <!-- Button to remove an affix -->
     </div>
-
-    <!-- If it's a checkbox -->
-    <div v-else-if="json.type=='checkbox'">
-      <input type="checkbox" v-model="option" @change="this.$emit('send-message',option,code)" :disabled="disabled"/>
-    </div>
+    <!-- END V4-SPECIFIC ENTRIES -->
 
     <!-- Otherwise, assume it's a dropdown list: -->
     <select v-else v-model="option" @change="this.$emit('send-message',option.toString(),code)" :disabled="disabled" :id="code">
@@ -42,37 +44,39 @@
     <p v-if='json.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})'><b>ERROR:</b> Empty affixes</p> <!-- if there's an error, have text that says so -->
     <p v-else-if='json.type == "affix" && this.affixes.length == 0 && reqAff'><b>ERROR:</b> Affixes are required</p>
     <p v-else-if='json.type == "text" && this.text == ""'><b>ERROR:</b> Empty text</p>
-    <p v-else-if='(json.type == "text" && (!this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())) && !this.$props.utdText))
-                ||(json.type == "affix" && this.affixes.length != 0 && !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))'><b>ERROR:</b> Non-allowed characters</p>
+    <p v-else-if='this.$props.whitelist && ((json.type == "text" && (!this.text.split("").every((x) => this.$props.whitelist.includes(x.toLowerCase()))))
+                ||(json.type == "affix" && this.affixes.length != 0 && !this.affixes.every((y) => y[0].split("").every((x) => this.$props.whitelist.includes(x)))))'><b>ERROR:</b> Non-allowed characters</p>
     <p v-else></p> <!-- This is here so that the padding works regardless of if there's a <p> element or not -->
   </div>
 </template>
 
 <script>
-import consdata from '../consdata.json'
-
 export default {
   name: 'OptionBox',
   props: {
-    code: String,
+    code: String, // pass in the code for the box (should be the same as the ref)
     json: Object, // pass in grammardata[code] to here
-    disabled: Boolean,
-    show: Boolean,
-    reqAff: Boolean,
-    utdText: Boolean,
+    disabled: Boolean, // true to disable (grey out) the box
+    show: Boolean, // true if the box should be hidden, false or empty if not
+    length: String, // for text entry - maximum length of entry
+    whitelist: Array, // for text entry - characters to be used (if blank, then any character)
+    reqAff: Boolean, // for v4 affix entry - if affixes are required
   },
   data() {
     return {
       text: "",
       option: null,
       affixes: [],
-      cData: consdata,
     }
   },
   computed: {
     OBclass() { // set class to error if the input is the default
       return {
-        error: (this.json.type == "affix" && this.affixes.length != 0 && (!this.affixes.every(function (e) {return e[0] != ""}) || !this.affixes.every((y) => y[0].split("").every((x) => Object.keys(this.cData).includes(x))))) || (this.json.type == "text" && (this.text == "" || (!this.text.split("").every((x) => Object.keys(this.cData).includes(x.toLowerCase())) && !this.$props.utdText))) || (this.json.type == "affix" && this.affixes.length == 0 && this.reqAff),
+        error: (this.json.type == "affix" && this.affixes.length != 0 && (this.$props.whitelist && !this.affixes.every(function (e) {return e[0] != ""})
+            ||  !this.affixes.every((y) => y[0].split("").every((x) => this.$props.whitelist.includes(x)))))
+            ||  (this.json.type == "text" && (this.text == "" || (this.$props.whitelist && !this.text.split("").every((x) => this.$props.whitelist.includes(x.toLowerCase())))))
+            ||  (this.json.type == "affix" && this.affixes.length == 0 && this.reqAff),
+            // end of V4 error checks
         disabledbox: this.disabled,
         notShown: this.show
       }

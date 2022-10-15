@@ -52,6 +52,7 @@ export default {
     },
     data() {
         return {
+            defaultWord: "", // this should be whatever the default form of your "normal" word type is - whatever the algorithm generates with no option changes (ithkuil iv = "aal")
             gDefault: { // this should contain all of the grammar options' (dropdowns') default values
                 "word": "",
             },
