@@ -307,7 +307,7 @@ export default {
                 ["o","oi","uo","oe"],
                 ["ü","iu","ue","öa"],
                 ["u","ui","ua","oa"],
-                ["ae","ea","äi","öi"]
+                ["ae","ea","üo","üö"]
             ],
             ipaLookup: { // n, x, r, rr, řř, hl, hr, hm, hn (ph, th, kh, ch, čh)
                 "p":"p",
@@ -356,13 +356,14 @@ export default {
                 "hl": "ɬ", // [ɬ] or [hl]
                 "hr": "ɾ̥", // [ɾ̥] or [hɾ]
                 "hm": "m̥", // [m̥] or [hm]
-                "hn": "n̥"  // [n̥] or [hn]
+                "hn": "n̥", // [n̥] or [hn]
+                "hň": "ŋ̊"  // [ŋ̊] or [hŋ]
             },
             shortcutting: false,
             shcuttypeA: 0,
             shcuttypeB: 0,
             slotVIIshortcut: false,
-            sDip: ["ai","äi","ei","ëi","oi","öi","ui","au","eu","ëu","ou","iu"], // permissible diphthongs
+            sDip: ["ai","ei","ëi","oi","ui","au","eu","ëu","ou","iu"], // permissible diphthongs
             sAccent: {"a":"á","e":"é","i":"í","ì":"í","o":"ó","u":"ú","ä":"â","ë":"ê","ö":"ô","ü":"û"}, // how to accent vowels
             slots: ["","","","","","","","","","",""], // ithkuil word, split into slots (0-6 = I-VII, 7-8 = VIII, 9 = IX, 10 = ungeminated VI)
             cut: [false,false,false], // cut vowels - slots 2, 9, and 8a
@@ -446,7 +447,7 @@ export default {
               finalvowel = ""; // then drop the final vowel.
             }
           } else {
-            if (finalvowel == "a" && this.allowedAtEnd(ll[0]) && (this.gOptions.affScopeOf == "conc" || ("öi".length > 1 && !this.sDip.includes("öi")))) {
+            if (finalvowel == "a" && this.allowedAtEnd(ll[0]) && (this.gOptions.affScopeOf == "conc" || ("üö".length > 1 && !this.sDip.includes("üö")))) {
               // same as above, but if CA
               finalvowel = "";
             }
@@ -454,7 +455,7 @@ export default {
           if (ll[1] != "CA") {
             this.ithkword = this.sVowels[(ll[1]+9)%10][ll[2]-1]+ll[0]+finalvowel;
           } else {
-            this.ithkword = "öi"+ll[0]+finalvowel;
+            this.ithkword = "üö"+ll[0]+finalvowel;
           }
         } else {
           var out = "";
@@ -465,14 +466,14 @@ export default {
           if (lll[1] != "CA") {
             out += lll[0] + this.sVowels[(lll[1]+9)%10][lll[2]-1];
           } else {
-            out += lll[0] + "öi";
+            out += lll[0] + "üö";
           }
           out += afxjunctC[this.gOptions.initialAffScope];
           for (var k of this.gOptions.affixjunct.slice(1)) {
             if (k[1] != "CA") {
               out += this.sVowels[(k[1]+9)%10][k[2]-1];
             } else {
-              out += "öi";
+              out += "üö";
             }
             out += k[0];
           }
@@ -493,7 +494,7 @@ export default {
         }
 
       } else if (type=="register") {
-        var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","öi"],"MTH":["u","ui"],"CAR":["ü","ü"],}
+        var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","üö"],"MTH":["u","ui"],"CAR":["ü","ü"],}
         this.ithkword = "h" + ph[this.gOptions.register][this.gOptions.regStartOrEnd];
         this.gloss = this.gOptions.register + (this.gOptions.regStartOrEnd == "1" || this.gOptions.register == "CAR" ? "_END" : "");
         this.fullGloss = this.gloss;
@@ -601,7 +602,7 @@ export default {
           if (p[1] != "CA") {
             output += this.sVowels[(p[1]+9)%10][p[2]-1];
           } else {
-            output += "öi";
+            output += "üö";
           }
           output += p[0];
           this.gloss += "-'" + p[0] + "'/" + p[1] + (p[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[p[2]] : "");
@@ -639,7 +640,7 @@ export default {
           output += {"FAC":"a","SUB":"e","ASM":"i","SPC":"o","COU":"ö","HYP":"u"}[this.gOptions.mood];
           this.gloss = this.gOptions.mood;
         } else {
-          output += {"CCN":"ai","CCA":"ei","CCS":"iu","CCQ":"oi","CCP":"öi","CCV":"ui"}[this.gOptions.casc];
+          output += {"CCN":"ai","CCA":"ei","CCS":"iu","CCQ":"oi","CCP":"üö","CCV":"ui"}[this.gOptions.casc];
           this.gloss = this.gOptions.casc;
         }
         this.fullGloss = this.gloss;
@@ -795,13 +796,13 @@ export default {
             if (i[1] != "CA") {
               out += this.insertGStop(this.sVowels[(i[1]+9)%10][i[2]-1]); // if it's the last slot 5 and slot 6 has been dropped, insert a glottal stop into the vowel
             } else {
-              out += this.insertGStop("öi");
+              out += this.insertGStop("üö");
             }
           } else {
             if (i[1] != "CA") {
               out += this.sVowels[(i[1]+9)%10][i[2]-1];
             } else {
-              out += "öi";
+              out += "üö";
             }
           }
           out += i[0];
@@ -810,7 +811,7 @@ export default {
           if (i[1] != "CA") {
             out += this.sVowels[(i[1]+9)%10][i[2]-1];
           } else {
-            out += "öi";
+            out += "üö";
           }
         }
       }
@@ -831,6 +832,7 @@ export default {
       }
       if (CONF === "" && EXT === "" && PSPESS === "" && AFFIL != ""){ // if affiliation is the only one with a value AND isn't also empty
         if (AFFIL == "l") { AFFIL = "nļ" }
+        else if (AFFIL == "ř") {AFFIL = "ň"}
         else { AFFIL += "ļ" }
       } else if (AFFIL === "" && CONF === "" && EXT === "") { // if perspective + essence is the only one with a value (incl. empty)
         if (PSPESS === ""){PSPESS = "l"}
@@ -915,7 +917,7 @@ export default {
           if (i[1] != "CA") {
             out += this.sVowels[(i[1]+9)%10][i[2]-1];
           } else {
-            out += "öi";
+            out += "üö";
           }
           out += i[0];
         }
@@ -925,7 +927,7 @@ export default {
           if (l[1] != "CA") {
             out += this.sVowels[(l[1]+9)%10][l[2]-1];
           } else {
-            out += "öi";
+            out += "üö";
           }
           out += l[0];
         }
@@ -964,7 +966,7 @@ export default {
     calculateSlot8b(num="",ca="") {
       var ph = [];
       var phh = [];
-      if (this.gOptions["vn"+num] === "asp") { ph = ["w","hw","hlw","hly","hnw","hny"]; }
+      if (this.gOptions["vn"+num] === "asp") { ph = ["w","hw","hrw","hmw","hnw","hňw"]; }
       else { ph = ["h","hl","hr","hm","hn","hň"]; }
       if (this.wordType == "modular" ? ca == "casc" : (this.gOptions.rel != "UNF/K" || this.gOptions.concat != "0")) {
         phh = ["CCN","CCA","CCS","CCQ","CCP","CCV"];
@@ -1380,7 +1382,7 @@ export default {
     },
 
     markStress(stressType,thisword) {
-      var wordVowels = thisword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
+      var wordVowels = thisword.match(/(?:ai|ei|ëi|oi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
       if (stressType === 0 && wordVowels.length > 1) { // if ultimate stress (and not single-syllable word, because that's already assumed to be ultimate)
         for (let i = thisword.length-1; i >= 0; i--) {
           if (["a","e","i","o","u","ä","ë","ö","ü"].includes(thisword.charAt(i))) {
@@ -1468,7 +1470,7 @@ export default {
 
       // Step 5: Apply Slot 10 (stress) & calculate External Juncture
       // Penultimate stress is unmarked, others are marked with a diacritic; a -> á, ä -> â.
-      var wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
+      var wordVowels = this.ithkword.match(/(?:ai|ei|ëi|oi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
       var stressType = 0;
       // 5a: converting meaning to where the stress should be [0 = ult, 1 = penult, 2 = antepenult]
       if (this.gOptions.concat != '0') { // if it's a concatenated word
@@ -1490,7 +1492,7 @@ export default {
         this.slots[ph[cutVal]] = "a";
         this.cut[cutVal] = false;
         (() => {this.ithkword = this.slots.slice(0,-1).join("")})(); // recalculate ithkword because slots have updated
-        wordVowels = this.ithkword.match(/(?:ai|äi|ei|ëi|oi|öi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi); // recalculate wordVowels because ithkword has updated
+        wordVowels = this.ithkword.match(/(?:ai|ei|ëi|oi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi); // recalculate wordVowels because ithkword has updated
       }
       if (this.cut[1] && this.$props.calculateEJ) {
           // if slot 9 isn't already filled* and the first letter of the next word is a consonant and the user is okay with doing this
@@ -1698,7 +1700,7 @@ export default {
           } else if ("řř" === char+nextchar) {
             this.ipa += this.ipaPreference[char+nextchar] // again, this is the user's choice between [ʁ:] and [ʀ], which is why it also has its own else if
             skipnext = true;
-          } else if (["hl","hr","hm","hn"].includes(char+nextchar)) {
+          } else if (["hl","hr","hm","hn","hň"].includes(char+nextchar)) {
             this.ipa += this.ipaPreference[char+nextchar] // this should be the user's choice as well
             skipnext = true;
           } else if (["ph","th","kh","ch","čh"].includes(char+nextchar) && (this.ithkword.charAt(parseInt(i)+2) === "" || Object.keys(this.sAccent).includes(this.ithkword.charAt(parseInt(i)+2)) || Object.values(this.sAccent).includes(this.ithkword.charAt(parseInt(i)+2)))) {
@@ -1780,11 +1782,13 @@ export default {
                 this.ipaPreference["hr"] = "ɾ̥";
                 this.ipaPreference["hm"] = "m̥";
                 this.ipaPreference["hn"] = "n̥";
+                this.ipaPreference["hň"] = "ŋ̊";
             } else {
                 this.ipaPreference["hl"] = "hl";
                 this.ipaPreference["hr"] = "hɾ";
                 this.ipaPreference["hm"] = "hm";
                 this.ipaPreference["hn"] = "hn";
+                this.ipaPreference["hň"] = "hŋ";
             }
             }
         }
