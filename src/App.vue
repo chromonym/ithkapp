@@ -140,8 +140,7 @@
       <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='cascOrMood && wordType!="mcs"' :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
       <OptionBox :class="{hidden: wordType == 'mcs'}" :show="cascOrMood" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
       <OptionBox :class="{hidden: wordType == 'suppletive' || wordType == 'mcs'}" :show="!cascOrMood" :json="gData.ill" code="ill" @send-message="handleSendMessage" ref="ill" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType == 'suppletive' || wordType == 'mcs'}" :show="!cascOrMood" :json="gData.exp" code="exp" @send-message="handleSendMessage" ref="exp" @modal="openModal"/>
-      <OptionBox :class="{hidden: wordType == 'suppletive' || wordType == 'mcs'}" :show="!cascOrMood" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill == "PFM"' ref="vld" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive' || wordType == 'mcs'}" :show="!cascOrMood" :json="gData.vld" code="vld" @send-message="handleSendMessage" :disabled='this.gOptions.ill != "ASR"' ref="vld" @modal="openModal"/>
     </div>
 
     <!-- AFFIXUAL ADJUNCT -->
@@ -343,7 +342,6 @@ export default {
         "rel": "UNF/C",
         "c":"THM",
         "ill":"ASR",
-        "exp":"COG",
         "vld":"OBS",
         // SUPPLETIVE ADJUNCT OPTION
         "suppType": "hl",
@@ -490,9 +488,9 @@ export default {
       casePopupEnd: "PLM",
       casePopupTitle: "Allcases",
       cascOrMood: false, // false if case scope, true if mood.
-      tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
-      SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
-      REFtabGroups: [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","exp","vld"]],
+      tabGroups: [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","vld"]],
+      SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","vld"]],
+      REFtabGroups: [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","vld"]],
       sentenceOpen: false,
       sentence: [], // things in this are of the form [word, grammarOptions, description]
       selectedWord: 0,
@@ -1207,7 +1205,7 @@ export default {
       }
     },
     calculateSlot9(num="") {
-      //"rel","c","ill","exp","vld"
+      //"rel","c","ill","vld"
       var ph = [["THM","INS","ABS","AFF","STM","EFF","ERG","DAT","IND"],
                 ["POS","PRP","GEN","ATT","PDC","ITP","OGN","IDP","PAR"],
                 ["APL","PUR","TRA","DFR","CRS","TSP","CMM","CMP","CSD"],
@@ -1216,9 +1214,8 @@ export default {
                  ["ACT","ASI","ESS","TRM","SEL","CFM","DEP","n/a","VOC"],
                  ["LOC","ATD","ALL","ABL","ORI","IRL","INV","n/a","NAV"],
                  ["CNR","ASS","PER","PRO","PCV","PCR","ELP","n/a","PLM"]];
-      var pph = ["OBS","REC","PUP","RPR","n/a","IMA","CVN","ITU","INF"];
-      var pphh = ["COG","RSP","EXE"];
-      var pphnum = 0;
+      var pph = ["OBS","REC","PUP","RPR","USP","IMA","CVN","ITU","INF"];
+      var pphh = ["DIR","DEC","IRG","VRF","n/a","ADM","POT","HOR","CNJ"];
       var cfound = false;
       if (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != '0' || ["suppletive","ref"].includes(this.wordType)) {
         for (var i in ph) {
@@ -1235,12 +1232,12 @@ export default {
           }
         }
       } else {
-        if (this.gOptions.ill == "PFM") {
-          pphnum = 4;
+        // if the word is a verb
+        if (this.gOptions.ill == "ASR") {
+          this.slots[9] = this.sVowels[pph.indexOf(this.gOptions.vld)][0]
         } else {
-          pphnum = pph.indexOf(this.gOptions.vld);
+          this.slots[9] = this.sVowels[pphh.indexOf(this.gOptions.ill)][1];
         }
-        this.slots[9] = this.sVowels[pphnum][pphh.indexOf(this.gOptions.exp)];
       }
     },
     shortcutCalcs() {
@@ -1872,10 +1869,9 @@ export default {
       if (this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") {
         //IEV
         var s9c = [];
-        this.fullGloss += "-"+this.gOptions.ill+"."+this.gOptions.exp;
+        this.fullGloss += "-"+this.gOptions.ill;
         if (this.gOptions.ill === "ASR") {this.fullGloss+="."+this.gOptions.vld}
         if (this.gOptions.ill !== "ASR") {s9c.push(this.gOptions.ill)}
-        if (this.gOptions.exp !== "COG") {s9c.push(this.gOptions.exp)}
         if (this.gOptions.ill === "ASR") {s9c.push(this.gOptions.vld)}
         if (s9c.length > 0) {this.gloss += "-" + s9c.join(".")}
       } else {

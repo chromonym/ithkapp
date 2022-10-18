@@ -736,7 +736,7 @@
                 "desc":"The HYPOTHETICAL mood indicates that the factuality of the underlying presupposition is false or unreal and that the factuality of the statement itself is uncertain. It thus corresponds to the English construction of auxiliary ‘might have’ in its use to show possible counterfactuality (i.e., what might have been if a false presupposition had been true).<br/><b>UNKNOWABLE / FALSE</b>"
             }
         },
-        "popupdesc":"Mood refers to the knowability and truthfulness of a statement, and describes both the truth of the actual statement and any underlying presuppositions.<br/>Alongside Illocution, Expectation and Validation, it refers to the whole statement.<br/><b>FULL STATEMENT / PRESUPPOSITIONS</b>"
+        "popupdesc":"Mood refers to the knowability and truthfulness of a statement, and describes both the truth of the actual statement and any underlying presuppositions.<br/>Alongside Illocution and Validation, it refers to the whole statement.<br/><b>FULL STATEMENT / PRESUPPOSITIONS</b>"
     },
     
     "casc": {
@@ -1057,34 +1057,42 @@
         "options": {
             "ASR":{
                 "name":"Assertive",
-                "desc":"Statement is an assertion/proposition about the world which constitutes a truth claim"
+                "desc":"The statement is an assertion/proposition about the world which constitutes a truth claim"
             },
-            "PFM":{
-                "name":"Performative",
-                "desc":"Statement is other than a truth claim; e.g., a declaration, a command, question, or a “commissive” (i.e., promise, vow, oath, guarantee)"
+            "DIR":{
+                "name":"Directive",
+                "desc":"The statement is either an imperative command to another party to do/be something, or a \"commissive\" statement committing the speaker to a specific state or course of action (i.e., a vow, promise, guarantee, etc.)"
+            },
+            "DEC":{
+                "name":"Declarative",
+                "desc":"A \"performative\" statement which, by its utterance/publication, creates a change of state (at least psychologically) for the addressees (i.e. a declaration, announcement, edict, etc.)"
+            },
+            "IRG":{
+                "name":"Interrogative",
+                "desc":"A statement whose purpose is to inquire or seek information from the addressee (i.e., equivalent to an English WH-question)"
+            },
+            "VRF":{
+                "name":"Verificative",
+                "desc":"A statement whose purpose is to seek/obtain corroboration, confirmation, or verification (i.e., equivalent to a Yes/No question)"
+            },
+            "ADM":{
+                "name":"Admonitive",
+                "desc":"A statement whose purpose is to provide advisory/admonitive information to the addressee (i.e., a warning)"
+            },
+            "POT":{
+                "name":"Potentiative",
+                "desc":"A statement of wishing, hoping, or other unreal(ized) provenance"
+            },
+            "HOR":{
+                "name":"Hortative",
+                "desc":"A counterfactual statement indicating a desired but impossible state of affairs that cannot be realized (equivalent to English hortative constructions such as <i>If only...</i>, <i>Were that...</i>, <i>If only it were so that...</i>"
+            },
+            "CNJ":{
+                "name":"Conjectural",
+                "desc":"Equivalent to an English-language \"if\"-clause, indicating that the statement is offered as a conjectured hypothetical, ostensibly to be followed by a \"then...\" implicational clause. Translatable as \"If (it were the case that)...\""
             }
         },
-        "popupdesc":"Illocution simply determines whether something is a truth claim or not.<br/>Alongside Mood, Expectation and Validation, it refers to the whole statement."
-    },
-
-    "exp": {
-        "type":"",
-        "title":"Expectation",
-        "options": {
-            "COG":{
-                "name":"Cognitive",
-                "desc":"Addressee expected to listen and consider the statement"
-            },
-            "RSP":{
-                "name":"Responsive",
-                "desc":"Addressee expected to verbally respond to the statement, whether as acknowledgment, agreement, or with a counter-statement"
-            },
-            "EXE":{
-                "name":"Executive",
-                "desc":"Addressee expected to physically (re-)act in response to the statement"
-            }
-        },
-        "popupdesc":"Expectation is the expected response from the addressee in regards to the statement.<br/>Alongside Mood, Illocution and Validation, it refers to the whole statement."
+        "popupdesc":"Illocution refers to the type of \"speech act\" made by the speaker, i.e. the purpose and intended interpretation of the statement.<br/>Alongside Mood and Validation, it refers to the whole statement."
     },
 
     "vld": {
@@ -1107,6 +1115,10 @@
                 "name":"Reportive",
                 "desc":"The statement is true because of knowledge from a 3rd party: “I heard (from someone)... / someone has said...”"
             },
+            "USP":{
+                "name": "Unspecified",
+                "desc": "[Validation deliberately left unspecified]"
+            },
             "IMA":{
                 "name":"Imaginary",
                 "desc":"The statement is <b>NOT</b> true because it is: an unreal statement, not intended as true, based on whim, imagination, dream, altered mental state, etc."
@@ -1124,7 +1136,7 @@
                 "desc":"The statement is true because of inference from evidence (or absence of alternatives), induction, extrapolation, etc. “I infer... / I reason...”"
             }
         },
-        "popupdesc":"Validation <b>only applies when the Illocution is Assertive</b>.<br/>It refers to the evidential basis for a statement (i.e. why it's true).<br/>Alongside Mood, Illocution and Validation, it refers to the whole statement."
+        "popupdesc":"Validation <b>only applies when the Illocution is Assertive</b>.<br/>It refers to the evidential basis for a statement (i.e. why it's true).<br/>Alongside Mood and Illocution, it refers to the whole statement."
     },
 
 
@@ -1317,7 +1329,6 @@
                 "desc": ""
             },
             "VSub": {
-                "name": "First of Slot V",
                 "desc": ""
             },
             "VIIDom": {
