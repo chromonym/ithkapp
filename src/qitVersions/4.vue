@@ -492,7 +492,7 @@ export default {
         }
 
       } else if (type=="register") {
-        var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","üö"],"MTH":["u","ui"],"CAR":["ü","ü"],}
+        var ph = {"DSV":["a","ai"],"PNT":["e","ei"],"SPF":["i","iu"],"EXM":["o","oi"],"CGT":["ö","üo"],"MTH":["u","ui"],"CAR":["ü","ü"],}
         this.ithkword = "h" + ph[this.gOptions.register][this.gOptions.regStartOrEnd];
         this.gloss = this.gOptions.register + (this.gOptions.regStartOrEnd == "1" || this.gOptions.register == "CAR" ? "_END" : "");
         this.fullGloss = this.gloss;
