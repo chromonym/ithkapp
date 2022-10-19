@@ -83,8 +83,9 @@ export default {
     },
   },
   mounted() {
-    if (this.$props.type != "affix" && this.$props.type != "text"){
-      document.getElementById(this.$props.code).selectedIndex = 0;
+    if (this.$props.json.type == ""){
+      this.option = Object.keys(this.$props.json.options)[0];
+      //document.getElementById(this.$props.code).selectedIndex = 0;
     }
   },
   methods: {
@@ -113,7 +114,7 @@ export default {
         console.log("Recieved",toUpdate,"in",this.$props.code);
         if (Object.keys(this.$props.json.options).includes(toUpdate)) {
           this.option = toUpdate;
-          document.getElementById(this.$props.code).selectedIndex = Object.keys(this.$props.json.options).findIndex(x => x === toUpdate);
+          document.getElementById(this.$props.code).selectedIndex = Object.keys(this.$props.json.options).indexOf(toUpdate);
           this.$emit('send-message',this.option.toString(),this.$props.code);
         }
       }

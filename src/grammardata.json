@@ -155,18 +155,18 @@
         "options": [
             {
                 "name":"None",
-                "desc":"NOTE FOR PEOPLE READING THIS .JSON FILE: these descriptions aren't shown because for some reason the shortcutting doesn't work when changed from inside the popup, and so currently I have disabled the options in the popup (which is where these descriptions would show)."
+                "desc":"Do not apply any shortcuts (other than Slot II affix shortcuts)"
             },
             {
                 "name":"Yes, if possible",
-                "desc":"N/A"
+                "desc":"Apply Slot IV and VI shortcuts if possible"
             },
             {
                 "name":"Absolutely None",
-                "desc":"N/A"
+                "desc":"Do not apply ANY shortcuts whatsoever, do not drop any letters, and show the full gloss instead of the regular"
             }
         ],
-        "popupdesc":"This does not affect the definition of the word, it's simply a way of potentially making it shorter if the other option choices allow.<br/><br/>The <b>Absolutely None</b> option also disables the dropping of default-value slots and will make sure that the word is at its maximum length."
+        "popupdesc":"Shortcutting doesn't change the definition of a word, it instead uses Slots I and II to indicate the contents of Slots IV and VI and potentially make the word shorter."
     },
     
     "Vafx": {

@@ -104,14 +104,14 @@
           </div>
           <div v-if="['c','c1','c2'].includes(modalID)">
             <div v-for="option in Object.keys(modalContent.options).slice(Object.keys(modalContent.options).indexOf(this.casePopupStart),Object.keys(modalContent.options).indexOf(this.casePopupEnd)+1)" v-bind:key="modalContent.options[option]">
-              <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}">
+              <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: this.$refs[langVer].gOptions[modalID] == option}">
                 <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2","3","4","5","6","7","8","9"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
                 <p v-html="modalContent.options[option].desc"></p>
               </div>
             </div>
           </div>
-          <div v-else-if="modalID != 'shcut'" v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
-            <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: gOptions[modalID] == option}" :style="modalContent.options[option].image ? 'min-height:170px;' : ''">
+          <div v-else v-for="option in Object.keys(modalContent.options)" v-bind:key="modalContent.options[option]">
+            <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: this.$refs[langVer].gOptions[modalID] == option}" :style="modalContent.options[option].image ? 'min-height:170px;' : ''">
               <img v-if="modalContent.options[option].image" :src="modalContent.options[option].image" :alt="modalContent.options[option].name" style="float: right; height:150px; padding-top: 10px; padding-left: 10px; padding-bottom: 10px;"/>
               <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2","3","4","5","6","7","8","9"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
               <p v-html="modalContent.options[option].desc"></p>
@@ -264,7 +264,7 @@ export default {
             document.getElementById(id).classList.add("hidden");
           }
         } catch {
-          console.log("uh");
+          //console.log("");
         }
       }
     },
