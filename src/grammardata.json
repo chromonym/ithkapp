@@ -82,7 +82,7 @@
                 "desc":"The <b>Completive</b> describes acts, conditions, or events which achieve, or are intended to achieve, an anticipated outcome, i.e., which are oriented toward the achievement of some purpose, outcome, or final state. Such a distinction is usually handled by word choice in Western languages.<br/><i>hunt → to hunt down<br/>to be losing → to lose<br/>to study → to learn<br/>to be winning → to win<br/>to strive for → to accomplish, achieve</i>"
             }
         },
-        "popupdesc":"Version describes if a given word is goal-oriented or not in its outcome. Ithkuil III had six, but TNIL has only two."
+        "popupdesc":"Version describes if a given word is goal-oriented or not in its outcome. Ithkuil III had six, but New Ithkuil has only two."
     },
 
     "ctxt": {
@@ -857,7 +857,7 @@
             },
             "TRA":{
                 "name":"Transmissive",
-                "desc":"Renamed from the <span style='font-variant:small-caps'>Benefactive</span> in Ithkuil 2011, this case indicates the party for which/whom an entity/act/event occurs or is transmitted, with the intention that the entity/act/event be beneficial/detrimental to the named party.<br/>'for (the benefit/detriment of) X'"
+                "desc":"Renamed from the <span style='font-variant:small-caps'>Benefactive</span> in Ithkuil III, this case indicates the party for which/whom an entity/act/event occurs or is transmitted, with the intention that the entity/act/event be beneficial/detrimental to the named party.<br/>'for (the benefit/detriment of) X'"
             },
             "DFR":{
                 "name":"Deferential",
@@ -937,7 +937,7 @@
             },
             "COM":{
                 "name":"Comitative",
-                "desc":"Identifies a formative that accompanies another, translatable as '(along) with'. When used with <span style='font-variant:small-caps'>Parallel</span> or <span style='font-variant:small-caps'>Complementary</span> valence, signifies that the formative is being used in the same (or a complementary) way or is undergoing the same (or a complementary) activity as the other formative it is associated with<br/>(i.e., the meaning of the <span style='font-variant:small-caps'>Conjunctive</span> case in Ithkuil 2011)."
+                "desc":"Identifies a formative that accompanies another, translatable as '(along) with'. When used with <span style='font-variant:small-caps'>Parallel</span> or <span style='font-variant:small-caps'>Complementary</span> valence, signifies that the formative is being used in the same (or a complementary) way or is undergoing the same (or a complementary) activity as the other formative it is associated with<br/>(i.e., the meaning of the <span style='font-variant:small-caps'>Conjunctive</span> case in Ithkuil III)."
             },
             "UTL":{
                 "name":"Utilitative",
@@ -1048,7 +1048,7 @@
                 "desc":"Signifies the spatio-temporal boundary point of a span of time or space during which or within which something is expected to or must occur or be situated.<br/>Equivalent to English phrases: by the end of X / within the period ending in X / within the period ending with X / before X is over / before X is up / inside of (the period signified by) X"
             }
         },
-        "popupdesc":"Cases are the role of the word in a sentence, and TNIL has 68.<br/>They are split into seven categories;<br/><b>Transrelative</b>, which are similar to cases in natural languages,<br/><b>Appositive</b>, which is to do with possession-esque relations,<br/><b>Associative</b>, which is similar but more related to reasons and motives,<br/><b>Adverbial</b>, which (fairly obviously) is for adverb-like words,<br/><b>Relational</b>,<br/><b>Affinitive</b>, and<br/><b>Spatio-Temporal</b>, which are for words describing the space or time of the sentence."
+        "popupdesc":"Cases are the role of the word in a sentence, and New Ithkuil has 68.<br/>They are split into seven categories;<br/><b>Transrelative</b>, which are similar to cases in natural languages,<br/><b>Appositive</b>, which is to do with possession-esque relations,<br/><b>Associative</b>, which is similar but more related to reasons and motives,<br/><b>Adverbial</b>, which (fairly obviously) is for adverb-like words,<br/><b>Relational</b>,<br/><b>Affinitive</b>, and<br/><b>Spatio-Temporal</b>, which are for words describing the space or time of the sentence."
     },
 
     "ill": {
