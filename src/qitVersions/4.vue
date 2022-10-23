@@ -434,6 +434,7 @@ export default {
               "ł":"ļ",
               "ḷ":"ļ", // these are also different
               "ż":"ẓ",
+              "ı":"i",
             },
         }
     },
