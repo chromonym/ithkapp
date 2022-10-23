@@ -8,7 +8,7 @@
     <br/>Click on a box's title to learn more about what it means.</p>
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','mcs','bias','free'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
       <!-- used only for affix-root adjuncts -->
-      <OptionBox :json="gData.affRoot" :class="{hidden: wordType != 'affRoot'}" code="affRoot" @send-message="handleSendMessage" ref="affRoot" @modal="openModal" length="6" :whitelist="Object.keys(this.cData)"/>
+      <OptionBox :json="gData.affRoot" :class="{hidden: wordType != 'affRoot'}" code="affRoot" @send-message="handleSendMessage" ref="affRoot" @modal="openModal" length="6" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/>
       <OptionBox :json="gData.arDegree" :class="{hidden: wordType != 'affRoot'}" code="arDegree" @send-message="handleSendMessage" ref="arDegree" @modal="openModal"/>
       <!-- used only for referential-related adjuncts -->
       <OptionBox :json="gData.ref" :class="{hidden: !['refRoot','ref','refCS'].includes(wordType)}" code="ref" @send-message="handleSendMessage" ref="ref" @modal="openModal"/>
@@ -16,7 +16,7 @@
       <OptionBox :json="gData.refPersp" :class="{hidden: !['refRoot','ref','refCS'].includes(wordType)}" code="refPersp" @send-message="handleSendMessage" ref="refPersp" @modal="openModal"/>
       <OptionBox :json="gData.c" :class="{hidden: wordType != 'ref' && wordType != 'refCS'}" code="c1" @send-message="handleSendMessage" ref="c1" @modal="openModal" />
       <!-- used in normal words and some others -->
-      <OptionBox :json="gData.root" :class="{hidden: ['affRoot','refRoot','ref','refCS'].includes(wordType)}" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal" length="6" :whitelist="Object.keys(this.cData)"/> <!-- @modal="openModal", ref="code" for each of these -->
+      <OptionBox :json="gData.root" :class="{hidden: ['affRoot','refRoot','ref','refCS'].includes(wordType)}" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal" length="6" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/> <!-- @modal="openModal", ref="code" for each of these -->
       <OptionBox :json="gData.stem" :class="{hidden: ['affRoot','refRoot','ref','refCS'].includes(wordType)}" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
       <OptionBox :json="gData.spec" :class="{hidden: wordType == 'ref'}" code="spec" @send-message="handleSendMessage" ref="spec" @modal="openModal"/>
       <OptionBox :json="gData.func" :class="{hidden: wordType == 'ref' || wordType == 'refCS'}" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
@@ -26,8 +26,8 @@
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
       <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != '0'"/>
-      <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal" :whitelist="Object.keys(this.cData)"/>
-      <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal" :whitelist="Object.keys(this.cData)"/>
+      <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/>
+      <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/>
     </div>
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs','bias','free'].includes(wordType)}"> <!-- Section 3: Configuration -->
       <h2 style="width:100%;">Configuration</h2>
@@ -112,7 +112,7 @@
 
     <!-- AFFIXUAL ADJUNCT -->
     <div class="section" :class="{hidden: wordType != 'affixjunct'}">
-      <OptionBox :json="gData.affixjunct" code="affixjunct" @send-message="handleSendMessage" ref="affixjunct" @modal="openModal" :reqAff="true" :whitelist="Object.keys(this.cData)"/>
+      <OptionBox :json="gData.affixjunct" code="affixjunct" @send-message="handleSendMessage" ref="affixjunct" @modal="openModal" :reqAff="true" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/>
       <OptionBox :json="gData.initialAffScope" code="initialAffScope" @send-message="handleSendMessage" ref="initialAffScope" @modal="openModal"/>
       <OptionBox :json="gData.otherAffScope" code="otherAffScope" @send-message="handleSendMessage" ref="otherAffScope" @modal="openModal" :disabled='this.gOptions.affixjunct.length < 2'/>
       <OptionBox :json="gData.affScopeOf" code="affScopeOf" @send-message="handleSendMessage" ref="affScopeOf" @modal="openModal"/>
@@ -124,7 +124,7 @@
     </div>
     <!-- REFERENTIAL ADJUNCTS -->
     <div class="section" :class="{hidden: wordType != 'ref' && wordType != 'refCS'}">
-      <OptionBox :json="gData.refAffix" :class="{hidden: wordType != 'refCS'}" code="refAffix" @send-message="handleSendMessage" ref="refAffix" @modal="openModal" :whitelist="Object.keys(this.cData)"/>
+      <OptionBox :json="gData.refAffix" :class="{hidden: wordType != 'refCS'}" code="refAffix" @send-message="handleSendMessage" ref="refAffix" @modal="openModal" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/>
       <OptionBox :json="gData.twoCs" code="twoCs" @send-message="handleSendMessage" ref="twoCs" @modal="openModal"/>
       <OptionBox :json="gData.twoRefs" :class="{hidden: wordType == 'refCS'}" code="twoRefs" @send-message="handleSendMessage" ref="twoRefs" @modal="openModal" :disabled="!this.gOptions.twoCs"/>
       <OptionBox :json="gData.ref" code="ref2" :class="{hidden: wordType == 'refCS'}" @send-message="handleSendMessage" ref="ref2" @modal="openModal" :disabled="!this.gOptions.twoRefs || !this.gOptions.twoCs"/>
@@ -370,6 +370,63 @@ export default {
             fullGloss: "", // full version of above
             ipa: "", // IPA transcription
             cascOrMood: false, // false if case scope, true if mood.
+            allographs: {
+              "cczz":"čč",
+              "yc":"čč",
+              "xxy":"çç",
+              "ccs":"çç",
+              "ddt":"ḑḑ",
+              "hxll":"ļļ",
+              "wwnn":"ňň",
+              "yn":"ňň",
+              "wrr":"řř",
+              "yr":"řř",
+              "ssz":"šš",
+              "tts":"ţţ",
+              "ttd":"ţţ",
+              "wtt":"ţţ",
+              "zzs":"žž",
+              "ddz":"ẓẓ",
+              "dzz":"ẓẓ",
+              "cz":"č",
+              "xy":"ç",
+              "cs":"ç",
+              "dt":"ḑ",
+              "hxl":"ļ",
+              "wn":"ň",
+              "wr":"ř",
+              "sz":"š",
+              "ts":"ţ",
+              "td":"ţ",
+              "wt":"ţ",
+              "zs":"ž",
+              "dz":"ẓ",
+              "aaq":"â",
+              "ooq":"ô",
+              "eeq":"ê",
+              "uuq":"û",
+              "aq":"ä",
+              "eq":"ë",
+              "uq":"ü",
+              "oq":"ö",
+              "qq":"'",
+              "aa":"á",
+              "ee":"é",
+              "ii":"í",
+              "oo":"ó",
+              "uu":"ú",
+              "ṭ":"ţ",
+              "ŧ":"ţ",
+              "ḍ":"ḑ", // yes these are different characters
+              "đ":"ḑ",
+              "ņ":"ň",
+              "ṇ":"ň",
+              "ŗ":"ř",
+              "ṛ":"ř",
+              "ł":"ļ",
+              "ḷ":"ļ", // these are also different
+              "ż":"ẓ",
+            },
         }
     },
     methods: {
@@ -377,7 +434,22 @@ export default {
             await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
             this.cut = [false,false,false]; // reset this.cut
             })();
-            (()=>{this.gOptions[code] = value})();
+            //(()=>{
+              var outval = JSON.parse(JSON.stringify(value));
+              if (this.gData[code].type == "text") {
+                for (let key in this.allographs) { 
+                  outval = outval.replaceAll(key,this.allographs[key]);
+                }
+              } else if (this.gData[code].type == "affix") {
+                for (let afx in outval) {
+                  for (let key in this.allographs)
+                  outval[afx][0] = outval[afx][0].replaceAll(key,this.allographs[key]);
+                }
+              } else {
+                outval = value;
+              }
+              this.gOptions[code] = outval;
+            //})();
             if (this.wordType == 'normal' || this.wordType == 'affRoot' || this.wordType == 'refRoot'){
                 //if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
                 this.calculateWord();
@@ -1412,7 +1484,7 @@ export default {
     },
 
     recalcVowels(word) { // replace series 3 vowel forms if necessary
-      return word.replace("yia","yuä").replace("yie","yuë").replace("yio","yüä").replace("yiö","yüë").replace("wuö","wöë").replace("wuo","wöä").replace("wue","wië").replace("wua","wiä");
+      return word.replaceAll("yia","yuä").replaceAll("yie","yuë").replaceAll("yio","yüä").replaceAll("yiö","yüë").replaceAll("wuö","wöë").replaceAll("wuo","wöä").replaceAll("wue","wië").replaceAll("wua","wiä");
     },
 
     finalCalcs() {
