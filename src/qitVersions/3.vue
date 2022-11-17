@@ -53,6 +53,14 @@ export default {
     data() {
         return {
             defaultWord: "", // this should be whatever the default form of your "normal" word type is - whatever the algorithm generates with no option changes (ithkuil iv = "aal")
+            settings: { // Settings - fill in with whatever you want the user to be able to change, with the following format:
+                "Category A": { // Category title
+                    "s1": ["Setting 1: ","defaultval",["defaultval","Fancy New Value"]] // dropdowns - "code": ["Visual Name","default value",[options]]
+                },
+                "Category B": {
+                    "s2": ["Setting 2: ",false] // check boxes - "code": ["Visual Name:",true/false]
+                }
+            },
             gDefault: { // this should contain all of the grammar options' (dropdowns') default values
                 "word": "",
             },
@@ -68,10 +76,14 @@ export default {
         }
     },
     methods: {
-        async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
-            this.gOptions[code] = value
+        async handleSendMessage(value="",code="") { // what happens when an <OptionBox> updates its value
+            if (code) {
+                this.gOptions[code] = value
+                // DO ANY FANCY VALUE UPDATING HERE (if necessary)
+            }
             // RUN RECALCULATIONS HERE
             this.ithkword = this.gOptions.word;
+            if (this.settings["Category B"].s2[1]) {this.ithkword += "AAAA"}
             this.ipa = this.gOptions.word;
             this.gloss = this.gOptions.word;
             this.fullGloss = this.gOptions.word;
@@ -95,12 +107,7 @@ export default {
     },
     beforeMount() {
         this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
-        // ALSO RUN YOUR RECALCULATIONS HERE
-        this.ithkword = this.gOptions.word;
-        this.ipa = this.gOptions.word;
-        this.gloss = this.gOptions.word;
-        this.fullGloss = this.gOptions.word;
-        // above is a placeholder recalculation
+        this.handleSendMessage();
     },
 }
 </script>

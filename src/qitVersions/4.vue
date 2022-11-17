@@ -1,4 +1,5 @@
 <template>
+  <!-- I am very sorry in advance if this code is somewhat unreadable - XXOs -->
     <div>
     <!--<button @click="notAvailableAlert(ithkword)">Read word (for testing)</button>-->
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
@@ -158,7 +159,9 @@ export default {
         listenModal: Array, // listener for updateModal - is an array of [reference,value]
         listenWordtype: String, // listener for switchWordType - is the word type
         listenWord: Object, // listener for handleSendMessage - is gOptions
-        calculateEJ: Boolean,
+        selectedWord: Number,
+        sLength: Number,
+        nextWord: Array,
     },
     watch: {
         // listen for variables
@@ -193,6 +196,24 @@ export default {
     data() {
         return {
             defaultWord: "aal",
+            settings: {
+              "IPA": {
+                "a": ["Pronunciation of ⟨a⟩: ","[a]",["[a]","[ɑ]"]],
+                "e": ["Pronunciation of ⟨e⟩: ","[ɛ]",["[ɛ]","[e]"]],
+                "ë": ["Pronunciation of ⟨ë⟩: ","[ɤ]",["[ɤ]","[ʌ]","[ə]"]],
+                "i": ["Pronunciation of ⟨i⟩: ","[i]",["[i]","[ɪ]"]],
+                "o": ["Pronunciation of ⟨o⟩: ","[ɔ]",["[ɔ]","[o]"]],
+                "ö": ["Pronunciation of ⟨ö⟩: ","[œ]",["[œ]","[ø]"]],
+                "u": ["Pronunciation of ⟨u⟩: ","[ʊ]",["[ʊ]","[u]"]],
+                "ü": ["Pronunciation of ⟨ü⟩: ","[ʉ]",["[ʉ]","[y]"]],
+                "x": ["Pronunciation of ⟨x⟩: ","[x]",["[x]","[χ]"]],
+                "rr": ["Pronunciation of ⟨řř⟩: ","[ʁː]",["[ʁː]","[ʀ]"]],
+                "hx": ["Pronunciation of ⟨hl⟩, ⟨hr⟩, ⟨hm⟩, ⟨hn⟩, ⟨hň⟩: ","Devoiced",["Devoiced","As written"]],
+              },
+              "Miscellaneous": {
+                "ej": ["Calculate External Juncture? ",true]
+              }
+            },
             wordType: "normal",
             gData: grammardata,
             cData: consdata,
@@ -338,25 +359,6 @@ export default {
                 "l":"l",
                 // everything else has a reliance on the surrounding letters
             },
-            ipaPreference: { // because with most vowels the user will eventually be able to choose which pronunciation they want
-                "a": "a", // [a] or [ɑ]
-                "ä": "æ", // only [æ]
-                "e": "ɛ", // [ɛ] or [e]
-                "ë": "ɤ", // [ɤ] or [ʌ] or [ə]
-                "i": "i", // [i] or [ɪ]
-                "ì":"iː", // only [iː]
-                "o": "ɔ", // [ɔ] or [o]
-                "ö": "œ", // [œ] or [ø]
-                "u": "ʊ", // [ʊ] or [u]
-                "ü": "ʉ", // [ʉ] or [y]
-                "x": "x", // [x] or [χ]
-                "řř": "ʁː", // [ʁː] and [ʀ]
-                "hl": "ɬ", // [ɬ] or [hl]
-                "hr": "ɾ̥", // [ɾ̥] or [hɾ]
-                "hm": "m̥", // [m̥] or [hm]
-                "hn": "n̥", // [n̥] or [hn]
-                "hň": "ŋ̊"  // [ŋ̊] or [hŋ]
-            },
             shortcutting: false,
             shcuttypeA: 0,
             shcuttypeB: 0,
@@ -439,26 +441,28 @@ export default {
         }
     },
     methods: {
-        async handleSendMessage(value,code) { // what happens when an <OptionBox> updates its value
-            await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
+        async handleSendMessage(value="",code="") { // what happens when an <OptionBox> updates its value
             this.cut = [false,false,false]; // reset this.cut
-            })();
-            //(()=>{
-              var outval = JSON.parse(JSON.stringify(value));
-              if (this.gData[code].type == "text") {
-                for (let key in this.allographs) { 
-                  outval = outval.replaceAll(key,this.allographs[key]);
+            if (code) {
+              await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
+              })();
+              //(()=>{
+                var outval = JSON.parse(JSON.stringify(value));
+                if (this.gData[code].type == "text") {
+                  for (let key in this.allographs) { 
+                    outval = outval.replaceAll(key,this.allographs[key]);
+                  }
+                } else if (this.gData[code].type == "affix") {
+                  for (let afx in outval) {
+                    for (let key in this.allographs)
+                    outval[afx][0] = outval[afx][0].replaceAll(key,this.allographs[key]);
+                  }
+                } else {
+                  outval = value;
                 }
-              } else if (this.gData[code].type == "affix") {
-                for (let afx in outval) {
-                  for (let key in this.allographs)
-                  outval[afx][0] = outval[afx][0].replaceAll(key,this.allographs[key]);
-                }
-              } else {
-                outval = value;
-              }
-              this.gOptions[code] = outval;
-            //})();
+                this.gOptions[code] = outval;
+              //})();
+            }
             if (this.wordType == 'normal' || this.wordType == 'affRoot' || this.wordType == 'refRoot'){
                 //if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
                 this.calculateWord();
@@ -650,7 +654,7 @@ export default {
             this.fullGloss += "-" + glb[1];
           }
         }
-        if (!["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(output.charAt(output.length - 1)) && this.$props.calculateEJ) {
+        if (!["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(output.charAt(output.length - 1)) && this.calculateEJ) {
             output += "ë"; // checking for external juncture violation
         }
         output = this.recalcVowels(output);
@@ -700,7 +704,7 @@ export default {
             output += "a";
           }
         }
-        if (!["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(output.charAt(output.length - 1)) && this.$props.calculateEJ) {
+        if (!["a","á","ä","â","e","ë","é","ê","i","í","o","ö","ó","ô","u","ü","ú","û"].includes(output.charAt(output.length - 1)) && this.calculateEJ) {
             output += "a"; // checking for external juncture violation
         }
         output = this.recalcVowels(output);
@@ -1572,7 +1576,7 @@ export default {
         (() => {this.ithkword = this.slots.slice(0,-1).join("")})(); // recalculate ithkword because slots have updated
         wordVowels = this.ithkword.match(/(?:ai|ei|ëi|oi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi); // recalculate wordVowels because ithkword has updated
       }
-      if (this.cut[1] && this.$props.calculateEJ) {
+      if (this.cut[1] && this.calculateEJ) {
           // if slot 9 isn't already filled* and the first letter of the next word is a consonant and the user is okay with doing this
           // (*not strictly necessary to check for but better safe than sorry)
           this.ithkword += "a";
@@ -1766,7 +1770,7 @@ export default {
             if (!(Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar))) {this.ipa += "ɹ"}
             else {this.ipa += "ɾ"}
           } else if (char === "x") {
-            this.ipa += this.ipaPreference[char]; // this should be the user's choice between [x] and [χ], which is why it has its own else if
+            this.ipa += this.settings["IPA"][char][1].slice(1, -1); // this should be the user's choice between [x] and [χ], which is why it has its own else if
             if (char == nextchar) {
               this.ipa += "ː"
               skipnext = true;
@@ -1775,10 +1779,14 @@ export default {
             this.ipa += "r"
             skipnext = true;
           } else if ("řř" === char+nextchar) {
-            this.ipa += this.ipaPreference[char+nextchar] // again, this is the user's choice between [ʁ:] and [ʀ], which is why it also has its own else if
+            this.ipa += this.settings["IPA"][char+nextchar][1].slice(1, -1) // again, this is the user's choice between [ʁ:] and [ʀ], which is why it also has its own else if
             skipnext = true;
           } else if (["hl","hr","hm","hn","hň"].includes(char+nextchar)) {
-            this.ipa += this.ipaPreference[char+nextchar] // this should be the user's choice as well
+            if (this.settings["IPA"]["hx"][1] == "Devoiced") {
+              this.ipa += {"hl":"ɬ","hr":"ɾ̥","hm":"m̥","hn":"n̥","hň":"ŋ̊"}[char+nextchar];
+            } else {
+              this.ipa += {"hl":"hl","hr":"hɾ","hm":"hm","hn":"hn","hň":"hŋ"}[char+nextchar];
+            }
             skipnext = true;
           } else if (["ph","th","kh","ch","čh"].includes(char+nextchar) && (this.ithkword.charAt(parseInt(i)+2) === "" || Object.keys(this.sAccent).includes(this.ithkword.charAt(parseInt(i)+2)) || Object.values(this.sAccent).includes(this.ithkword.charAt(parseInt(i)+2)))) {
             // syllable-initial or word-final
@@ -1794,34 +1802,34 @@ export default {
             if (Object.values(this.sAccent).includes(char)) {vwl = Object.keys(this.sAccent).find(e => this.sAccent[e] == char)}
             else {vwl = char}
             if (vwl === nextchar || vwl === Object.keys(this.sAccent).find(e => this.sAccent[e] == nextchar)) { // if geminated vowel
-              this.ipa += this.ipaPreference[vwl];
+              this.ipa += this.settings["IPA"][vwl][1].slice(1, -1);
               this.ipa += "ː";
               skipnext = true;
             } else if (["ä","ë"].includes(vwl)) {
-                this.ipa += this.ipaPreference[vwl];
+                this.ipa += this.settings["IPA"][vwl][1].slice(1, -1);
             } else if (vwl === "a") {
                 if (Object.keys(this.sAccent).includes(prevchar) || Object.values(this.sAccent).includes(prevchar)) {this.ipa += "ɑ"}
-                else {this.ipa += this.ipaPreference[vwl]}
+                else {this.ipa += this.settings["IPA"][vwl][1].slice(1, -1)}
             } else if (vwl === "e") {
                 if (Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar)) {this.ipa += "e"}
-                else {this.ipa += this.ipaPreference[vwl]}
+                else {this.ipa += this.settings["IPA"][vwl][1].slice(1, -1)}
             } else if (vwl === "i") {
                 if (Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar)) {this.ipa += "i"}
                 else if (nextchar == "y" || prevchar == "y") {this.ipa += "ɪ"}
-                else {this.ipa += this.ipaPreference[vwl]}
+                else {this.ipa += this.settings["IPA"][vwl][1].slice(1, -1)}
             } else if (vwl === "o") {
                 if (Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar)) {this.ipa += "o"}
-                else {this.ipa += this.ipaPreference[vwl]}
+                else {this.ipa += this.settings["IPA"][vwl][1].slice(1, -1)}
             } else if (vwl === "ö") {
                 if (Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar)) {this.ipa += "ø"}
-                else {this.ipa += this.ipaPreference[vwl]}
+                else {this.ipa += this.settings["IPA"][vwl][1].slice(1, -1)}
             } else if (vwl === "u") {
                 if (Object.keys(this.sAccent).includes(nextchar) || Object.values(this.sAccent).includes(nextchar)) {this.ipa += "u"}
                 else if (nextchar == "w" || prevchar == "w") {this.ipa += "ʊ"}
-                else {this.ipa += this.ipaPreference[vwl]}
+                else {this.ipa += this.settings["IPA"][vwl][1].slice(1, -1)}
             } else if (vwl === "ü") {
                 if (nextchar == "w" || prevchar == "w" || nextchar == "y" || prevchar == "y") {this.ipa += "ʉ"}
-                else {this.ipa += this.ipaPreference[vwl]}
+                else {this.ipa += this.settings["IPA"][vwl][1].slice(1, -1)}
             }
           } else if (Object.keys(this.ipaLookup).includes(char)) {
             this.ipa += this.ipaLookup[char];
@@ -1846,38 +1854,13 @@ export default {
     },
     beforeMount() {
         this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
-        /*let sCookie = this.getCookie("settings");
-        let wCookie = this.getCookie("sentence");
-        if (sCookie != "") {
-        for (let i in JSON.parse(sCookie)) {
-            this.settingRaw[i] = JSON.parse(sCookie)[i];
-            if (this.settingRaw[i] != "h+" && this.settingRaw[i] != "dev") {
-            this.ipaPreference[["a","e","ë","i","o","ö","u","ü","x","řř"][i]] = this.settingRaw[i].slice(1, -1);
-            } else {
-            if (this.settingRaw[i] == "dev") {
-                this.ipaPreference["hl"] = "ɬ";
-                this.ipaPreference["hr"] = "ɾ̥";
-                this.ipaPreference["hm"] = "m̥";
-                this.ipaPreference["hn"] = "n̥";
-                this.ipaPreference["hň"] = "ŋ̊";
-            } else {
-                this.ipaPreference["hl"] = "hl";
-                this.ipaPreference["hr"] = "hɾ";
-                this.ipaPreference["hm"] = "hm";
-                this.ipaPreference["hn"] = "hn";
-                this.ipaPreference["hň"] = "hŋ";
-            }
-            }
-        }
-        }
-        if (wCookie != "") {
-        this.sentence = JSON.parse(wCookie);
-        }*/
-        //this.slots[2] = "";
-        this.calculateWord();
-        this.IPAcalcs();
-        this.glossCalcs();
+        this.handleSendMessage();
         //this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
     },
+    computed: {
+      calculateEJ() {
+        return (this.$props.selectedWord != this.$props.sLength - 1) && this.settings["Miscellaneous"].ej[1] && Object.keys(this.cData).includes(this.$props.nextWord[0].charAt(0));
+      }
+    }
 }
 </script>

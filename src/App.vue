@@ -36,7 +36,7 @@
     <Ithkuil_v4 v-if="langVer == '4'" ref="4"
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
     @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
-    :listenModal="modalListen" :listenWordtype="wordType" :listenWord="gSOptions" :calculateEJ="false"/>
+    :listenModal="modalListen" :listenWordtype="wordType" :listenWord="gSOptions" :selectedWord="selectedWord" :sLength="sentence.length" :nextWord="this.sentence[selectedWord+1]"/>
 
     <Ithkuil_v3 v-if="langVer == '3'" ref="3"
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
@@ -64,29 +64,16 @@
         <span class="close" @click="closeModal()">&times;</span>
       </div>
       <div :class="{hidden: modalID != 'settings'}" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
-        <h2 style="text-align:center;">Settings</h2>
-        <h3>IPA (Pronunciation)</h3>
-        <label>Pronunciation of ⟨a⟩: </label><select id="sett0" v-model="settingRaw[0]" @change="event => settingsUpdate(event, 'a')"><option>[a]</option><option>[ɑ]</option></select><br/><br/>
-        <label>Pronunciation of ⟨e⟩: </label><select id="sett1" v-model="settingRaw[1]" @change="event => settingsUpdate(event, 'e')"><option>[ɛ]</option><option>[e]</option></select><br/><br/>
-        <label>Pronunciation of ⟨ë⟩: </label><select id="sett2" v-model="settingRaw[2]" @change="event => settingsUpdate(event, 'ë')"><option>[ɤ]</option><option>[ʌ]</option><option>[ə]</option></select><br/><br/>
-        <label>Pronunciation of ⟨i⟩: </label><select id="sett3" v-model="settingRaw[3]" @change="event => settingsUpdate(event, 'i')"><option>[i]</option><option>[ɪ]</option></select><br/><br/>
-        <label>Pronunciation of ⟨o⟩: </label><select id="sett4" v-model="settingRaw[4]" @change="event => settingsUpdate(event, 'o')"><option>[ɔ]</option><option>[o]</option></select><br/><br/>
-        <label>Pronunciation of ⟨ö⟩: </label><select id="sett5" v-model="settingRaw[5]" @change="event => settingsUpdate(event, 'ö')"><option>[œ]</option><option>[ø]</option></select><br/><br/>
-        <label>Pronunciation of ⟨u⟩: </label><select id="sett6" v-model="settingRaw[6]" @change="event => settingsUpdate(event, 'u')"><option>[ʊ]</option><option>[u]</option></select><br/><br/>
-        <label>Pronunciation of ⟨ü⟩: </label><select id="sett7" v-model="settingRaw[7]" @change="event => settingsUpdate(event, 'ü')"><option>[ʉ]</option><option>[y]</option></select><br/><br/>
-        <label>Pronunciation of ⟨x⟩: </label><select id="sett8" v-model="settingRaw[8]" @change="event => settingsUpdate(event, 'x')"><option>[x]</option><option>[χ]</option></select><br/><br/>
-        <label>Pronunciation of ⟨řř⟩: </label><select id="sett9" v-model="settingRaw[9]" @change="event => settingsUpdate(event, 'řř')"><option>[ʁː]</option><option>[ʀ]</option></select><br/><br/>
-        <label>Pronunciation of ⟨hl⟩, ⟨hr⟩, ⟨hm⟩, ⟨hn⟩: </label>
-        <select id="sett10" v-model="settingRaw[10]" @change="event => settingsUpdate(event, 'hX')">
-          <option value="dev">Devoiced</option>
-          <option value="h+">As written</option>
-        </select><br/><br/>
-        <!--<label>Don't calculate External Juncture: </label><input v-model="skipEJ" type="checkbox"/>-->
-        <br/><br/><hr/><br/><b>WARNING:</b> The below doesn't work on mobile and will cause the the webpage to not load after reloading (until you close your web browser).<br/><br/>
-        <button @click="setCookie('settings',JSON.stringify(settingRaw),365)">Save settings as cookies</button>
-        <!--<button @click="setCookie('sentence',JSON.stringify(sentence),365)">Save words as cookies (warning: buggy)</button><br/>-->
-        <button @click="deleteCookie('settings')">Remove settings cookies</button>
-        <!--<button @click="deleteCookie('sentence')">Remove word cookies</button>-->
+        <h2 style="text-align:center">Settings</h2>
+        <div v-for="section of Object.keys(settingsClone)" :key="section">
+          <h3>{{section}}</h3>
+          <span v-for="setOpt in Object.keys(settingsClone[section])" :key="setOpt">
+            <label>{{settingsClone[section][setOpt][0]}}</label>
+            <select v-if="settingsClone[section][setOpt].length > 2" v-model="this.$refs[langVer].settings[section][setOpt][1]" @change="this.$refs[langVer].handleSendMessage()"><option v-for="spOpt in settingsClone[section][setOpt][2]" :key="spOpt">{{spOpt}}</option></select>
+            <input type="checkbox" v-else v-model="this.$refs[langVer].settings[section][setOpt][1]" @change="this.$refs[langVer].handleSendMessage()"/>
+            <br/><br/>
+          </span>
+        </div>
       </div>
       <div v-if="modalID != 'settings' && modalID != 'share'">
         <h2 style="text-align:center;">{{modalContent.title}}</h2>
@@ -198,7 +185,7 @@ export default {
       hovering: null,
       isMouseDown: false,
       draggedWord: null,
-      settingRaw: ["[a]","[ɛ]","[ɤ]","[i]","[ɔ]","[œ]","[ʊ]","[ʉ]","[x]","[ʁː]","dev"],
+      settingsClone: {},
     }
   },
   methods: {
@@ -206,13 +193,6 @@ export default {
       alert(al + " is not available yet!");
     },
     openModal(code) {
-      if (code == "settings") {
-        for (let i = 0; i < 11; i++) {
-          console.log(i);
-          console.log(this.settingRaw[i]);
-          document.getElementById("sett"+i.toString()).value = this.settingRaw[i];
-        }
-      }
       let tGroupFound = false;
       let tG = [];
       this.modalID = code;
@@ -498,7 +478,7 @@ export default {
   },
   beforeMount() {
     //this.gSentenceOptions = JSON.parse(JSON.stringify(this.gDefault));
-    let sCookie = this.getCookie("settings");
+    /*let sCookie = this.getCookie("settings");
     let wCookie = this.getCookie("sentence");
     if (sCookie != "") {
       for (let i in JSON.parse(sCookie)) {
@@ -522,8 +502,7 @@ export default {
     }
     if (wCookie != "") {
       this.sentence = JSON.parse(wCookie);
-    }
-    //this.slots[2] = "";
+    }*/
     this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
   },
   directives: {
@@ -551,6 +530,9 @@ export default {
     window.removeEventListener("mouseup",this.onMouseDownF);
     window.removeEventListener("touchstart",this.onMouseUpF);
     window.removeEventListener("touchend",this.onMouseDownF);
+  },
+  mounted() {
+    this.settingsClone = JSON.parse(JSON.stringify(this.$refs[this.langVer].settings));
   }
 }
 </script>
