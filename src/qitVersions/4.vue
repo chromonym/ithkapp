@@ -3,7 +3,7 @@
     <div>
     <!--<button @click="notAvailableAlert(ithkword)">Read word (for testing)</button>-->
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
-    <p class="smalltext">Compatible with New Ithkuil Design Doc v1.0, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
+    <p class="smalltext">Compatible with New Ithkuil Design Doc v1.0.1, Lexical Roots v0.5.1, VxCs Affixes v0.7.5, and Phonotaxis v0.5.4.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/New_Ithkuil_design_doc_v_1_0.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
@@ -372,6 +372,7 @@ export default {
             fullGloss: "", // full version of above
             ipa: "", // IPA transcription
             cascOrMood: false, // false if case scope, true if mood.
+            eightSix: false, // true if slot 8 has been moved to slot 6
             allographs: {
               "cczz":"čč",
               "yc":"čč",
@@ -1516,7 +1517,15 @@ export default {
         }
 
         // Step 3: Remove unnecessary vowels at the end
-        if (this.slots[7] === "a" && this.slots[8] === "h") {
+        if (this.slots[7] === "a" && this.gOptions.vn != "asp" && this.slots[5] === "l" && this.slots[8] != "h") {
+          this.slots[10] = this.slots[8];
+          this.slots[5] = this.slots[8];
+          this.slots[8] = "";
+          this.eightSix = true;
+        } else {
+          this.eightSix = false;
+        }
+        if (this.slots[7] === "a" && (this.slots[8] === "h" || this.slots[8] === "")) {
           this.slots[7] = "";
           this.slots[8] = "";
           this.cut[2] = true; // slot 8a removed
@@ -1672,16 +1681,22 @@ export default {
       // Slot 6
       if (!this.shortcutting) {
         var configCode = (this.gOptions.plex+this.gOptions.simil+this.gOptions.cctd).slice(0,3);
-        this.fullGloss += "-"+this.gOptions.affil+"."+configCode+"."+this.gOptions.ext+"."+this.gOptions.persp+"."+this.gOptions.ess;
-        var s6c = [];
-        if (this.gOptions.affil != "CSL") {s6c.push(this.gOptions.affil)}
-        if (configCode != "UPX") {s6c.push(configCode)}
-        if (this.gOptions.ext != "DEL") {s6c.push(this.gOptions.ext)}
-        if (this.gOptions.persp != "M") {s6c.push(this.gOptions.persp)}
-        if (this.gOptions.ess != "NRM") {s6c.push(this.gOptions.ess)}
-        if (s6c.length > 0) {this.gloss += "-" + s6c.join(".")}
-        else if (this.gOptions.Vafx.length > 0) {
-          this.gloss += "-{Ca}";
+        if (!this.eightSix) {
+          this.fullGloss += "-"+this.gOptions.affil+"."+configCode+"."+this.gOptions.ext+"."+this.gOptions.persp+"."+this.gOptions.ess;
+          var s6c = [];
+          if (this.gOptions.affil != "CSL") {s6c.push(this.gOptions.affil)}
+          if (configCode != "UPX") {s6c.push(configCode)}
+          if (this.gOptions.ext != "DEL") {s6c.push(this.gOptions.ext)}
+          if (this.gOptions.persp != "M") {s6c.push(this.gOptions.persp)}
+          if (this.gOptions.ess != "NRM") {s6c.push(this.gOptions.ess)}
+          if (s6c.length > 0) {this.gloss += "-" + s6c.join(".")}
+          else if (this.gOptions.Vafx.length > 0) {
+            this.gloss += "-{Ca}";
+          }
+        } else { // if slot 8 has moved to slot 6, move the gloss here too
+          this.gloss += "-"+this.gOptions.casc; // it is only possible with a non-default case-scope, so there's no need to check for that here
+          this.fullGloss += "-"+this.gOptions.affil+"."+configCode+"."+this.gOptions.ext+"."+this.gOptions.persp+"."+this.gOptions.ess;
+          this.fullGloss += "." + this.gOptions[this.gOptions.vn] + (this.gOptions.vn == "lvl" ? (this.gOptions.abslvl ? "a" : "r") : "") + "." + ((this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") ? this.gOptions.mood : this.gOptions.casc);
         }
       } else if (this.gOptions.Vafx.length > 0) {
         this.gloss += "-{Ca}";
@@ -1702,12 +1717,14 @@ export default {
         }
       }
       // Slot 8
+      if (!this.eightSix) {
       var s8c = [];
-      if (this.gOptions[this.gOptions.vn] !== "MNO") {s8c.push(this.gOptions[this.gOptions.vn] + (this.gOptions.vn == "lvl" ? (this.gOptions.abslvl ? "a" : "r") : ""))}
-      if (this.gOptions.mood !== "FAC" && this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") {s8c.push(this.gOptions.mood)}
-      if (this.gOptions.casc !== "CCN" && (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != "0")) {s8c.push(this.gOptions.casc)}
-      if (s8c.length > 0) {this.gloss += "-" + s8c.join(".")}
-      this.fullGloss += "-" + this.gOptions[this.gOptions.vn] + (this.gOptions.vn == "lvl" ? (this.gOptions.abslvl ? "a" : "r") : "") + "." + ((this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") ? this.gOptions.mood : this.gOptions.casc)
+        if (this.gOptions[this.gOptions.vn] !== "MNO") {s8c.push(this.gOptions[this.gOptions.vn] + (this.gOptions.vn == "lvl" ? (this.gOptions.abslvl ? "a" : "r") : ""))}
+        if (this.gOptions.mood !== "FAC" && this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") {s8c.push(this.gOptions.mood)}
+        if (this.gOptions.casc !== "CCN" && (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != "0")) {s8c.push(this.gOptions.casc)}
+        if (s8c.length > 0) {this.gloss += "-" + s8c.join(".")}
+        this.fullGloss += "-" + this.gOptions[this.gOptions.vn] + (this.gOptions.vn == "lvl" ? (this.gOptions.abslvl ? "a" : "r") : "") + "." + ((this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") ? this.gOptions.mood : this.gOptions.casc)
+      }
       // Slot 9
       if (this.gOptions.rel === "UNF/K" && this.gOptions.concat == "0") {
         //IEV
