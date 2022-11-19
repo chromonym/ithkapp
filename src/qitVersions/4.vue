@@ -1800,7 +1800,7 @@ export default {
             this.ipa += "r"
             skipnext = true;
           } else if ("řř" === char+nextchar) {
-            this.ipa += this.settings["IPA"][char+nextchar][1].slice(1, -1) // again, this is the user's choice between [ʁ:] and [ʀ], which is why it also has its own else if
+            this.ipa += this.settings["IPA"]["rr"][1].slice(1, -1) // again, this is the user's choice between [ʁ:] and [ʀ], which is why it also has its own else if
             skipnext = true;
           } else if (["hl","hr","hm","hn","hň"].includes(char+nextchar)) {
             if (this.settings["IPA"]["hx"][1] == "Devoiced") {
