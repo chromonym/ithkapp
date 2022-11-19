@@ -211,7 +211,8 @@ export default {
                 "hx": ["Pronunciation of ⟨hl⟩, ⟨hr⟩, ⟨hm⟩, ⟨hn⟩, ⟨hň⟩: ","Devoiced",["Devoiced","As written"]],
               },
               "Miscellaneous": {
-                "ej": ["Calculate External Juncture? ",true]
+                "ej": ["Calculate External Juncture? ",true],
+                "s8": ["Move Slot 8 consonant to Slot 6 if possible? ",false]
               }
             },
             wordType: "normal",
@@ -817,7 +818,7 @@ export default {
         if (!this.shortcutting){
           var lastVII;
           var vowelColumn = 0;
-          if (this.gOptions.shcut != "2") {
+          if (this.gOptions.shcut != "3" && this.gOptions.shcut != "2") {
             if (this.gOptions.VIIafx.length > 0) {
               lastVII = [...this.gOptions.VIIafx[this.gOptions.VIIafx.length-1]];
             } else {
@@ -835,6 +836,8 @@ export default {
             } else {
               this.slotVIIshortcut = false;
             }
+          } else {
+            this.slotVIIshortcut = false;
           }
           this.slots[1] = this.sVowels[ph[this.gOptions.stem][this.gOptions.ver]][vowelColumn];
         } else {
@@ -995,7 +998,7 @@ export default {
     calculateSlot7() {
       // I have no idea if it was the Object.assign() or the async/await in handleSendMessage(), but it works and I'm not questioning it.
       var out="";
-      if (this.slotVIIshortcut && !this.shortcutting && this.gOptions.shcut != "2") {
+      if (this.slotVIIshortcut && !this.shortcutting && this.gOptions.shcut != "3" && this.gOptions.shcut != "2") {
         for (var j in this.gOptions.VIIafx.slice(0,-1)) {
           var i = Object.assign({},this.gOptions.VIIafx[j]);
           if (i[1] != "CA") {
@@ -1507,7 +1510,7 @@ export default {
       slot9saved = this.slots[9];
       this.slot9gStop();
 
-      if (this.gOptions.shcut != "2") {
+      if (this.gOptions.shcut != "3") {
         // Step 2: Remove unnecessary vowels at the start - the logic is dependant on the length of the root, so that's what I've done.
         if (this.slots[0] === "" && this.slots[1] === "a" && !this.slotVIIshortcut) {
           if (this.allowedAtStart(this.slots[2])) {
@@ -1517,11 +1520,12 @@ export default {
         }
 
         // Step 3: Remove unnecessary vowels at the end
-        if (this.slots[7] === "a" && this.gOptions.vn != "asp" && this.slots[5] === "l" && this.slots[8] != "h") {
+        if (this.slots[7] === "a" && this.gOptions.vn != "asp" && this.slots[5] === "l" && this.slots[8] != "h" && this.settings["Miscellaneous"].s8[1]) {
           this.slots[10] = this.slots[8];
           this.slots[5] = this.slots[8];
           this.slots[8] = "";
           this.eightSix = true;
+          this.cut[2] = true; // slot 8a removed
         } else {
           this.eightSix = false;
         }
@@ -1532,15 +1536,15 @@ export default {
           if (this.slots[9] === "a") { // here i have to check that the consonant before this is allowed at the end of a word
             var lastCons;
             var shortenSlot8 = true;
-            if (this.gOptions.VIIafx.length == 0 && this.gOptions.Vafx.length == 0 && this.shortcutting) { // if slots 5 & 7 are empty and there's shortcutting,
+            if (this.gOptions.VIIafx.length == 0 && this.gOptions.Vafx.length == (0 + (this.slotVIIshortcut && 1)) && this.shortcutting) { // if slots 5 & 7 are empty and there's shortcutting,
               if (this.gOptions.c == "PRN" && (this.sDip.includes(this.slots[1]) || Object.keys(this.sAccent).includes(this.slots[1]))) { // with the edge case of if the case is Pertinental
                 shortenSlot8 = false; // then don't drop the last consonant so there's two syllables
               } else { // otherwise,
                 lastCons = this.slots[2]; // the last consonant is the root.
               }
-            } else if (this.gOptions.VIIafx.length == 0 && this.shortcutting) { // if that but slot 5 is filled,
+            } else if (this.gOptions.VIIafx.length == (0 + (this.slotVIIshortcut && 1)) && this.shortcutting) { // if that but slot 5 is filled,
               shortenSlot8 = false; // don't remove slot 8, because 5 must have a glottal stop at the end which is not permitted.
-            } else if (this.gOptions.VIIafx.length == 0) { // if that but no shortcutting,
+            } else if (this.gOptions.VIIafx.length == (0 + (this.slotVIIshortcut && 1))) { // if that but no shortcutting,
               lastCons = this.slots[5]; // then the last consonant is slot 6.
             } else { // otherwise,
               lastCons = this.gOptions.VIIafx[this.gOptions.VIIafx.length-1][0]; // the last consonant is slot 7's last affix.
@@ -1744,7 +1748,7 @@ export default {
         this.fullGloss += "\\" + this.gOptions.rel.split("/")[0];
         if (this.gOptions.rel.split("/")[0] !== "UNF") {this.gloss += "\\" + this.gOptions.rel.split("/")[0]}
       }
-      if (this.gOptions.shcut == "2") {
+      if (this.gOptions.shcut == "3") {
         let ph = this.gloss;
         this.gloss = this.fullGloss;
         this.fullGloss = ph;

@@ -154,19 +154,23 @@
         "title":"Shortcutting",
         "options": [
             {
-                "name":"None",
-                "desc":"Do not apply any shortcuts (other than Slot II affix shortcuts)"
+                "name":"Default (VII only)",
+                "desc":"Do not apply Slot IV/VI shortcuts"
             },
             {
-                "name":"Yes, if possible",
-                "desc":"Apply Slot IV and VI shortcuts if possible"
+                "name":"Slot IV/VI",
+                "desc":"Apply Slot IV/VI shortcuts if possible (takes priority over all other shortcuts)"
+            },
+            {
+                "name":"No VII affix",
+                "desc":"Do not apply Slot IV/VI or Slot VII affix shortcuts"
             },
             {
                 "name":"Absolutely None",
                 "desc":"Do not apply ANY shortcuts whatsoever, do not drop any letters, and show the full gloss instead of the regular"
             }
         ],
-        "popupdesc":"Shortcutting doesn't change the definition of a word, it instead uses Slots I and II to indicate the contents of Slots IV and VI and potentially make the word shorter."
+        "popupdesc":"Please note that these options (aside from \"Absolutely None\") do not apply to Slot VIII being moved to Slot VI. For that, check settings.<br/>Shortcutting doesn't change the definition of a word, it instead shuffles around how the meaning is represented on that word, potentially making it shorter.<br/><b>If you're not sure which option to use, finish creating your word and then see which option makes it the shortest.</b><br/>(The Slot IV/VI shortcut uses Slots I and II to indicate Slots IV and VI, and the Slot VII shortcut uses Slot II to indicate one Slot VII affix)"
     },
     
     "Vafx": {
