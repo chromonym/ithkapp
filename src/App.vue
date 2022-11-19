@@ -147,8 +147,8 @@
 <script>
 import vClickOutside from "click-outside-vue3"
 
-import Ithkuil_v4 from './qitVersions/4.vue'
-import Ithkuil_v3 from './qitVersions/3.vue'
+import Ithkuil_v4 from './qit4/4.vue'
+import Ithkuil_v3 from './qit3/3.vue'
 
 export default {
   name: 'App',

@@ -147,8 +147,8 @@
 
 <script>
 import OptionBox from '../components/optionbox.vue'
-import grammardata from '../grammardata.json'
-import consdata from '../consdata.json'
+import grammardata from './grammardata.json'
+import consdata from './consdata.json'
 
 export default {
     name: "Ithkuil_v4",
