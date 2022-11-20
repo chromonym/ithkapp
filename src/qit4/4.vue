@@ -440,6 +440,18 @@ export default {
               "ż":"ẓ",
               "ı":"i",
             },
+            tabGroups: {
+              "normal": [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","vld"]],
+              "suppletive": [["suppType","c"]],
+              "affRoot": [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","vld"]],
+              "refRoot": [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","vld"]],
+              "affixjunct": [["affixjunct","initialAffScope","otherAffScope","affScopeOf"]],
+              "register": [["register","regStartOrEnd"]],
+              "modular": [["modAppliesTo","modNumber","cn","vh"],["vn","val","pha","eff","lvl","abslvl"],["vn2","val2","pha2","eff2","lvl2","abslvl2","asp2"],["vn3","val3","pha3","eff3","lvl3","abslvl3","asp3"],["vn4","val4","pha4","eff4","lvl4","abslvl4","asp4"]],
+              "ref": [["ref","refEff","refPersp","c1"],["twoCs","twoRefs","ref2","refEff2","refPersp2","c2","ess2"]],
+              "refCS": [["ref","refEff","refPersp","c1","spec"],["refAffix","twoCs","c2","ess2"]],
+              "mcs": [["cn2","mood","casc"]]
+            }
         }
     },
     methods: {
@@ -492,9 +504,7 @@ export default {
     switchWordType(type) {
       this.wordType = type;
       this.calculateAdjunct(type);
-      //this.closeDropdown('adjDD',{},true);
-      //this.closeDropdown('formDD',{},true);
-      this.handleSendMessage(this.gOptions.root,"root");
+      this.handleSendMessage();
     },
     calculateAdjunct(type) {
       var output = "";

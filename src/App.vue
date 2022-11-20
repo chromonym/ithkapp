@@ -6,7 +6,8 @@
     <h1 style="float: left; padding-left: 20px; font-size: 16px; padding-top:2px;">Ithkapp</h1>
     <span class="close" style="padding-left:10px;" @click="openModal('settings')" title="Settings"><i class="fa-solid fa-gear fa-xs"></i></span>
     <span class="close" style="padding-left: 10px; height: 38px;" :style="sentenceOpen ? 'background-color:rgb(179, 255, 230); color:#333;' : ''" @click="openNav(false)" title="Sentence Menu"><i class="fa-solid fa-align-right fa-xs"></i></span>
-    <div class="dropdown">
+    <!-- V4 WORD TYPE DROPDOWNS -->
+    <div class="dropdown" v-if="langVer == 4">
       <button :class="{active: !['normal','affRoot','refRoot','ref','refCS','free'].includes(wordType)}" @click="openDropdown('adjDD')" v-click-outside="event => closeDropdown('adjDD',event)">Adjunct ▼</button>
       <div class="dropdown-content hidden" id="adjDD">
         <span @click="switchWordType('affixjunct')" :class="{active: wordType == 'affixjunct'}">Affixual</span>
@@ -17,7 +18,7 @@
         <span @click="switchWordType('bias')" :class="{active: wordType == 'bias'}">Bias</span>
       </div>
     </div>
-    <div class="dropdown">
+    <div class="dropdown" v-if="langVer == 4">
       <button :class="{active: ['normal','affRoot','refRoot','ref','refCS','free'].includes(wordType)}" @click="openDropdown('formDD')" v-click-outside="event => closeDropdown('formDD',event)">Formative ▼</button>
       <div class="dropdown-content hidden" id="formDD">
         <span @click="switchWordType('normal')" :class="{active: wordType == 'normal'}">Normal</span>
@@ -28,6 +29,25 @@
         <span @click="switchWordType('free')" :class="{active: wordType == 'free'}">Non-Ithkuil (Borrowed) Word</span>
       </div>
     </div>
+    <!-- END V4 WORD TYPE DROPDOWNS -->
+    <!-- V3 WORD TYPE DROPDOWNS -->
+    <div class="dropdown" v-if="langVer == 3">
+      <button :class="{active: ['aspect','affix','bias'].includes(wordType)}" @click="openDropdown('adj3')" v-click-outside="event => closeDropdown('adj3',event)">Adjunct ▼</button>
+      <div class="dropdown-content hidden" id="adj3">
+        <span @click="switchWordType('aspect')" :class="{active: wordType == 'aspect'}">Aspectual</span>
+        <span @click="switchWordType('affix')" :class="{active: wordType == 'affix'}">Affixual</span>
+        <span @click="switchWordType('bias')" :class="{active: wordType == 'bias'}">Bias</span>
+      </div>
+    </div>
+    <div class="dropdown" v-if="langVer == 3">
+      <button :class="{active: ['normal','ref'].includes(wordType)}" @click="openDropdown('form3')" v-click-outside="event => closeDropdown('form3',event)">Formative ▼</button>
+      <div class="dropdown-content hidden" id="form3">
+        <span @click="switchWordType('normal')" :class="{active: wordType == 'normal'}">Normal</span>
+        <span @click="switchWordType('ref')" :class="{active: wordType == 'ref'}">Personal Reference</span>
+      </div>
+    </div>
+    <!-- END V3 WORD TYPE DROPDOWNS -->
+    <!-- add more word type dropdowns for more versions here, in REVERSE order -->
   </div>
 
   <!-- MAIN (contains word-creation options) -->
@@ -41,13 +61,12 @@
     <Ithkuil_v3 v-if="langVer == '3'" ref="3"
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
     @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
-    :listenModal="modalListen" :listenWord="gSOptions"/> <!-- add :listenWordtype="wordType" to add multiple word types -->
+    :listenModal="modalListen" :listenWord="gSOptions" :listenWordtype="wordType"/>
     
-  <!--(Note: The affix slots & root slot will eventually be modified to be a definition-based selector)-->
+  </div>
   <!-- END OF MAIN -->
 
   <!-- FOOTER (contains word, pronunciation, and gloss) -->
-  </div>
   <div id="footer">
     <p><span class="word"><b>{{ithkword}}</b></span><br/>
     <span class="smalltext">[{{ipa}}]<br/>
@@ -194,29 +213,13 @@ export default {
     },
     openModal(code) {
       let tGroupFound = false;
-      let tG = [];
+      let tG = JSON.parse(JSON.stringify(this.$refs[this.langVer].tabGroups[this.wordType]));
       this.modalID = code;
       if (isNaN(code.charAt(code.length-1))) {
         this.modalContent = this.$refs[this.langVer].gData[code];
       } else {
         this.modalContent = this.$refs[this.langVer].gData[code.slice(0,-1)]
       }
-      if (this.wordType == "normal") {tG = JSON.parse(JSON.stringify(this.tabGroups));}
-      else if (this.wordType == "suppletive") {tG = [["suppType","c"]];}
-      else if (this.wordType == "affRoot") {tG = JSON.parse(JSON.stringify(this.SRtabGroups));}
-      else if (this.wordType == "refRoot") {tG = JSON.parse(JSON.stringify(this.REFtabGroups));}
-      else if (this.wordType == "affixjunct") {tG = [["affixjunct","initialAffScope","otherAffScope","affScopeOf"]];}
-      else if (this.wordType == "register") {tG = [["register","regStartOrEnd"]];}
-      else if (this.wordType == "modular") {
-        tG = [["modAppliesTo","modNumber","cn","vh"],
-              ["vn","val","pha","eff","lvl","abslvl"],
-              ["vn2","val2","pha2","eff2","lvl2","abslvl2","asp2"],
-              ["vn3","val3","pha3","eff3","lvl3","abslvl3","asp3"],
-              ["vn4","val4","pha4","eff4","lvl4","abslvl4","asp4"]];
-      }
-      else if (this.wordType == "ref") {tG = [["ref","refEff","refPersp","c1"],["twoCs","twoRefs","ref2","refEff2","refPersp2","c2","ess2"]];}
-      else if (this.wordType == "refCS") {tG = [["ref","refEff","refPersp","c1","spec"],["refAffix","twoCs","c2","ess2"]]}
-      else if (this.wordType == "mcs") {tG = [["cn2","mood","casc"]]}
       for (let i of tG) {
         if (i.includes(code)) {
           this.modalTabs = [...i];
@@ -267,8 +270,13 @@ export default {
     switchWordType(type) {
       this.wordType = type;
       //this.calculateAdjunct(type);
-      this.closeDropdown('adjDD',{},true);
-      this.closeDropdown('formDD',{},true);
+      if (this.langVer == "4") {
+        this.closeDropdown('adjDD',{},true);
+        this.closeDropdown('formDD',{},true);
+      } else if (this.langVer == "3") {
+        this.closeDropdown('adj3',{},true);
+        this.closeDropdown('form3',{},true);
+      }
       //this.handleSendMessage(this.gOptions.root,"root");
     },
     concatenateSentence(sent) {

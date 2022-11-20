@@ -1,7 +1,8 @@
+<!-- THIS IS A TEMPLATE FOR HOW TO ADD MORE ITHKUIL VERSIONS. SOME CODE WILL ALSO NEED TO BE ADDED TO APP.VUE STILL -->
 <template>
     <div>
         <div class="section"> <!-- all OptionBoxes must be in a class="section" div or else the formatting will be messed up -->
-            <OptionBox :json="gData.word" code="word" @send-message="handleSendMessage" ref="word" @modal="openModal" :class="{hidden: wordType != 'normal'}"/> <!-- ref should be the same as code -->
+            <OptionBox :json="gData.word" code="word" @send-message="handleSendMessage" ref="word" @modal="openModal"/> <!-- ref should be the same as code -->
         </div>
     </div>
 </template>
@@ -11,7 +12,7 @@ import OptionBox from "../components/optionbox.vue"
 // import grammardata from "path/to/grammardata.json"
 
 export default {
-    name: "Ithkuil_v3",
+    name: "Ithkuil_placeholder",
     components: {
         OptionBox,
     },
@@ -25,9 +26,9 @@ export default {
         listenModal(arr) {
             this.updateFromModal(arr[0],arr[1]);
         },
-        listenWordtype(str) { // Uncomment this value if multiple word types are required - str is the word type code set up in App.vue. Also uncomment switchWordType() and wordType
+        /*listenWordtype(str) { // Uncomment this value if multiple word types are required - str is the word type code set up in App.vue. Also uncomment switchWordType() and wordType
             this.switchWordType(str);
-        },
+        },*/
         listenWord(obj) {
             this.gOptions = JSON.parse(JSON.stringify(obj));
             for (var property in obj) {
@@ -64,7 +65,7 @@ export default {
             gDefault: { // this should contain all of the grammar options' (dropdowns') default values
                 "word": "",
             },
-            wordType: "normal", //  set to whatever the default word type is - UNCOMMENT WITH LISTENWORDTYPE() ABOVE AND SWITCHWORDTYPE() BELOW TO ADD MULTIPLE WORD TYPES
+            //wordType: "",     set to whatever the default word type is - UNCOMMENT WITH LISTENWORDTYPE() ABOVE AND SWITCHWORDTYPE() BELOW TO ADD MULTIPLE WORD TYPES
             tabGroups: {"normal": [["word"]]}, // a dictionary representing the tab groups, based on word type
             gOptions: {}, //  leave as is - SHOULD BE WHERE YOU STORE/UPDATE GRAMMAR OPTIONS
             ithkword: "", //  leave as is - SHOULD BE THE FINAL WORD GENERATED
@@ -106,11 +107,11 @@ export default {
                 this.updateFromModal(property,JSON.parse(JSON.stringify(gO[property])));
             }
         },
-        switchWordType(type) { //UNCOMMENT THIS FUNCTION TO ADD MULTIPLE WORD TYPES - THE WORD TYPES SHOULD BE SET UP IN APP.VUE
+        /*switchWordType(type) { //UNCOMMENT THIS FUNCTION TO ADD MULTIPLE WORD TYPES - THE WORD TYPES SHOULD BE SET UP IN APP.VUE
             this.wordType = type;
             // RECALCULATE WORDS HERE
             this.handleSendMessage();
-        },
+        },*/
     },
     beforeMount() {
         this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
