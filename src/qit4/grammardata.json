@@ -554,11 +554,6 @@
         },
         "popupdesc":"Level is used in comparative statements, such as \"my hat is cooler than your hat\".<br/>X = this word,<br/>M = a <b>verb</b> (what quality of X is being compared),<br/>Y = a word marked with the <b>CMP case</b> (the thing being compared to)"
     },
-    "abslvl": {
-        "type": "checkbox",
-        "title": "Absolute Level?",
-        "popupdesc": "Absolute level is the opposite of relative level.<br/>Relative level only means that the comparison is true based on the current context (point of view, time, etc), whereas absolute level means that the comparison is <i>always</i> true in <i>all</i> contexts.<br/>If you're unsure which to use, use relative level (unchecked box)."
-    },
     "asp": {
         "type":"",
         "title":"Aspect",
