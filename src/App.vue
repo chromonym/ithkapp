@@ -93,6 +93,7 @@
             <br/><br/>
           </span>
         </div>
+        <a href="https://github.com/TheXXOs/ithkapp" target="_blank">This project on GitHub</a>
       </div>
       <div v-if="modalID != 'settings' && modalID != 'share'">
         <h2 style="text-align:center;">{{modalContent.title}}</h2>
