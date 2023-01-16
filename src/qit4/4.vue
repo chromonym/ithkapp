@@ -67,20 +67,28 @@
       <OptionBox :json="gData.pha" code="pha3" @send-message="handleSendMessage" ref="pha3" @modal="openModal" :disabled='this.gOptions.vn3 != "pha"'/>
       <OptionBox :json="gData.eff" code="eff3" @send-message="handleSendMessage" ref="eff3" @modal="openModal" :disabled='this.gOptions.vn3 != "eff"'/>
       <OptionBox :json="gData.lvl" code="lvl3" @send-message="handleSendMessage" ref="lvl3" @modal="openModal" :disabled='this.gOptions.vn3 != "lvl"'/>
-      <!--<OptionBox :json="gData.asp" code="asp3" @send-message="handleSendMessage" ref="asp3" @modal="openModal" :disabled='this.gOptions.vn3 != "asp"'/>-->
+      <OptionBox :json="gData.asp" code="asp3" @send-message="handleSendMessage" ref="asp3" @modal="openModal" :disabled='this.gOptions.vn3 != "asp"'/>
+    </div>
+    <div class="section" :class="{hidden: wordType != 'modular'}">
+      <h2 style="width:100%;">Slot IV</h2>
+      <OptionBox :json="gData.vh" code="vh" @send-message="handleSendMessage" ref="vh" @modal="openModal" :class='{hidden: this.wordType != "modular"}' :disabled='this.gOptions.modNumber == "1"'/>
+      <OptionBox :json="gData.modScope" code="modScope" @send-message="handleSendMessage" ref="modScope" @modal="openModal" :class='{hidden: this.wordType != "modular" || this.gOptions.modNumber == "1" || this.gOptions.vh == "vn"}'/>
+      <OptionBox :json="gData.v4n" code="v4n" @send-message="handleSendMessage" ref="v4n" @modal="openModal" :class='{hidden: this.gOptions.vh != "vn" || this.gOptions.modNumber == "1"}'/>
+      <OptionBox :json="gData.val" code="val4" @send-message="handleSendMessage" ref="val4" @modal="openModal" :disabled='this.gOptions.v4n != "val"' :class='{hidden: this.gOptions.vh != "vn" || this.gOptions.modNumber == "1"}'/>
+      <OptionBox :json="gData.pha" code="pha4" @send-message="handleSendMessage" ref="pha4" @modal="openModal" :disabled='this.gOptions.v4n != "pha"' :class='{hidden: this.gOptions.vh != "vn" || this.gOptions.modNumber == "1"}'/>
+      <OptionBox :json="gData.eff" code="eff4" @send-message="handleSendMessage" ref="eff4" @modal="openModal" :disabled='this.gOptions.v4n != "eff"' :class='{hidden: this.gOptions.vh != "vn" || this.gOptions.modNumber == "1"}'/>
+      <OptionBox :json="gData.lvl" code="lvl4" @send-message="handleSendMessage" ref="lvl4" @modal="openModal" :disabled='this.gOptions.v4n != "lvl"' :class='{hidden: this.gOptions.vh != "vn" || this.gOptions.modNumber == "1"}'/>
+      <OptionBox :json="gData.asp" code="asp4" @send-message="handleSendMessage" ref="asp4" @modal="openModal" :class='{hidden: this.gOptions.modNumber != "1"}'/>
     </div>
     <!-- END OF MODULAR ADJUNCT -->
 
-    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','ref','refCS','mcs','bias','free'].includes(wordType)}"> <!-- Section 5: Slot 8a -->
-      <h2 style="width:100%;" :class='{hidden: this.wordType != "modular"}'>Slot IV</h2>
-      <OptionBox :json="gData.vh" code="vh" @send-message="handleSendMessage" ref="vh" @modal="openModal" :class='{hidden: this.wordType != "modular"}' :disabled='this.gOptions.modNumber == "1"'/>
-      <OptionBox :json="gData.modScope" code="modScope" @send-message="handleSendMessage" ref="modScope" @modal="openModal" :class='{hidden: this.wordType != "modular" || this.gOptions.modNumber == "1" || this.gOptions.vh == "vn"}'/>
-      <OptionBox :json="gData.vn" code="vn" @send-message="handleSendMessage" ref="vn" @modal="openModal" :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
-      <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage" ref="val" @modal="openModal" :disabled='this.gOptions.vn != "val"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
-      <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage" ref="pha" @modal="openModal" :disabled='this.gOptions.vn != "pha"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
-      <OptionBox :json="gData.eff" code="eff" @send-message="handleSendMessage" ref="eff" @modal="openModal" :disabled='this.gOptions.vn != "eff"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
-      <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"' :class='{hidden: this.wordType == "modular" && (this.gOptions.vh != "vn" || this.gOptions.modNumber == "1")}'/>
-      <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal" :disabled='(this.gOptions.vn != "asp" && this.wordType != "modular") || (this.wordType == "modular" && this.gOptions.modNumber != "1")' :class='{hidden: this.wordType == "modular" && this.gOptions.modNumber != "1"}'/>
+    <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs','bias','free'].includes(wordType)}"> <!-- Section 5: Slot 8a -->
+      <OptionBox :json="gData.vn" code="vn" @send-message="handleSendMessage" ref="vn" @modal="openModal"/>
+      <OptionBox :json="gData.val" code="val" @send-message="handleSendMessage" ref="val" @modal="openModal" :disabled='this.gOptions.vn != "val"'/>
+      <OptionBox :json="gData.pha" code="pha" @send-message="handleSendMessage" ref="pha" @modal="openModal" :disabled='this.gOptions.vn != "pha"'/>
+      <OptionBox :json="gData.eff" code="eff" @send-message="handleSendMessage" ref="eff" @modal="openModal" :disabled='this.gOptions.vn != "eff"'/>
+      <OptionBox :json="gData.lvl" code="lvl" @send-message="handleSendMessage" ref="lvl" @modal="openModal" :disabled='this.gOptions.vn != "lvl"'/>
+      <OptionBox :json="gData.asp" code="asp" @send-message="handleSendMessage" ref="asp" @modal="openModal" :disabled='this.gOptions.vn != "asp"'/>
     </div>
     <div class="section" :class="{hidden: ['affixjunct','register','modular','ref','refCS','bias','free'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct / M/CS Adjunct -->
       <OptionBox :class="{hidden: wordType != 'suppletive'}" :json="gData.suppType" code="suppType" @send-message="handleSendMessage" ref="suppType" @modal="openModal"/>
@@ -260,8 +268,12 @@ export default {
                 "eff3":"1:BEN",
                 "lvl3":"MIN",
                 "asp3":"RTR",
-                "mood3":"FAC",
-                "casc3":"CCN",
+                "v4n":"val",
+                "val4":"MNO",
+                "pha4":"PCT",
+                "eff4":"1:BEN",
+                "lvl4":"MIN",
+                "asp4":"RTR",
                 "cn": "mood",
                 "modAppliesTo":"all",
                 "modNumber": "1",
@@ -583,19 +595,19 @@ export default {
           this.fullGloss += this.gOptions[this.gOptions.vn2+"2"] + "." + this.gOptions[this.gOptions.cn+"2"];
         } if (this.gOptions.modNumber == "3") {
           output += this.calculateSlot8a("3");
-          output += "ň";
+          output += this.gOptions.vn3 == "asp" ? "n" : "ň";
           this.gloss += (this.gOptions[this.gOptions.vn3+"3"] != "MNO" ? "-" + this.gOptions[this.gOptions.vn3+"3"] : "");
           this.fullGloss += "-" + this.gOptions[this.gOptions.vn3+"3"];
         }
         output = this.recalcVowels(output);
         if (this.gOptions.modNumber == "1") {
-          output += this.calculateSlot8a("","asp");
-          this.gloss += this.gOptions.asp;
-          this.fullGloss += this.gOptions.asp;
+          output += this.calculateSlot8a("4","asp");
+          this.gloss += this.gOptions.asp4;
+          this.fullGloss += this.gOptions.asp4;
         } else if (this.gOptions.vh == "vn") {
-          output += this.calculateSlot8a();
-          this.gloss += (this.gOptions[this.gOptions.vn] != "MNO" ? "-" + this.gOptions[this.gOptions.vn] : "");
-          this.fullGloss += "-" + this.gOptions[this.gOptions.vn];
+          output += this.calculateSlot8a("4");
+          this.gloss += (this.gOptions[this.gOptions.v4n+"4"] != "MNO" ? "-" + this.gOptions[this.gOptions.v4n+"4"] : "");
+          this.fullGloss += "-" + this.gOptions[this.gOptions.v4n+"4"];
         } else {
           output += this.gOptions.modScope;
           output = this.markStress(0,output);
@@ -914,13 +926,12 @@ export default {
       for (var key1 in ph1) {
         out = out.replace(key1,ph1[key1]);
       }
-      var ph2 = {"gm":"x","gn":"ň"}
+      var ph2 = {"gm":"x","gn":"ň","bm":"v","bn":"ḑ"}
       for (var key2 in ph2) {
         out = out.charAt(0) + out.slice(1).replace(key2,ph2[key2]);
       }
       out = out.replace("ngn","ňn");
       out = out.charAt(0) + out.slice(1).replace("çx","xw");
-      // unsure how to do [C]bm --> [C]f / [C]v and [C]bn --> [C]ţ / [C]ḑ, because it's based on voicedness I think
       out = out.replace("ff","vw").replace("ţţ","ḑy");
       this.slots[10] = out;
       // step 4: apply gemination (apply nine rules) IF slot V contains affixes
@@ -1005,6 +1016,7 @@ export default {
     calculateSlot8a(num="",override="") {
       var vn;
       if (override != "") {vn = override}
+      else if (num == "4") {vn = this.gOptions["v4n"]}
       else {vn = this.gOptions["vn"+num]}
       if (vn === "asp") {
         // aspect
@@ -1024,7 +1036,12 @@ export default {
                    "pha":["PCT","ITR","REP","ITM","RCT","FRE","FRG","VAC","FLC"],
                    "eff":["1:BEN","2:BEN","3:BEN","SLF:BEN","UNK","SLF:DET","3:DET","2:DET","1:DET"],
                    "lvl":["MIN","SBE","IFR","DFT","EQU","SUR","SPL","SPQ","MAX"]};
-        let out = this.sVowels[phh[this.gOptions["vn"+num]].indexOf(this.gOptions[this.gOptions["vn"+num]+num])][ph.indexOf(this.gOptions["vn"+num])];
+        var out;
+        if (num == "4") {
+          out = this.sVowels[phh[this.gOptions["v4n"]].indexOf(this.gOptions[this.gOptions["v4n"]+num])][ph.indexOf(this.gOptions["v4n"])];
+        } else {
+          out = this.sVowels[phh[this.gOptions["vn"+num]].indexOf(this.gOptions[this.gOptions["vn"+num]+num])][ph.indexOf(this.gOptions["vn"+num])];
+        }
         return out;
       }
     },

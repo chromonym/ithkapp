@@ -379,6 +379,30 @@
         "popupdesc":"Determines which of the linked categories (listed below) will actually be shown on the word. All others are showable via <a href=\"http://www.ithkuil.net/affixes%20v_0_7_5.pdf\" target=\"_blank\">affix</a> if absolutely necessary, but will not be shown otherwise."
     },
 
+    "v4n": {
+        "type":"",
+        "title":"Vₙ",
+        "options": {
+            "val": {
+                "name":"Valence",
+                "desc":""
+            },
+            "pha": {
+                "name":"Phase",
+                "desc":""
+            },
+            "eff": {
+                "name":"Effect",
+                "desc":""
+            },
+            "lvl": {
+                "name":"Level",
+                "desc":""
+            }
+        },
+        "popupdesc":"Determines which of the linked categories (listed below) will actually be shown on the word.<br/>To show <b>Aspect</b> in this slot, the word must only have one module - otherwise, use a different slot."
+    },
+
     "val": {
         "type":"",
         "title":"Valence",
