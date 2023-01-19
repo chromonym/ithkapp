@@ -60,15 +60,25 @@
           <option>RPV</option>
         </select>
         <!-- END CA AFFIX -->
-        <select v-model="affixes[index][1]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block" :id="code+'affD'+index.toString()"> <!-- Dropdown 1 (Degree) -->
-          <option v-for="num in (['sy','zy','čy','šy','žy','jy','ly'].includes(affixes[index][0])) ? [0,1,2,3,4,5,6,8] : Array(10).keys()" :key="(num+1)%10" :value="(num+1)%10">Deg. {{(num+1)%10}}</option>
+        <select v-model="affixes[index][1]" @input="this.$emit('send-message',affixes,code)" :style="'display:inline-block'" :id="code+'affD'+index.toString()"> <!-- Dropdown 1 (Degree) -->
+          <option :key="1" :value="1">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 1" : affixes[index][2] == 4 ? "THM" : affixes[index][2] == 3 && affixes.length == 1 ? "POS" : "Deg. 1"}}</option>
+          <option :key="2" :value="2">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 2" : affixes[index][2] == 4 ? "INS" : affixes[index][2] == 3 && affixes.length == 1 ? "PRP" : "Deg. 2"}}</option>
+          <option :key="3" :value="3">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 3" : affixes[index][2] == 4 ? "ABS" : affixes[index][2] == 3 && affixes.length == 1 ? "GEN" : "Deg. 3"}}</option>
+          <option :key="4" :value="4">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 4" : affixes[index][2] == 4 ? "AFF" : affixes[index][2] == 3 && affixes.length == 1 ? "ATT" : "Deg. 4"}}</option>
+          <option :key="5" :value="5">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 5" : affixes[index][2] == 4 ? "STM" : affixes[index][2] == 3 && affixes.length == 1 ? "PDC" : "Deg. 5"}}</option>
+          <option :key="6" :value="6">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 6" : affixes[index][2] == 4 ? "EFF" : affixes[index][2] == 3 && affixes.length == 1 ? "ITP" : "Deg. 6"}}</option>
+          <option :key="7" :value="7">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 7" : affixes[index][2] == 4 ? "ERG" : affixes[index][2] == 3 && affixes.length == 1 ? "OGN" : "Deg. 7"}}</option>
+          <option :key="8" :value="8" v-if="!['sy','zy','čy','šy','žy','jy','ly'].includes(affixes[index][0])">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 8" : affixes[index][2] == 4 ? "DAT" : affixes[index][2] == 3 && affixes.length == 1 ? "IDP" : "Deg. 8"}}</option>
+          <option :key="9" :value="9">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 9" : affixes[index][2] == 4 ? "IND" : affixes[index][2] == 3 && affixes.length == 1 ? "PAR" : "Deg. 9"}}</option>
+          <option :key="0" :value="0" v-if="!(['sy','zy','čy','šy','žy','jy','ly'].includes(affixes[index][0]) || (!['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) && (affixes[index][2] == 4 || (affixes[index][2] == 3 && affixes.length == 1))))">Deg. 0</option>
+          <!--<option v-for="num in (['sy','zy','čy','šy','žy','jy','ly'].includes(affixes[index][0])) ? [0,1,2,3,4,5,6,8] : Array(10).keys()" :key="(num+1)%10" :value="(num+1)%10">Deg. {{(num+1)%10}}</option>-->
           <option key="CA" value="CA" @click="calc6(index)">Cₐ-stacking</option>
         </select>
         <select v-model="affixes[index][2]" @input="this.$emit('send-message',affixes,code)" :style="affixes[index][1] == 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'affT'+index"> <!-- Dropdown 2 (Type) -->
           <option :value="1">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? 'Series ' : 'Type-'}}1</option>
           <option :value="2">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series " : 'Type-'}}2</option>
-          <option :value="3">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series " : "Type-"}}3</option>
-          <option :value="4" v-if="['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0])">Series 4</option>
+          <option :value="3">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series 3" : affixes.length == 1 ? "Referential" : "Type-3"}}</option>
+          <option :value="4">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series 4" : "Referential"}}</option>
         </select>
       </div>
       <input type="button" value="Add" @click="affixes.push(['',1,1]); this.$emit('send-message',affixes,code)"/> <!-- Button to add another affix -->
