@@ -77,8 +77,8 @@
         <select v-model="affixes[index][2]" @input="this.$emit('send-message',affixes,code)" :style="affixes[index][1] == 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'affT'+index"> <!-- Dropdown 2 (Type) -->
           <option :value="1">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? 'Series ' : 'Type-'}}1</option>
           <option :value="2">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series " : 'Type-'}}2</option>
-          <option :value="3">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series 3" : affixes.length == 1 ? "Referential" : "Type-3"}}</option>
-          <option :value="4">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series 4" : "Referential"}}</option>
+          <option :value="3">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series 3" : affixes.length == 1 ? "Ref (3)" : "Type-3"}}</option>
+          <option :value="4">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series 4" : "Ref (4)"}}</option>
         </select>
       </div>
       <input type="button" value="Add" @click="affixes.push(['',1,1]); this.$emit('send-message',affixes,code)"/> <!-- Button to add another affix -->
