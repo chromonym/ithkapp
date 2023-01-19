@@ -27,8 +27,8 @@
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
       <OptionBox :json="gData.concat" code="concat" @send-message="handleSendMessage" ref="concat" @modal="openModal"/>
       <OptionBox :json="gData.rel" code="rel" @send-message="handleSendMessage" ref="rel" @modal="openModal" :disabled="this.gOptions.concat != '0'"/>
-      <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/>
-      <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/>
+      <OptionBox :json="gData.Vafx" code="Vafx" @send-message="handleSendMessage" type="affix" ref="Vafx" @modal="openModal" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])" :aff6="calculateSlot6"/>
+      <OptionBox :json="gData.VIIafx" code="VIIafx" @send-message="handleSendMessage" type="affix" ref="VIIafx" @modal="openModal" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])" :aff6="calculateSlot6"/>
     </div>
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','mcs','bias','free'].includes(wordType)}"> <!-- Section 3: Configuration -->
       <h2 style="width:100%;">Configuration</h2>
@@ -104,7 +104,7 @@
 
     <!-- AFFIXUAL ADJUNCT -->
     <div class="section" :class="{hidden: wordType != 'affixjunct'}">
-      <OptionBox :json="gData.affixjunct" code="affixjunct" @send-message="handleSendMessage" ref="affixjunct" @modal="openModal" :reqAff="true" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/>
+      <OptionBox :json="gData.affixjunct" code="affixjunct" @send-message="handleSendMessage" ref="affixjunct" @modal="openModal" :reqAff="true" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])" :aff6="calculateSlot6"/>
       <OptionBox :json="gData.initialAffScope" code="initialAffScope" @send-message="handleSendMessage" ref="initialAffScope" @modal="openModal"/>
       <OptionBox :json="gData.otherAffScope" code="otherAffScope" @send-message="handleSendMessage" ref="otherAffScope" @modal="openModal" :disabled='this.gOptions.affixjunct.length < 2'/>
       <OptionBox :json="gData.affScopeOf" code="affScopeOf" @send-message="handleSendMessage" ref="affScopeOf" @modal="openModal"/>
@@ -116,7 +116,7 @@
     </div>
     <!-- REFERENTIAL ADJUNCTS -->
     <div class="section" :class="{hidden: wordType != 'ref' && wordType != 'refCS'}">
-      <OptionBox :json="gData.refAffix" :class="{hidden: wordType != 'refCS'}" code="refAffix" @send-message="handleSendMessage" ref="refAffix" @modal="openModal" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/>
+      <OptionBox :json="gData.refAffix" :class="{hidden: wordType != 'refCS'}" code="refAffix" @send-message="handleSendMessage" ref="refAffix" @modal="openModal" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])" :aff6="calculateSlot6"/>
       <OptionBox :json="gData.twoCs" code="twoCs" @send-message="handleSendMessage" ref="twoCs" @modal="openModal"/>
       <OptionBox :json="gData.twoRefs" :class="{hidden: wordType == 'refCS'}" code="twoRefs" @send-message="handleSendMessage" ref="twoRefs" @modal="openModal" :disabled="!this.gOptions.twoCs"/>
       <OptionBox :json="gData.ref" code="ref2" :class="{hidden: wordType == 'refCS'}" @send-message="handleSendMessage" ref="ref2" @modal="openModal" :disabled="!this.gOptions.twoRefs || !this.gOptions.twoCs"/>
@@ -897,15 +897,25 @@ export default {
       }
       this.slots[4] = out;
     },
-    calculateSlot6() {
+    calculateSlot6(aff=false,iAffil=null,iPlex=null,iSimil=null,iCctd=null,iExt=null,iEss=null,iPersp=null) { // aff for if this is for calculating affixes
+      // step 0: set variables
+      if (!aff) {
+        iAffil = this.gOptions.affil;
+        iPlex = this.gOptions.plex;
+        iSimil = this.gOptions.simil;
+        iCctd = this.gOptions.cctd;
+        iExt = this.gOptions.ext;
+        iEss = this.gOptions.ess;
+        iPersp = this.gOptions.persp;
+      }
       // step 1: get normal states for each option
-      var AFFIL = {"CSL":"","ASO":"l","COA":"r","VAR":"ř"}[this.gOptions.affil];
-      var CONF = (this.gOptions.plex === "UPX") ? "" : (this.gOptions.plex === "DPX") ? "s" : // the most hideous (but comparatively tame compared to ithkuil iii) table as an object
+      var AFFIL = {"CSL":"","ASO":"l","COA":"r","VAR":"ř"}[iAffil];
+      var CONF = (iPlex === "UPX") ? "" : (iPlex === "DPX") ? "s" : // the most hideous (but comparatively tame compared to ithkuil iii) table as an object
                  ({"M":{"S":{"S":"t","C":"k","F":"p"}, "D":{"S":"ţ","C":"f","F":"ç"}, "F":{"S":"z","C":"ž","F":"ẓ"}},
-                   "D":{"S":{"S":"c","C":"ks","F":"ps"}, "D":{"S":"ţs","C":"fs","F":"š"}, "F":{"S":"č","C":"kš","F":"pš"}}})[this.gOptions.plex][this.gOptions.simil][this.gOptions.cctd];
+                   "D":{"S":{"S":"c","C":"ks","F":"ps"}, "D":{"S":"ţs","C":"fs","F":"š"}, "F":{"S":"č","C":"kš","F":"pš"}}})[iPlex][iSimil][iCctd];
       var EXT = ((CONF === "") ? {"DEL":"","PRX":"d","ICP":"g","ATV":"b","GRA":"gz","DPL":"bz"}
-                               : {"DEL":"","PRX":"t","ICP":"k","ATV":"p","GRA":"g","DPL":"b"})[this.gOptions.ext]; // use a different value if preceded by a nonzero configuration (CONF)
-      var PSPESS = {"NRM":{"M":"","G":"r","N":"w","A":"y"},"RPV":{"M":"l","G":"ř","N":"m","A":"n"}}[this.gOptions.ess][this.gOptions.persp];
+                               : {"DEL":"","PRX":"t","ICP":"k","ATV":"p","GRA":"g","DPL":"b"})[iExt]; // use a different value if preceded by a nonzero configuration (CONF)
+      var PSPESS = {"NRM":{"M":"","G":"r","N":"w","A":"y"},"RPV":{"M":"l","G":"ř","N":"m","A":"n"}}[iEss][iPersp];
       // step 2: check anything regarding different characters if different slots
       if (["t","k","p"].includes(EXT) && CONF != "" && AFFIL != "" && ["m","n"].includes(PSPESS)) {
         PSPESS = {"m":"h","n":"ç"}[PSPESS];
@@ -933,21 +943,25 @@ export default {
       out = out.replace("ngn","ňn");
       out = out.charAt(0) + out.slice(1).replace("çx","xw");
       out = out.replace("ff","vw").replace("ţţ","ḑy");
-      this.slots[10] = out;
-      // step 4: apply gemination (apply nine rules) IF slot V contains affixes
-      if (Object.keys(this.gOptions.Vafx).length != 0) {
-        // 1-8. are in geminate()
-        var oldOut = out;
-        out = this.geminate(out);
-        // 9. For forms beginning with l-, r- or ř-, apply one of the above eight rules as if the l-, r- or ř- were not present;
-        // if the resulting form including the initial l-, r- or ř- is not phonotactically permissible or is euphonically awkward,
-        // geminate the l-, r- or ř- instead.
-        if (out == oldOut && ["l","r","ř"].includes(out.charAt(0))) {
-          out = out.charAt(0) + this.geminate(out.slice(1));
+      if (!aff) {
+        this.slots[10] = out;
+        // step 4: apply gemination (apply nine rules) IF slot V contains affixes
+        if (Object.keys(this.gOptions.Vafx).length != 0) {
+          // 1-8. are in geminate()
+          var oldOut = out;
+          out = this.geminate(out);
+          // 9. For forms beginning with l-, r- or ř-, apply one of the above eight rules as if the l-, r- or ř- were not present;
+          // if the resulting form including the initial l-, r- or ř- is not phonotactically permissible or is euphonically awkward,
+          // geminate the l-, r- or ř- instead.
+          if (out == oldOut && ["l","r","ř"].includes(out.charAt(0))) {
+            out = out.charAt(0) + this.geminate(out.slice(1));
+          }
         }
+        // finally: output
+        this.slots[5] = out;
+      } else { // if affix, just return the output
+        return out;
       }
-      // finally: output
-      this.slots[5] = out;
     },
     geminate(out) {
       //var rulesApplied = [false,false,false,false,false,false,false,false,false];

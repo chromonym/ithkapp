@@ -17,12 +17,54 @@
     <!-- If it's a list of text entries: -->
     <div v-else-if="json.type=='affix'">
       <div v-for="(affix,index) in affixes" :key="affix"> <!-- For each affix/degree pair in the array "affixes", add a textbox and two dropdowns linked to each-->
-        <input v-model="affixes[index][0]" @input="this.$emit('send-message',affixes,code)" placeholder="Enter..." maxlength=5 :id="code+'affW'+index"/> <!-- Textbox -->
+        <input v-model="affixes[index][0]" @input="this.$emit('send-message',affixes,code)" placeholder="Enter..." maxlength=5 :id="code+'affW'+index" :class="{hidden: affixes[index][1] == 'CA'}"/> <!-- Textbox -->
+        <!-- CA AFFIX -->
+        <select v-model="plex" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'plex'+index.toString()">
+          <option>UPX</option>
+          <option>DPX</option>
+          <option>D</option>
+          <option>M</option>
+        </select>
+        <select v-model="simil" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'simil'+index.toString()" :disabled="plex=='UPX' || plex=='DPX'">
+          <option>S</option>
+          <option>D</option>
+          <option>F</option>
+        </select>
+        <select v-model="cctd" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'cctd'+index.toString()" :disabled="plex=='UPX' || plex=='DPX'">
+          <option>S</option>
+          <option>C</option>
+          <option>F</option>
+        </select>
+        <select v-model="affil" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'affil'+index.toString()">
+          <option>CSL</option>
+          <option>ASO</option>
+          <option>COA</option>
+          <option>VAR</option>
+        </select>
+        <select v-model="ext" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'ext'+index.toString()">
+          <option>DEL</option>
+          <option>PRX</option>
+          <option>ICP</option>
+          <option>ATV</option>
+          <option>GRA</option>
+          <option>DPL</option>
+        </select>
+        <select v-model="persp" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'persp'+index.toString()">
+          <option>M</option>
+          <option>G</option>
+          <option>N</option>
+          <option>A</option>
+        </select>
+        <select v-model="ess" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'ess'+index.toString()">
+          <option>NRM</option>
+          <option>RPV</option>
+        </select>
+        <!-- END CA AFFIX -->
         <select v-model="affixes[index][1]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block" :id="code+'affD'+index.toString()"> <!-- Dropdown 1 (Degree) -->
           <option v-for="num in (['sy','zy','čy','šy','žy','jy','ly'].includes(affixes[index][0])) ? [0,1,2,3,4,5,6,8] : Array(10).keys()" :key="(num+1)%10" :value="(num+1)%10">Deg. {{(num+1)%10}}</option>
-          <option key="CA" value="CA">Cₐ-stacking</option>
+          <option key="CA" value="CA" @click="calc6(index)">Cₐ-stacking</option>
         </select>
-        <select v-model="affixes[index][2]" @input="this.$emit('send-message',affixes,code)" style="display:inline-block" :id="code+'affT'+index" :disabled="affixes[index][1] == 'CA'"> <!-- Dropdown 2 (Type) -->
+        <select v-model="affixes[index][2]" @input="this.$emit('send-message',affixes,code)" :style="affixes[index][1] == 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'affT'+index"> <!-- Dropdown 2 (Type) -->
           <option :value="1">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? 'Series ' : 'Type-'}}1</option>
           <option :value="2">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series " : 'Type-'}}2</option>
           <option :value="3">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series " : "Type-"}}3</option>
@@ -61,12 +103,22 @@ export default {
     length: String, // for text entry - maximum length of entry
     whitelist: Array, // for text entry - characters to be used (if blank, then any character)
     reqAff: Boolean, // for v4 affix entry - if affixes are required
+    aff6: Function, // for v4 affix entry - slot 6 calcs
   },
   data() {
     return {
       text: "",
       option: null,
       affixes: [],
+      // for ca affixes
+      plex: 'UPX',
+      simil: 'S',
+      cctd: 'S',
+      affil: 'CSL',
+      ext: 'DEL',
+      persp: 'M',
+      ess: 'NRM',
+      // ---
     }
   },
   computed: {
@@ -118,6 +170,18 @@ export default {
           this.$emit('send-message',this.option.toString(),this.$props.code);
         }
       }
+    },
+    calc6(idx) {
+      let dAffil = document.getElementById(this.code+'affil'+idx).value;
+      let dPlex = document.getElementById(this.code+'plex'+idx).value;
+      let dSimil = document.getElementById(this.code+'simil'+idx).value;
+      let dCctd = document.getElementById(this.code+'cctd'+idx).value;
+      let dExt = document.getElementById(this.code+'ext'+idx).value;
+      let dEss = document.getElementById(this.code+'ess'+idx).value;
+      let dPersp = document.getElementById(this.code+'persp'+idx).value;
+      this.affixes[idx][0] = this.aff6(true,dAffil,dPlex,dSimil,dCctd,dExt,dEss,dPersp);
+      this.$emit('send-message',this.affixes,this.$props.code);
+      this.$emit('send-message',this.affixes,this.$props.code);
     },
     waitForElm(selector) { // code for this is by Yong Wang (https://stackoverflow.com/questions/5525071/how-to-wait-until-an-element-exists)
                            // basically, it waits for the element described by (selector) to exist on the page before resolving
