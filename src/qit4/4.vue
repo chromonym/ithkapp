@@ -1402,7 +1402,7 @@ export default {
         let a = conson.charAt(i);
         let b = conson.charAt(i+1);
         let c = conson.charAt(i+2);
-        if ((a != 'ʔ' && conson.split("ʔ").length >= 2) || conson.split("ʔ").length >= 3) {
+        if ((a != "'" && conson.split("'").length >= 2) || conson.split("'").length >= 3) {
           // 2.1 No glottal stops immediately after any consonant
           return false;
         } else if (["t","d"].includes(a) && ["s","z","š","ž","c","ẓ","č","j","ţ","ḑ"].includes(b)) {
@@ -1477,6 +1477,41 @@ export default {
     },
 
     markStress(stressType,thisword) {
+      // FIRST, CHECK ANY ADDED GLOTTAL STOPS
+      if (thisword.includes("'")) {
+        // glottal stop has likely been added
+        for (let i=thisword.length;i--;){
+          if (thisword.charAt(i) == "'" && i != thisword.length-1){ // for each glottal stop (if not final char as failsafe):
+            // assume there are no consonants in FRONT of the glottal stop because that's always not allowed but check anyway
+            console.log(thisword.charAt(i-1));
+            if (["a","e","i","o","u","ä","ë","ö","ü"].includes(thisword.charAt(i-1)) && i != 0) {
+              console.log(thisword,thisword.charAt(i-1));
+              if (!["a","e","i","o","u","ä","ë","ö","ü"].includes(thisword.charAt(i+1))) { // if next is consonant
+                let counter = 1;
+                while (!["a","e","i","o","u","ä","ë","ö","ü"].includes(thisword.charAt(i+counter))) { // find how big the consonant cluster is
+                  counter += 1;
+                }
+                let conscl = thisword.slice(i+1,i+counter);
+                console.log(conscl);
+                // recalculate for glottal stop
+                if (!this.allowedAtStart(conscl)) {
+                  // if consonant cluster cannot be preceded by glottal stop, redo vowels
+                  thisword = thisword.slice(0,i) + thisword.slice(i+1); // remove gs
+                  if (["a","e","i","o","u","ä","ë","ö","ü"].includes(thisword.charAt(i-2)) && i >= 2) {
+                    // if diphthong or vowel cluster
+                    thisword = thisword.slice(0,i-1) + "'" + thisword.slice(i-1);
+                    // move glottal stop to there
+                  } else {
+                    // if singular vowel
+                    thisword = thisword.slice(0,i-1) + thisword.charAt(i-1) + "'" + thisword.slice(i-1);
+                    // reduplicate and move glottal stop
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       var wordVowels = thisword.match(/(?:ai|ei|ëi|oi|ui|au|eu|ëu|ou|iu|[aeiouäëöü])/gi);
       if (stressType === 0 && wordVowels.length > 1) { // if ultimate stress (and not single-syllable word, because that's already assumed to be ultimate)
         for (let i = thisword.length-1; i >= 0; i--) {
