@@ -14,7 +14,6 @@
         <span @click="switchWordType('modular')" :class="{active: wordType == 'modular'}">Modular</span>
         <span @click="switchWordType('register')" :class="{active: wordType == 'register'}">Register</span>
         <span @click="switchWordType('suppletive')" :class="{active: wordType == 'suppletive'}">Suppletive</span>
-        <span @click="switchWordType('mcs')" :class="{active: wordType == 'mcs'}">Mood/Case-Scope</span>
         <span @click="switchWordType('bias')" :class="{active: wordType == 'bias'}">Bias</span>
       </div>
     </div>

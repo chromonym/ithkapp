@@ -1273,19 +1273,19 @@
         "type": "",
         "title": "Adjunct Type",
         "options": {
-            "hl": {
+            "CAR": {
                 "name": "Carrier",
                 "desc": "This is a “shortcut” for a full carrier stem, providing Case information only. It is used when the identity/nature of the foreign word(s) or proper name following the adjunct is already known to the addressee."
             },
-            "hm": {
+            "QUO": {
                 "name": "Quotative",
                 "desc": "This adjunct combines the Carrier Adjunct with the DISCURSIVE Register Adjunct to allow direct quotes to be placed within a caseframe, useful for translating imbedded quotes within sentences such as <i>He told me “get out of the house!”</i>"
             },
-            "hn": {
+            "NAM": {
                 "name": "Naming",
                 "desc": "This adjunct indicates that the following word is a name being referred to as such, rather than referring to the entity that bears the name, i.e., it would be used before the name Emily in the sentence <i>‘He said “Emily”’</i> as opposed to the sentence <i>‘He said “tell Emily”’</i> which would use the Quotative adjunct, or <i>‘He said to tell Emily’</i> which would use the Carrier adjunct."
             },
-            "hň": {
+            "PHR": {
                 "name": "Phrasal",
                 "desc": "This adjunct is essentially a specialized form of the carrier adjunct above to apply meta-level grammatical information to an entire subsequent phrase as a whole. This is similar to a case-frame, except that where case-frames function solely as an equivalent to subordinate clauses in Western languages, this adjunct causes the subsequent phrase to become a conventionalized, (quasi-)lexicalized gestalt."
             }
@@ -1448,13 +1448,9 @@
                 "name": "Cogitant",
                 "desc": "Silent/subjective thoughts"
             },
-            "MTH": {
-                "name": "Mathematical",
-                "desc": "Expression in the mathematical sub-language"
-            },
-            "CAR": {
+            "END": {
                 "name": "Carrier-End",
-                "desc": "End of term/phrase governed by carrier stem/adjunct<br/>(Use the CAR end-adjunct marker for any register where the referent within the register clause is a proper name or a foreign word/phrase)<br/><b>ONLY works if this is a Final marker.</b>"
+                "desc": "End of term/phrase governed by carrier stem/adjunct<br/>(Use the END end-adjunct marker for any register where the referent within the register clause is a proper name or a foreign word/phrase)<br/><b>ONLY works if this is a Final marker.</b>"
             }
         }
     },
