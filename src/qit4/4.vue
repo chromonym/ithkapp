@@ -3,7 +3,7 @@
     <div>
     <!--<button @click="notAvailableAlert(ithkword)">Read word (for testing)</button>-->
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
-    <p class="smalltext">Compatible with <span title="Grammar Design v1.3.1, Lexicon v1.0, VxCs Affixes v1.1, Phonotactic Rules v1.0"><u style="border-bottom: 1px dotted gray; text-decoration: none;">the version of New Ithkuil on </u><a href="http://www.ithkuil.net/">ithkuil.net</a></span>.
+    <p class="smalltext">Compatible with <span title="Grammar Design v1.3.2, Lexicon v1.0.1.1, VxCs Affixes v1.1, Phonotactic Rules v1.0"><u style="border-bottom: 1px dotted gray; text-decoration: none;">the version of New Ithkuil on </u><a href="http://www.ithkuil.net/">ithkuil.net</a></span>.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://www.ithkuil.net/00_intro.html">the old Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/">the New Ithkuil website</a>, and (occasionally) written by the creator of this site.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
@@ -430,6 +430,8 @@ export default {
               "modular": [["modAppliesTo","modNumber","cn","vh"],["vn","val","pha","eff","lvl"],["vn2","val2","pha2","eff2","lvl2","asp2"],["vn3","val3","pha3","eff3","lvl3","asp3"]],
               "ref": [["ref","refEff","refPersp","c1"],["twoCs","twoRefs","ref2","refEff2","refPersp2","c2","ess2"]],
               "refCS": [["ref","refEff","refPersp","c1","spec"],["refAffix","twoCs","c2","ess2"]],
+              "bias": [],
+              "free": [],
             }
         }
     },
@@ -1066,7 +1068,7 @@ export default {
                  ["LOC","ATD","ALL","ABL","ORI","IRL","INV","n/a","NAV"],
                  ["CNR","ASS","PER","PRO","PCV","PCR","ELP","n/a","PLM"]];
       var pph = ["OBS","REC","PUP","RPR","USP","IMA","CVN","ITU","INF"];
-      var pphh = ["DIR","DEC","IRG","VRF","n/a","ADM","POT","HOR","CNJ"];
+      var pphh = ["DIR","DEC","IRG","VER","n/a","ADM","POT","HOR","CNJ"];
       var cfound = false;
       if (this.gOptions.rel !== "UNF/K" || this.gOptions.concat != '0' || ["suppletive","ref"].includes(this.wordType)) {
         for (var i in ph) {

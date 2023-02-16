@@ -1094,7 +1094,7 @@
                 "name":"Interrogative",
                 "desc":"A statement whose purpose is to inquire or seek information from the addressee (i.e., equivalent to an English WH-question)"
             },
-            "VRF":{
+            "VER":{
                 "name":"Verificative",
                 "desc":"A statement whose purpose is to seek/obtain corroboration, confirmation, or verification (i.e., equivalent to a Yes/No question)"
             },
@@ -1575,7 +1575,7 @@
                 "desc": "<i>what (a) ...!; how . . .! ; Boy! Did (does) X ever …</i>",
                 "word": "mçt"
             },
-            "ADM": {
+            "ADS": {
                 "name": "Admissive",
                 "desc": "<i>‘Mm-hm’ ‘Uh-huh’ (said as mere acknowledgement of a statement without any implied agreement with or assent to the statement)</i>",
                 "word": "lļ"
@@ -1715,11 +1715,6 @@
                 "desc": "<i>‘It’s now or never!’</i>",
                 "word": "rrs"
             },
-            "EXP": {
-                "name": "Experiential",
-                "desc": "<i>‘Ah!’, ‘Well, now!’ ‘So!’</i> [Italian <i>‘Allora!’</i>]",
-                "word": "pss"
-            },
             "FOR": {
                 "name": "Fortuitous",
                 "desc": "<i>‘It’s just as well that...’ or ‘All’s well that ends well...’</i>",
@@ -1775,6 +1770,11 @@
                 "desc": "<i>‘take it or leave it,’ ‘this is your last chance,’</i>",
                 "word": "msk"
             },
+            "MNF": {
+                "name": "Manifestive",
+                "desc": "<i>‘Ah!’, ‘Well, now!’ ‘So!’</i> [Italian <i>‘Allora!’</i>]",
+                "word": "pss"
+            },
             "OPT": {
                 "name": "Optimal",
                 "desc": "prolonged <i>‘so’</i> or <i>‘totally’</i> as in <i>‘I so don’t care!’</i> or <i>‘That is totally not what I meant.’</i>",
@@ -1820,15 +1820,15 @@
                 "desc": "<i>‘Look at it this way…’ ‘As I see it,…’ ‘In my opinion…’ ‘From my point of view…’</i>",
                 "word": "llm"
             },
-            "RNC": {
-                "name": "Renunciative",
-                "desc": "<i>‘So much for...!’ ‘There goes...!’</i>",
-                "word": "msf"
-            },
             "RPU": {
                 "name": "Repulsive",
                 "desc": "<i>‘Yuck! Ew! How gross!’</i>",
                 "word": "šštļ"
+            },
+            "RSG": {
+                "name": "Resignative",
+                "desc": "<i>‘So much for...!’ ‘There goes...!’</i>",
+                "word": "msf"
             },
             "RVL": {
                 "name": "Revelative",
