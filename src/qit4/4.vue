@@ -3,7 +3,7 @@
     <div>
     <!--<button @click="notAvailableAlert(ithkword)">Read word (for testing)</button>-->
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
-    <p class="smalltext">Compatible with <span title="Grammar Design v1.3.2, Lexicon v1.0.1.1, VxCs Affixes v1.1, Phonotactic Rules v1.0"><u style="border-bottom: 1px dotted gray; text-decoration: none;">the version of New Ithkuil on </u><a href="http://www.ithkuil.net/">ithkuil.net</a></span>.
+    <p class="smalltext">Compatible with <span title="Grammar Design v1.3.2, Lexicon v1.0.1.1, VxCs Affixes v1.1.2, Phonotactic Rules v1.0"><u style="border-bottom: 1px dotted gray; text-decoration: none;">the version of New Ithkuil on </u><a href="http://www.ithkuil.net/">ithkuil.net</a></span>.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://www.ithkuil.net/00_intro.html">the old Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/">the New Ithkuil website</a>, and (occasionally) written by the creator of this site.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
