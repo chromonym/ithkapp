@@ -3,8 +3,8 @@
     <div>
     <!--<button @click="notAvailableAlert(ithkword)">Read word (for testing)</button>-->
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
-    <p class="smalltext">Compatible with New Ithkuil Grammar Design v1.3.1, Lexicon v1.0, VxCs Affixes v1.1, and Phonotactic Rules v1.0.
-    <br/>Definitions are a combination of taken from <a target="_blank" href="http://ithkuil.net/index.htm">the official Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/New_Ithkuil_design_doc_v_1_3.pdf">official Ithkuil IV documentation</a>, and (occasionally) written by the creator of this site.
+    <p class="smalltext">Compatible with <span title="Grammar Design v1.3.1, Lexicon v1.0, VxCs Affixes v1.1, Phonotactic Rules v1.0"><u style="border-bottom: 1px dotted gray; text-decoration: none;">the version of New Ithkuil on </u><a href="http://www.ithkuil.net/">ithkuil.net</a></span>.
+    <br/>Definitions are a combination of taken from <a target="_blank" href="http://www.ithkuil.net/00_intro.html">the old Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/">the New Ithkuil website</a>, and (occasionally) written by the creator of this site.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','bias','free'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
