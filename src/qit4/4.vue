@@ -509,14 +509,6 @@ export default {
         var afxjunctV = {"VDom":"a","VSub":"u","VIIDom":"e","VIISub":"i","formative":"o","adjacent":"ö","same":"ai"};
         var afxjunctC = {"VDom":"h","VSub":"'h","VIIDom":"'hl","VIISub":"'hr","formative":"hw","adjacent":"'hw"};
         try {
-          /*
-          let isRefCut;
-          if (this.gOptions.Vafx.length == 1) {isRefCut = this.gOptions.Vafx[i][2] == 3 || this.gOptions.Vafx[i][2] == 4;}
-          else {isRefCut = this.gOptions.Vafx[i][2] == 4;}
-          let affx = this.gOptions.Vafx[i];
-          this.gloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
-          this.fullGloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
-          */
           let isRefCut;
           if (this.gOptions.affixjunct.length == 1) {isRefCut = this.gOptions.affixjunct[0][2] == 3 || this.gOptions.affixjunct[0][2] == 4;}
           else {isRefCut = this.gOptions.affixjunct[0][2] == 4;}
@@ -576,14 +568,6 @@ export default {
           out = this.recalcVowels(out);
           this.ithkword = out;
           for (let i of this.gOptions.affixjunct.slice(1)) {
-            /*
-            let isRefCut;
-        if (this.gOptions.Vafx.length == 1) {isRefCut = this.gOptions.Vafx[i][2] == 3 || this.gOptions.Vafx[i][2] == 4;}
-        else {isRefCut = this.gOptions.Vafx[i][2] == 4;}
-        let affx = this.gOptions.Vafx[i];
-        this.gloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
-        this.fullGloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
-        */
             this.gloss += "-" + this.getAffixDefinition(i[0],i[1],i[2]==4) + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
             this.fullGloss += "-" + this.getAffixDefinition(i[0],i[1],i[2]==4) + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
           }
@@ -1707,8 +1691,8 @@ export default {
         this.fullGloss += '-' + this.getRootDefinition(this.gOptions.root.toLowerCase(),this.gOptions.stem);
         if (this.gOptions.root.toLowerCase() == "") {this.gloss += '""';this.fullGloss += '""'}
       } else if (this.wordType == "affRoot") {
-        this.gloss += '"' + this.gOptions.affRoot.toLowerCase() + '"';
-        this.fullGloss += '"' + this.gOptions.affRoot.toLowerCase() + '"';
+        this.gloss += this.getAffixDefinition(this.gOptions.affRoot.toLowerCase(),((Number(this.gOptions.arDegree)+1)%10),false,true);
+        this.fullGloss += this.getAffixDefinition(this.gOptions.affRoot.toLowerCase(),((Number(this.gOptions.arDegree)+1)%10),false,true);
       } else if (this.wordType == "refRoot") {
         let gla = this.refGloss(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
         this.gloss += gla[0];
@@ -1723,9 +1707,9 @@ export default {
         if (s4c.length > 0) {this.gloss += "-" + s4c.join(".")}
         this.fullGloss += "-"+this.gOptions.func+"."+this.gOptions.spec+"."+this.gOptions.ctxt;
       } else {
-        this.gloss += "-D" + ((this.gOptions.arDegree+1)%10).toString().slice((this.gOptions.arDegree+1).toString().length - 1);
+        this.gloss += "-D" + ((Number(this.gOptions.arDegree)+1)%10).toString();
         if (this.gOptions.ctxt != "EXS") {this.gloss += "." + this.gOptions.ctxt}
-        this.fullGloss += "-D" + (this.gOptions.arDegree+1).toString().slice((this.gOptions.arDegree+1).toString().length - 1)+"."+this.gOptions.ctxt;
+        this.fullGloss += "-D" + ((Number(this.gOptions.arDegree)+1)%10).toString()+"."+this.gOptions.ctxt;
       }
       // Slot 5
       for (var i in this.gOptions.Vafx) {
@@ -1966,97 +1950,186 @@ export default {
       }
       return root; // nothing found, use root instead
     },
-    getAffixDefinition(affix,degree,refOverride=false){
+    getAffixDefinition(affix,degree,refOverride=false,root=false){
       if (!refOverride) {
+        if (!root && affix == "") { return "''/"+degree; }
+        else if (affix == "") { return '""'; }
         for (let i = 1; i < this.affixDB.length; i++) {
           if (this.affixDB[i][0] == affix && (this.affixDB[i][1] != "" || this.affixDB[i][2] != "")) {
-            switch (degree) {
-              case 0:
-                if (this.affixDB[i][1] != "") {
-                  return this.affixDB[i][1]+"/0";
-                } else {
-                  return affix+"/0";
-                }
-              case 1:
-                if (this.affixDB[i][2] != "") {
-                  return "'"+this.affixDB[i][2]+"'";
-                } else if (this.affixDB[i][1] != "") {
-                  return this.affixDB[i][1]+"/1";
-                } else {
-                  return affix+"/1";
-                }
-              case 2:
-                if (this.affixDB[i][3] != "") {
-                  return "'"+this.affixDB[i][3]+"'";
-                } else if (this.affixDB[i][1] != "") {
-                  return this.affixDB[i][1]+"/2";
-                } else {
-                  return affix+"/2";
-                }
-              case 3:
-                if (this.affixDB[i][4] != "") {
-                  return "'"+this.affixDB[i][4]+"'";
-                } else if (this.affixDB[i][1] != "") {
-                  return this.affixDB[i][1]+"/3";
-                } else {
-                  return affix+"/3";
-                }
-              case 4:
-                if (this.affixDB[i][5] != "") {
-                  return "'"+this.affixDB[i][5]+"'";
-                } else if (this.affixDB[i][1] != "") {
-                  return this.affixDB[i][1]+"/4";
-                } else {
-                  return affix+"/4";
-                }
-              case 5:
-                if (this.affixDB[i][6] != "") {
-                  return "'"+this.affixDB[i][6]+"'";
-                } else if (this.affixDB[i][1] != "") {
-                  return this.affixDB[i][1]+"/5";
-                } else {
-                  return affix+"/5";
-                }
-              case 6:
-                if (this.affixDB[i][7] != "") {
-                  return "'"+this.affixDB[i][7]+"'";
-                } else if (this.affixDB[i][1] != "") {
-                  return this.affixDB[i][1]+"/6";
-                } else {
-                  return affix+"/6";
-                }
-              case 7:
-                if (this.affixDB[i][8] != "") {
-                  return "'"+this.affixDB[i][8]+"'";
-                } else if (this.affixDB[i][1] != "") {
-                  return this.affixDB[i][1]+"/7";
-                } else {
-                  return affix+"/7";
-                }
-              case 8:
-                if (this.affixDB[i][9] != "") {
-                  return "'"+this.affixDB[i][9]+"'";
-                } else if (this.affixDB[i][1] != "") {
-                  return this.affixDB[i][1]+"/8";
-                } else {
-                  return affix+"/8";
-                }
-              case 9:
-                if (this.affixDB[i][10] != "") {
-                  return "'"+this.affixDB[i][10]+"'";
-                } else if (this.affixDB[i][1] != "") {
-                  return this.affixDB[i][1]+"/9";
-                } else {
-                  return affix+"/9";
-                }
-              case "CA":
-                return affix+"/CA";
+            if (!root) {
+              switch (degree) {
+                case 0:
+                  if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1]+"/0";
+                  } else {
+                    return affix+"/0";
+                  }
+                case 1:
+                  if (this.affixDB[i][2] != "") {
+                    return "'"+this.affixDB[i][2]+"'";
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1]+"/1";
+                  } else {
+                    return affix+"/1";
+                  }
+                case 2:
+                  if (this.affixDB[i][3] != "") {
+                    return "'"+this.affixDB[i][3]+"'";
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1]+"/2";
+                  } else {
+                    return affix+"/2";
+                  }
+                case 3:
+                  if (this.affixDB[i][4] != "") {
+                    return "'"+this.affixDB[i][4]+"'";
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1]+"/3";
+                  } else {
+                    return affix+"/3";
+                  }
+                case 4:
+                  if (this.affixDB[i][5] != "") {
+                    return "'"+this.affixDB[i][5]+"'";
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1]+"/4";
+                  } else {
+                    return affix+"/4";
+                  }
+                case 5:
+                  if (this.affixDB[i][6] != "") {
+                    return "'"+this.affixDB[i][6]+"'";
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1]+"/5";
+                  } else {
+                    return affix+"/5";
+                  }
+                case 6:
+                  if (this.affixDB[i][7] != "") {
+                    return "'"+this.affixDB[i][7]+"'";
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1]+"/6";
+                  } else {
+                    return affix+"/6";
+                  }
+                case 7:
+                  if (this.affixDB[i][8] != "") {
+                    return "'"+this.affixDB[i][8]+"'";
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1]+"/7";
+                  } else {
+                    return affix+"/7";
+                  }
+                case 8:
+                  if (this.affixDB[i][9] != "") {
+                    return "'"+this.affixDB[i][9]+"'";
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1]+"/8";
+                  } else {
+                    return affix+"/8";
+                  }
+                case 9:
+                  if (this.affixDB[i][10] != "") {
+                    return "'"+this.affixDB[i][10]+"'";
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1]+"/9";
+                  } else {
+                    return affix+"/9";
+                  }
+                case "CA":
+                  return affix+"/CA";
+              }
+            } else {
+              if (affix == "") {return '""';}
+              switch (degree) {
+                case 0:
+                  if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1];
+                  } else {
+                    return affix;
+                  }
+                case 1:
+                  if (this.affixDB[i][2] != "") {
+                    return '"'+this.affixDB[i][2]+'"';
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1];
+                  } else {
+                    return affix;
+                  }
+                case 2:
+                  if (this.affixDB[i][3] != "") {
+                    return '"'+this.affixDB[i][3]+'"';
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1];
+                  } else {
+                    return affix;
+                  }
+                case 3:
+                  if (this.affixDB[i][4] != "") {
+                    return '"'+this.affixDB[i][4]+'"';
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1];
+                  } else {
+                    return affix;
+                  }
+                case 4:
+                  if (this.affixDB[i][5] != "") {
+                    return '"'+this.affixDB[i][5]+'"';
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1];
+                  } else {
+                    return affix;
+                  }
+                case 5:
+                  if (this.affixDB[i][6] != "") {
+                    return '"'+this.affixDB[i][6]+'"';
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1];
+                  } else {
+                    return affix;
+                  }
+                case 6:
+                  if (this.affixDB[i][7] != "") {
+                    return '"'+this.affixDB[i][7]+'"';
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1];
+                  } else {
+                    return affix;
+                  }
+                case 7:
+                  if (this.affixDB[i][8] != "") {
+                    return '"'+this.affixDB[i][8]+'"';
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1];
+                  } else {
+                    return affix;
+                  }
+                case 8:
+                  if (this.affixDB[i][9] != "") {
+                    return '"'+this.affixDB[i][9]+'"';
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1];
+                  } else {
+                    return affix;
+                  }
+                case 9:
+                  if (this.affixDB[i][10] != "") {
+                    return '"'+this.affixDB[i][10]+'"';
+                  } else if (this.affixDB[i][1] != "") {
+                    return this.affixDB[i][1];
+                  } else {
+                    return affix;
+                  }
+                case "CA":
+                  return affix;
+              }
             }
           }
         }
-        return affix+"/"+degree;
+        return affix+(root ? "" : "/"+degree);
+      } else {
+        return "(ref "+affix+"/"+degree+")";
       }
-      return "(ref "+affix+"/"+degree+")";
     },
     resetWord(gO=null) {
       if (gO == null) {
