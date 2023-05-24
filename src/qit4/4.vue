@@ -5,6 +5,7 @@
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
     <p class="smalltext">Compatible with <span title="Grammar Design v1.3.2, Lexicon v1.0.1.1, VxCs Affixes v1.1.2, Phonotactic Rules v1.0"><u style="border-bottom: 1px dotted gray; text-decoration: none;">the version of New Ithkuil on </u><a href="http://www.ithkuil.net/">ithkuil.net</a></span>.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://www.ithkuil.net/00_intro.html">the old Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/">the New Ithkuil website</a>, and (occasionally) written by the creator of this site.
+    <br/>Glosses are based on <a href="https://github.com/ngoriyasjil/IthkuilGloss">ırburučpaızya#2326</a> and in-gloss definitions are provided by the <a href="https://docs.google.com/spreadsheets/d/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/edit?usp=sharing">Collaborative Ithkuil IV Roots and Affixes Spreadsheet</a>.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','bias','free'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
@@ -201,6 +202,8 @@ export default {
                 "hx": ["Pronunciation of ⟨hl⟩, ⟨hr⟩, ⟨hm⟩, ⟨hn⟩, ⟨hň⟩: ","Devoiced",["Devoiced","As written"]],
               },
               "Miscellaneous": {
+                "gr": ["Show root gloss definitions? ", true],
+                "ga": ["Show affix gloss definitions? ","Yes",["Yes","No","Codes Only"]],
                 "ej": ["Calculate External Juncture? ",true],
                 "s8": ["Move Slot 8 consonant to Slot 6 if possible? ",false]
               }
@@ -1907,226 +1910,249 @@ export default {
       }
     },
     getRootDefinition(root,stem) {
-      for (let i=1; i < this.rootDB.length; i++) {
-        if (this.rootDB[i][0] == root && (this.rootDB[i][1] != "" || this.rootDB[i][2] != "")) {
-          // p = pattern, e = extension (text that contains ~ where the relevant definition should go), N/A = irrelevant
-          // ignore patterns for now
-          // 0 root, 1 S0, 2 S1, 3 S2, 4 S3, 5 S1.CPL, 6 S2.CPL, 7 S3.CPL, 8-10 N/A, 11 S1p, 12 S2p, 13 S3p, 14 BSCe, 15 CTEe, 16 CSVe, 17 S1.OBJ, 18 S2.OBJ, 19 S3.OBJ, 20 DYNe, 21+ N/A
-          switch (stem) {
-            case "s0":
-              if (this.rootDB[i][1] == "") {
-                return '"'+this.rootDB[i][2]+'"';
-              } else {
-                return '"'+this.rootDB[i][1]+'"';
-              }
-            case "s1":
-            if (this.rootDB[i][2] == "") {
-                return '"'+this.rootDB[i][1]+'"';
-              } else {
-                return '"'+this.rootDB[i][2]+'"';
-              }
-            case "s2":
-              if (this.rootDB[i][3] == "") {
-                if (this.rootDB[i][1] == "") {
-                  return '"'+this.rootDB[i][2]+'"';
-                } else {
-                  return '"'+this.rootDB[i][1]+'"';
-                }
-              } else {
-                return '"'+this.rootDB[i][3]+'"';
-              }
-              case "s3":
-              if (this.rootDB[i][4] == "") {
-                if (this.rootDB[i][1] == "") {
-                  return '"'+this.rootDB[i][2]+'"';
-                } else {
-                  return '"'+this.rootDB[i][1]+'"';
-                }
-              } else {
-                return '"'+this.rootDB[i][4]+'"';
-              }
-          }
-        }
-      }
-      return root; // nothing found, use root instead
-    },
-    getAffixDefinition(affix,degree,refOverride=false,root=false){
-      if (!refOverride) {
-        if (!root && affix == "") { return "''/"+degree; }
-        else if (affix == "") { return '""'; }
-        for (let i = 1; i < this.affixDB.length; i++) {
-          if (this.affixDB[i][0] == affix && (this.affixDB[i][1] != "" || this.affixDB[i][2] != "")) {
-            if (!root) {
-              switch (degree) {
-                case 0:
-                  if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1]+"/0";
+      if (this.settings["Miscellaneous"].gr[1]) {
+        try {
+          for (let i=1; i < this.rootDB.length; i++) {
+            if (this.rootDB[i][0] == root && (this.rootDB[i][1] != "" || this.rootDB[i][2] != "")) {
+              // p = pattern, e = extension (text that contains ~ where the relevant definition should go), N/A = irrelevant
+              // ignore patterns for now
+              // 0 root, 1 S0, 2 S1, 3 S2, 4 S3, 5 S1.CPL, 6 S2.CPL, 7 S3.CPL, 8-10 N/A, 11 S1p, 12 S2p, 13 S3p, 14 BSCe, 15 CTEe, 16 CSVe, 17 S1.OBJ, 18 S2.OBJ, 19 S3.OBJ, 20 DYNe, 21+ N/A
+              switch (stem) {
+                case "s0":
+                  if (this.rootDB[i][1] == "") {
+                    return '"'+this.rootDB[i][2]+'"';
                   } else {
-                    return affix+"/0";
+                    return '"'+this.rootDB[i][1]+'"';
                   }
-                case 1:
-                  if (this.affixDB[i][2] != "") {
-                    return "'"+this.affixDB[i][2]+"'";
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1]+"/1";
+                case "s1":
+                if (this.rootDB[i][2] == "") {
+                    return '"'+this.rootDB[i][1]+'"';
                   } else {
-                    return affix+"/1";
+                    return '"'+this.rootDB[i][2]+'"';
                   }
-                case 2:
-                  if (this.affixDB[i][3] != "") {
-                    return "'"+this.affixDB[i][3]+"'";
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1]+"/2";
+                case "s2":
+                  if (this.rootDB[i][3] == "") {
+                    if (this.rootDB[i][1] == "") {
+                      return '"'+this.rootDB[i][2]+'"';
+                    } else {
+                      return '"'+this.rootDB[i][1]+'"';
+                    }
                   } else {
-                    return affix+"/2";
+                    return '"'+this.rootDB[i][3]+'"';
                   }
-                case 3:
-                  if (this.affixDB[i][4] != "") {
-                    return "'"+this.affixDB[i][4]+"'";
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1]+"/3";
+                  case "s3":
+                  if (this.rootDB[i][4] == "") {
+                    if (this.rootDB[i][1] == "") {
+                      return '"'+this.rootDB[i][2]+'"';
+                    } else {
+                      return '"'+this.rootDB[i][1]+'"';
+                    }
                   } else {
-                    return affix+"/3";
+                    return '"'+this.rootDB[i][4]+'"';
                   }
-                case 4:
-                  if (this.affixDB[i][5] != "") {
-                    return "'"+this.affixDB[i][5]+"'";
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1]+"/4";
-                  } else {
-                    return affix+"/4";
-                  }
-                case 5:
-                  if (this.affixDB[i][6] != "") {
-                    return "'"+this.affixDB[i][6]+"'";
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1]+"/5";
-                  } else {
-                    return affix+"/5";
-                  }
-                case 6:
-                  if (this.affixDB[i][7] != "") {
-                    return "'"+this.affixDB[i][7]+"'";
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1]+"/6";
-                  } else {
-                    return affix+"/6";
-                  }
-                case 7:
-                  if (this.affixDB[i][8] != "") {
-                    return "'"+this.affixDB[i][8]+"'";
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1]+"/7";
-                  } else {
-                    return affix+"/7";
-                  }
-                case 8:
-                  if (this.affixDB[i][9] != "") {
-                    return "'"+this.affixDB[i][9]+"'";
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1]+"/8";
-                  } else {
-                    return affix+"/8";
-                  }
-                case 9:
-                  if (this.affixDB[i][10] != "") {
-                    return "'"+this.affixDB[i][10]+"'";
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1]+"/9";
-                  } else {
-                    return affix+"/9";
-                  }
-                case "CA":
-                  return affix+"/CA";
-              }
-            } else {
-              if (affix == "") {return '""';}
-              switch (degree) {
-                case 0:
-                  if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1];
-                  } else {
-                    return affix;
-                  }
-                case 1:
-                  if (this.affixDB[i][2] != "") {
-                    return '"'+this.affixDB[i][2]+'"';
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1];
-                  } else {
-                    return affix;
-                  }
-                case 2:
-                  if (this.affixDB[i][3] != "") {
-                    return '"'+this.affixDB[i][3]+'"';
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1];
-                  } else {
-                    return affix;
-                  }
-                case 3:
-                  if (this.affixDB[i][4] != "") {
-                    return '"'+this.affixDB[i][4]+'"';
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1];
-                  } else {
-                    return affix;
-                  }
-                case 4:
-                  if (this.affixDB[i][5] != "") {
-                    return '"'+this.affixDB[i][5]+'"';
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1];
-                  } else {
-                    return affix;
-                  }
-                case 5:
-                  if (this.affixDB[i][6] != "") {
-                    return '"'+this.affixDB[i][6]+'"';
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1];
-                  } else {
-                    return affix;
-                  }
-                case 6:
-                  if (this.affixDB[i][7] != "") {
-                    return '"'+this.affixDB[i][7]+'"';
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1];
-                  } else {
-                    return affix;
-                  }
-                case 7:
-                  if (this.affixDB[i][8] != "") {
-                    return '"'+this.affixDB[i][8]+'"';
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1];
-                  } else {
-                    return affix;
-                  }
-                case 8:
-                  if (this.affixDB[i][9] != "") {
-                    return '"'+this.affixDB[i][9]+'"';
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1];
-                  } else {
-                    return affix;
-                  }
-                case 9:
-                  if (this.affixDB[i][10] != "") {
-                    return '"'+this.affixDB[i][10]+'"';
-                  } else if (this.affixDB[i][1] != "") {
-                    return this.affixDB[i][1];
-                  } else {
-                    return affix;
-                  }
-                case "CA":
-                  return affix;
               }
             }
           }
+          return root; // nothing found, use root instead
+        } catch {
+          return '"'+root+'"';
         }
-        return affix+(root ? "" : "/"+degree);
+      } else {
+        return '"'+root+'"';
+      }
+    },
+    getAffixDefinition(affix,degree,refOverride=false,root=false){
+      if (!refOverride) {
+        if (this.settings["Miscellaneous"].ga[1] == "Yes") {
+          if (!root && affix == "") { return "''/"+degree; }
+          else if (affix == "") { return '""'; }
+          for (let i = 1; i < this.affixDB.length; i++) {
+            if (this.affixDB[i][0] == affix && (this.affixDB[i][1] != "" || this.affixDB[i][2] != "")) {
+              if (!root) {
+                switch (degree) {
+                  case 0:
+                    if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1]+"/0";
+                    } else {
+                      return affix+"/0";
+                    }
+                  case 1:
+                    if (this.affixDB[i][2] != "") {
+                      return "'"+this.affixDB[i][2]+"'";
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1]+"/1";
+                    } else {
+                      return affix+"/1";
+                    }
+                  case 2:
+                    if (this.affixDB[i][3] != "") {
+                      return "'"+this.affixDB[i][3]+"'";
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1]+"/2";
+                    } else {
+                      return affix+"/2";
+                    }
+                  case 3:
+                    if (this.affixDB[i][4] != "") {
+                      return "'"+this.affixDB[i][4]+"'";
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1]+"/3";
+                    } else {
+                      return affix+"/3";
+                    }
+                  case 4:
+                    if (this.affixDB[i][5] != "") {
+                      return "'"+this.affixDB[i][5]+"'";
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1]+"/4";
+                    } else {
+                      return affix+"/4";
+                    }
+                  case 5:
+                    if (this.affixDB[i][6] != "") {
+                      return "'"+this.affixDB[i][6]+"'";
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1]+"/5";
+                    } else {
+                      return affix+"/5";
+                    }
+                  case 6:
+                    if (this.affixDB[i][7] != "") {
+                      return "'"+this.affixDB[i][7]+"'";
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1]+"/6";
+                    } else {
+                      return affix+"/6";
+                    }
+                  case 7:
+                    if (this.affixDB[i][8] != "") {
+                      return "'"+this.affixDB[i][8]+"'";
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1]+"/7";
+                    } else {
+                      return affix+"/7";
+                    }
+                  case 8:
+                    if (this.affixDB[i][9] != "") {
+                      return "'"+this.affixDB[i][9]+"'";
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1]+"/8";
+                    } else {
+                      return affix+"/8";
+                    }
+                  case 9:
+                    if (this.affixDB[i][10] != "") {
+                      return "'"+this.affixDB[i][10]+"'";
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1]+"/9";
+                    } else {
+                      return affix+"/9";
+                    }
+                  case "CA":
+                    return affix+"/CA";
+                }
+              } else {
+                if (affix == "") {return '""';}
+                switch (degree) {
+                  case 0:
+                    if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1];
+                    } else {
+                      return affix;
+                    }
+                  case 1:
+                    if (this.affixDB[i][2] != "") {
+                      return '"'+this.affixDB[i][2]+'"';
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1];
+                    } else {
+                      return affix;
+                    }
+                  case 2:
+                    if (this.affixDB[i][3] != "") {
+                      return '"'+this.affixDB[i][3]+'"';
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1];
+                    } else {
+                      return affix;
+                    }
+                  case 3:
+                    if (this.affixDB[i][4] != "") {
+                      return '"'+this.affixDB[i][4]+'"';
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1];
+                    } else {
+                      return affix;
+                    }
+                  case 4:
+                    if (this.affixDB[i][5] != "") {
+                      return '"'+this.affixDB[i][5]+'"';
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1];
+                    } else {
+                      return affix;
+                    }
+                  case 5:
+                    if (this.affixDB[i][6] != "") {
+                      return '"'+this.affixDB[i][6]+'"';
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1];
+                    } else {
+                      return affix;
+                    }
+                  case 6:
+                    if (this.affixDB[i][7] != "") {
+                      return '"'+this.affixDB[i][7]+'"';
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1];
+                    } else {
+                      return affix;
+                    }
+                  case 7:
+                    if (this.affixDB[i][8] != "") {
+                      return '"'+this.affixDB[i][8]+'"';
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1];
+                    } else {
+                      return affix;
+                    }
+                  case 8:
+                    if (this.affixDB[i][9] != "") {
+                      return '"'+this.affixDB[i][9]+'"';
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1];
+                    } else {
+                      return affix;
+                    }
+                  case 9:
+                    if (this.affixDB[i][10] != "") {
+                      return '"'+this.affixDB[i][10]+'"';
+                    } else if (this.affixDB[i][1] != "") {
+                      return this.affixDB[i][1];
+                    } else {
+                      return affix;
+                    }
+                  case "CA":
+                    return affix;
+                }
+              }
+            }
+          }
+          return affix+(root ? "" : "/"+degree);
+        } else if (this.settings["Miscellaneous"].ga[1] == "Codes Only") {
+          for (let i = 1; i < this.affixDB.length; i++) {
+            if (this.affixDB[i][0] == affix && this.affixDB[i][1] != "") {
+              return this.affixDB[i][1]+(root ? "" : "/"+degree);
+            }
+          }
+          return affix+(root ? "" : "/"+degree);
+        } else {
+          if (root) {
+            return '"'+affix+'"';
+          } else {
+            return "'"+affix+"'"+"/"+degree;
+          }
+        }
       } else {
         return "(ref "+affix+"/"+degree+")";
       }
@@ -2148,12 +2174,20 @@ export default {
         //this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
     },
     created() {
-      fetch("https://sheets.googleapis.com/v4/spreadsheets/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/values/'Roots(Alphabetical%20order)'?key=AIzaSyDRCO5E1IYVwPWeZSUY07emm8c7Kg5Cf14")
-      .then(response => response.json())
-      .then(data => (this.rootDB = data.values));
-      fetch("https://sheets.googleapis.com/v4/spreadsheets/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/values/Affixes?key=AIzaSyDRCO5E1IYVwPWeZSUY07emm8c7Kg5Cf14")
-      .then(response => response.json())
-      .then(data => (this.affixDB = data.values));
+      try {
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/values/'Roots(Alphabetical%20order)'?key=AIzaSyDRCO5E1IYVwPWeZSUY07emm8c7Kg5Cf14")
+        .then(response => response.json())
+        .then(data => (this.rootDB = data.values));
+      } catch {
+        this.rootDB = {};
+      }
+      try {
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/values/Affixes?key=AIzaSyDRCO5E1IYVwPWeZSUY07emm8c7Kg5Cf14")
+        .then(response => response.json())
+        .then(data => (this.affixDB = data.values));
+      } catch {
+        this.affixDB = {};
+      }
     },
     computed: {
       calculateEJ() {
