@@ -432,7 +432,9 @@ export default {
               "refCS": [["ref","refEff","refPersp","c1","spec"],["refAffix","twoCs","c2","ess2"]],
               "bias": [],
               "free": [],
-            }
+            },
+            rootDB: [],
+            affixDB: [],
         }
     },
     methods: {
@@ -507,7 +509,18 @@ export default {
         var afxjunctV = {"VDom":"a","VSub":"u","VIIDom":"e","VIISub":"i","formative":"o","adjacent":"ö","same":"ai"};
         var afxjunctC = {"VDom":"h","VSub":"'h","VIIDom":"'hl","VIISub":"'hr","formative":"hw","adjacent":"'hw"};
         try {
-          this.gloss = "'" + this.gOptions.affixjunct[0][0] + "'/" + this.gOptions.affixjunct[0][1] + (this.gOptions.affixjunct[0][1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[this.gOptions.affixjunct[0][2]] : "");
+          /*
+          let isRefCut;
+          if (this.gOptions.Vafx.length == 1) {isRefCut = this.gOptions.Vafx[i][2] == 3 || this.gOptions.Vafx[i][2] == 4;}
+          else {isRefCut = this.gOptions.Vafx[i][2] == 4;}
+          let affx = this.gOptions.Vafx[i];
+          this.gloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          this.fullGloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          */
+          let isRefCut;
+          if (this.gOptions.affixjunct.length == 1) {isRefCut = this.gOptions.affixjunct[0][2] == 3 || this.gOptions.affixjunct[0][2] == 4;}
+          else {isRefCut = this.gOptions.affixjunct[0][2] == 4;}
+          this.gloss = this.getAffixDefinition(this.gOptions.affixjunct[0][0],this.gOptions.affixjunct[0][1],isRefCut) + (this.gOptions.affixjunct[0][1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[this.gOptions.affixjunct[0][2]] : "");
           this.fullGloss = this.gloss;
           this.gloss += (this.gOptions.initialAffScope == "VDom" ? "" : "-{"+this.gOptions.initialAffScope+"}");
           this.fullGloss += "-{"+this.gOptions.initialAffScope+"}";
@@ -563,15 +576,23 @@ export default {
           out = this.recalcVowels(out);
           this.ithkword = out;
           for (let i of this.gOptions.affixjunct.slice(1)) {
-            this.gloss += "-'" + i[0] + "'/" + i[1] + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
-            this.fullGloss += "-'" + i[0] + "'/" + i[1] + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
+            /*
+            let isRefCut;
+        if (this.gOptions.Vafx.length == 1) {isRefCut = this.gOptions.Vafx[i][2] == 3 || this.gOptions.Vafx[i][2] == 4;}
+        else {isRefCut = this.gOptions.Vafx[i][2] == 4;}
+        let affx = this.gOptions.Vafx[i];
+        this.gloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+        this.fullGloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+        */
+            this.gloss += "-" + this.getAffixDefinition(i[0],i[1],i[2]==4) + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
+            this.fullGloss += "-" + this.getAffixDefinition(i[0],i[1],i[2]==4) + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
           }
           this.gloss += (this.gOptions.otherAffScope == "same" ? "" : "-{" + this.gOptions.otherAffScope + "}");
           this.fullGloss += "-{" + this.gOptions.otherAffScope + "}"
         }
         if (this.gOptions.affixjunct.length > 0) {
-          this.gloss += (this.gOptions.affScopeOf == "conc" ? "{concat.}" : "");
-          this.fullGloss += (this.gOptions.affScopeOf == "conc" ? "{concat.}" : "");
+          this.gloss += (this.gOptions.affScopeOf == "conc" ? "-{concat.}" : "");
+          this.fullGloss += (this.gOptions.affScopeOf == "conc" ? "-{concat.}" : "");
           this.ithkword = this.markStress(["conc","default"].indexOf(this.gOptions.affScopeOf),this.ithkword);
         }
 
@@ -1682,8 +1703,9 @@ export default {
       }
       // Slot 3
       if (this.wordType == "normal") {
-        this.gloss += '-"' + this.gOptions.root.toLowerCase() + '"'; // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
-        this.fullGloss += '-"' + this.gOptions.root.toLowerCase() + '"';
+        this.gloss += '-' + this.getRootDefinition(this.gOptions.root.toLowerCase(),this.gOptions.stem); // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
+        this.fullGloss += '-' + this.getRootDefinition(this.gOptions.root.toLowerCase(),this.gOptions.stem);
+        if (this.gOptions.root.toLowerCase() == "") {this.gloss += '""';this.fullGloss += '""'}
       } else if (this.wordType == "affRoot") {
         this.gloss += '"' + this.gOptions.affRoot.toLowerCase() + '"';
         this.fullGloss += '"' + this.gOptions.affRoot.toLowerCase() + '"';
@@ -1701,15 +1723,18 @@ export default {
         if (s4c.length > 0) {this.gloss += "-" + s4c.join(".")}
         this.fullGloss += "-"+this.gOptions.func+"."+this.gOptions.spec+"."+this.gOptions.ctxt;
       } else {
-        this.gloss += "-D" + (this.gOptions.arDegree+1).toString().slice((this.gOptions.arDegree+1).toString().length - 1);
+        this.gloss += "-D" + ((this.gOptions.arDegree+1)%10).toString().slice((this.gOptions.arDegree+1).toString().length - 1);
         if (this.gOptions.ctxt != "EXS") {this.gloss += "." + this.gOptions.ctxt}
         this.fullGloss += "-D" + (this.gOptions.arDegree+1).toString().slice((this.gOptions.arDegree+1).toString().length - 1)+"."+this.gOptions.ctxt;
       }
       // Slot 5
       for (var i in this.gOptions.Vafx) {
+        let isRefCut;
+        if (this.gOptions.Vafx.length == 1) {isRefCut = this.gOptions.Vafx[i][2] == 3 || this.gOptions.Vafx[i][2] == 4;}
+        else {isRefCut = this.gOptions.Vafx[i][2] == 4;}
         let affx = this.gOptions.Vafx[i];
-        this.gloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : ""); // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
-        this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+        this.gloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+        this.fullGloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
       }
       // Slot 6
       if (!this.shortcutting) {
@@ -1738,15 +1763,21 @@ export default {
       // Slot 7
       if (this.slotVIIshortcut) {
         for (var j in this.gOptions.VIIafx.slice(0,-1)) {
+          let isRefCut;
+          if (this.gOptions.VIIafx.length == 1) {isRefCut = this.gOptions.VIIafx[j][2] == 3 || this.gOptions.VIIafx[j][2] == 4;}
+          else {isRefCut = this.gOptions.VIIafx[j][2] == 4;}
           let affx = this.gOptions.VIIafx[j];
-          this.gloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : ""); // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
-          this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          this.gloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          this.fullGloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
         }
       } else {
         for (var k in this.gOptions.VIIafx) {
+          let isRefCut;
+          if (this.gOptions.VIIafx.length == 1) {isRefCut = this.gOptions.VIIafx[k][2] == 3 || this.gOptions.VIIafx[k][2] == 4;}
+          else {isRefCut = this.gOptions.VIIafx[k][2] == 4;}
           let affx = this.gOptions.VIIafx[k];
-          this.gloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : ""); // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
-          this.fullGloss += "-'" + affx[0] + "'/" + affx[1] + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          this.gloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          this.fullGloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
         }
       }
       // Slot 8
@@ -1891,6 +1922,142 @@ export default {
         }
       }
     },
+    getRootDefinition(root,stem) {
+      for (let i=1; i < this.rootDB.length; i++) {
+        if (this.rootDB[i][0] == root && (this.rootDB[i][1] != "" || this.rootDB[i][2] != "")) {
+          // p = pattern, e = extension (text that contains ~ where the relevant definition should go), N/A = irrelevant
+          // ignore patterns for now
+          // 0 root, 1 S0, 2 S1, 3 S2, 4 S3, 5 S1.CPL, 6 S2.CPL, 7 S3.CPL, 8-10 N/A, 11 S1p, 12 S2p, 13 S3p, 14 BSCe, 15 CTEe, 16 CSVe, 17 S1.OBJ, 18 S2.OBJ, 19 S3.OBJ, 20 DYNe, 21+ N/A
+          switch (stem) {
+            case "s0":
+              if (this.rootDB[i][1] == "") {
+                return '"'+this.rootDB[i][2]+'"';
+              } else {
+                return '"'+this.rootDB[i][1]+'"';
+              }
+            case "s1":
+            if (this.rootDB[i][2] == "") {
+                return '"'+this.rootDB[i][1]+'"';
+              } else {
+                return '"'+this.rootDB[i][2]+'"';
+              }
+            case "s2":
+              if (this.rootDB[i][3] == "") {
+                if (this.rootDB[i][1] == "") {
+                  return '"'+this.rootDB[i][2]+'"';
+                } else {
+                  return '"'+this.rootDB[i][1]+'"';
+                }
+              } else {
+                return '"'+this.rootDB[i][3]+'"';
+              }
+              case "s3":
+              if (this.rootDB[i][4] == "") {
+                if (this.rootDB[i][1] == "") {
+                  return '"'+this.rootDB[i][2]+'"';
+                } else {
+                  return '"'+this.rootDB[i][1]+'"';
+                }
+              } else {
+                return '"'+this.rootDB[i][4]+'"';
+              }
+          }
+        }
+      }
+      return root; // nothing found, use root instead
+    },
+    getAffixDefinition(affix,degree,refOverride=false){
+      if (!refOverride) {
+        for (let i = 1; i < this.affixDB.length; i++) {
+          if (this.affixDB[i][0] == affix && (this.affixDB[i][1] != "" || this.affixDB[i][2] != "")) {
+            switch (degree) {
+              case 0:
+                if (this.affixDB[i][1] != "") {
+                  return this.affixDB[i][1]+"/0";
+                } else {
+                  return affix+"/0";
+                }
+              case 1:
+                if (this.affixDB[i][2] != "") {
+                  return "'"+this.affixDB[i][2]+"'";
+                } else if (this.affixDB[i][1] != "") {
+                  return this.affixDB[i][1]+"/1";
+                } else {
+                  return affix+"/1";
+                }
+              case 2:
+                if (this.affixDB[i][3] != "") {
+                  return "'"+this.affixDB[i][3]+"'";
+                } else if (this.affixDB[i][1] != "") {
+                  return this.affixDB[i][1]+"/2";
+                } else {
+                  return affix+"/2";
+                }
+              case 3:
+                if (this.affixDB[i][4] != "") {
+                  return "'"+this.affixDB[i][4]+"'";
+                } else if (this.affixDB[i][1] != "") {
+                  return this.affixDB[i][1]+"/3";
+                } else {
+                  return affix+"/3";
+                }
+              case 4:
+                if (this.affixDB[i][5] != "") {
+                  return "'"+this.affixDB[i][5]+"'";
+                } else if (this.affixDB[i][1] != "") {
+                  return this.affixDB[i][1]+"/4";
+                } else {
+                  return affix+"/4";
+                }
+              case 5:
+                if (this.affixDB[i][6] != "") {
+                  return "'"+this.affixDB[i][6]+"'";
+                } else if (this.affixDB[i][1] != "") {
+                  return this.affixDB[i][1]+"/5";
+                } else {
+                  return affix+"/5";
+                }
+              case 6:
+                if (this.affixDB[i][7] != "") {
+                  return "'"+this.affixDB[i][7]+"'";
+                } else if (this.affixDB[i][1] != "") {
+                  return this.affixDB[i][1]+"/6";
+                } else {
+                  return affix+"/6";
+                }
+              case 7:
+                if (this.affixDB[i][8] != "") {
+                  return "'"+this.affixDB[i][8]+"'";
+                } else if (this.affixDB[i][1] != "") {
+                  return this.affixDB[i][1]+"/7";
+                } else {
+                  return affix+"/7";
+                }
+              case 8:
+                if (this.affixDB[i][9] != "") {
+                  return "'"+this.affixDB[i][9]+"'";
+                } else if (this.affixDB[i][1] != "") {
+                  return this.affixDB[i][1]+"/8";
+                } else {
+                  return affix+"/8";
+                }
+              case 9:
+                if (this.affixDB[i][10] != "") {
+                  return "'"+this.affixDB[i][10]+"'";
+                } else if (this.affixDB[i][1] != "") {
+                  return this.affixDB[i][1]+"/9";
+                } else {
+                  return affix+"/9";
+                }
+              case "CA":
+                return affix+"/CA";
+            }
+          }
+        }
+        return affix+"/"+degree;
+      }
+      return "(ref "+affix+"/"+degree+")";
+    },
     resetWord(gO=null) {
       if (gO == null) {
         gO = this.gDefault;
@@ -1906,6 +2073,14 @@ export default {
         this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
         this.handleSendMessage();
         //this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
+    },
+    created() {
+      fetch("https://sheets.googleapis.com/v4/spreadsheets/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/values/'Roots(Alphabetical%20order)'?key=AIzaSyDRCO5E1IYVwPWeZSUY07emm8c7Kg5Cf14")
+      .then(response => response.json())
+      .then(data => (this.rootDB = data.values));
+      fetch("https://sheets.googleapis.com/v4/spreadsheets/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/values/Affixes?key=AIzaSyDRCO5E1IYVwPWeZSUY07emm8c7Kg5Cf14")
+      .then(response => response.json())
+      .then(data => (this.affixDB = data.values));
     },
     computed: {
       calculateEJ() {
