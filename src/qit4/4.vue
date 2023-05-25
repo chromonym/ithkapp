@@ -3,9 +3,9 @@
     <div>
     <!--<button @click="notAvailableAlert(ithkword)">Read word (for testing)</button>-->
     <h1>Ithkapp (hwirbuvie-ekţgyil)</h1>
-    <p class="smalltext">Compatible with <span title="Grammar Design v1.3.2, Lexicon v1.0.1.1, VxCs Affixes v1.1.2, Phonotactic Rules v1.0"><u style="border-bottom: 1px dotted gray; text-decoration: none;">the version of New Ithkuil on </u><a href="http://www.ithkuil.net/">ithkuil.net</a></span>.
+    <p class="smalltext">Compatible with <span title="Grammar Design v1.3.2, Lexicon v1.0.1.1, VxCs Affixes v1.1.2, Phonotactic Rules v1.0"><u style="border-bottom: 1px dotted gray; text-decoration: none;">the version of New Ithkuil on </u><a target="_blank" href="http://www.ithkuil.net/">ithkuil.net</a></span>.
     <br/>Definitions are a combination of taken from <a target="_blank" href="http://www.ithkuil.net/00_intro.html">the old Ithkuil III site</a>, taken from <a target="_blank" href="http://www.ithkuil.net/">the New Ithkuil website</a>, and (occasionally) written by the creator of this site.
-    <br/>Glosses are based on <a href="https://github.com/ngoriyasjil/IthkuilGloss">ırburučpaızya#2326</a> and in-gloss definitions are provided by the <a href="https://docs.google.com/spreadsheets/d/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/edit?usp=sharing">Collaborative Ithkuil IV Roots and Affixes Spreadsheet</a>.
+    <br/>Glosses are based on <a target="_blank" href="https://github.com/ngoriyasjil/IthkuilGloss">ırburučpaızya#2326</a> and in-gloss definitions are provided by the <a target="_blank" href="https://docs.google.com/spreadsheets/d/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/edit?usp=sharing">Collaborative Ithkuil IV Roots and Affixes Spreadsheet</a>.
     <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
     <br/>Click on a box's title to learn more about what it means.</p>
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','bias','free'].includes(wordType)}"> <!-- Section 1: Root, etc. -->
@@ -202,7 +202,7 @@ export default {
                 "hx": ["Pronunciation of ⟨hl⟩, ⟨hr⟩, ⟨hm⟩, ⟨hn⟩, ⟨hň⟩: ","Devoiced",["Devoiced","As written"]],
               },
               "Miscellaneous": {
-                "gr": ["Show root gloss definitions? ", true],
+                "gr": ["Show root gloss definitions? ", "Yes",["Yes","Stem & Root Only", "Root Only","No"]],
                 "ga": ["Show affix gloss definitions? ","Yes",["Yes","No","Codes Only"]],
                 "ej": ["Calculate External Juncture? ",true],
                 "s8": ["Move Slot 8 consonant to Slot 6 if possible? ",false]
@@ -438,6 +438,7 @@ export default {
             },
             rootDB: [],
             affixDB: [],
+            rootSpecPatterns: [],
         }
     },
     methods: {
@@ -571,8 +572,9 @@ export default {
           out = this.recalcVowels(out);
           this.ithkword = out;
           for (let i of this.gOptions.affixjunct.slice(1)) {
-            this.gloss += "-" + this.getAffixDefinition(i[0],i[1],i[2]==4) + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
-            this.fullGloss += "-" + this.getAffixDefinition(i[0],i[1],i[2]==4) + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
+            let aDef = this.getAffixDefinition(i[0],i[1],i[2]==4);
+            this.gloss += "-" + aDef + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
+            this.fullGloss += "-" + aDef + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
           }
           this.gloss += (this.gOptions.otherAffScope == "same" ? "" : "-{" + this.gOptions.otherAffScope + "}");
           this.fullGloss += "-{" + this.gOptions.otherAffScope + "}"
@@ -1476,16 +1478,13 @@ export default {
         for (let i=thisword.length;i--;){
           if (thisword.charAt(i) == "'" && i != thisword.length-1){ // for each glottal stop (if not final char as failsafe):
             // assume there are no consonants in FRONT of the glottal stop because that's always not allowed but check anyway
-            console.log(thisword.charAt(i-1));
             if (["a","e","i","o","u","ä","ë","ö","ü"].includes(thisword.charAt(i-1)) && i != 0) {
-              console.log(thisword,thisword.charAt(i-1));
               if (!["a","e","i","o","u","ä","ë","ö","ü"].includes(thisword.charAt(i+1))) { // if next is consonant
                 let counter = 1;
                 while (!["a","e","i","o","u","ä","ë","ö","ü"].includes(thisword.charAt(i+counter))) { // find how big the consonant cluster is
                   counter += 1;
                 }
                 let conscl = thisword.slice(i+1,i+counter);
-                console.log(conscl);
                 // recalculate for glottal stop
                 if (!this.allowedAtStart(conscl)) {
                   // if consonant cluster cannot be preceded by glottal stop, redo vowels
@@ -1690,12 +1689,14 @@ export default {
       }
       // Slot 3
       if (this.wordType == "normal") {
-        this.gloss += '-' + this.getRootDefinition(this.gOptions.root.toLowerCase(),this.gOptions.stem); // will be changed if/when community database integration is added - the glossbot actually uses BOLD for unidentified roots
-        this.fullGloss += '-' + this.getRootDefinition(this.gOptions.root.toLowerCase(),this.gOptions.stem);
+        let rDef = this.getRootDefinition(this.gOptions.root.toLowerCase(),this.gOptions.stem,this.gOptions.spec,this.gOptions.ver,this.gOptions.func);
+        this.gloss += '-' + rDef
+        this.fullGloss += '-' + rDef
         if (this.gOptions.root.toLowerCase() == "") {this.gloss += '""';this.fullGloss += '""'}
       } else if (this.wordType == "affRoot") {
-        this.gloss += this.getAffixDefinition(this.gOptions.affRoot.toLowerCase(),((Number(this.gOptions.arDegree)+1)%10),false,true);
-        this.fullGloss += this.getAffixDefinition(this.gOptions.affRoot.toLowerCase(),((Number(this.gOptions.arDegree)+1)%10),false,true);
+        let aDef = this.getAffixDefinition(this.gOptions.affRoot.toLowerCase(),((Number(this.gOptions.arDegree)+1)%10),false,true);
+        this.gloss += aDef
+        this.fullGloss += aDef;
       } else if (this.wordType == "refRoot") {
         let gla = this.refGloss(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
         this.gloss += gla[0];
@@ -1720,8 +1721,9 @@ export default {
         if (this.gOptions.Vafx.length == 1) {isRefCut = this.gOptions.Vafx[i][2] == 3 || this.gOptions.Vafx[i][2] == 4;}
         else {isRefCut = this.gOptions.Vafx[i][2] == 4;}
         let affx = this.gOptions.Vafx[i];
-        this.gloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
-        this.fullGloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+        let aDef = this.getAffixDefinition(affx[0],affx[1],isRefCut);
+        this.gloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+        this.fullGloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
       }
       // Slot 6
       if (!this.shortcutting) {
@@ -1754,8 +1756,9 @@ export default {
           if (this.gOptions.VIIafx.length == 1) {isRefCut = this.gOptions.VIIafx[j][2] == 3 || this.gOptions.VIIafx[j][2] == 4;}
           else {isRefCut = this.gOptions.VIIafx[j][2] == 4;}
           let affx = this.gOptions.VIIafx[j];
-          this.gloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
-          this.fullGloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          let aDef = this.getAffixDefinition(affx[0],affx[1],isRefCut);
+          this.gloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          this.fullGloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
         }
       } else {
         for (var k in this.gOptions.VIIafx) {
@@ -1763,8 +1766,9 @@ export default {
           if (this.gOptions.VIIafx.length == 1) {isRefCut = this.gOptions.VIIafx[k][2] == 3 || this.gOptions.VIIafx[k][2] == 4;}
           else {isRefCut = this.gOptions.VIIafx[k][2] == 4;}
           let affx = this.gOptions.VIIafx[k];
-          this.gloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
-          this.fullGloss += "-" + this.getAffixDefinition(affx[0],affx[1],isRefCut) + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          let aDef = this.getAffixDefinition(affx[0],affx[1],isRefCut)
+          this.gloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          this.fullGloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
         }
       }
       // Slot 8
@@ -1909,47 +1913,124 @@ export default {
         }
       }
     },
-    getRootDefinition(root,stem) {
-      if (this.settings["Miscellaneous"].gr[1]) {
+    getRootDefinition(root,stem,spec,vers,func) {
+      if (this.settings["Miscellaneous"].gr[1] != "No") {
         try {
+          var base;
+          var extension;
           for (let i=1; i < this.rootDB.length; i++) {
             if (this.rootDB[i][0] == root && (this.rootDB[i][1] != "" || this.rootDB[i][2] != "")) {
               // p = pattern, e = extension (text that contains ~ where the relevant definition should go), N/A = irrelevant
-              // ignore patterns for now
-              // 0 root, 1 S0, 2 S1, 3 S2, 4 S3, 5 S1.CPL, 6 S2.CPL, 7 S3.CPL, 8-10 N/A, 11 S1p, 12 S2p, 13 S3p, 14 BSCe, 15 CTEe, 16 CSVe, 17 S1.OBJ, 18 S2.OBJ, 19 S3.OBJ, 20 DYNe, 21+ N/A
-              switch (stem) {
-                case "s0":
-                  if (this.rootDB[i][1] == "") {
-                    return '"'+this.rootDB[i][2]+'"';
-                  } else {
-                    return '"'+this.rootDB[i][1]+'"';
-                  }
-                case "s1":
-                if (this.rootDB[i][2] == "") {
-                    return '"'+this.rootDB[i][1]+'"';
-                  } else {
-                    return '"'+this.rootDB[i][2]+'"';
-                  }
-                case "s2":
-                  if (this.rootDB[i][3] == "") {
+              // 0 root, 1 S0, 2 S1, 3 S2, 4 S3, 5 S1.CPL, 6 S2.CPL, 7 S3.CPL, 8-10 p, 11 S1p, 12 S2p, 13 S3p, 14 BSCe, 15 CTEe, 16 CSVe, 17 S1.OBJ, 18 S2.OBJ, 19 S3.OBJ, 20 DYNe, 21+ N/A
+              /* "Using the stem (and CPT version, if present),
+                  prepend or append specification info
+                  according to the specification pattern.
+                  If the specification used is defined in columns 14-19, it will replace both the version and specification info. Dynamic function info from the 20 column is then appended."
+              */
+              // calculate "base" definition
+              if (this.settings["Miscellaneous"].gr[1] != "Root Only") {
+                switch (stem) {
+                  case "s0":
                     if (this.rootDB[i][1] == "") {
-                      return '"'+this.rootDB[i][2]+'"';
+                      base = this.rootDB[i][2];
                     } else {
-                      return '"'+this.rootDB[i][1]+'"';
+                      base = this.rootDB[i][1];
                     }
-                  } else {
-                    return '"'+this.rootDB[i][3]+'"';
-                  }
+                    break;
+                  case "s1":
+                    if (this.rootDB[i][16] && spec == "OBJ" && this.settings["Miscellaneous"].gr[1] == "Yes") {
+                      base = this.rootDB[i][16];
+                    } else if (this.rootDB[i][5] && vers == "CPT" && this.settings["Miscellaneous"].gr[1] == "Yes") {
+                      base = this.rootDB[i][5];
+                    } else if (this.rootDB[i][2] == "") {
+                      base = this.rootDB[i][1];
+                    } else {
+                      base = this.rootDB[i][2];
+                    }
+                    break;
+                  case "s2":
+                    if (this.rootDB[i][17] && spec == "OBJ" && this.settings["Miscellaneous"].gr[1] == "Yes") {
+                      base = this.rootDB[i][17];
+                    } else if (this.rootDB[i][6] && vers == "CPT" && this.settings["Miscellaneous"].gr[1] == "Yes") {
+                      base = this.rootDB[i][6];
+                    } else if (this.rootDB[i][3] == "") {
+                      if (this.rootDB[i][1] == "") {
+                        base = this.rootDB[i][2];
+                      } else {
+                        base = this.rootDB[i][1];
+                      }
+                    } else {
+                      base = this.rootDB[i][3];
+                    }
+                    break;
                   case "s3":
-                  if (this.rootDB[i][4] == "") {
-                    if (this.rootDB[i][1] == "") {
-                      return '"'+this.rootDB[i][2]+'"';
+                    if (this.rootDB[i][18] && spec == "OBJ" && this.settings["Miscellaneous"].gr[1] == "Yes") {
+                      base = this.rootDB[i][18];
+                    } else if (this.rootDB[i][7] && vers == "CPT" && this.settings["Miscellaneous"].gr[1] == "Yes") {
+                      base = this.rootDB[i][7];
+                    } else if (this.rootDB[i][4] == "") {
+                      if (this.rootDB[i][1] == "") {
+                        base = this.rootDB[i][2];
+                      } else {
+                        base = this.rootDB[i][1];
+                      }
                     } else {
-                      return '"'+this.rootDB[i][1]+'"';
+                      base = this.rootDB[i][4];
                     }
-                  } else {
-                    return '"'+this.rootDB[i][4]+'"';
+                }
+                // calculate definition "extension"
+                // should be spec(base)
+                extension = "~";
+                if (this.settings["Miscellaneous"].gr[1] == "Yes") { // only calculate it if the user wants it calculated
+                  switch (spec) {
+                    case "BSC":
+                      if (this.rootDB[i][13]) { extension = this.rootDB[i][13] }
+                      break;
+                    case "CTE":
+                      if (this.rootDB[i][14]) { extension = this.rootDB[i][14] }
+                      break;
+                    case "CSV":
+                      if (this.rootDB[i][15]) { extension = this.rootDB[i][15] }
+                      break;
                   }
+                  // if no custom extension is used, check if there's a default one
+                  if (extension == "~" && ((this.rootDB[i][10] && stem == "s1") || (this.rootDB[i][11] && stem == "s2") || (this.rootDB[i][12] && stem == "s3"))) {
+                    for (let j = 1; j < this.rootSpecPatterns.length; j++) {
+                      if (
+                        (stem == "s1" && this.rootSpecPatterns[j][1] == this.rootDB[i][10]) ||
+                        (stem == "s2" && this.rootSpecPatterns[j][1] == this.rootDB[i][11]) ||
+                        (stem == "s3" && this.rootSpecPatterns[j][1] == this.rootDB[i][12])
+                        ) {
+                        switch (spec) {
+                          case "BSC":
+                            if (this.rootSpecPatterns[j][2]) { extension = this.rootSpecPatterns[j][2] }
+                            break;
+                          case "CTE":
+                          if (this.rootSpecPatterns[j][3]) { extension = this.rootSpecPatterns[j][3] }
+                            break;
+                          case "CSV":
+                            if (this.rootSpecPatterns[j][4]) { extension = this.rootSpecPatterns[j][4] }
+                            break;
+                          case "OBJ":
+                            if (this.rootSpecPatterns[j][5]) { extension = this.rootSpecPatterns[j][5] }
+                            break;
+                        }
+                        break;
+                      }
+                    }
+                  }
+                }
+                if (this.rootDB[i][19] && this.settings["Miscellaneous"].gr[1] == "Yes" && func == "DYN") {
+                  return '"'+this.rootDB[i][19].replace("~",extension.replace("~",base))+'"';
+                } else {
+                  return '"'+extension.replace("~",base)+'"';
+                }
+              } else { // if the user wants to have a non-changing definition
+                if (this.rootDB[i][1] == "") {
+                  return '"'+this.rootDB[i][2]+'"';
+                } else {
+                  return '"'+this.rootDB[i][1]+'"';
+                }
               }
             }
           }
@@ -2187,6 +2268,13 @@ export default {
         .then(data => (this.affixDB = data.values));
       } catch {
         this.affixDB = {};
+      }
+      try {
+        fetch("https://sheets.googleapis.com/v4/spreadsheets/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/values/'Specification%20Patterns'?key=AIzaSyDRCO5E1IYVwPWeZSUY07emm8c7Kg5Cf14")
+        .then(response => response.json())
+        .then(data => (this.rootSpecPatterns = data.values));
+      } catch {
+        this.rootSpecPatterns = [];
       }
     },
     computed: {
