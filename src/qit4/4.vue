@@ -13,8 +13,9 @@
       <OptionBox :json="gData.affRoot" :class="{hidden: wordType != 'affRoot'}" code="affRoot" @send-message="handleSendMessage" ref="affRoot" @modal="openModal" length="6" :whitelist="Object.keys(this.cData).concat(['ṭ','ŧ','ḍ','đ','ņ','ṇ','ŗ','ṛ','ł','ḷ','ż'])"/>
       <OptionBox :json="gData.arDegree" :class="{hidden: wordType != 'affRoot'}" code="arDegree" @send-message="handleSendMessage" ref="arDegree" @modal="openModal"/>
       <!-- used only for referential-related adjuncts -->
-      <OptionBox :json="gData.ref" :class="{hidden: !['refRoot','ref','refCS'].includes(wordType)}" code="ref" @send-message="handleSendMessage" ref="ref" @modal="openModal"/>
-      <OptionBox :json="gData.refEff" :class="{hidden: !['refRoot','ref','refCS'].includes(wordType)}" code="refEff" @send-message="handleSendMessage" ref="refEff" @modal="openModal"/>
+      <!--<OptionBox :json="gData.ref" :class="{hidden: !['refRoot','ref','refCS'].includes(wordType)}" code="ref" @send-message="handleSendMessage" ref="ref" @modal="openModal"/>
+      <OptionBox :json="gData.refEff" :class="{hidden: !['refRoot','ref','refCS'].includes(wordType)}" code="refEff" @send-message="handleSendMessage" ref="refEff" @modal="openModal"/>-->
+      <OptionBox :json="gData.refs" :class="{hidden: !['refRoot','ref','refCS'].includes(wordType)}" code="refs" @send-message="handleSendMessage" type="pref" ref="refs" @modal="openModal"/>
       <OptionBox :json="gData.refPersp" :class="{hidden: !['refRoot','ref','refCS'].includes(wordType)}" code="refPersp" @send-message="handleSendMessage" ref="refPersp" @modal="openModal"/>
       <OptionBox :json="gData.c" :class="{hidden: wordType != 'ref' && wordType != 'refCS'}" code="c1" @send-message="handleSendMessage" ref="c1" @modal="openModal" />
       <!-- used in normal words and some others -->
@@ -282,8 +283,9 @@ export default {
                 "vh": "vn",
                 "modScope": "a",
                 // PERSONAL-REFERENCE ADJUNCT OPTIONS
-                "ref": "1M",
-                "refEff": "NEU",
+                "ref": "1M", // remove
+                "refs":[["1M","NEU"]],
+                "refEff": "NEU", // remove
                 "refPersp": "M",
                 "ref2": "1M",
                 "refEff2": "NEU",
@@ -427,63 +429,64 @@ export default {
               "normal": [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","vld"]],
               "suppletive": [["suppType","c"]],
               "affRoot": [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","vld"]],
-              "refRoot": [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","vld"]],
+              "refRoot": [["refs","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","vld"]],
               "affixjunct": [["affixjunct","initialAffScope","otherAffScope","affScopeOf"]],
               "register": [["register","regStartOrEnd"]],
               "modular": [["modAppliesTo","modNumber","cn","vh"],["vn","val","pha","eff","lvl"],["vn2","val2","pha2","eff2","lvl2","asp2"],["vn3","val3","pha3","eff3","lvl3","asp3"]],
-              "ref": [["ref","refEff","refPersp","c1"],["twoCs","twoRefs","ref2","refEff2","refPersp2","c2","ess2"]],
-              "refCS": [["ref","refEff","refPersp","c1","spec"],["refAffix","twoCs","c2","ess2"]],
+              "ref": [["refs","refPersp","c1"],["twoCs","twoRefs","ref2","refEff2","refPersp2","c2","ess2"]],
+              "refCS": [["refs","refPersp","c1","spec"],["refAffix","twoCs","c2","ess2"]],
               "bias": [],
               "free": [],
             },
             rootDB: [],
             affixDB: [],
             rootSpecPatterns: [],
+            refOrder: [["1M","NEU"]],
         }
     },
     methods: {
         async handleSendMessage(value="",code="") { // what happens when an <OptionBox> updates its value
-            this.cut = [false,false,false]; // reset this.cut
-            if (code) {
-              await (()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
-              })();
-              //(()=>{
-                var outval = JSON.parse(JSON.stringify(value));
-                let gCode;
-                if (!isNaN(code.slice(-1))) { // this is so duplicates of descriptions can be created by using [code]2 or [code]3, such as vn2, etc.
-                  gCode = code.slice(0,-1)
-                } else {
-                  gCode = code;
-                }
-                if (this.gData[gCode].type == "text") {
-                  for (let key in this.allographs) { 
-                    outval = outval.replaceAll(key,this.allographs[key]);
-                  }
-                } else if (this.gData[gCode].type == "affix") {
-                  for (let afx in outval) {
-                    for (let key in this.allographs)
-                    outval[afx][0] = outval[afx][0].replaceAll(key,this.allographs[key]);
-                  }
-                } else {
-                  outval = value;
-                }
-                this.gOptions[code] = outval;
-              //})();
-            }
-            if (this.wordType == 'normal' || this.wordType == 'affRoot' || this.wordType == 'refRoot'){
-                //if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
-                this.calculateWord();
-                this.IPAcalcs();
-                this.glossCalcs();
-                this.cascOrMood = (this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0');
+          this.cut = [false,false,false]; // reset this.cut
+          if (code) {
+            //(()=>{ // apparently this being SPECIFICALLY await is important to making sure the Slot V and VII affixes work???
+            //})();
+            //(()=>{
+            var outval = JSON.parse(JSON.stringify(value));
+            let gCode;
+            if (!isNaN(code.slice(-1))) { // this is so duplicates of descriptions can be created by using [code]2 or [code]3, such as vn2, etc.
+              gCode = code.slice(0,-1)
             } else {
-                this.gloss = "";
-                this.fullGloss = "";
-                this.cascOrMood = false;
-                this.calculateAdjunct(this.wordType);
-                this.IPAcalcs();
-                // need to figure out how to gloss adjuncts/
+              gCode = code;
             }
+            if (this.gData[gCode].type == "text") {
+              for (let key in this.allographs) { 
+                outval = outval.replaceAll(key,this.allographs[key]);
+              }
+            } else if (this.gData[gCode].type == "affix") {
+              for (let afx in outval) {
+                for (let key in this.allographs) {
+                  outval[afx][0] = outval[afx][0].replaceAll(key,this.allographs[key]);
+                }
+              }
+            } else if (this.gData[gCode].type != "pref") {
+              outval = value;
+            }
+            this.gOptions[code] = JSON.parse(JSON.stringify(outval));
+          }
+          if (this.wordType == 'normal' || this.wordType == 'affRoot' || this.wordType == 'refRoot'){
+            //if (code == "root") {this.slots[2] = value.toLowerCase()} // this is essentially this.calculateSlot3(), because slot 3 is just the root
+            this.calculateWord();
+            this.IPAcalcs();
+            this.glossCalcs();
+            this.cascOrMood = (this.gOptions.rel == 'UNF/K' && this.gOptions.concat == '0');
+          } else {
+            this.gloss = "";
+            this.fullGloss = "";
+            this.cascOrMood = false;
+            this.calculateAdjunct(this.wordType);
+            this.IPAcalcs();
+            // need to figure out how to gloss adjuncts/
+          }
         },
         notAvailableAlert(al) {
             alert(al + " is not available yet!");
@@ -625,13 +628,13 @@ export default {
         this.ithkword = output;
 
       } else if (type=="ref") {
-        var refA = this.calculateReference(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
+        var refA = this.calculateReference(this.gOptions.refs,this.gOptions.refPersp);
         output += this.allowedAtStart(refA) && !(!this.gOptions.twoCs && this.gOptions.ess2 == "RPV") ? "" : "ë";
         output += refA;
         this.calculateSlot9("1");
         this.slot9gStop();
         output += this.slots[9];
-        let gla = this.refGloss(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
+        let gla = this.refGloss();
         this.gloss = gla[0];
         this.fullGloss = gla[1];
         this.gloss += this.gOptions.c1 == "THM" && !this.gOptions.twoCs ? "" : "-" + this.gOptions.c1;
@@ -644,10 +647,10 @@ export default {
           this.gloss += "-" + this.gOptions.c2;
           this.fullGloss += "-" + this.gOptions.c2;
           if (this.gOptions.twoRefs) {
-            var refB = this.calculateReference(this.gOptions.ref2,this.gOptions.refEff2,this.gOptions.refPersp2);
+            var refB = this.calculateReference([[this.gOptions.ref2,this.gOptions.refEff2]],this.gOptions.refPersp2);
             output += refB
             output += this.allowedAtEnd(refB) ? "": "ë";
-            let glb = this.refGloss(this.gOptions.ref2,this.gOptions.refEff2,this.gOptions.refPersp2);
+            let glb = this.refGloss(true,this.gOptions.ref2,this.gOptions.refEff2,this.gOptions.refPersp2);
             this.gloss += "-" + glb[0];
             this.fullGloss += "-" + glb[1];
           }
@@ -666,14 +669,14 @@ export default {
         this.ithkword = output;
 
       } else if (type=="refCS") {
-        var Aref = this.calculateReference(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
+        var Aref = this.calculateReference(this.gOptions.refs,this.gOptions.refPersp);
         output += this.allowedAtStart(Aref) ? "" : "ë";
         output += Aref
         this.calculateSlot9("1");
         this.slot9gStop();
         output += this.slots[9];
         output += {"BSC":"x","CTE":"xt","CSV":"xp","OBJ":"xx"}[this.gOptions.spec];
-        let gla = this.refGloss(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
+        let gla = this.refGloss();
         this.gloss = gla[0];
         this.gloss += (this.gOptions.c1 == "THM" && !this.gOptions.twoCs ? "" : "-" + this.gOptions.c1);
         this.gloss += (this.gOptions.spec == "BSC" ? "" : "-" + this.gOptions.spec);
@@ -729,9 +732,11 @@ export default {
       }
       this.IPAcalcs();
     },
-    calculateReference(ref,refEff,refPersp,refAff=false) { // use refAff=true for whenever I implement referential affixes (sec. 4.6.5)
-      /* "ref": "1m",
-        "refEff": "NEU",
+    calculateReference(refs,refPersp,refAff=false) { // use refAff=true for whenever I implement referential affixes (sec. 4.6.5)
+      /*
+        "refs": [["1M","NEU"],...] 
+        // "ref": "1m",
+        // "refEff": "NEU",
         "refPersp": "M", */
       var ph = {"1M": {"NEU":"l","BEN":"r","DET":"ř"},
                 "2M": {"NEU":"s","BEN":"š","DET":"ž"},
@@ -744,29 +749,77 @@ export default {
                 "RDP":{"NEU":"th","BEN":"ph","DET":"kh"},
                 "OBV":{"NEU":"ll","BEN":"rr","DET":"řř"},
                 "PVS":{"NEU":"mm","BEN":"nn","DET":"ňň"}};
-      var output;
-      if (refAff && ["OBV","PVS"].includes(ref)) {
-        output = {"OBV":{"NEU":"lç","BEN":"rç","DET":"řç"},"PVS":{"NEU":"mç","BEN":"nç","DET":"ňç"}}[ref][refEff];
+      var output = "";
+      var refOrders
+      if (refs.length <= 7) {
+        refOrders = this.permutator(refs);
       } else {
-        output = ph[ref][refEff];
+        refOrders = [refs];
+      }
+      // check for first combo allowed at start
+      for (let j = 0; j < refOrders.length; j++) {
+        let tempOut = "";
+        for (let i = 0; i < refOrders[j].length; i++) {
+          if (refAff && ["OBV","PVS"].includes(refOrders[j][i][0])) {
+            tempOut += {"OBV":{"NEU":"lç","BEN":"rç","DET":"řç"},"PVS":{"NEU":"mç","BEN":"nç","DET":"ňç"}}[refOrders[j][i][0]][refOrders[j][i][1]];
+          } else {
+            tempOut += ph[refOrders[j][i][0]][refOrders[j][i][1]];
+          }
+        }
+        if (this.allowedAtStart(tempOut)) {
+          output = tempOut;
+          this.refOrder = JSON.parse(JSON.stringify(refOrders[j]));
+          break;
+        }
+      }
+      // if none, check for first combo allowed at all
+      if (output == "") {
+          for (let j = 0; j < refOrders.length; j++) {
+          let tempOut = "";
+          for (let i = 0; i < refOrders[j].length; i++) {
+            if (refAff && ["OBV","PVS"].includes(refOrders[j][i][0])) {
+              tempOut += {"OBV":{"NEU":"lç","BEN":"rç","DET":"řç"},"PVS":{"NEU":"mç","BEN":"nç","DET":"ňç"}}[refOrders[j][i][0]][refOrders[j][i][1]];
+            } else {
+              tempOut += ph[refOrders[j][i][0]][refOrders[j][i][1]];
+            }
+          }
+          if (this.consAllowed(tempOut)) {
+            output = tempOut;
+            this.refOrder = JSON.parse(JSON.stringify(refOrders[j]));
+            break;
+          }
+        }
+      }
+      // if none, just go with user order - ADD CODE THAT CHECKS IF ADDING ë WOULD WORK!
+      if (output == "") {
+        for (let i = 0; i < refs.length; i++) {
+          output += i == 0 ? "" : "ë"
+          if (refAff && ["OBV","PVS"].includes(refs[0][0])) {
+            output += {"OBV":{"NEU":"lç","BEN":"rç","DET":"řç"},"PVS":{"NEU":"mç","BEN":"nç","DET":"ňç"}}[refs[i][0]][refs[i][1]];
+          } else {
+            output += ph[refs[i][0]][refs[i][1]];
+          }
+          this.refOrder = JSON.parse(JSON.stringify(refs));
+        }
       }
       var pph = [];
       if (refPersp == "A") {
         if (!this.consAllowed(output+"w")) {output += "y"}
         else {output += "w"}
+        this.refOrder.push("A");
       } else if (refPersp == "G" || refPersp == "N") {
         if (refPersp == "G") {pph = ["ļ","tļ"]}
         else {pph = ["ç","x"]}
         // first, check for the first combination allowed at the end of a word, in case of shortcutting
-        if (this.allowedAtEnd(pph[0]+output)) {output = pph[0] + output}
-        else if (this.allowedAtEnd(pph[1]+output)) {output = pph[1] + output}
-        else if (this.allowedAtEnd(output+pph[0])) {output += pph[0]}
-        else if (this.allowedAtEnd(output+pph[1])) {output += pph[1]}
+        if (this.allowedAtStart(output+pph[0])) {output += pph[0]; this.refOrder.push(refPersp)}
+        else if (this.allowedAtStart(output+pph[1])) {output += pph[1]; this.refOrder.push(refPersp)}
+        else if (this.allowedAtStart(pph[0]+output)) {output = pph[0] + output; this.refOrder.unshift(refPersp)}
+        else if (this.allowedAtStart(pph[1]+output)) {output = pph[1] + output; this.refOrder.unshift(refPersp)}
         // then just check for the first viable combination
-        else if (this.consAllowed(output+pph[0])) {output += pph[0]}
-        else if (this.consAllowed(output+pph[1])) {output += pph[1]}
-        else if (this.consAllowed(pph[0]+output)) {output = output + pph[0]}
-        else {output = output + pph[1]}
+        else if (this.consAllowed(output+pph[0])) {output += pph[0]; this.refOrder.push(refPersp)}
+        else if (this.consAllowed(output+pph[1])) {output += pph[1]; this.refOrder.push(refPersp)}
+        else if (this.consAllowed(pph[0]+output)) {output = output + pph[0]; this.refOrder.unshift(refPersp)}
+        else {output = output + pph[1]; this.refOrder.unshift(refPersp)}
       }
       return output;
     },
@@ -848,7 +901,7 @@ export default {
       } else if (this.wordType == "affRoot") {
         this.slots[2] = this.gOptions.affRoot.toLowerCase();
       } else if (this.wordType == "refRoot") {
-        this.slots[2] = this.calculateReference(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
+        this.slots[2] = this.calculateReference(this.gOptions.refs,this.gOptions.refPersp);
       }
     },
     calculateSlot4() {
@@ -1698,7 +1751,7 @@ export default {
         this.gloss += aDef
         this.fullGloss += aDef;
       } else if (this.wordType == "refRoot") {
-        let gla = this.refGloss(this.gOptions.ref,this.gOptions.refEff,this.gOptions.refPersp);
+        let gla = this.refGloss();
         this.gloss += gla[0];
         this.fullGloss += gla[1];
       }
@@ -1805,16 +1858,46 @@ export default {
         this.fullGloss = ph;
       }
     },
-    refGloss(ref,refEff,refPersp) {
+    refGloss(secondRef=false,ref="1M",refEff="NEU",refPersp="M") {
       var output = "";
       var fullPut = ""
-      output += refPersp == "M" ? "" : "[";
-      fullPut += refPersp == "M" ? "" : "[";
-      output += ref;
-      output += refEff == "NEU" ? "" : "."+refEff;
-      fullPut += ref + "." + refEff;
-      output += refPersp == "M" ? "" : "+"+refPersp+"]";
-      fullPut += refPersp == "M" ? "" : "+"+refPersp+"]";
+      if (secondRef) {
+        output += refPersp == "M" ? "" : "[";
+        fullPut += refPersp == "M" ? "" : "[";
+        output += ref;
+        output += refEff == "NEU" ? "" : "."+refEff;
+        fullPut += ref + "." + refEff;
+        output += refPersp == "M" ? "" : "+"+refPersp+"]";
+        fullPut += refPersp == "M" ? "" : "+"+refPersp+"]";
+      } else {
+        output += this.refOrder.length > 1 ? "[" : "";
+        fullPut += this.refOrder.length > 1 ? "[" : "";
+        if (typeof this.refOrder[0] == "string") {
+          output += this.refOrder[0];
+          fullPut += this.refOrder[0];
+        } else {
+          output += this.refOrder[0][0]
+          output += this.refOrder[0][1] == "NEU" ? "" : "." + this.refOrder[0][1];
+          fullPut += this.refOrder[0][0] + "." + this.refOrder[0][1];
+        }
+        if (this.refOrder.length > 1) {
+          for (let i = 1; i < this.refOrder.length; i++) {
+            /*output += "+" + this.refOrder[i][0]
+            output += this.refOrder[i][1] == "M" ? "" : "." + this.refOrder[i][1];
+            fullPut += "+" + this.refOrder[i][0] + "." + this.refOrder[i][1];*/
+            if (typeof this.refOrder[i] == "string") {
+              output += "+"+this.refOrder[i];
+              fullPut += "+"+this.refOrder[i];
+            } else {
+              output += "+"+this.refOrder[i][0]
+              output += this.refOrder[i][1] == "NEU" ? "" : "." + this.refOrder[i][1];
+              fullPut += "+"+this.refOrder[i][0] + "." + this.refOrder[i][1];
+            }
+          }
+          output += "]";
+          fullPut += "]";
+        }
+      }
       return [output,fullPut];
     },
     IPAcalcs() {
@@ -2044,199 +2127,224 @@ export default {
     },
     getAffixDefinition(affix,degree,refOverride=false,root=false){
       if (!refOverride) {
-        if (this.settings["Miscellaneous"].ga[1] == "Yes") {
-          if (!root && affix == "") { return "''/"+degree; }
-          else if (affix == "") { return '""'; }
-          for (let i = 1; i < this.affixDB.length; i++) {
-            if (this.affixDB[i][0] == affix && (this.affixDB[i][1] != "" || this.affixDB[i][2] != "")) {
-              if (!root) {
-                switch (degree) {
-                  case 0:
-                    if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1]+"/0";
-                    } else {
-                      return affix+"/0";
-                    }
-                  case 1:
-                    if (this.affixDB[i][2] != "") {
-                      return "'"+this.affixDB[i][2]+"'";
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1]+"/1";
-                    } else {
-                      return affix+"/1";
-                    }
-                  case 2:
-                    if (this.affixDB[i][3] != "") {
-                      return "'"+this.affixDB[i][3]+"'";
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1]+"/2";
-                    } else {
-                      return affix+"/2";
-                    }
-                  case 3:
-                    if (this.affixDB[i][4] != "") {
-                      return "'"+this.affixDB[i][4]+"'";
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1]+"/3";
-                    } else {
-                      return affix+"/3";
-                    }
-                  case 4:
-                    if (this.affixDB[i][5] != "") {
-                      return "'"+this.affixDB[i][5]+"'";
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1]+"/4";
-                    } else {
-                      return affix+"/4";
-                    }
-                  case 5:
-                    if (this.affixDB[i][6] != "") {
-                      return "'"+this.affixDB[i][6]+"'";
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1]+"/5";
-                    } else {
-                      return affix+"/5";
-                    }
-                  case 6:
-                    if (this.affixDB[i][7] != "") {
-                      return "'"+this.affixDB[i][7]+"'";
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1]+"/6";
-                    } else {
-                      return affix+"/6";
-                    }
-                  case 7:
-                    if (this.affixDB[i][8] != "") {
-                      return "'"+this.affixDB[i][8]+"'";
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1]+"/7";
-                    } else {
-                      return affix+"/7";
-                    }
-                  case 8:
-                    if (this.affixDB[i][9] != "") {
-                      return "'"+this.affixDB[i][9]+"'";
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1]+"/8";
-                    } else {
-                      return affix+"/8";
-                    }
-                  case 9:
-                    if (this.affixDB[i][10] != "") {
-                      return "'"+this.affixDB[i][10]+"'";
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1]+"/9";
-                    } else {
-                      return affix+"/9";
-                    }
-                  case "CA":
-                    return affix+"/CA";
-                }
-              } else {
-                if (affix == "") {return '""';}
-                switch (degree) {
-                  case 0:
-                    if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1];
-                    } else {
+        try {
+          if (this.settings["Miscellaneous"].ga[1] == "Yes") {
+            if (!root && affix == "") { return "''/"+degree; }
+            else if (affix == "") { return '""'; }
+            for (let i = 1; i < this.affixDB.length; i++) {
+              if (this.affixDB[i][0] == affix && (this.affixDB[i][1] != "" || this.affixDB[i][2] != "")) {
+                if (!root) {
+                  switch (degree) {
+                    case 0:
+                      if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1]+"/0";
+                      } else {
+                        return affix+"/0";
+                      }
+                    case 1:
+                      if (this.affixDB[i][2] != "") {
+                        return "'"+this.affixDB[i][2]+"'";
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1]+"/1";
+                      } else {
+                        return affix+"/1";
+                      }
+                    case 2:
+                      if (this.affixDB[i][3] != "") {
+                        return "'"+this.affixDB[i][3]+"'";
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1]+"/2";
+                      } else {
+                        return affix+"/2";
+                      }
+                    case 3:
+                      if (this.affixDB[i][4] != "") {
+                        return "'"+this.affixDB[i][4]+"'";
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1]+"/3";
+                      } else {
+                        return affix+"/3";
+                      }
+                    case 4:
+                      if (this.affixDB[i][5] != "") {
+                        return "'"+this.affixDB[i][5]+"'";
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1]+"/4";
+                      } else {
+                        return affix+"/4";
+                      }
+                    case 5:
+                      if (this.affixDB[i][6] != "") {
+                        return "'"+this.affixDB[i][6]+"'";
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1]+"/5";
+                      } else {
+                        return affix+"/5";
+                      }
+                    case 6:
+                      if (this.affixDB[i][7] != "") {
+                        return "'"+this.affixDB[i][7]+"'";
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1]+"/6";
+                      } else {
+                        return affix+"/6";
+                      }
+                    case 7:
+                      if (this.affixDB[i][8] != "") {
+                        return "'"+this.affixDB[i][8]+"'";
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1]+"/7";
+                      } else {
+                        return affix+"/7";
+                      }
+                    case 8:
+                      if (this.affixDB[i][9] != "") {
+                        return "'"+this.affixDB[i][9]+"'";
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1]+"/8";
+                      } else {
+                        return affix+"/8";
+                      }
+                    case 9:
+                      if (this.affixDB[i][10] != "") {
+                        return "'"+this.affixDB[i][10]+"'";
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1]+"/9";
+                      } else {
+                        return affix+"/9";
+                      }
+                    case "CA":
+                      return affix+"/CA";
+                  }
+                } else {
+                  if (affix == "") {return '""';}
+                  switch (degree) {
+                    case 0:
+                      if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1];
+                      } else {
+                        return affix;
+                      }
+                    case 1:
+                      if (this.affixDB[i][2] != "") {
+                        return '"'+this.affixDB[i][2]+'"';
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1];
+                      } else {
+                        return affix;
+                      }
+                    case 2:
+                      if (this.affixDB[i][3] != "") {
+                        return '"'+this.affixDB[i][3]+'"';
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1];
+                      } else {
+                        return affix;
+                      }
+                    case 3:
+                      if (this.affixDB[i][4] != "") {
+                        return '"'+this.affixDB[i][4]+'"';
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1];
+                      } else {
+                        return affix;
+                      }
+                    case 4:
+                      if (this.affixDB[i][5] != "") {
+                        return '"'+this.affixDB[i][5]+'"';
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1];
+                      } else {
+                        return affix;
+                      }
+                    case 5:
+                      if (this.affixDB[i][6] != "") {
+                        return '"'+this.affixDB[i][6]+'"';
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1];
+                      } else {
+                        return affix;
+                      }
+                    case 6:
+                      if (this.affixDB[i][7] != "") {
+                        return '"'+this.affixDB[i][7]+'"';
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1];
+                      } else {
+                        return affix;
+                      }
+                    case 7:
+                      if (this.affixDB[i][8] != "") {
+                        return '"'+this.affixDB[i][8]+'"';
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1];
+                      } else {
+                        return affix;
+                      }
+                    case 8:
+                      if (this.affixDB[i][9] != "") {
+                        return '"'+this.affixDB[i][9]+'"';
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1];
+                      } else {
+                        return affix;
+                      }
+                    case 9:
+                      if (this.affixDB[i][10] != "") {
+                        return '"'+this.affixDB[i][10]+'"';
+                      } else if (this.affixDB[i][1] != "") {
+                        return this.affixDB[i][1];
+                      } else {
+                        return affix;
+                      }
+                    case "CA":
                       return affix;
-                    }
-                  case 1:
-                    if (this.affixDB[i][2] != "") {
-                      return '"'+this.affixDB[i][2]+'"';
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1];
-                    } else {
-                      return affix;
-                    }
-                  case 2:
-                    if (this.affixDB[i][3] != "") {
-                      return '"'+this.affixDB[i][3]+'"';
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1];
-                    } else {
-                      return affix;
-                    }
-                  case 3:
-                    if (this.affixDB[i][4] != "") {
-                      return '"'+this.affixDB[i][4]+'"';
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1];
-                    } else {
-                      return affix;
-                    }
-                  case 4:
-                    if (this.affixDB[i][5] != "") {
-                      return '"'+this.affixDB[i][5]+'"';
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1];
-                    } else {
-                      return affix;
-                    }
-                  case 5:
-                    if (this.affixDB[i][6] != "") {
-                      return '"'+this.affixDB[i][6]+'"';
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1];
-                    } else {
-                      return affix;
-                    }
-                  case 6:
-                    if (this.affixDB[i][7] != "") {
-                      return '"'+this.affixDB[i][7]+'"';
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1];
-                    } else {
-                      return affix;
-                    }
-                  case 7:
-                    if (this.affixDB[i][8] != "") {
-                      return '"'+this.affixDB[i][8]+'"';
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1];
-                    } else {
-                      return affix;
-                    }
-                  case 8:
-                    if (this.affixDB[i][9] != "") {
-                      return '"'+this.affixDB[i][9]+'"';
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1];
-                    } else {
-                      return affix;
-                    }
-                  case 9:
-                    if (this.affixDB[i][10] != "") {
-                      return '"'+this.affixDB[i][10]+'"';
-                    } else if (this.affixDB[i][1] != "") {
-                      return this.affixDB[i][1];
-                    } else {
-                      return affix;
-                    }
-                  case "CA":
-                    return affix;
+                  }
                 }
               }
             }
-          }
-          return affix+(root ? "" : "/"+degree);
-        } else if (this.settings["Miscellaneous"].ga[1] == "Codes Only") {
-          for (let i = 1; i < this.affixDB.length; i++) {
-            if (this.affixDB[i][0] == affix && this.affixDB[i][1] != "") {
-              return this.affixDB[i][1]+(root ? "" : "/"+degree);
+            return affix+(root ? "" : "/"+degree);
+          } else if (this.settings["Miscellaneous"].ga[1] == "Codes Only") {
+            for (let i = 1; i < this.affixDB.length; i++) {
+              if (this.affixDB[i][0] == affix && this.affixDB[i][1] != "") {
+                return this.affixDB[i][1]+(root ? "" : "/"+degree);
+              }
+            }
+            return affix+(root ? "" : "/"+degree);
+          } else {
+            if (root) {
+              return '"'+affix+'"';
+            } else {
+              return "'"+affix+"'"+"/"+degree;
             }
           }
-          return affix+(root ? "" : "/"+degree);
-        } else {
+        } catch {
           if (root) {
-            return '"'+affix+'"';
-          } else {
-            return "'"+affix+"'"+"/"+degree;
-          }
+              return '"'+affix+'"';
+            } else {
+              return "'"+affix+"'"+"/"+degree;
+            }
         }
       } else {
         return "(ref "+affix+"/"+degree+")";
       }
+    },
+    permutator(inputArr) {
+      // gets all permutations of an array - taken from https://stackoverflow.com/questions/9960908/permutations-in-javascript
+      var results = [];
+      function permute(arr, memo) {
+        var cur, mEmo = memo || [];
+        for (var i = 0; i < arr.length; i++) {
+          cur = arr.splice(i, 1);
+          if (arr.length === 0) {
+            results.push(mEmo.concat(cur));
+          }
+          permute(arr.slice(), mEmo.concat(cur));
+          arr.splice(i, 0, cur[0]);
+        }
+        return results;
+      }
+      return permute(inputArr);
     },
     resetWord(gO=null) {
       if (gO == null) {
@@ -2260,14 +2368,14 @@ export default {
         .then(response => response.json())
         .then(data => (this.rootDB = data.values));
       } catch {
-        this.rootDB = {};
+        this.rootDB = [];
       }
       try {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/values/Affixes?key=AIzaSyDRCO5E1IYVwPWeZSUY07emm8c7Kg5Cf14")
         .then(response => response.json())
         .then(data => (this.affixDB = data.values));
       } catch {
-        this.affixDB = {};
+        this.affixDB = [];
       }
       try {
         fetch("https://sheets.googleapis.com/v4/spreadsheets/1JdaG1PaSQJRE2LpILvdzthbzz1k_a0VT86XSXouwGy8/values/'Specification%20Patterns'?key=AIzaSyDRCO5E1IYVwPWeZSUY07emm8c7Kg5Cf14")

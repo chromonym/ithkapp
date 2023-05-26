@@ -1163,10 +1163,10 @@
     },
 
 
-    "ref": {
-        "type": "",
-        "title": "Referential",
-        "popupdesc": "Similar to pronouns in most languages (I, you, they, etc.)",
+    "refs": {
+        "type":"pref",
+        "title":"Referentials",
+        "popupdesc":"Similar to pronouns in most languages (I, you, they, etc.). Multiple can stack to combine their meanings, and each can also have an effect applied.<br/>Similar to the normal <b>Effect</b>, this describes if this person is being referred to beneficially or detrimentally.<br/>May potentially be linked to the Effect of another word (e.g. 'the detrimental 3rd party')<br/><br/><b><u>Referential Types</u></b><br/><b>Monadic Speaker (1M):</b> 'I'<br/><b>Monadic Addressee (2M):</b> 'you (singular)'<br/><b>Polyadic Addressee (2P):</b> 'you (plural)'<br/><b>Monadic Animate 3rd Party (MA):</b> 'he'/'she'/'they (singular)'/etc<br/><b>Polyadic Animate 3rd Party (PA):</b> 'they (plural)'<br/><b>Monadic Inanimate 3rd Party (MI):</b> 'it'<br/><b>Polyadic Inanimate 3rd Party (PI):</b> 'these things'/'those things'<br/><b>Mixed Animacy 3rd Party (MX):</b> mixed animate+inanimate, e.g. 's/he+it', 'they+those', 'it+they', 'those+s/he', etc<br/><b>Reduplicative (RDP):</b> Referring back to the previously-named party (often used with SWR affix)<br/><b>Obviative (OBV):</b> 3rd party other than the one previously referenced<br/><b>Provisional (PVS):</b> 'whatever'; vague or unknown entity (corresponds with English WH-words)<br/><br/><b><u>Referential Effects</u></b><br/><b>Neutral (NEU):</b> The party is being described neutrally<br/><b>Beneficial (BEN):</b> The party is benefitting from the statement<br/><b>Detrimental (DET):</b> The party is in detriment due to the statement",
         "options": {
             "1M": {
                 "name": "Monadic Speaker",
@@ -1182,7 +1182,7 @@
             },
             "MA": {
                 "name": "Monadic Animate 3rd Party",
-                "desc": "'he'/'she'/'they (singular)'"
+                "desc": "'he'/'she'/'they (singular)'/etc"
             },
             "PA": {
                 "name": "Polyadic Animate 3rd Party",
@@ -1194,7 +1194,72 @@
             },
             "PI": {
                 "name": "Polyadic Inanimate 3rd Party",
-                "desc": "'these things/those things'"
+                "desc": "'these things'/'those things'"
+            },
+            "MX": {
+                "name": "Mixed Animacy 3rd Party",
+                "desc": "mixed animate+inanimate, e.g. 's/he+it', 'they+those', 'it+they', 'those+s/he', etc"
+            },
+            "RDP": {
+                "name": "Reduplicative",
+                "desc": "Referring back to the previously-named party (often used with SWR affix)"
+            },
+            "OBV": {
+                "name": "Obviative",
+                "desc": "3rd party other than the one previously referenced"
+            },
+            "PVS": {
+                "name": "Provisional",
+                "desc": "'whatever'; vague or unknown entity (corresponds with English WH-words)"
+            }
+        },
+        "options2": {
+            "NEU": {
+                "name": "Neutral",
+                "desc": "The party is being described neutrally"
+            },
+            "BEN": {
+                "name": "Beneficial",
+                "desc": "The party is benefitting from the statement"
+            },
+            "DET": {
+                "name": "Detrimental",
+                "desc": "The party is in detriment due to the statement"
+            }
+        }
+    },
+    "ref": {
+        "type": "",
+        "title": "Secondary Referential",
+        "popupdesc": "Apply a secondary Referential to a word that supports it.",
+        "options": {
+            "1M": {
+                "name": "Monadic Speaker",
+                "desc": "'I'"
+            },
+            "2M": {
+                "name": "Monadic Addressee",
+                "desc": "'you (singular)'"
+            },
+            "2P": {
+                "name": "Polyadic Addressee",
+                "desc": "'you (plural)'"
+            },
+            "MA": {
+                "name": "Monadic Animate 3rd Party",
+                "desc": "'he'/'she'/'they (singular)'/etc"
+            },
+            "PA": {
+                "name": "Polyadic Animate 3rd Party",
+                "desc": "'they (plural)'"
+            },
+            "MI": {
+                "name": "Monadic Inanimate 3rd Party",
+                "desc": "'it'"
+            },
+            "PI": {
+                "name": "Polyadic Inanimate 3rd Party",
+                "desc": "'these things'/'those things'"
             },
             "MX": {
                 "name": "Mixed Animacy 3rd Party",
@@ -1216,24 +1281,27 @@
     },
     "refEff": {
         "type": "",
-        "title": "Referential Effect",
-        "popupdesc": "Similar to the normal <b>Effect</b>, this describes if this person is being referred to beneficially or detrimentally.<br/>May potentially be linked to the Effect of another word (e.g. 'the detrimental 3rd party')",
+        "title": "Secondary Effect",
+        "popupdesc": "Apply an effect to the Secondary Referential",
         "options": {
             "NEU": {
-                "name": "Neutral"
+                "name": "Neutral",
+                "desc": "The party is being described neutrally"
             },
             "BEN": {
-                "name": "Beneficial"
+                "name": "Beneficial",
+                "desc": "The party is benefitting from the statement"
             },
             "DET": {
-                "name": "Detrimental"
+                "name": "Detrimental",
+                "desc": "The party is in detriment due to the statement"
             }
         }
     },
     "refPersp": {
         "type": "",
         "title": "Referential Perspective",
-        "popupdesc": "The same as the normal <b>Perspective</b>, but applied to the referential.<br/>Does nothing, currently.",
+        "popupdesc": "The same as the normal <b>Perspective</b>, but applied to a referential (either primary or secondary).",
         "options": {
             "M": {
                 "name":"Monadic",

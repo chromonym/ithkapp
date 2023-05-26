@@ -19,29 +19,29 @@
       <div v-for="(affix,index) in affixes" :key="affix"> <!-- For each affix/degree pair in the array "affixes", add a textbox and two dropdowns linked to each-->
         <input v-model="affixes[index][0]" @input="this.$emit('send-message',affixes,code)" placeholder="Enter..." maxlength=5 :id="code+'affW'+index" :class="{hidden: affixes[index][1] == 'CA'}"/> <!-- Textbox -->
         <!-- CA AFFIX -->
-        <select v-model="plex" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'plex'+index.toString()">
+        <select v-model="plex" @change="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'plex'+index.toString()">
           <option>UPX</option>
           <option>DPX</option>
           <option>D</option>
           <option>M</option>
         </select>
-        <select v-model="simil" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'simil'+index.toString()" :disabled="plex=='UPX' || plex=='DPX'">
+        <select v-model="simil" @change="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'simil'+index.toString()" :disabled="plex=='UPX' || plex=='DPX'">
           <option>S</option>
           <option>D</option>
           <option>F</option>
         </select>
-        <select v-model="cctd" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'cctd'+index.toString()" :disabled="plex=='UPX' || plex=='DPX'">
+        <select v-model="cctd" @change="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'cctd'+index.toString()" :disabled="plex=='UPX' || plex=='DPX'">
           <option>S</option>
           <option>C</option>
           <option>F</option>
         </select>
-        <select v-model="affil" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'affil'+index.toString()">
+        <select v-model="affil" @change="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'affil'+index.toString()">
           <option>CSL</option>
           <option>ASO</option>
           <option>COA</option>
           <option>VAR</option>
         </select>
-        <select v-model="ext" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'ext'+index.toString()">
+        <select v-model="ext" @change="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'ext'+index.toString()">
           <option>DEL</option>
           <option>PRX</option>
           <option>ICP</option>
@@ -49,18 +49,18 @@
           <option>GRA</option>
           <option>DPL</option>
         </select>
-        <select v-model="persp" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'persp'+index.toString()">
+        <select v-model="persp" @change="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'persp'+index.toString()">
           <option>M</option>
           <option>G</option>
           <option>N</option>
           <option>A</option>
         </select>
-        <select v-model="ess" @input="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'ess'+index.toString()">
+        <select v-model="ess" @change="this.calc6(index)" :style="affixes[index][1] != 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'ess'+index.toString()">
           <option>NRM</option>
           <option>RPV</option>
         </select>
         <!-- END CA AFFIX -->
-        <select v-model="affixes[index][1]" @input="this.$emit('send-message',affixes,code)" :style="'display:inline-block'" :id="code+'affD'+index.toString()"> <!-- Dropdown 1 (Degree) -->
+        <select v-model="affixes[index][1]" @change="this.$emit('send-message',affixes,code)" :style="'display:inline-block'" :id="code+'affD'+index.toString()"> <!-- Dropdown 1 (Degree) -->
           <option :key="1" :value="1">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 1" : affixes[index][2] == 4 ? "THM" : affixes[index][2] == 3 && affixes.length == 1 ? "POS" : "Deg. 1"}}</option>
           <option :key="2" :value="2">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 2" : affixes[index][2] == 4 ? "INS" : affixes[index][2] == 3 && affixes.length == 1 ? "PRP" : "Deg. 2"}}</option>
           <option :key="3" :value="3">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Deg. 3" : affixes[index][2] == 4 ? "ABS" : affixes[index][2] == 3 && affixes.length == 1 ? "GEN" : "Deg. 3"}}</option>
@@ -74,7 +74,7 @@
           <!--<option v-for="num in (['sy','zy','čy','šy','žy','jy','ly'].includes(affixes[index][0])) ? [0,1,2,3,4,5,6,8] : Array(10).keys()" :key="(num+1)%10" :value="(num+1)%10">Deg. {{(num+1)%10}}</option>-->
           <option key="CA" value="CA" @click="calc6(index)">Cₐ-stacking</option>
         </select>
-        <select v-model="affixes[index][2]" @input="this.$emit('send-message',affixes,code)" :style="affixes[index][1] == 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'affT'+index"> <!-- Dropdown 2 (Type) -->
+        <select v-model="affixes[index][2]" @change="this.$emit('send-message',affixes,code)" :style="affixes[index][1] == 'CA' ? 'display:none' : 'display:inline-block'" :id="code+'affT'+index"> <!-- Dropdown 2 (Type) -->
           <option :value="1">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? 'Series ' : 'Type-'}}1</option>
           <option :value="2">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series " : 'Type-'}}2</option>
           <option :value="3">{{['sw','sy','zw','zy','čw','čy','šw','šy','žw','žy','jw','jy','lw','ly'].includes(affixes[index][0]) ? "Series 3" : affixes.length == 1 ? "Ref (3)" : "Type-3"}}</option>
@@ -83,6 +83,19 @@
       </div>
       <input type="button" value="Add" @click="affixes.push(['',1,1]); this.$emit('send-message',affixes,code)"/> <!-- Button to add another affix -->
       <input type="button" value="Remove" @click="affixes.pop(); this.$emit('send-message',affixes,code)"/> <!-- Button to remove an affix -->
+    </div>
+
+    <div v-else-if="json.type=='pref'"> <!-- technically should add code to check that there's no duplicate values -->
+      <div v-for="(affix,index) in refs" :key="affix">
+        <select v-model="refs[index][0]" @change="this.$emit('send-message',refs,code)" :style="'display:inline-block'" :id="code+'ref'+index.toString()">
+          <option v-for="(opt, short) in json.options" :key="opt.name" :value="short">{{opt.name}} ({{short}})</option>
+        </select>
+        <select v-model="refs[index][1]" @change="this.$emit('send-message',refs,code)" :style="'display:inline-block'" :id="code+'refP'+index.toString()">
+          <option v-for="(opt, short) in json.options2" :key="opt.name" :value="short">{{opt.name}} ({{short}})</option>
+        </select>
+      </div>
+      <input type="button" value="Add" @click="refs.push(['1M','NEU']); this.$emit('send-message',refs,code)"/> <!-- Button to add another affix -->
+      <input type="button" value="Remove" @click="if (refs.length > 1) { refs.pop(); this.$emit('send-message',refs,code) }"/> <!-- Button to remove an affix -->
     </div>
     <!-- END V4-SPECIFIC ENTRIES -->
 
@@ -129,6 +142,7 @@ export default {
       persp: 'M',
       ess: 'NRM',
       // ---
+      refs: [["1M","NEU"]], // for v4 personal-ref aff
     }
   },
   computed: {
@@ -166,6 +180,15 @@ export default {
           })
         }
         this.$emit('send-message',this.affixes,this.$props.code);
+      } else if (this.$props.json.type == "pref") {
+        for (let i in this.refs) {
+          this.waitForElm("#"+this.$props.code+"ref"+i.toString()).then((elm) => {
+            elm.value = toUpdate[i][0];
+          })
+          this.waitForElm("#"+this.$props.code+"refP"+i.toString()).then((elm) => {
+            elm.value = toUpdate[i][1];
+          })
+        }
       } else if (this.$props.json.type == "text") {
         this.text = toUpdate;
         this.$emit('send-message',this.text,this.$props.code);
