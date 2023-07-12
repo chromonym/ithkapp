@@ -181,6 +181,8 @@ export default {
         }
         this.$emit('send-message',this.affixes,this.$props.code);
       } else if (this.$props.json.type == "pref") {
+        this.refs = toUpdate;
+        console.log(toUpdate);
         for (let i in this.refs) {
           this.waitForElm("#"+this.$props.code+"ref"+i.toString()).then((elm) => {
             elm.value = toUpdate[i][0];

@@ -51,7 +51,7 @@
 
   <!-- MAIN (contains word-creation options) -->
   <div id="content">
-
+    <!-- v-if="langVer == '4'" -->
     <Ithkuil_v4 v-if="langVer == '4'" ref="4"
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
     @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"

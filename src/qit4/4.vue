@@ -172,8 +172,8 @@ export default {
         },
         // emit variables
         ithkword(word) {
-            this.$emit("ithkword",[word,this.ipa,this.gloss,this.fullGloss]);
             this.$emit("gEmit",this.gOptions);
+            this.$emit("ithkword",[word,this.ipa,this.gloss,this.fullGloss]);
         },
         ipa(ipa) {
             this.$emit("ithkword",[this.ithkword,ipa,this.gloss,this.fullGloss]);
@@ -283,9 +283,7 @@ export default {
                 "vh": "vn",
                 "modScope": "a",
                 // PERSONAL-REFERENCE ADJUNCT OPTIONS
-                "ref": "1M", // remove
                 "refs":[["1M","NEU"]],
-                "refEff": "NEU", // remove
                 "refPersp": "M",
                 "ref2": "1M",
                 "refEff2": "NEU",
