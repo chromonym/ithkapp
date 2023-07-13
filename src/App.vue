@@ -1,4 +1,5 @@
 <template>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Ithkapp | {{ithkword}}</title>
   <!-- This program works with TNIL Morpho-Phonology v0.19 and Phonotaxis v0.5.4 -->
   <!-- HEADER -->
@@ -145,11 +146,13 @@
     </div>
     <div id="sContent">
       <div v-for="(word,index) in sentence" :key="index" class="sentWord noSelecting"
-      :class="{active: selectedWord == index, deletable: deleteWordMode, dragging: draggedWord === index}"
+      :class="{active: selectedWord == index, deletable: deleteWordMode, dragging: draggedWord === index}" style="position: relative;"
       @click="switchWord(index)" @mouseover="hoverChange(index)" @mouseleave="hovering = null" @mousemove="beginDrag(index)" @touchstart="beginDrag(index)"> <!-- @touchmove.prevent -->
-        <p><b>{{word[0]}}</b></p>
-        <textarea placeholder="Description..." v-model="sentence[index][3]" @input="resizeTA" rows="1" class="ta"></textarea>
-        <br/>
+                <p><b>{{word[0]}}</b></p>
+                <textarea placeholder="Description..." v-model="sentence[index][3]" @input="resizeTA" rows="1" class="ta"></textarea>
+                <br/>
+                <button v-if="isMobile && index != 0 && !deleteWordMode" style="position: absolute; top: 10px; right: 10px;" @click="() => {this.draggedWord = index; hoverChange(index-1);}">⬆️</button>
+                <button v-if="isMobile && index != sentence.length-1 && !deleteWordMode" style="position: absolute; bottom: 10px; right: 10px;" @click="() => {this.draggedWord = index; hoverChange(index+1);}">⬇️</button>
       </div>
     </div>
     <div id="sFooter">
@@ -164,10 +167,10 @@
 </template>
 
 <script>
-import vClickOutside from "click-outside-vue3"
+import vClickOutside from "click-outside-vue3";
 
-import Ithkuil_v4 from './qit4/4.vue'
-import Ithkuil_v3 from './qit3/3.vue'
+import Ithkuil_v4 from './qit4/4.vue';
+import Ithkuil_v3 from './qit3/3.vue';
 
 export default {
   name: 'App',
@@ -205,6 +208,7 @@ export default {
       isMouseDown: false,
       draggedWord: null,
       settingsClone: {},
+      isMobile: false,
     }
   },
   methods: {
@@ -361,7 +365,7 @@ export default {
     },
     hoverChange(index){
       this.hovering = index;
-      if (this.isMouseDown && this.draggedWord !== null && this.draggedWord !== this.hovering) {
+      if ((this.isMouseDown || this.isMobile) && this.draggedWord !== null && this.draggedWord !== this.hovering) {
         var sW = JSON.parse(JSON.stringify(this.sentence[this.draggedWord]));
         this.sentence.splice(this.draggedWord,1);
         this.sentence.splice(this.hovering,0,JSON.parse(JSON.stringify(sW)));
@@ -387,6 +391,9 @@ export default {
         this.isMouseDown = false;
         this.draggedWord = null;
       }
+    },
+    detectTap() {
+      this.isMobile = true;
     },
     beginDrag(index) {
       if (!this.deleteWordMode) {
@@ -531,6 +538,7 @@ export default {
     window.addEventListener("mouseup",this.onMouseUpF);
     window.addEventListener("touchstart",this.onMouseDownF);
     window.addEventListener("touchend",this.onMouseUpF);
+    window.addEventListener("touchstart",this.detectTap);
   },
   unmounted() {
     window.removeEventListener("resize",this.onScreenResize);
@@ -538,6 +546,7 @@ export default {
     window.removeEventListener("mouseup",this.onMouseDownF);
     window.removeEventListener("touchstart",this.onMouseUpF);
     window.removeEventListener("touchend",this.onMouseDownF);
+    window.removeEventListener("touchstart",this.detectTap);
   },
   mounted() {
     this.settingsClone = JSON.parse(JSON.stringify(this.$refs[this.langVer].settings));
