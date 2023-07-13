@@ -33,12 +33,12 @@ export default {
             for (var property in obj) {
                 this.updateFromModal(property,JSON.parse(JSON.stringify(obj[property])));
             }
-            this.handleSendMessage(obj.root, "root"); // recalculate the word
+            this.handleSendMessage(obj.word, "word"); // recalculate the word - MAKE SURE THIS IS A PROPERTY THAT EXISTS!
         },
         // emit variables
         ithkword(word) {
-            this.$emit("ithkword",[word,this.ipa,this.gloss,this.fullGloss]);
             this.$emit("gEmit",this.gOptions);
+            this.$emit("ithkword",[word,this.ipa,this.gloss,this.fullGloss]);
         },
         ipa(ipa) {
             this.$emit("ithkword",[this.ithkword,ipa,this.gloss,this.fullGloss]);
