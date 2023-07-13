@@ -113,6 +113,9 @@ export default {
         },
     },
     beforeMount() {
+        if (this.$cookies.isKey("ithkapp-settings3")) {
+          this.settings = this.$cookies.get("ithkapp-settings3");
+        }
         this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
         this.handleSendMessage();
     },

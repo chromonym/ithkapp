@@ -2356,6 +2356,9 @@ export default {
 
     },
     beforeMount() {
+        if (this.$cookies.isKey("ithkapp-settings4")) {
+          this.settings = this.$cookies.get("ithkapp-settings4");
+        }
         this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
         this.handleSendMessage();
         //this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);

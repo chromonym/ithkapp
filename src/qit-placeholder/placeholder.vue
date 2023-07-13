@@ -114,6 +114,9 @@ export default {
         },*/
     },
     beforeMount() {
+        if (this.$cookies.isKey("ithkapp-settingsX")) {
+          this.settings = this.$cookies.get("ithkapp-settingsX"); // replace the X with whatever the relevant langVer is
+        }
         this.gOptions = JSON.parse(JSON.stringify(this.gDefault));
         this.handleSendMessage();
     },

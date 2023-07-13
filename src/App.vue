@@ -88,11 +88,17 @@
           <h3>{{section}}</h3>
           <span v-for="setOpt in Object.keys(settingsClone[section])" :key="setOpt">
             <label>{{settingsClone[section][setOpt][0]}}</label>
-            <select v-if="settingsClone[section][setOpt].length > 2" v-model="this.$refs[langVer].settings[section][setOpt][1]" @change="this.$refs[langVer].handleSendMessage()"><option v-for="spOpt in settingsClone[section][setOpt][2]" :key="spOpt">{{spOpt}}</option></select>
-            <input type="checkbox" v-else v-model="this.$refs[langVer].settings[section][setOpt][1]" @change="this.$refs[langVer].handleSendMessage()"/>
+            <select v-if="settingsClone[section][setOpt].length > 2" v-model="this.$refs[langVer].settings[section][setOpt][1]" @change="updateSetting(true)"><option v-for="spOpt in settingsClone[section][setOpt][2]" :key="spOpt">{{spOpt}}</option></select>
+            <input type="checkbox" v-else v-model="this.$refs[langVer].settings[section][setOpt][1]" @change="updateSetting(true)"/>
             <br/><br/>
           </span>
         </div>
+        <h3>Other</h3>
+        <label>Show Finished Checkboxes:</label>
+        <input type="checkbox" v-model="this.otherSettings.finishBoxes" @change="updateSetting(false)"/>
+        <br/><br/>
+        <a href="javascript:void(0);" @click="clearCookies">Clear cookies</a>
+        <br/><br/>
         <a href="https://github.com/TheXXOs/ithkapp" target="_blank">This project on GitHub</a>
       </div>
       <div v-if="modalID != 'settings' && modalID != 'share'">
@@ -208,6 +214,7 @@ export default {
       isMouseDown: false,
       draggedWord: null,
       settingsClone: {},
+      otherSettings: {"finishBoxes": false}, // settings that apply to all versions of ithkuil
       isMobile: false,
     }
   },
@@ -421,29 +428,17 @@ export default {
         alert("Could not copy to clipboard");
       }
     },
-    setCookie(cname, cvalue, exdays) { // from w3schools
-      const d = new Date();
-      d.setTime(d.getTime() + (exdays*24*60*60*1000));
-      let expires = "expires="+ d.toUTCString();
-      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    },
-    getCookie(cname) { // from w3schools
-      let name = cname + "=";
-      let decodedCookie = decodeURIComponent(document.cookie);
-      let ca = decodedCookie.split(';');
-      for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
+    updateSetting(v=true) { // v is if it's for version-specific settings
+      if (v) {
+        this.$cookies.set("ithkapp-settings"+this.langVer,this.$refs[this.langVer].settings,-1,null,null,false,"Strict");
+        this.$refs[this.langVer].handleSendMessage();
+      } else {
+        this.$cookies.set("ithkapp-settings",this.otherSettings,-1,null,null,false,"Strict");
       }
-      return "";
     },
-    deleteCookie(name) { // from stackoverflow (https://stackoverflow.com/questions/10593013/delete-cookie-by-name)
-      document.cookie = name +'=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    clearCookies() {
+      this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie));
+      alert("All cookies cleared.");
     },
     handleImportedWord(snt) {
       // snt is a list representative of the sentence, like this.sentence
@@ -492,32 +487,9 @@ export default {
     }
   },
   beforeMount() {
-    //this.gSentenceOptions = JSON.parse(JSON.stringify(this.gDefault));
-    /*let sCookie = this.getCookie("settings");
-    let wCookie = this.getCookie("sentence");
-    if (sCookie != "") {
-      for (let i in JSON.parse(sCookie)) {
-        this.settingRaw[i] = JSON.parse(sCookie)[i];
-        if (this.settingRaw[i] != "h+" && this.settingRaw[i] != "dev") {
-          this.ipaPreference[["a","e","ë","i","o","ö","u","ü","x","řř"][i]] = this.settingRaw[i].slice(1, -1);
-        } else {
-          if (this.settingRaw[i] == "dev") {
-            this.ipaPreference["hl"] = "ɬ";
-            this.ipaPreference["hr"] = "ɾ̥";
-            this.ipaPreference["hm"] = "m̥";
-            this.ipaPreference["hn"] = "n̥";
-          } else {
-            this.ipaPreference["hl"] = "hl";
-            this.ipaPreference["hr"] = "hɾ";
-            this.ipaPreference["hm"] = "hm";
-            this.ipaPreference["hn"] = "hn";
-          }
-        }
-      }
+    if (this.$cookies.isKey("ithkapp-settings")) {
+      this.otherSettings = this.$cookies.get("ithkapp-settings");
     }
-    if (wCookie != "") {
-      this.sentence = JSON.parse(wCookie);
-    }*/
     this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
   },
   directives: {
