@@ -6,11 +6,16 @@
     <!-- The following depends on which TYPE of grammar option this is: -->
 
     <!-- If it's a simple text entry: -->
-    <input v-if="json.type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." :maxlength="length"/>
+    <input v-if="json.type=='text'" v-model="text" @input="this.$emit('send-message',text,code)" placeholder="Enter..." :maxlength="length" :disabled="disabled"/>
 
     <!-- If it's a checkbox -->
     <div v-else-if="json.type=='checkbox'">
       <input type="checkbox" v-model="option" @change="this.$emit('send-message',option,code)" :disabled="disabled"/>
+    </div>
+
+    <!-- If it's number entry -->
+    <div v-else-if="json.type=='number'">
+      <input type="number" v-model="text" @input="this.calcNum()" placeholder="Enter..." :disabled="disabled"/>
     </div>
 
     <!-- V4-SPECIFIC ENTRIES -->
@@ -108,9 +113,11 @@
 
     <p v-if='json.type == "affix" && this.affixes.length != 0 && !this.affixes.every(function (e) {return e[0] != ""})'><b>ERROR:</b> Empty affixes</p> <!-- if there's an error, have text that says so -->
     <p v-else-if='json.type == "affix" && this.affixes.length == 0 && reqAff'><b>ERROR:</b> Affixes are required</p>
-    <p v-else-if='json.type == "text" && this.text == ""'><b>ERROR:</b> Empty text</p>
+    <p v-else-if='json.type == "text" && this.text == "" && !this.$props.emptyOK'><b>ERROR:</b> Empty text</p>
     <p v-else-if='this.$props.whitelist && ((json.type == "text" && (!this.text.split("").every((x) => this.$props.whitelist.includes(x.toLowerCase()))))
                 ||(json.type == "affix" && this.affixes.length != 0 && !this.affixes.every((y) => y[0].split("").every((x) => this.$props.whitelist.includes(x)))))'><b>ERROR:</b> Non-allowed characters</p>
+    <p v-else-if="json.type == 'number' && !this.isNum"><b>ERROR:</b> Non-numeric input</p>
+    <p v-else-if="this.$props.error"><b>ERROR:</b> {{this.$props.errorName}}</p>
     <p v-else></p> <!-- This is here so that the padding works regardless of if there's a <p> element or not -->
   </div>
 </template>
@@ -127,10 +134,14 @@ export default {
     whitelist: Array, // for text entry - characters to be used (if blank, then any character)
     reqAff: Boolean, // for v4 affix entry - if affixes are required
     aff6: Function, // for v4 affix entry - slot 6 calcs
+    error: Boolean, // throw error if true
+    errorName: String, // what the error text should say if error is true
+    emptyOK: Boolean, // true if the entry can be empty (for text entry)
   },
   data() {
     return {
       text: "",
+      isNum: false,
       option: null,
       affixes: [],
       // for ca affixes
@@ -150,8 +161,10 @@ export default {
       return {
         error: (this.json.type == "affix" && this.affixes.length != 0 && (this.$props.whitelist && !this.affixes.every(function (e) {return e[0] != ""})
             ||  !this.affixes.every((y) => y[0].split("").every((x) => this.$props.whitelist.includes(x)))))
-            ||  (this.json.type == "text" && (this.text == "" || (this.$props.whitelist && !this.text.split("").every((x) => this.$props.whitelist.includes(x.toLowerCase())))))
-            ||  (this.json.type == "affix" && this.affixes.length == 0 && this.reqAff),
+            ||  (this.json.type == "text" && ((this.text == "" && !this.$props.emptyOK) || (this.$props.whitelist && !this.text.split("").every((x) => this.$props.whitelist.includes(x.toLowerCase())))))
+            ||  (this.json.type == "affix" && this.affixes.length == 0 && this.reqAff)
+            ||  (!this.isNum && this.json.type == "number")
+            ||  (this.$props.error),
             // end of V4 error checks
         disabledbox: this.disabled,
         notShown: this.show
@@ -191,7 +204,7 @@ export default {
             elm.value = toUpdate[i][1];
           })
         }
-      } else if (this.$props.json.type == "text") {
+      } else if (this.$props.json.type == "text" || this.$props.json.type == "number") {
         this.text = toUpdate;
         this.$emit('send-message',this.text,this.$props.code);
       } else if (this.$props.json.type == "checkbox") {
@@ -217,6 +230,17 @@ export default {
       this.affixes[idx][0] = this.aff6(true,dAffil,dPlex,dSimil,dCctd,dExt,dEss,dPersp);
       this.$emit('send-message',this.affixes,this.$props.code);
       this.$emit('send-message',this.affixes,this.$props.code);
+    },
+    calcNum() {
+      console.log(this.text);
+      console.log(isNaN(this.text));
+      if (!isNaN(this.text) && this.text !== "") {
+        this.isNum = true;
+        this.$emit('send-message',this.text,this.$props.code);
+      } else {
+        this.isNum = false;
+        this.$emit('send-message',"",this.$props.code);
+      }
     },
     waitForElm(selector) { // code for this is by Yong Wang (https://stackoverflow.com/questions/5525071/how-to-wait-until-an-element-exists)
                            // basically, it waits for the element described by (selector) to exist on the page before resolving

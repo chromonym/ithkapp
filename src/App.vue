@@ -48,11 +48,19 @@
     </div>
     <!-- END V3 WORD TYPE DROPDOWNS -->
     <!-- add more word type dropdowns for more versions here, in REVERSE order -->
+    <!-- !@#$%^&*() <div class="dropdown" v-if="langVer == 'kb'">
+      <button @click="openDropdown('kayfWords')" v-click-outside="event => closeDropdown('kayfWords',event)">Word Type ▼</button>
+      <div class="dropdown-content hidden" id="kayfWords">
+        <span @click="switchWordType('normal')" :class="{active: wordType == 'normal'}">Noun</span>
+        <span @click="switchWordType('verb')" :class="{active: wordType == 'verb'}">Verb</span>
+        <span @click="switchWordType('adjv')" :class="{active: wordType == 'adjv'}">Adjective/Adverb</span>
+        <span @click="switchWordType('other')" :class="{active: wordType == 'other'}">Other</span>
+      </div>
+    </div> -->
   </div>
 
   <!-- MAIN (contains word-creation options) -->
   <div id="content">
-    <!-- v-if="langVer == '4'" -->
     <Ithkuil_v4 v-if="langVer == '4'" ref="4"
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
     @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
@@ -62,6 +70,11 @@
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
     @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
     :listenModal="modalListen" :listenWord="gSOptions" :listenWordtype="wordType"/>
+
+    <!-- !@#$%^&*() <TestBop v-if="langVer == 'kb'" ref="kb"
+    @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
+    @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
+    :listenModal="modalListen" :listenWord="gSOptions" :listenWordtype="wordType"/> -->
     
   </div>
   <!-- END OF MAIN -->
@@ -100,6 +113,7 @@
         <a href="javascript:void(0);" @click="clearCookies">Clear cookies</a>
         <br/><br/>
         <a href="https://github.com/TheXXOs/ithkapp" target="_blank">This project on GitHub</a>
+        <!-- !@#$%^&*() <p class="smalltext" style="padding-left: 0" v-if="langVer == 'kb'"><i>don't you wish there was a way back to normal</i><span style="font-family: monospace; font-size: 16px;"><b>?<span style="color: white">v=4</span></b></span></p> -->
       </div>
       <div v-if="modalID != 'settings' && modalID != 'share'">
         <h2 style="text-align:center;">{{modalContent.title}}</h2>
@@ -177,12 +191,14 @@ import vClickOutside from "click-outside-vue3";
 
 import Ithkuil_v4 from './qit4/4.vue';
 import Ithkuil_v3 from './qit3/3.vue';
+// !@#$%^&*() import TestBop from './qkf/qkf.vue';
 
 export default {
   name: 'App',
   components: {
     Ithkuil_v4,
     Ithkuil_v3, // THIS ONE FOR TESTING
+    // !@#$%^&*() TestBop,
 },
   data() {
     return {
@@ -287,23 +303,29 @@ export default {
       } else if (this.langVer == "3") {
         this.closeDropdown('adj3',{},true);
         this.closeDropdown('form3',{},true);
+      /* !@#$%^&*() } else if (this.langVer == "kb") {
+        this.closeDropdown('kayfWords',{},true); */
       }
       //this.handleSendMessage(this.gOptions.root,"root");
     },
     concatenateSentence(sent) {
-      let output = " "
-      for (let i of sent) {
-        output += i[0];
-        if (["normal","affRoot","refRoot"].includes(i[2]) && i[1].concat != '0') {
-          output += "-";
-        } else {
-          output += " ";
+      if (this.langVer == "4") {
+        let output = " "
+        for (let i of sent) {
+          output += i[0];
+          if (["normal","affRoot","refRoot"].includes(i[2]) && i[1].concat != '0') {
+            output += "-";
+          } else {
+            output += " ";
+          }
         }
+        if (output.charAt(output.length-1) == " ") {
+          output = output.slice(0,-1);
+        }
+        return output;
+      } else {
+        return sent.map(x => x[0]).join(" ");
       }
-      if (output.charAt(output.length-1) == " ") {
-        output = output.slice(0,-1);
-      }
-      return output;
     },
     resetWord(gO=null) {
       if (gO == null) {
@@ -497,11 +519,12 @@ export default {
   },
   created() {
     let urlParams = new URLSearchParams(window.location.search);
+    let validLangVers = ["4","3"]; // !@#$%^&*() ,"kb"
     if (urlParams.has('v')) {
-      if (urlParams.get('v') != "3") {
-        this.langVer = "4";
-      } else {
+      if (validLangVers.indexOf(urlParams.get('v')) >= 0) {
         this.langVer = urlParams.get('v');
+      } else {
+        this.langVer = "4";
       }
     }
     this.oldScreenSize = window.innerWidth;
