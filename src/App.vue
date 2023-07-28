@@ -101,16 +101,18 @@
           <h3>{{section}}</h3>
           <span v-for="setOpt in Object.keys(settingsClone[section])" :key="setOpt">
             <label>{{settingsClone[section][setOpt][0]}}</label>
-            <select v-if="settingsClone[section][setOpt].length > 2" v-model="this.$refs[langVer].settings[section][setOpt][1]" @change="updateSetting(true)"><option v-for="spOpt in settingsClone[section][setOpt][2]" :key="spOpt">{{spOpt}}</option></select>
-            <input type="checkbox" v-else v-model="this.$refs[langVer].settings[section][setOpt][1]" @change="updateSetting(true)"/>
+            <select v-if="settingsClone[section][setOpt].length > 2" v-model="this.$refs[langVer].settings[section][setOpt][1]" @change="updateSetting()"><option v-for="spOpt in settingsClone[section][setOpt][2]" :key="spOpt">{{spOpt}}</option></select>
+            <input type="checkbox" v-else v-model="this.$refs[langVer].settings[section][setOpt][1]" @change="updateSetting()"/>
             <br/><br/>
           </span>
         </div>
         <h3>Other</h3>
         <label>Show Finished Checkboxes:</label>
-        <input type="checkbox" v-model="this.otherSettings.finishBoxes" @change="updateSetting(false)"/>
+        <input type="checkbox" v-model="this.otherSettings.finishBoxes" @change="updateSetting()"/>
         <br/><br/>
-        <a href="javascript:void(0);" @click="clearCookies">Clear cookies</a>
+        <label>Save settings as cookies</label>
+        <input type="checkbox" v-model="this.otherSettings.saveCookies" @change="updateSetting()"/>
+        <br/><span class="smalltext"><i>Unchecking box will clear cookies</i></span>
         <br/><br/>
         <a href="https://github.com/TheXXOs/ithkapp" target="_blank">This project on GitHub</a>
         <!-- !@#$%^&*() <p class="smalltext" style="padding-left: 0" v-if="langVer == 'kb'"><i>don't you wish there was a way back to normal</i><span style="font-family: monospace; font-size: 16px;"><b>?<span style="color: white">v=4</span></b></span></p> -->
@@ -230,7 +232,7 @@ export default {
       isMouseDown: false,
       draggedWord: null,
       settingsClone: {},
-      otherSettings: {"finishBoxes": false}, // settings that apply to all versions of ithkuil
+      otherSettings: {"finishBoxes": false, "saveCookies": false}, // settings that apply to all versions of ithkuil
       isMobile: false,
     }
   },
@@ -450,17 +452,14 @@ export default {
         alert("Could not copy to clipboard");
       }
     },
-    updateSetting(v=true) { // v is if it's for version-specific settings
-      if (v) {
-        this.$cookies.set("ithkapp-settings"+this.langVer,this.$refs[this.langVer].settings,-1,null,null,false,"Strict");
-        this.$refs[this.langVer].handleSendMessage();
+    updateSetting() { // v is if it's for version-specific settings
+      if (this.otherSettings.saveCookies) {
+          this.$cookies.set("ithkapp-settings"+this.langVer,this.$refs[this.langVer].settings,-1,null,null,false,"Strict");
+          this.$cookies.set("ithkapp-settings",this.otherSettings,-1,null,null,false,"Strict");
       } else {
-        this.$cookies.set("ithkapp-settings",this.otherSettings,-1,null,null,false,"Strict");
+        this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie));
       }
-    },
-    clearCookies() {
-      this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie));
-      alert("All cookies cleared.");
+      this.$refs[this.langVer].handleSendMessage();
     },
     handleImportedWord(snt) {
       // snt is a list representative of the sentence, like this.sentence
