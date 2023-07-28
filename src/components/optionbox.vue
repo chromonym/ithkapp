@@ -1,6 +1,7 @@
 <template>
   <div class="optionbox" :class="OBclass">
     <!--<button style="float:right; margin-top: 5px; margin-right: 5px; display:inline" @click="this.$emit('modal',code)">?</button>-->
+    <input v-if="this.$parent.$parent.otherSettings.finishBoxes" type="checkbox" style="right:0; position:absolute" v-model="isDone"/>
     <h3 @click.self="this.$emit('modal',code)" :title="'Learn more about '+json.title">{{json.title}}</h3>
 
     <!-- The following depends on which TYPE of grammar option this is: -->
@@ -154,6 +155,7 @@ export default {
       ess: 'NRM',
       // ---
       refs: [["1M","NEU"]], // for v4 personal-ref aff
+      isDone: false,
     }
   },
   computed: {
@@ -167,7 +169,8 @@ export default {
             ||  (this.$props.error),
             // end of V4 error checks
         disabledbox: this.disabled,
-        notShown: this.show
+        notShown: this.show,
+        doneBox: this.$parent.$parent.otherSettings.finishBoxes && this.isDone,
       }
     },
   },
@@ -279,10 +282,16 @@ export default {
   flex-grow: 1;
   /*flex-basis: 20vw;*/
   margin: 2px;
+  position: relative;
 }
 h3:hover {
   text-decoration: underline;
   cursor: pointer;
+}
+.doneBox {
+  background-color: rgb(239, 253, 248);
+  border-color: rgb(0, 113, 75);
+  color: rgb(0, 113, 75);
 }
 .error {
   border-color: #FF2C3E; /* #006C67 */
