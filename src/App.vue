@@ -63,17 +63,17 @@
   <div id="content">
     <Ithkuil_v4 v-if="langVer == '4'" ref="4"
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
-    @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
+    @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3],doneOpts]));}"
     :listenModal="modalListen" :listenWordtype="wordType" :listenWord="gSOptions" :selectedWord="selectedWord" :sLength="sentence.length" :nextWord="this.sentence[selectedWord+1]"/>
 
     <Ithkuil_v3 v-if="langVer == '3'" ref="3"
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
-    @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
+    @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3],doneOpts]));}"
     :listenModal="modalListen" :listenWord="gSOptions" :listenWordtype="wordType"/>
 
     <!-- !@#$%^&*() <TestBop v-if="langVer == 'kb'" ref="kb"
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
-    @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3]]));}"
+    @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3],doneOpts]));}"
     :listenModal="modalListen" :listenWord="gSOptions" :listenWordtype="wordType"/> -->
     
   </div>
@@ -179,7 +179,7 @@
     </div>
     <div id="sFooter">
       <input type="file" @change="uploadJSON" accept=".json" id="fimport" class="hidden"/>
-      <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify([this.$refs[langVer].defaultWord, this.$refs[langVer].gDefault, 'normal', ''])))"><i class="fa-solid fa-plus fa-xl"></i></button>
+      <button title="Add New Word" @click="this.sentence.push(JSON.parse(JSON.stringify([this.$refs[langVer].defaultWord, this.$refs[langVer].gDefault, 'normal', '',[]])))"><i class="fa-solid fa-plus fa-xl"></i></button>
       <button title="Save" @click="exportToJsonFile(sentence)"><i class="fa-solid fa-floppy-disk fa-xl"></i></button>
       <button title="Import" @click.self="openFileDialog()"><label id="filab" for="fimport"><i class="fa-solid fa-arrow-up-from-bracket fa-xl"></i></label></button>
       <button title="Export/Share" @click="openModal('share'); closeNav()"><i class="fa-solid fa-share-from-square fa-xl"></i></button>
@@ -224,7 +224,7 @@ export default {
       SRtabGroups: [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","vld"]],
       REFtabGroups: [["ref","refEff","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","abslvl","asp"],["casc","c"],["mood","ill","vld"]],
       sentenceOpen: false,
-      sentence: [], // things in this are of the form [word, grammarOptions, description]
+      sentence: [], // things in this are of the form [word, grammarOptions, wordType, description, doneOpts]
       selectedWord: 0,
       deleteWordMode: false,
       oldScreenSize: 0,
@@ -234,6 +234,7 @@ export default {
       settingsClone: {},
       otherSettings: {"finishBoxes": false, "saveCookies": false}, // settings that apply to all versions of ithkuil
       isMobile: false,
+      doneOpts: [],
     }
   },
   methods: {
@@ -374,16 +375,18 @@ export default {
         if (confirm("Really delete "+this.sentence[index][0]+(this.sentence[index][3] ? " ("+this.sentence[index][3]+")" : "")+"?")) {
           this.sentence.splice(index,1);
           if (this.sentence.length == 0) {
-            this.sentence.push([this.$refs[this.langVer].defaultWord,JSON.parse(JSON.stringify(this.$refs[this.langVer].gDefault)),"normal",""]);
+            this.sentence.push(JSON.parse(JSON.stringify([this.$refs[this.langVer].defaultWord,this.$refs[this.langVer].gDefault,"normal","",[]])));
           }
           if ((this.sentence.length <= this.selectedWord || index < this.selectedWord) && this.selectedWord != 0) {this.switchWord(this.selectedWord-1,true)}
           else {this.switchWord(this.selectedWord,true);}
         }
       } else {
+        console.log(this.sentence);
         this.selectedWord = index;
         this.ithkword = this.sentence[index][0]
         //this.gOptions = JSON.parse(JSON.stringify(this.sentence[index][1]));
         this.wordType = this.sentence[index][2];
+        this.doneOpts = JSON.parse(JSON.stringify(this.sentence[index][4]));
         //this.handleSendMessage(this.gOptions.root,"root");
         this.resetWord(this.sentence[index][1]);
       }
@@ -466,7 +469,7 @@ export default {
       try {
         this.sentence = [];
         for (let wID in snt) {
-          this.sentence.push([this.$refs[this.langVer].defaultWord,JSON.parse(JSON.stringify(this.$refs[this.langVer].gDefault)),"normal",""]);
+          this.sentence.push([this.$refs[this.langVer].defaultWord,JSON.parse(JSON.stringify(this.$refs[this.langVer].gDefault)),"normal","",[]]);
           for (let gopt in snt[wID][1]) {
             if (Object.prototype.hasOwnProperty.call(this.gOptions, gopt)) {
               this.sentence[wID][1][gopt] = JSON.parse(JSON.stringify(snt[wID][1][gopt]));
@@ -475,6 +478,11 @@ export default {
           this.sentence[wID][0] = snt[wID][0]; // actual word
           this.sentence[wID][2] = snt[wID][2]; // word type
           this.sentence[wID][3] = snt[wID][3]; // user description
+          try {
+            this.sentence[wID][4] = JSON.parse(JSON.stringify(snt[wID][4])); // done checkboxes
+          } catch {
+            this.sentence[wID][4] = [];
+          }
         }
       } catch {
         alert("Could not import correctly.");
@@ -511,7 +519,7 @@ export default {
     if (this.$cookies.isKey("ithkapp-settings")) {
       this.otherSettings = this.$cookies.get("ithkapp-settings");
     }
-    this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal",""]);
+    this.sentence.unshift([this.ithkword,JSON.parse(JSON.stringify(this.gOptions)),"normal","",[]]);
   },
   directives: {
     clickOutside: vClickOutside.directive

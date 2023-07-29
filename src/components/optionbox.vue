@@ -1,7 +1,7 @@
 <template>
   <div class="optionbox" :class="OBclass">
     <!--<button style="float:right; margin-top: 5px; margin-right: 5px; display:inline" @click="this.$emit('modal',code)">?</button>-->
-    <input v-if="this.$parent.$parent.otherSettings.finishBoxes" type="checkbox" style="right:0; position:absolute" v-model="isDone"/>
+    <input v-if="this.$parent.$parent.otherSettings.finishBoxes" type="checkbox" style="right:0; position:absolute" v-model="isDone" @change="emitDoneBox"/>
     <h3 @click.self="this.$emit('modal',code)" :title="'Learn more about '+json.title">{{json.title}}</h3>
 
     <!-- The following depends on which TYPE of grammar option this is: -->
@@ -158,6 +158,15 @@ export default {
       isDone: false,
     }
   },
+  /*watch: {
+    isDone() {
+      if (!this.isDone && this.$parent.$parent.doneOpts.indexOf(this.code) > -1) { // if not done and code is in doneOpts
+        this.$parent.$parent.doneOpts.splice(this.$parent.$parent.doneOpts.indexOf(this.code),1); // remove it
+      } else if (this.isDone && this.$parent.$parent.doneOpts.indexOf(this.code) <= -1) { // if done and code is not in doneOpts
+        this.$parent.$parent.doneOpts.push(this.code);
+      }
+    }
+  },*/
   computed: {
     OBclass() { // set class to error if the input is the default
       return {
@@ -182,6 +191,11 @@ export default {
   },
   methods: {
     updateValue(toUpdate) {
+      if (this.$parent.$parent.doneOpts.indexOf(this.$props.code) > -1) {
+        this.isDone = true;
+      } else {
+        this.isDone = false;
+      }
       if (this.$props.json.type == "affix") {
         this.affixes = toUpdate;
         for (let i in this.affixes) {
@@ -264,6 +278,15 @@ export default {
               subtree: true
           });
       });
+    },
+    emitDoneBox() {
+      if (!this.isDone && this.$parent.$parent.doneOpts.indexOf(this.$props.code) > -1) {
+        this.$parent.$parent.doneOpts.splice(this.$parent.$parent.doneOpts.indexOf(this.$props.code),1);
+      } else if (this.isDone && this.$parent.$parent.doneOpts.indexOf(this.$props.code) <= -1) {
+        this.$parent.$parent.doneOpts.push(this.$props.code);
+      }
+      this.$parent.$emit("ithkword",[this.$parent.ithkword,this.$parent.ipa,this.$parent.gloss,this.$parent.fullGloss]); // i love janky solutions that will probably bite me in the ass in the future!!!
+      console.log("emitted checkbox!");
     }
   }
 }
