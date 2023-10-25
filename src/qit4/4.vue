@@ -24,6 +24,8 @@
       <OptionBox :json="gData.spec" :class="{hidden: wordType == 'ref' || wordType == 'affRoot'}" code="spec" @send-message="handleSendMessage" ref="spec" @modal="openModal"/>
       <OptionBox :json="gData.func" :class="{hidden: wordType == 'ref' || wordType == 'refCS'}" code="func" @send-message="handleSendMessage" ref="func" @modal="openModal"/>
       <OptionBox :json="gData.ver" :class="{hidden: wordType == 'ref' || wordType == 'refCS'}" code="ver" @send-message="handleSendMessage" ref="ver" @modal="openModal"/>
+      <!-- again used only in affix-root adjuncts -->
+      <OptionBox :json="gData.arCaseV" :class="{hidden: wordType != 'affRoot'}" code="arCaseV" @send-message="handleSendMessage" ref="arCaseV" @modal="openModal" :disabled='!["sw","sy","zw","zy","čw","čy","šw","šy","žw","žy","jw","jy","lw","ly"].includes(this.gOptions.affRoot)'/>
     </div>
     <div class="section" :class="{hidden: ['suppletive','affixjunct','register','modular','ref','refCS','bias','free'].includes(wordType)}"> <!-- Section 2: Concatenation & Affixes-->
       <OptionBox :json="gData.shcut" code="shcut" @send-message="handleSendMessage" ref="shcut" @modal="openModal"/>
@@ -95,7 +97,7 @@
     <div class="section" :class="{hidden: ['affixjunct','register','modular','ref','refCS','bias','free'].includes(wordType)}"> <!-- Section 6: Slot 8b to 10 / Suppletive Adjunct -->
       <OptionBox :class="{hidden: wordType != 'suppletive'}" :json="gData.suppType" code="suppType" @send-message="handleSendMessage" ref="suppType" @modal="openModal"/>
 
-      <OptionBox :class="{hidden: wordType == 'suppletive'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal"/>
+      <OptionBox :class="{hidden: wordType == 'suppletive'}" :json="gData.ctxt" code="ctxt" @send-message="handleSendMessage" ref="ctxt" @modal="openModal" :disabled='["sw","sy","zw","zy","čw","čy","šw","šy","žw","žy","jw","jy","lw","ly"].includes(this.gOptions.affRoot) && this.wordType == "affRoot"'/>
       <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='!cascOrMood' :json="gData.mood" code="mood" @send-message="handleSendMessage" ref="mood" @modal="openModal"/>
       <OptionBox :class="{hidden: wordType == 'suppletive'}" :show='cascOrMood' :json="gData.casc" code="casc" @send-message="handleSendMessage" ref="casc" @modal="openModal"/>
       <OptionBox :show="cascOrMood" :json="gData.c" code="c" @send-message="handleSendMessage" ref="c" @modal="openModal"/>
@@ -248,6 +250,7 @@ export default {
                 // ROOT-AFFIX ADJUNCT OPTIONS
                 "affRoot": "",
                 "arDegree": 0,
+                "arCaseV": 0,
                 // AFFIX ADJUNCT OPTIONS
                 "affixjunct": [],
                 "initialAffScope": "VDom",
@@ -426,7 +429,7 @@ export default {
             tabGroups: {
               "normal": [["root","stem","spec"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","vld"]],
               "suppletive": [["suppType","c"]],
-              "affRoot": [["affRoot","arDegree"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","vld"]],
+              "affRoot": [["affRoot","arDegree","arCaseV"],["func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","vld"]],
               "refRoot": [["refs","refPersp"],["spec","func","ver","ctxt"],["shcut","concat","rel"],["Vafx","VIIafx"],["plex","simil","cctd"],["affil","ext","persp","ess"],["vn","val","pha","eff","lvl","asp"],["casc","c"],["mood","ill","vld"]],
               "affixjunct": [["affixjunct","initialAffScope","otherAffScope","affScopeOf"]],
               "register": [["register","regStartOrEnd"]],
@@ -909,7 +912,11 @@ export default {
       if (this.wordType == "normal" || this.wordType == "refRoot"){
         this.slots[3] = this.sVowels[ph[this.gOptions.func][this.gOptions.spec]][phh.indexOf(this.gOptions.ctxt)];
       } else if (this.wordType == "affRoot") {
-        this.slots[3] = this.sVowels[this.gOptions.arDegree][phh.indexOf(this.gOptions.ctxt)];
+        if (["sw","sy","zw","zy","čw","čy","šw","šy","žw","žy","jw","jy","lw","ly"].includes(this.gOptions.affRoot)) {
+          this.slots[3] = this.sVowels[this.gOptions.arDegree][this.gOptions.arCaseV];
+        } else {
+          this.slots[3] = this.sVowels[this.gOptions.arDegree][phh.indexOf(this.gOptions.ctxt)];
+        }
       }
     },
     calculateSlot5() {
@@ -1762,9 +1769,14 @@ export default {
         if (s4c.length > 0) {this.gloss += "-" + s4c.join(".")}
         this.fullGloss += "-"+this.gOptions.func+"."+this.gOptions.spec+"."+this.gOptions.ctxt;
       } else {
-        this.gloss += "-D" + ((Number(this.gOptions.arDegree)+1)%10).toString();
-        if (this.gOptions.ctxt != "EXS") {this.gloss += "." + this.gOptions.ctxt}
-        this.fullGloss += "-D" + ((Number(this.gOptions.arDegree)+1)%10).toString()+"."+this.gOptions.ctxt;
+        if (["sw","sy","zw","zy","čw","čy","šw","šy","žw","žy","jw","jy","lw","ly"].includes(this.gOptions.affRoot)) {
+          this.gloss += "-D" + ((Number(this.gOptions.arDegree)+1)%10).toString()+["₁","₂","₃","₄"][this.gOptions.arCaseV];
+          this.fullGloss += "-D" + ((Number(this.gOptions.arDegree)+1)%10).toString()+["₁","₂","₃","₄"][this.gOptions.arCaseV];
+        } else {
+          this.gloss += "-D" + ((Number(this.gOptions.arDegree)+1)%10).toString();
+          if (this.gOptions.ctxt != "EXS") {this.gloss += "." + this.gOptions.ctxt}
+          this.fullGloss += "-D" + ((Number(this.gOptions.arDegree)+1)%10).toString()+"."+this.gOptions.ctxt;
+        }
       }
       // Slot 5
       for (var i in this.gOptions.Vafx) {

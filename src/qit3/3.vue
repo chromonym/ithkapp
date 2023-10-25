@@ -1,6 +1,12 @@
 <template>
     <div>
-        <div class="section"> <!-- all OptionBoxes must be in a class="section" div or else the formatting will be messed up -->
+        <h1>Ithkapp (olaisaliupšea)</h1> <!-- will need to change this bc KÇT means 'translate' when FML/s3 -->
+        <p class="smalltext">Compatible with the <a target="_blank" href="http://www.ithkuil.net/00_intro.html">final version of Ithkuil III on ithkuil.net</a>.
+        <br/>Definitions are a combination of taken from the Ithkuil III site and (occasionally) written by the creator of this site.
+        <br/>Glosses are based on the glosses on the Ithkuil III site. and in-gloss definitions are provided by <a target="_blank" href="https://porpoiseless.github.io/elamxhi/">Elamxhí</a>.
+        <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
+        <br/>Click on a box's title to learn more about what it means.</p>
+            <div class="section"> <!-- all OptionBoxes must be in a class="section" div or else the formatting will be messed up -->
             <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal"/> <!-- ref should be the same as code -->
             <OptionBox :json="gData.desig" code="desig" @send-message="handleSendMessage" ref="desig" @modal="openModal"/>
             <OptionBox :json="gData.stem" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>

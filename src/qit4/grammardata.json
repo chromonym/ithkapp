@@ -1404,6 +1404,25 @@
             }
         ]
     },
+    "arCaseV": {
+        "type": "",
+        "title": "Vowel Series",
+        "popupdesc": "For Case-Accessor affixes in Affix-Root formatives, the vowel series can be used to display the relevant case rather than the Context.<br/>To display a non-EXS Context, use an affix.",
+        "options": [
+            {
+                "name": "Series 1"
+            },
+            {
+                "name": "Series 2"
+            },
+            {
+                "name": "Series 3"
+            },
+            {
+                "name": "Series 4"
+            }
+        ]
+    },
 
     "affixjunct": {
         "type": "affix",
