@@ -22,4 +22,4 @@ pnpm-debug.log*
 *.sw?
 
 # Local testing files
-src/qkf
+src/qkf/R*

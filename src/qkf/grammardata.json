@@ -1,0 +1,398 @@
+{
+    "root": {
+        "type":"text",
+        "title":"Root",
+        "popupdesc":"The root is the meaning of the word - all other grammar features are to hopefully specify which of the many meanings of the root you are referring to. Check the Lexicon (<a target=\"_blank\" href=\"https://github.com/mr-martian/kaybop/blob/master/lex.csv\">by kay(f)bop(t)</a> / <a target=\"_blank\" href=\"https://github.com/mr-martian/kaybop/blob/master/lex_current.txt\">by English</a>)."
+    },
+    "case": {
+        "type":"",
+        "title":"Case",
+        "options": {
+            "NOM": {
+                "name": "Nominative",
+                "desc": "Marks the subject of the verb."
+            },
+            "ACC": {
+                "name": "Accusative",
+                "desc": "Marks the direct object of the verb."
+            },
+            "BRF": {
+                "name": "Brief",
+                "desc": "Used to signify nouns as background information (primarily used in legal or business documents)."
+            },
+            "SUI": {
+                "name": "Suit",
+                "desc": "Used to describe location in a far off place (usually used for travel)."
+            },
+            "JUS": {
+                "name": "Justin",
+                "desc": "Topicalizes hypothetical situations with low probability."
+            },
+            "INE": {
+                "name": "Inessive",
+                "desc": "Locative case meaning 'in'."
+            },
+            "ANT": {
+                "name": "In front of",
+                "desc": "Locative case meaning 'in front of'."
+            },
+            "PST": {
+                "name": "Behind",
+                "desc": "Locative case meaning 'behind'."
+            }
+        },
+        "popupdesc": "Cases are the role of the noun in a sentence with relation to the verb."
+    },
+    "num": {
+        "type":"",
+        "title":"Number",
+        "options":{
+            "FIN": {
+                "name": "Finite",
+                "desc": "The word describes a finite amount of something, or a finite concept."
+            },
+            "INF": {
+                "name": "Infinite",
+                "desc": "The word describes either an infinite amount of something, or an infinite concept."
+            }
+        },
+        "popupdesc": "Describes whether a word is finite or infinite.<br/>For verbs, this must instead match the subject (NOM)."
+    },
+    "exp": {
+        "type":"",
+        "title":"Expectation",
+        "options": {
+            "Y": {
+                "name": "Yes",
+                "desc": "The word matches the speaker's expectations."
+            },
+            "N": {
+                "name": "No",
+                "desc": "The word does not match the speaker's expectations."
+            },
+            "YB": {
+                "name": "Yes, but not to that extent",
+                "desc": "The word matches the speaker's expectations, but not by <i>that</i> much."
+            }
+        },
+        "popupdesc": "Whether the word matches the speaker's expectations or not."
+    },
+    "food": {
+        "title": "Is food?",
+        "type": "checkbox",
+        "popupdesc": "Describes whether the word is food or not. You are free to interpret whether this means simply <i>edible</i>, or <i>is treated as food in this current context</i>."
+    },
+    "gdr": {
+        "title":"Gender",
+        "type": "",
+        "options": {
+            "HUM": {
+                "name": "Human",
+                "desc": "A human."
+            },
+            "NHM": {
+                "name": "Non-Human Metazoan",
+                "desc": "A non-human creature in the kingdom of <i><a target=\"_blank\" href=\"https://en.wikipedia.org/wiki/Metazoa\">Metazoa</a></i>, or an \"animal\"."
+            },
+            "NMO": {
+                "name": "Non-Metazoan Opisthokonts",
+                "desc": "A non-metazoan creature in the group of <i><a target=\"_blank\" href=\"https://en.wikipedia.org/wiki/Opisthokont\">Opisthokont</a></i>, or a \"fungus\"."
+            },
+            "AGI": {
+                "name": "Angiosperms",
+                "desc": "A member of the clade <i><a target=\"_blank\" href=\"https://en.wikipedia.org/wiki/Angiosperm\">Angiospermae</a></i>, or a \"flowering plant\"."
+            },
+            "GYM": {
+                "name": "Gymnosperms",
+                "desc": "A member of the group <i><a target=\"_blank\" href=\"https://en.wikipedia.org/wiki/Gymnosperm\">Gymnospermae</a></i>, or a \"seed-producing plant\" that is not a member of Angiospermae."
+            },
+            "SIL": {
+                "name": "Silicate Minerals",
+                "desc": "Any mineral made up of silicate groups. <a target=\"_blank\" href=\"https://en.wikipedia.org/wiki/Silicate_mineral\">(Wikipedia)</a>"
+            },
+            "OTH": {
+                "name": "Other",
+                "desc": "If, somehow, you are referring to something that does not fall into one of the above categories, use this gender instead."
+            }
+        },
+        "popupdesc": "Which group of thing this word refers to."
+    },
+    "death": {
+        "title":"Manner of Death",
+        "type": "",
+        "options": {
+            "PSN": {
+                "name": "Poison",
+                "desc": ""
+            },
+            "STU": {
+                "name": "Stupidity",
+                "desc": ""
+            },
+            "WMB": {
+                "name": "Wombat",
+                "desc": ""
+            },
+            "SMK": {
+                "name": "Smoke Inhalation",
+                "desc": ""
+            },
+            "ANV": {
+                "name": "Falling Anvil",
+                "desc": ""
+            },
+            "FHO": {
+                "name": "Falling Heavy Object",
+                "desc": "(non-anvil)"
+            },
+            "IMM": {
+                "name": "Immortality",
+                "desc": ""
+            },
+            "SLG": {
+                "name": "Sledgehammer",
+                "desc": ""
+            },
+            "BAX": {
+                "name": "Battle-Ax",
+                "desc": ""
+            },
+            "GUI": {
+                "name": "Guillotine",
+                "desc": ""
+            },
+            "SHP": {
+                "name": "Sheep",
+                "desc": ""
+            },
+            "PNG": {
+                "name": "Penguin",
+                "desc": ""
+            },
+            "OTH": {
+                "name": "Other",
+                "desc": ""
+            }
+        },
+        "popupdesc": "How the noun died, or, if it is still alive, how you <i>expect</i> the noun will die."
+    },
+    "awe": {
+        "title":"Awesomeness",
+        "type":"",
+        "options": {
+            "BM": {
+                "name": "Below Meh",
+                "desc": ""
+            },
+            "M": {
+                "name": "Meh",
+                "desc": ""
+            },
+            "OK": {
+                "name": "ok",
+                "desc": ""
+            },
+            "C": {
+                "name": "Cool",
+                "desc": ""
+            },
+            "G": {
+                "name": "Great",
+                "desc": ""
+            },
+            "AM": {
+                "name": "Amazing",
+                "desc": ""
+            },
+            "AW": {
+                "name": "Awesome",
+                "desc": ""
+            },
+            "UE": {
+                "name": "Unspeakably Epic",
+                "desc": ""
+            }
+        },
+        "popupdesc": "How awesome the word is.<br/>As we all know, this is completely objective."
+    },
+    "mv": {
+        "title": "Market Value",
+        "type": "number",
+        "popupdesc": "The approximate market value of the word in USD.<br/>As this is a number, it must not be negative or contain a zero."
+    },
+    "mvlog": {
+        "title": "log(Market Value)?",
+        "type": "checkbox",
+        "popupdesc": "The number in the Market Value input should have a log (base 10) applied to it first."
+    },
+
+
+    "ment": {
+        "title": "Mental State",
+        "type": "",
+        "options": {
+            "TNR": {
+                "name": "Totally Normal and Rational",
+                "desc": ""
+            },
+            "BZZ": {
+                "name": "Buzzed",
+                "desc": ""
+            },
+            "DRK": {
+                "name": "Fairly Drunk",
+                "desc": ""
+            },
+            "HGH": {
+                "name": "High",
+                "desc": ""
+            },
+            "HAL": {
+                "name": "On Any Number of Hallucinogens",
+                "desc": ""
+            },
+            "PAS": {
+                "name": "Overcome with Passion",
+                "desc": ""
+            },
+            "MTH": {
+                "name": "Doing Mathematics",
+                "desc": ""
+            },
+            "PNK": {
+                "name": "Panicking",
+                "desc": ""
+            }
+        },
+        "popupdesc": "The mental state of the speaker."
+    },
+    "day": {
+        "title": "Day of the Week",
+        "type": "",
+        "options": {
+            "SU": {
+                "name": "Sunday",
+                "desc": "I would prefer this being at the end of the list, but I'm going off of how the official website lists them."
+            },
+            "M": {
+                "name": "Monday",
+                "desc": ""
+            },
+            "TU": {
+                "name": "Tuesday",
+                "desc": ""
+            },
+            "W": {
+                "name": "Wednesday",
+                "desc": ""
+            },
+            "TH": {
+                "name": "Thursday",
+                "desc": ""
+            },
+            "F": {
+                "name": "Friday",
+                "desc": ""
+            },
+            "F13": {
+                "name": "Friday the 13th",
+                "desc": "Use instead of Friday on Fridays which are the 13th of the month."
+            },
+            "SA": {
+                "name": "Saturday",
+                "desc": ""
+            }
+        },
+        "popupdesc": "Which day of the week it is."
+    },
+    "lie": {
+        "title": "Degree to which the Speaker is Lying",
+        "type": "",
+        "options": {
+            "LIE": {
+                "name": "Lying",
+                "desc": ""
+            },
+            "TRU": {
+                "name": "Telling the Truth",
+                "desc": ""
+            },
+            "EXG": {
+                "name": "Exagerating",
+                "desc": "(sic)"
+            },
+            "MSL": {
+                "name": "The Statement is True But Misleading",
+                "desc": ""
+            },
+            "PDG": {
+                "name": "Simplifying for Pedagogical Purposes",
+                "desc": ""
+            }
+        },
+        "popupdesc": "Yes, you do have to be truthful about this."
+    },
+    "bread": {
+        "title": "Smaller than a breadbox?",
+        "type": "checkbox",
+        "popupdesc": "Is the <b>subject</b> smaller than a breadbox?"
+    },
+    "ebar": {
+        "title": "Error Bars (%)",
+        "type": "number",
+        "popupdesc": "The error bars on your statement, as a percentage.<br/>As this is a number, it must not be negative or contain a zero."
+    },
+    "pro": {
+        "title": "I/You/There?",
+        "type": "",
+        "options": {
+            "no": {
+                "name": "No",
+                "desc": "This word is not \"I\", \"you\" or \"there\"."
+            },
+            "i": {
+                "name": "I",
+                "desc": ""
+            },
+            "you": {
+                "name": "You",
+                "desc": ""
+            },
+            "there": {
+                "name": "There",
+                "desc": ""
+            }
+        },
+        "popupdesc": "Is this noun \"I\", \"you\" or \"there\"?<br/>Don't forget that pronouns other than “I” and “you” must be declared with the verb “dan(f)yist(t)a(b)mar(b)ap(t)”, which takes the pronoun as subject and the referent as object."
+    },
+    "numroot": {
+        "type":"number",
+        "title":"Root (Number)",
+        "popupdesc":"The root is the meaning of the word - this specific word is a number.<br/>As this is a number, it must not be negative or contain a zero."
+    },
+    "isanum": {
+        "type":"checkbox",
+        "title": "Use number as root?",
+        "popupdesc": "Check this if you would like to use a number for the root - <b>use this instead of typing in the root manually</b>."
+    },
+    "stddev": {
+        "type": "number",
+        "title": "Standard Deviations from Average",
+        "popupdesc": "The number of standard deviations from the mean (adjective/adverb)-ness your desired quality is.<br/>As this is a number, it must not be negative or contain a zero.<br/>As negatives are not allowed, this number refers to <i>either</i> direction."
+    },
+    "fword": {
+        "type": "checkbox",
+        "title": "Is a function word?",
+        "popupdesc": "Check this box if this word is a function word."
+    },
+    "idiot": {
+        "type": "checkbox",
+        "title": "Is the addressee's grasp of kay(f)bop(t) lacking?",
+        "popupdesc": "Check this box if the addressee is a (young) child, a foreigner, or someone whose intellegence you wish to insult."
+    },
+    "funcplus": {
+        "title": "Arbitrary syllables",
+        "type": "text",
+        "popupdesc": "If the word is a function word and the addressee's grasp of kay(f)bop(t) is lacking, add as many arbitrary syllables here as you wish.<br/>Ideally, they will be as hard to pronounce as possible."
+    }
+}

@@ -1,0 +1,63 @@
+{
+    "root": {
+        "type":"text",
+        "title":"Root (Cr)",
+        "popupdesc":"The root is the general definition of the word, and can be directly modified by the Stem, Pattern annd Designation. Check the <a target=\"_blank\" href=\"https://ithkuil.net/lexicon.htm\">Lexicon</a> for what your word's Root, Stem, Pattern annd Designation should be."
+    },
+
+    "stem": {
+        "type":"",
+        "title":"Stem",
+        "options": {
+            "s1":{
+                "name": "Stem 1",
+                "desc": ""
+            },
+            "s2":{
+                "name": "Stem 2",
+                "desc": ""
+            },
+            "s3":{
+                "name": "Stem 3",
+                "desc": ""
+            }
+        },
+        "popupdesc":"The stem of a word partially describes which of the 18 or so possible definitons that a root could take is used in the word. Root-specific stem definitions are in the <a target=\"_blank\" href=\"https://ithkuil.net/lexicon.htm\">Lexicon</a>."
+    },
+
+    "pattern": {
+        "type":"",
+        "title":"Pattern",
+        "options": {
+            "p1":{
+                "name": "Pattern 1 (Holistic)",
+                "desc": ""
+            },
+            "p2":{
+                "name": "Pattern 2 (Compl. 1)",
+                "desc": ""
+            },
+            "p3":{
+                "name": "Pattern 3 (Compl. 2)",
+                "desc": ""
+            }
+        },
+        "popupdesc":"The pattern of a word partially describes which of the 18 or so possible definitons that a root could take is used in the word. Root-specific pattern definitions are in the <a target=\"_blank\" href=\"https://ithkuil.net/lexicon.htm\">Lexicon</a>."
+    },
+
+    "desig": {
+        "type":"",
+        "title":"Designation",
+        "options": {
+            "IFL":{
+                "name": "Informal",
+                "desc": "The INFORMAL designation indicates that the noun or verb in question does not exist in a necessarily permanent state, or is to be considered only for the duration of the context in which it is spoken, with any lasting effect, influence or permanency beyond the context being either absent, unknown or irrelevant."
+            },
+            "FML":{
+                "name": "Formal",
+                "desc": "The FORMAL designation imparts a sense of permanency and/or authority, raising the noun or verb to a more definitive, formal or institutional manifestation of itself, or stressing this authoritative/definitive nature if the meaning already includes it."
+            }
+        },
+        "popupdesc":"The designation of a word partially describes which of the 18 or so possible definitons that a root could take is used in the word. Root-specific designation definitions are in the <a target=\"_blank\" href=\"https://ithkuil.net/lexicon.htm\">Lexicon</a>.<br/>However, these designations also have generic meanings attached."
+    }
+}

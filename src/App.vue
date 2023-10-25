@@ -48,7 +48,7 @@
     </div>
     <!-- END V3 WORD TYPE DROPDOWNS -->
     <!-- add more word type dropdowns for more versions here, in REVERSE order -->
-    <!-- !@#$%^&*() <div class="dropdown" v-if="langVer == 'kb'">
+    <div class="dropdown" v-if="langVer == 'kb'">
       <button @click="openDropdown('kayfWords')" v-click-outside="event => closeDropdown('kayfWords',event)">Word Type ▼</button>
       <div class="dropdown-content hidden" id="kayfWords">
         <span @click="switchWordType('normal')" :class="{active: wordType == 'normal'}">Noun</span>
@@ -56,7 +56,7 @@
         <span @click="switchWordType('adjv')" :class="{active: wordType == 'adjv'}">Adjective/Adverb</span>
         <span @click="switchWordType('other')" :class="{active: wordType == 'other'}">Other</span>
       </div>
-    </div> -->
+    </div>
   </div>
 
   <!-- MAIN (contains word-creation options) -->
@@ -71,10 +71,15 @@
     @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3],doneOpts]));}"
     :listenModal="modalListen" :listenWord="gSOptions" :listenWordtype="wordType"/>
 
-    <!-- !@#$%^&*() <TestBop v-if="langVer == 'kb'" ref="kb"
+    <Ithkuil_v1 v-if="langVer == '1'" ref="1"
     @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
     @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3],doneOpts]));}"
-    :listenModal="modalListen" :listenWord="gSOptions" :listenWordtype="wordType"/> -->
+    :listenModal="modalListen" :listenWord="gSOptions" :listenWordtype="wordType"/>
+
+    <KayBop v-if="langVer == 'kb'" ref="kb"
+    @modal="openModal" @gEmit="(g) => gOptions = JSON.parse(JSON.stringify(g))"
+    @ithkword="(w) => {ithkword = w[0]; ipa = w[1]; gloss = w[2]; fullGloss = w[3]; sentence[selectedWord] = JSON.parse(JSON.stringify([ithkword,gOptions,wordType,sentence[selectedWord][3],doneOpts]));}"
+    :listenModal="modalListen" :listenWord="gSOptions" :listenWordtype="wordType"/>
     
   </div>
   <!-- END OF MAIN -->
@@ -193,14 +198,16 @@ import vClickOutside from "click-outside-vue3";
 
 import Ithkuil_v4 from './qit4/4.vue';
 import Ithkuil_v3 from './qit3/3.vue';
-// !@#$%^&*() import TestBop from './qkf/qkf.vue';
+import Ithkuil_v1 from './qit1/1.vue';
+import KayBop from './qkf/qkf.vue';
 
 export default {
   name: 'App',
   components: {
     Ithkuil_v4,
     Ithkuil_v3, // THIS ONE FOR TESTING
-    // !@#$%^&*() TestBop,
+    Ithkuil_v1,
+    KayBop,
 },
   data() {
     return {
@@ -306,8 +313,8 @@ export default {
       } else if (this.langVer == "3") {
         this.closeDropdown('adj3',{},true);
         this.closeDropdown('form3',{},true);
-      /* !@#$%^&*() } else if (this.langVer == "kb") {
-        this.closeDropdown('kayfWords',{},true); */
+      } else if (this.langVer == "kb") {
+        this.closeDropdown('kayfWords',{},true);
       }
       //this.handleSendMessage(this.gOptions.root,"root");
     },
@@ -526,7 +533,7 @@ export default {
   },
   created() {
     let urlParams = new URLSearchParams(window.location.search);
-    let validLangVers = ["4","3"]; // !@#$%^&*() ,"kb"
+    let validLangVers = ["4"]; // !@#$%^&*() ,"1","3","kb"
     if (urlParams.has('v')) {
       if (validLangVers.indexOf(urlParams.get('v')) >= 0) {
         this.langVer = urlParams.get('v');
