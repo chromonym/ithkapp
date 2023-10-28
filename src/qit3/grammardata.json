@@ -59,5 +59,305 @@
             }
         },
         "popupdesc":"The designation of a word partially describes which of the 18 or so possible definitons that a root could take is used in the word. Root-specific designation definitions are in the <a target=\"_blank\" href=\"https://ithkuil.net/lexicon.htm\">Lexicon</a>.<br/>However, these designations also have generic meanings attached."
+    },
+
+    "cIII": {
+        "type":"",
+        "title":"Case",
+        "options": {
+            "OBL":{
+                "name": "Oblique",
+                "desc": ""
+            },
+            "IND":{
+                "name": "Inducive",
+                "desc": ""
+            },
+            "ABS":{
+                "name": "Absolutive",
+                "desc": ""
+            },
+            "ERG":{
+                "name": "Ergative",
+                "desc": ""
+            },
+            "EFF":{
+                "name": "Effectuative",
+                "desc": ""
+            },
+            "AFF":{
+                "name": "Affective",
+                "desc": ""
+            },
+            "DAT":{
+                "name": "Dative",
+                "desc": ""
+            },
+            "INS":{
+                "name": "Instrumental",
+                "desc": ""
+            },
+            "ACT":{
+                "name": "Activative",
+                "desc": ""
+            },
+            "DER":{
+                "name": "Derivative",
+                "desc": ""
+            },
+            "SIT":{
+                "name": "Situative",
+                "desc": ""
+            },
+            "POS":{
+                "name": "Posessive",
+                "desc": ""
+            },
+            "PRP":{
+                "name": "Proprietive",
+                "desc": ""
+            },
+            "GEN":{
+                "name": "Genitive",
+                "desc": ""
+            },
+            "ATT":{
+                "name": "Attributive",
+                "desc": ""
+            },
+            "PDC":{
+                "name": "Productive",
+                "desc": ""
+            },
+            "ITP":{
+                "name": "Interpretative",
+                "desc": ""
+            },
+            "OGN":{
+                "name": "Originative",
+                "desc": ""
+            },
+            "PAR":{
+                "name": "Partitive",
+                "desc": ""
+            },
+            "CRS":{
+                "name": "Contrastive",
+                "desc": ""
+            },
+            "CPS":{
+                "name": "Compositive",
+                "desc": ""
+            },
+            "PRD":{
+                "name": "Predicative",
+                "desc": ""
+            },
+            "MED":{
+                "name": "Mediative",
+                "desc": ""
+            },
+            "APL":{
+                "name": "Applicative",
+                "desc": ""
+            },
+            "PUR":{
+                "name": "Purposive",
+                "desc": ""
+            },
+            "CSD":{
+                "name": "Considerative",
+                "desc": ""
+            },
+            "ESS":{
+                "name": "Essive",
+                "desc": ""
+            },
+            "ASI":{
+                "name": "Assimilative",
+                "desc": ""
+            },
+            "FUN":{
+                "name": "Functive",
+                "desc": ""
+            },
+            "TFM":{
+                "name": "Transformative",
+                "desc": ""
+            },
+            "REF":{
+                "name": "Referential",
+                "desc": ""
+            },
+            "CLA":{
+                "name": "Classificative",
+                "desc": ""
+            },
+            "CNV":{
+                "name": "Conductive",
+                "desc": ""
+            },
+            "IDP":{
+                "name": "Interdependent",
+                "desc": ""
+            },
+            "BEN":{
+                "name": "Benefactive",
+                "desc": ""
+            },
+            "TSP":{
+                "name": "Transpositive",
+                "desc": ""
+            },
+            "CMM":{
+                "name": "Commutative",
+                "desc": ""
+            },
+            "COM":{
+                "name": "Comitative",
+                "desc": ""
+            },
+            "CNJ":{
+                "name": "Conjunctive",
+                "desc": ""
+            },
+            "UTL":{
+                "name": "Utilitative",
+                "desc": ""
+            },
+            "ABE":{
+                "name": "Abessive",
+                "desc": ""
+            },
+            "CVS":{
+                "name": "Conversive",
+                "desc": ""
+            },
+            "COR":{
+                "name": "Correlative",
+                "desc": ""
+            },
+            "DEP":{
+                "name": "Dependent",
+                "desc": ""
+            },
+            "PVS":{
+                "name": "Provisional",
+                "desc": ""
+            },
+            "PTL":{
+                "name": "Postulative",
+                "desc": ""
+            },
+            "CON":{
+                "name": "Concessive",
+                "desc": ""
+            },
+            "EXC":{
+                "name": "Exceptive",
+                "desc": ""
+            },
+            "AVR":{
+                "name": "Aversive",
+                "desc": ""
+            },
+            "CMP":{
+                "name": "Comparative",
+                "desc": ""
+            },
+            "SML":{
+                "name": "Simultaneitive",
+                "desc": ""
+            },
+            "ASS":{
+                "name": "Assessive",
+                "desc": ""
+            },
+            "CNR":{
+                "name": "Concursive",
+                "desc": "",
+                "image": "https://ithkuil.net/images/4-6-3.jpg"
+            },
+            "ACS":{
+                "name": "Accessive",
+                "desc": "",
+                "image": "https://ithkuil.net/images/4-6-4.jpg"
+            },
+            "DFF":{
+                "name": "Diffusive",
+                "desc": "",
+                "image": "https://ithkuil.net/images/4-6-5.jpg"
+            },
+            "PER":{
+                "name": "Periodic",
+                "desc": "",
+                "image": "https://ithkuil.net/images/4-6-6.jpg"
+            },
+            "PRO":{
+                "name": "Prolapsive",
+                "desc": "",
+                "image": "https://ithkuil.net/images/4-6-7.jpg"
+            },
+            "PCV":{
+                "name": "Precursive",
+                "desc": ""
+            },
+            "PCR":{
+                "name": "Postcurstive",
+                "desc": ""
+            },
+            "ELP":{
+                "name": "Elapsive",
+                "desc": ""
+            },
+            "ALP":{
+                "name": "Allapsive",
+                "desc": ""
+            },
+            "INP":{
+                "name": "Interpolative",
+                "desc": ""
+            },
+            "EPS":{
+                "name": "Episodic",
+                "desc": ""
+            },
+            "PLM":{
+                "name": "Prolimitive",
+                "desc": ""
+            },
+            "LIM":{
+                "name": "Limitative",
+                "desc": ""
+            },
+            "LOC":{
+                "name": "Locative",
+                "desc": ""
+            },
+            "ORI":{
+                "name": "Orientative",
+                "desc": ""
+            },
+            "PSV":{
+                "name": "Procursive",
+                "desc": ""
+            },
+            "ALL":{
+                "name": "Allative",
+                "desc": ""
+            },
+            "ABL":{
+                "name": "Ablative",
+                "desc": ""
+            },
+            "NAV":{
+                "name": "Navigative",
+                "desc": ""
+            },
+            "VOC":{
+                "name": "Vocative",
+                "desc": ""
+            }
+        }
     }
 }

@@ -136,7 +136,16 @@
             <button class="tablinks" @click="changeClassTab('ACT','VOC','Affinitive')" id="Affinitive">Affinitive</button>
             <button class="tablinks" @click="changeClassTab('LOC','PLM','Spatio-Temporal')" id="Spatio-Temporal">Spatio-Temporal</button>
           </div>
-          <div v-if="['c','c1','c2'].includes(modalID)">
+          <div v-else-if="modalID == 'cIII'" class="tab">
+            <button class="tablinks active" @click="changeClassTab('OBL','VOC','Allcases')" id="Allcases">All</button>
+            <button class="tablinks" @click="changeClassTab('OBL','SIT','Transrelative')" id="Transrelative">Transrelative</button>
+            <button class="tablinks" @click="changeClassTab('POS','OGN','Posessive')" id="Posessive">Posessive</button>
+            <button class="tablinks" @click="changeClassTab('PAR','CMP','Associative')" id="Associative">Associative</button>
+            <button class="tablinks" @click="changeClassTab('SML','LIM','Temporal')" id="Temporal">Temporal</button>
+            <button class="tablinks" @click="changeClassTab('LOC','NAV','Spatial')" id="Spatial">Spatial</button>
+            <button class="tablinks" @click="changeClassTab('VOC','VOC','Vocative')" id="Vocative">Vocative</button>
+          </div>
+          <div v-if="['c','c1','c2','cIII'].includes(modalID)">
             <div v-for="option in Object.keys(modalContent.options).slice(Object.keys(modalContent.options).indexOf(this.casePopupStart),Object.keys(modalContent.options).indexOf(this.casePopupEnd)+1)" v-bind:key="modalContent.options[option]">
               <div @click="updateFromModal(modalID,option)" class="modalOption" :class="{modalSelected: this.$refs[langVer].gOptions[modalID] == option}">
                 <h3>{{modalContent.options[option].name}}{{option === option.toString().toUpperCase() && !["0","1","2","3","4","5","6","7","8","9"].includes(option.toString()) ? " ("+option+")" : ""}}</h3>
@@ -267,10 +276,15 @@ export default {
         this.modalTabs = [];
       }
       document.getElementById("modal").style.display = "block";
-      if(code === "c") { this.changeClassTab('THM','PLM','Allcases'); }
     },
     closeModal() {
       document.getElementById("modal").style.display = "none";
+      if (this.langVer == "kb") { // !@#$%^&*() remove this entire if statement once the joke is over
+        if (!this.$refs[this.langVer].settings["Cursor"].cursor[1]) {
+          document.body.style.cursor = 'none';
+          this.$refs[this.langVer].showCursorText = false;
+        }
+      }
     },
     openDropdown(id) {
       document.getElementById(id).classList.toggle("hidden");
@@ -470,6 +484,14 @@ export default {
         this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie));
       }
       this.$refs[this.langVer].handleSendMessage();
+      if (this.langVer == "kb") {
+        if (this.$refs[this.langVer].settings["Cursor"].cursor[1]) {
+          document.body.style.cursor = 'url("/img/cursor.png") 9 3, pointer';
+          this.$refs[this.langVer].showCursorText = true;
+        } else {
+          document.body.style.cursor = 'auto';
+        }
+      }
     },
     handleImportedWord(snt) {
       // snt is a list representative of the sentence, like this.sentence
@@ -548,6 +570,15 @@ export default {
     window.addEventListener("touchstart",this.onMouseDownF);
     window.addEventListener("touchend",this.onMouseUpF);
     window.addEventListener("touchstart",this.detectTap);
+    if (this.langVer == "4") {
+      this.casePopupStart = "THM";
+      this.casePopupEnd = "PLM";
+    } else if (this.langVer == "3") {
+      this.casePopupStart = "OBL";
+      this.casePopupEnd = "VOC";
+    } else if (this.langVer == "kb") {
+      document.body.style.cursor = 'url("/img/cursor.png") 9 3, pointer';
+    }
   },
   unmounted() {
     window.removeEventListener("resize",this.onScreenResize);

@@ -6,11 +6,14 @@
         <br/>Glosses are based on the glosses on the Ithkuil III site. and in-gloss definitions are provided by <a target="_blank" href="https://porpoiseless.github.io/elamxhi/">Elamxhí</a>.
         <br/>All past and current forms of Ithkuil and all official documentation are by John Quijada.
         <br/>Click on a box's title to learn more about what it means.</p>
-            <div class="section"> <!-- all OptionBoxes must be in a class="section" div or else the formatting will be messed up -->
+        <div class="section"> <!-- all OptionBoxes must be in a class="section" div or else the formatting will be messed up -->
             <OptionBox :json="gData.root" code="root" @send-message="handleSendMessage" ref="root" @modal="openModal"/> <!-- ref should be the same as code -->
             <OptionBox :json="gData.desig" code="desig" @send-message="handleSendMessage" ref="desig" @modal="openModal"/>
             <OptionBox :json="gData.stem" code="stem" @send-message="handleSendMessage" ref="stem" @modal="openModal"/>
             <OptionBox :json="gData.pattern" code="pattern" @send-message="handleSendMessage" ref="pattern" @modal="openModal"/>
+        </div>
+        <div class="section">
+            <OptionBox :json="gData.cIII" code="cIII" @send-message="handleSendMessage" ref="cIII" @modal="openModal"/>
         </div>
     </div>
 </template>
@@ -74,7 +77,8 @@ export default {
                 "root": "",
                 "desig":"IFL",
                 "stem":"s1",
-                "pattern":"p1"
+                "pattern":"p1",
+                "cIII":"OBL",
             },
             wordType: "normal", //  set to whatever the default word type is - UNCOMMENT WITH LISTENWORDTYPE() ABOVE AND SWITCHWORDTYPE() BELOW TO ADD MULTIPLE WORD TYPES
             tabGroups: {"normal": [["root","desig","stem","pattern"]]}, // a dictionary representing the tab groups, based on word type

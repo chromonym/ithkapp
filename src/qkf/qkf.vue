@@ -5,7 +5,9 @@
         <h1>Ithkapp<br/>(vil(p)&#x200b;!af(b)&#x200b;fus(f)&#x200b;vaf(t)&#x200b;san(t)&#x200b;ap(t)&#x200b;vig(t)&#x200b;sung(b)&#x200b;es(p)&#x200b;u(t)&#x200b;vom(b)&#x200b;e(f)&#x200b;grog(f)&#x200b;kay(f)&#x200b;point(f)&#x200b;ga(f))</h1>
         <p class="smalltext">Compatible with <span title="Last update December 5, 2020 | 𝘬𝘢𝘺(𝘧)𝘣𝘰𝘱(𝘵) 𝘪𝘯 𝘵𝘩𝘦 𝘞𝘪𝘥𝘦𝘳 𝘞𝘰𝘳𝘭𝘥"><u style="border-bottom: 1px dotted gray; text-decoration: none;">the version of kay(f)bop(t) </u><a href="https://crazyninjageeks.wordpress.com/2015/11/28/introduction-to-kayfdanfsantaptvlirtsangbesputvombngagtvlimpkayfsnafkayfgaf-boptvegpdaffshofbompvlimpgafvlimpgaf/" target="_blank">currently on crazyninjageeks</a></span>.
         <br/>Definitions are a combination of taken from <a href="https://crazyninjageeks.wordpress.com/category/kayfbopt/" target="_blank">the kay(f)bop(t) site</a>, taken from <a href="https://badconlangingideas.tumblr.com/" target="_blank">badconlangingideas.tumblr.com</a>, and (occasionally) written by the creator of this site.
-        <br/>Glosses are completely made up and <a href="https://crazyninjageeks.wordpress.com/2015/11/28/kayfbopt-phonetics-and-romanization/" target="_blank">this is the best pronunciation guide you're getting</a>.
+        <br/><a href="https://replit.com/@CameronHorn1/kayfbopt-orthography" target="_blank">Alternative orthography</a> from <a href="https://en.illogicopedia.org/wiki/How_to_Survive_in_Kay(f)bop(t)land(p)" target="_blank">Illogicopedia</a>.
+        <br/>Cursor is <span :class="{hidden: !showCursorText}">the character of kay(f)bop(t) from <a href="https://www.reddit.com/r/prolangs/" target="_blank">Elemenopi's <i>Prolangs</i> webcomic</a></span>
+                        <span :class="{hidden: showCursorText}">██████████████████████████████████████████</span>.
         <br/>All past and current forms of kay(f)bop(t) and all official documentation are by Daniel Swanson.
         <br/>Click on a box's title to learn more about what it means.</p>
         <p :class="{hidden: wordType != 'normal'}">Note that pronouns other than “I” and “you” must be declared with the verb “dan(f)yist(t)a(b)mar(b)ap(t)”, which takes the pronoun as subject and the referent as object</p>
@@ -85,13 +87,18 @@ export default {
     },
     data() {
         return {
-            defaultWord: "san(t)​ap(t)​vlir(t)​sang(b)​des(p)​nu(t)​vom(b)​ngo(p)​ngo(p)​gag(b)​vlim(p)​kay(f)​", // this should be whatever the default form of your "normal" word type is - whatever the algorithm generates with no option changes (ithkuil iv = "aal")
+            defaultWord: "san(t)​ap(t)​vlir(t)​sang(b)​es(p)​nu(t)​vom(b)​ngo(p)​ngo(p)​gag(b)​vlim(p)​kay(f)​", // this should be whatever the default form of your "normal" word type is - whatever the algorithm generates with no option changes (ithkuil iv = "aal")
             settings: { // Settings - fill in with whatever you want the user to be able to change, with the following format:
-                "Category A": { // Category title
-                    "s1": ["Setting 1: ","defaultval",["defaultval","Fancy New Value"]] // dropdowns - "code": ["Visual Name","default value",[options]]
+                //"Category A": { // Category title
+                //    "s1": ["Setting 1: ","defaultval",["defaultval","Fancy New Value"]] // dropdowns - "code": ["Visual Name","default value",[options]]
+                //},
+                "Orthography": {
+                    "noHan": ["Write Han characters as appropriate IPA instead: ",false],
+                    "altOrth": ["Use alternative orthography: ",false], // check boxes - "code": ["Visual Name:",true/false]
+                    "zwj": ["Add Zero-Width Joiners where relevant: ", true]
                 },
-                "Category B": {
-                    "s2": ["Setting 2: ",false] // check boxes - "code": ["Visual Name:",true/false]
+                "Cursor": {
+                    "cursor": ["Use the funny cursor: ",true]
                 }
             },
             gDefault: { // this should contain all of the grammar options' (dropdowns') default values
@@ -128,7 +135,8 @@ export default {
             ipa: "", //       leave as is - SHOULD BE THE IPA TRANSCRIPTION OF THE ABOVE WORD
             gloss: "", //     leave as is - SHOULD BE THE GLOSS (meaning) OF THE ABOVE WORD
             fullGloss: "", // leave as is - SHOULD BE A LONGER VERSION OF THE ABOVE GLOSS
-            gData: grammardata
+            gData: grammardata,
+            showCursorText: true,
         }
     },
     methods: {
@@ -144,9 +152,10 @@ export default {
         calcWord() {
             this.ithkword = "";
             let ithkparts = [];
+            this.gOptions.root = this.gOptions.root.replaceAll("​","");
             // Ignoring roots with underscores for now
             if (!this.gOptions.isanum) {
-                this.ithkword += this.gOptions.root.replace(/-/g,"");
+                this.ithkword += this.gOptions.root.replace(/-/g,"").replace(/酶/g,"ø").replace(/瑟/g,"ɪ").replace(/蕯/g,"ʔ").replace(/蕦/g,"ʌ");
             } else {
                 this.ithkword += this.calcNumber(this.gOptions.numroot);
             }
@@ -248,12 +257,66 @@ export default {
             }
             // calc ipa
             this.ipa = "";
-            if (this.ithkword.indexOf("!") > -1) { this.ipa += " ! = left click "; }
-            if (this.ithkword.indexOf("*") > -1) { this.ipa += " * = right click "; }
-            if (this.ithkword.indexOf("%") > -1) { this.ipa += " % = clap "; }
-            if (this.ithkword.indexOf("@") > -1) { this.ipa += " @ = facepalm "; }
+            if (!this.settings["Orthography"].altOrth[1]) {
+                if (this.ithkword.indexOf("!") > -1) { this.ipa += " ! = left click "; }
+                if (this.ithkword.indexOf("*") > -1) { this.ipa += " * = right click "; }
+                if (this.ithkword.indexOf("%") > -1) { this.ipa += " % = clap "; }
+                if (this.ithkword.indexOf("@") > -1) { this.ipa += " @ = facepalm "; }
+                if (this.ithkword.indexOf("ø") > -1 && !this.settings["Orthography"].noHan[1]) { this.ipa += " 酶 = ø "}
+                if (this.ithkword.indexOf("ɪ") > -1 && !this.settings["Orthography"].noHan[1]) { this.ipa += " 瑟 = ɪ "}
+                if (this.ithkword.indexOf("ʔ") > -1 && !this.settings["Orthography"].noHan[1]) { this.ipa += " 蕯 = ʔ "}
+                if (this.ithkword.indexOf("ʌ") > -1 && !this.settings["Orthography"].noHan[1]) { this.ipa += " 蕦 = ʌ "}
+            }
             // add zwsp between syllables for better displaying
-            this.ithkword = this.ithkword.split(")").join(")​");
+            var syllablesplit = this.ithkword.split(")")
+            this.ithkword = "";
+            for (let i of syllablesplit.slice(0, -1)) {
+                if (this.settings["Orthography"].altOrth[1]) {
+                    let j = i.split("(");
+                    for (let char of (this.gData.dictionary.indexOf(j[0]) >>> 0).toString(2)) {
+                        if (char == "1") {
+                            this.ithkword += "n";
+                        } else {
+                            this.ithkword += "u";
+                        }
+                        if (this.settings["Orthography"].zwj[1]) {
+                            this.ithkword += "​"; // zwj
+                        }
+                    }
+                    if (j.length > 1) {
+                        switch (j[1]) {
+                            case "f":
+                                this.ithkword += "m";
+                                break;
+                            case "t":
+                                this.ithkword += "ɯ";
+                                break;
+                            case "b":
+                                this.ithkword += "h";
+                                break;
+                            case "p":
+                                this.ithkword += "ɥ";
+                                break;
+                        }
+                        if (this.settings["Orthography"].zwj[1]) {
+                            this.ithkword += "​"; // zwj
+                        }
+                    }
+                } else {
+                    this.ithkword += i + ")";
+                    if (this.settings["Orthography"].zwj[1]) {
+                        this.ithkword += "​"; // zwj
+                    }
+                }
+            }
+            if (!this.settings["Orthography"].altOrth[1]) {
+                if (!this.settings["Orthography"].noHan[1]) {
+                    this.ithkword = this.ithkword.replace(/ø/g,"酶").replace(/ɪ/g,"瑟").replace(/ʔ/g,"蕯").replace(/ʌ/g,"蕦");
+                }
+                if (this.settings["Orthography"].zwj[1]) {
+                    this.ithkword = this.ithkword.slice(0,-1);
+                }
+            }
             // remove gloss/fullgloss
             this.gloss = "";
             this.fullGloss = "";
