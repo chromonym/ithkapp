@@ -517,10 +517,8 @@ export default {
         var afxjunctV = {"VDom":"a","VSub":"u","VIIDom":"e","VIISub":"i","formative":"o","adjacent":"ö","same":"ai"};
         var afxjunctC = {"VDom":"h","VSub":"'h","VIIDom":"'hl","VIISub":"'hr","formative":"hw","adjacent":"'hw"};
         try {
-          let isRefCut;
-          if (this.gOptions.affixjunct.length == 1) {isRefCut = this.gOptions.affixjunct[0][2] == 3 || this.gOptions.affixjunct[0][2] == 4;}
-          else {isRefCut = this.gOptions.affixjunct[0][2] == 4;}
-          this.gloss = this.getAffixDefinition(this.gOptions.affixjunct[0][0],this.gOptions.affixjunct[0][1],isRefCut) + (this.gOptions.affixjunct[0][1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[this.gOptions.affixjunct[0][2]] : "");
+          let isRefCut = (this.$refs.affixjunct.slot3Ref(0) && this.gOptions.affixjunct[0][2] == 3) || this.gOptions.affixjunct[0][2] == 4;
+          this.gloss = this.getAffixDefinition(this.gOptions.affixjunct[0][0],this.gOptions.affixjunct[0][1],this.gOptions.affixjunct[0][2],isRefCut) + (this.gOptions.affixjunct[0][1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[this.gOptions.affixjunct[0][2]] : "");
           this.fullGloss = this.gloss;
           this.gloss += (this.gOptions.initialAffScope == "VDom" ? "" : "-{"+this.gOptions.initialAffScope+"}");
           this.fullGloss += "-{"+this.gOptions.initialAffScope+"}";
@@ -575,10 +573,13 @@ export default {
           out += afxjunctV[this.gOptions.otherAffScope];
           out = this.recalcVowels(out);
           this.ithkword = out;
+          let j = 1;
           for (let i of this.gOptions.affixjunct.slice(1)) {
-            let aDef = this.getAffixDefinition(i[0],i[1],i[2]==4);
-            this.gloss += "-" + aDef + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
-            this.fullGloss += "-" + aDef + (i[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
+            let isRefCut = (this.$refs.affixjunct.slot3Ref(j) && this.gOptions.affixjunct[j][2] == 3) || this.gOptions.affixjunct[j][2] == 4;
+            let aDef = this.getAffixDefinition(i[0],i[1],i[2],isRefCut);
+            this.gloss += "-" + aDef + (i[1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
+            this.fullGloss += "-" + aDef + (i[1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[i[2]] : "");
+            j++;
           }
           this.gloss += (this.gOptions.otherAffScope == "same" ? "" : "-{" + this.gOptions.otherAffScope + "}");
           this.fullGloss += "-{" + this.gOptions.otherAffScope + "}"
@@ -690,8 +691,11 @@ export default {
             output += "üö";
           }
           output += p[0];
-          this.gloss += "-'" + p[0] + "'/" + p[1] + (p[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[p[2]] : "");
-          this.fullGloss += "-'" + p[0] + "'/" + p[1] + (p[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[p[2]] : "");
+          let isRefCut = (this.$refs.refAffix.slot3Ref(q) && this.gOptions.refAffix[q][2] == 3) || this.gOptions.refAffix[q][2] == 4;
+          let affx = this.gOptions.refAffix[q];
+          let aDef = this.getAffixDefinition(affx[0],affx[1],affx[2],isRefCut);
+          this.gloss += "-" + aDef + (affx[1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          this.fullGloss += "-" + aDef + (affx[1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
         }
         if (this.gOptions.twoCs) {
           this.calculateSlot9("2");
@@ -1752,7 +1756,7 @@ export default {
         this.fullGloss += '-' + rDef
         if (this.gOptions.root.toLowerCase() == "") {this.gloss += '""';this.fullGloss += '""'}
       } else if (this.wordType == "affRoot") {
-        let aDef = this.getAffixDefinition(this.gOptions.affRoot.toLowerCase(),((Number(this.gOptions.arDegree)+1)%10),false,true);
+        let aDef = this.getAffixDefinition(this.gOptions.affRoot.toLowerCase(),((Number(this.gOptions.arDegree)+1)%10),1,false,true);
         this.gloss += aDef
         this.fullGloss += aDef;
       } else if (this.wordType == "refRoot") {
@@ -1780,13 +1784,12 @@ export default {
       }
       // Slot 5
       for (var i in this.gOptions.Vafx) {
-        let isRefCut;
-        if (this.gOptions.Vafx.length == 1) {isRefCut = this.gOptions.Vafx[i][2] == 3 || this.gOptions.Vafx[i][2] == 4;}
-        else {isRefCut = this.gOptions.Vafx[i][2] == 4;}
+        let isRefCut = (this.$refs.Vafx.slot3Ref(i) && this.gOptions.Vafx[i][2] == 3) || this.gOptions.Vafx[i][2] == 4;
+        //let isRefCut = this.gOptions.Vafx[i][2] == 4 || (this.gOptions.Vafx[i][2] == 3 && this.gOptions.Vafx[i][3]);
         let affx = this.gOptions.Vafx[i];
-        let aDef = this.getAffixDefinition(affx[0],affx[1],isRefCut);
-        this.gloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
-        this.fullGloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+        let aDef = this.getAffixDefinition(affx[0],affx[1],affx[2],isRefCut);
+        this.gloss += "-" + aDef + (affx[1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+        this.fullGloss += "-" + aDef + (affx[1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
       }
       // Slot 6
       if (!this.shortcutting) {
@@ -1815,23 +1818,21 @@ export default {
       // Slot 7
       if (this.slotVIIshortcut) {
         for (var j in this.gOptions.VIIafx.slice(0,-1)) {
-          let isRefCut;
-          if (this.gOptions.VIIafx.length == 1) {isRefCut = this.gOptions.VIIafx[j][2] == 3 || this.gOptions.VIIafx[j][2] == 4;}
-          else {isRefCut = this.gOptions.VIIafx[j][2] == 4;}
+          let isRefCut = (this.$refs.VIIafx.slot3Ref(j) && this.gOptions.VIIafx[j][2] == 3) || this.gOptions.VIIafx[j][2] == 4;
+          //let isRefCut = this.gOptions.VIIafx[j][2] == 4 || (this.gOptions.VIIafx[j][2] == 3 && this.gOptions.VIIafx[j][3]);
           let affx = this.gOptions.VIIafx[j];
-          let aDef = this.getAffixDefinition(affx[0],affx[1],isRefCut);
-          this.gloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
-          this.fullGloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          let aDef = this.getAffixDefinition(affx[0],affx[1],affx[2],isRefCut);
+          this.gloss += "-" + aDef + (affx[1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          this.fullGloss += "-" + aDef + (affx[1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
         }
       } else {
         for (var k in this.gOptions.VIIafx) {
-          let isRefCut;
-          if (this.gOptions.VIIafx.length == 1) {isRefCut = this.gOptions.VIIafx[k][2] == 3 || this.gOptions.VIIafx[k][2] == 4;}
-          else {isRefCut = this.gOptions.VIIafx[k][2] == 4;}
+          let isRefCut = (this.$refs.VIIafx.slot3Ref(k) && this.gOptions.VIIafx[k][2] == 3) || this.gOptions.VIIafx[k][2] == 4;
+          //let isRefCut = this.gOptions.VIIafx[k][2] == 4 || (this.gOptions.VIIafx[k][2] == 3 && this.gOptions.VIIafx[k][3]);
           let affx = this.gOptions.VIIafx[k];
-          let aDef = this.getAffixDefinition(affx[0],affx[1],isRefCut)
-          this.gloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
-          this.fullGloss += "-" + aDef + (affx[1] != "CA" ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          let aDef = this.getAffixDefinition(affx[0],affx[1],affx[2],isRefCut)
+          this.gloss += "-" + aDef + (affx[1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
+          this.fullGloss += "-" + aDef + (affx[1] != "CA" && !isRefCut ? {1:"₁",2:"₂",3:"₃",4:"₄"}[affx[2]] : "");
         }
       }
       // Slot 8
@@ -2135,7 +2136,7 @@ export default {
         return '"'+root+'"';
       }
     },
-    getAffixDefinition(affix,degree,refOverride=false,root=false){
+    getAffixDefinition(affix,degree,type,refOverride=false,root=false){
       if (!refOverride) {
         try {
           if (this.settings["Miscellaneous"].ga[1] == "Yes") {
@@ -2336,7 +2337,22 @@ export default {
             }
         }
       } else {
-        return "(ref "+affix+"/"+degree+")";
+        if (degree == "CA") {
+          return "'"+affix+"'/CA";
+        }
+        if (type == 4) {
+          let refC = ["THM","INS","ABS","AFF","STM","EFF","ERG","DAT","IND"];
+          // ["POS","PRP","GEN","ATT","PDC","ITP","OGN","IDP","PAR"],
+          if (degree == 0) {
+            return "'"+affix+"'/CA";
+          } else {
+            return "'"+affix+"'/"+refC[degree-1];
+          }
+        } else if (type == 3 && degree != 0) {
+          let refC = ["POS","PRP","GEN","ATT","PDC","ITP","OGN","IDP","PAR"];
+          return "'"+affix+"'/"+refC[degree-1];
+        }
+        return "(invalid ref)";
       }
     },
     permutator(inputArr) {
