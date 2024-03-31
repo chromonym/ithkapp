@@ -486,7 +486,7 @@ export default {
       this.$refs[this.langVer].handleSendMessage();
       if (this.langVer == "kb") {
         if (this.$refs[this.langVer].settings["Cursor"].cursor[1]) {
-          document.body.style.cursor = 'url("./img/cursor.png") 9 3, pointer';
+          document.body.style.cursor = 'url("/ithkapp/img/cursor.png") 9 3, pointer';
           this.$refs[this.langVer].showCursorText = true;
         } else {
           document.body.style.cursor = 'auto';
