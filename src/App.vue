@@ -120,7 +120,7 @@
         <br/><span class="smalltext"><i>Unchecking box will clear cookies</i></span>
         <br/><br/>
         <a href="https://github.com/TheXXOs/ithkapp" target="_blank">This project on GitHub</a>
-        <!-- !@#$%^&*() <p class="smalltext" style="padding-left: 0" v-if="langVer == 'kb'"><i>don't you wish there was a way back to normal</i><span style="font-family: monospace; font-size: 16px;"><b>?<span style="color: white">v=4</span></b></span></p> -->
+        <p class="smalltext" style="padding-left: 0" v-if="langVer == 'kb'"><i>don't you wish there was a way back to normal</i><span style="font-family: monospace; font-size: 16px;"><b>?<span style="color: white">v=4</span></b></span></p>
       </div>
       <div v-if="modalID != 'settings' && modalID != 'share'">
         <h2 style="text-align:center;">{{modalContent.title}}</h2>
@@ -220,7 +220,7 @@ export default {
 },
   data() {
     return {
-      langVer: "4",
+      langVer: "kb",
 
       modalListen: [],
       wordType: "normal",
@@ -555,12 +555,12 @@ export default {
   },
   created() {
     let urlParams = new URLSearchParams(window.location.search);
-    let validLangVers = ["4"]; // !@#$%^&*() ,"1","3","kb"
+    let validLangVers = ["4","kb"]; // !@#$%^&*() ,"1","3","kb"
     if (urlParams.has('v')) {
       if (validLangVers.indexOf(urlParams.get('v')) >= 0) {
         this.langVer = urlParams.get('v');
       } else {
-        this.langVer = "4";
+        this.langVer = "kb";
       }
     }
     this.oldScreenSize = window.innerWidth;
