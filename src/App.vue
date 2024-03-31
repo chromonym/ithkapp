@@ -577,7 +577,7 @@ export default {
       this.casePopupStart = "OBL";
       this.casePopupEnd = "VOC";
     } else if (this.langVer == "kb") {
-      document.body.style.cursor = 'url("/img/cursor.png") 9 3, pointer';
+      document.body.style.cursor = 'url("/ithkapp/img/cursor.png") 9 3, pointer';
     }
   },
   unmounted() {
