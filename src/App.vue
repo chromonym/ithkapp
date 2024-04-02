@@ -220,7 +220,7 @@ export default {
 },
   data() {
     return {
-      langVer: "kb",
+      langVer: "4",
 
       modalListen: [],
       wordType: "normal",
@@ -560,7 +560,7 @@ export default {
       if (validLangVers.indexOf(urlParams.get('v')) >= 0) {
         this.langVer = urlParams.get('v');
       } else {
-        this.langVer = "kb";
+        this.langVer = "4";
       }
     }
     this.oldScreenSize = window.innerWidth;
