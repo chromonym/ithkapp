@@ -119,7 +119,7 @@
         <input type="checkbox" v-model="this.otherSettings.saveCookies" @change="updateSetting()"/>
         <br/><span class="smalltext"><i>Unchecking box will clear cookies</i></span>
         <br/><br/>
-        <a href="https://github.com/TheXXOs/ithkapp" target="_blank">This project on GitHub</a>
+        <a href="https://github.com/chromonym/ithkapp" target="_blank">This project on GitHub</a>
         <p class="smalltext" style="padding-left: 0" v-if="langVer == 'kb'"><i>don't you wish there was a way back to normal</i><span style="font-family: monospace; font-size: 16px;"><b>?<span style="color: white">v=4</span></b></span></p>
       </div>
       <div v-if="modalID != 'settings' && modalID != 'share'">
